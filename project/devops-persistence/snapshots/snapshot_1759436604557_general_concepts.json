@@ -1,0 +1,178 @@
+{
+  "id": "snapshot_1759436604557_general_concepts",
+  "timestamp": 1759436604557,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436604551_hjbdi349t",
+        "concept": "docker",
+        "embedding": [
+          0.07577847577934879,
+          0.045467085467609275,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11366771366902319,
+          0.058349426350098564,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6438061331073465,
+          0.09197230472962091,
+          0.6024285187452523,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436604554_yb48f7yiu",
+        "concept": "nginx",
+        "embedding": [
+          0.07580803853093457,
+          0.037904019265467284,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11371205779640185,
+          0.058372189668819616,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6440573215252392,
+          0.09200818878931989,
+          0.602663539454673,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": [
+      {
+        "source": "memory_1759436604551_hjbdi349t",
+        "target": "memory_1759436604554_yb48f7yiu",
+        "type": "semantic_relationship",
+        "strength": 1
+      },
+      {
+        "source": "memory_1759436604554_yb48f7yiu",
+        "target": "memory_1759436604551_hjbdi349t",
+        "type": "semantic_relationship",
+        "strength": 1
+      },
+      {
+        "source": "memory_1759436604554_yb48f7yiu",
+        "target": "memory_1759436604551_hjbdi349t",
+        "type": "semantic_relationship",
+        "strength": 1
+      }
+    ]
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "docker",
+      "target": "logging",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "docker",
+      "target": "testing",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "docker",
+      "target": "nginx",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "docker",
+      "target": "consul",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "docker",
+      "target": "scaling",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "nginx",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "nginx",
+      "target": "consul",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "nginx",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "nginx",
+      "target": "kibana",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "nginx",
+      "target": "vault",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

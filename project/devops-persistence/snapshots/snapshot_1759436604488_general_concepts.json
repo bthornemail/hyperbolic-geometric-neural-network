@@ -1,0 +1,159 @@
+{
+  "id": "snapshot_1759436604488_general_concepts",
+  "timestamp": 1759436604488,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436604482_9knkfvxbr",
+        "concept": "elasticsearch",
+        "embedding": [
+          0.07543966498350976,
+          0.09807156447856269,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11315949747526464,
+          0.055070955437962116,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6409270289777861,
+          0.09156100413968374,
+          0.5997349991728343,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436604485_mniasz6r4",
+        "concept": "vault",
+        "embedding": [
+          0.07582421756917829,
+          0.037912108784589144,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11373632635376742,
+          0.055351678825500135,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6441941714344309,
+          0.09202773877634728,
+          0.6027921404115145,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "elasticsearch",
+      "target": "configuration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "elasticsearch",
+      "target": "orchestration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "elasticsearch",
+      "target": "orchestration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "elasticsearch",
+      "target": "configuration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "elasticsearch",
+      "target": "microservices",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "vault",
+      "target": "nginx",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "vault",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "vault",
+      "target": "consul",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "vault",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "vault",
+      "target": "nginx",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

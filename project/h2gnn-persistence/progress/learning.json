@@ -1,0 +1,15 @@
+{
+  "domain": "learning",
+  "totalConcepts": 1,
+  "learnedConcepts": 1,
+  "masteryLevel": 0.06999999999999999,
+  "lastUpdated": 1759435955022,
+  "learningCurve": [
+    {
+      "timestamp": 1759435955022,
+      "performance": 0.7
+    }
+  ],
+  "weakAreas": [],
+  "strongAreas": []
+}

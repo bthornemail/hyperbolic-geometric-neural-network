@@ -1,0 +1,112 @@
+{
+  "id": "snapshot_1759436605533_general_concepts",
+  "timestamp": 1759436605533,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436605511_yx7pqrk3w",
+        "concept": "continuous_integration",
+        "embedding": [
+          0.1476262348869485,
+          0.16238885837564335,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11071967616521138,
+          0.06274114982695311,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6271168523658843,
+          0.08958812176655491,
+          0.5868044621454988,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.9,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436605529_j6m3msguo",
+        "concept": "continuous_deployment",
+        "embedding": [
+          0.14784860181460188,
+          0.15524103190533195,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.1108864513609514,
+          0.06209641276213278,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6280616219971764,
+          0.0897230888567395,
+          0.5876883610225464,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.9,
+        "confidence": 1
+      }
+    ],
+    "edges": [
+      {
+        "source": "memory_1759436605529_j6m3msguo",
+        "target": "memory_1759436605511_yx7pqrk3w",
+        "type": "semantic_relationship",
+        "strength": 1
+      }
+    ]
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "continuous_deployment",
+      "target": "continuous_integration",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.900",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.9
+}

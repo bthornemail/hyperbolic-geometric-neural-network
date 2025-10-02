@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604771_njcqm92my",
+  "timestamp": 1759436604771,
+  "concept": "configuration",
+  "embedding": [
+    0.07543561106504869,
+    0.09806629438456328,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11315341659757303,
+    0.05582235218813601,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.64089511058738,
+    0.09155644436962573,
+    0.5997028551849525,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "automation",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "orchestration",
+    "orchestration",
+    "microservices",
+    "elasticsearch",
+    "orchestration"
+  ],
+  "consolidated": true
+}

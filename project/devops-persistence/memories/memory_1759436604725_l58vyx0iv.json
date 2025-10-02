@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604725_l58vyx0iv",
+  "timestamp": 1759436604725,
+  "concept": "scaling",
+  "embedding": [
+    0.07570416411567582,
+    0.05299291488097308,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11355624617351373,
+    0.0651055811394812,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6431763134567189,
+    0.09188233049381699,
+    0.6018378020020718,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "javascript_automation",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "docker",
+    "logging",
+    "security",
+    "testing",
+    "ansible"
+  ],
+  "consolidated": false
+}

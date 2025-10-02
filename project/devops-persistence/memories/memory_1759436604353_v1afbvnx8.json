@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604353_v1afbvnx8",
+  "timestamp": 1759436604353,
+  "concept": "automation",
+  "embedding": [
+    0.07559893522201169,
+    0.07559893522201169,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11339840283301754,
+    0.059723158825389235,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6422790337802945,
+    0.09175414768289922,
+    0.6010011378280994,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "containerization",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "deployment",
+    "monitoring",
+    "compliance",
+    "deployment",
+    "monitoring"
+  ],
+  "consolidated": false
+}

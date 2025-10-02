@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604609_cu5plabyz",
+  "timestamp": 1759436604609,
+  "concept": "logging",
+  "embedding": [
+    0.07576354010718164,
+    0.053034478075027154,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11364531016077245,
+    0.05454974887717077,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6436797497712369,
+    0.09195424996731955,
+    0.6023097991474338,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "security",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "security",
+    "testing",
+    "docker",
+    "consul",
+    "scaling"
+  ],
+  "consolidated": true
+}

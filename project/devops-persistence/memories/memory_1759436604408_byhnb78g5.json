@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604408_byhnb78g5",
+  "timestamp": 1759436604408,
+  "concept": "traefik",
+  "embedding": [
+    0.07573529218734391,
+    0.053014704531140745,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11360293828101586,
+    0.059830880828001684,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6434379962637737,
+    0.09191971375196767,
+    0.6020851733117624,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "containerization",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "logging",
+    "security",
+    "testing",
+    "docker",
+    "consul"
+  ],
+  "consolidated": false
+}

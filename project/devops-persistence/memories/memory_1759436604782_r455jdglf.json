@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604782_r455jdglf",
+  "timestamp": 1759436604782,
+  "concept": "testing",
+  "embedding": [
+    0.07575560652298129,
+    0.053028924566086905,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11363340978447192,
+    0.05605914882700614,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6436138636686596,
+    0.09194483766695137,
+    0.6022467787984785,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "automation",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "logging",
+    "security",
+    "docker",
+    "consul",
+    "scaling"
+  ],
+  "consolidated": false
+}

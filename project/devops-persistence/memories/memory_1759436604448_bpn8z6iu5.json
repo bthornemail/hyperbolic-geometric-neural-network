@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604448_bpn8z6iu5",
+  "timestamp": 1759436604448,
+  "concept": "orchestration",
+  "embedding": [
+    0.07543968361890238,
+    0.09807158870457308,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11315952542835356,
+    0.05507096904179872,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6409268904328901,
+    0.09156098434755573,
+    0.5997351374260146,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "monitoring",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "configuration",
+    "configuration",
+    "microservices",
+    "elasticsearch",
+    "configuration"
+  ],
+  "consolidated": true
+}

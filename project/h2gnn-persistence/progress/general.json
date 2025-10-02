@@ -1,0 +1,51 @@
+{
+  "domain": "general",
+  "totalConcepts": 10,
+  "learnedConcepts": 10,
+  "masteryLevel": 0.62,
+  "lastUpdated": 1759435955203,
+  "learningCurve": [
+    {
+      "timestamp": 1759435954946,
+      "performance": 0.7
+    },
+    {
+      "timestamp": 1759435954985,
+      "performance": 0.8
+    },
+    {
+      "timestamp": 1759435955007,
+      "performance": 0.8
+    },
+    {
+      "timestamp": 1759435955074,
+      "performance": 0.6
+    },
+    {
+      "timestamp": 1759435955113,
+      "performance": 0.8
+    },
+    {
+      "timestamp": 1759435955123,
+      "performance": 0.5
+    },
+    {
+      "timestamp": 1759435955159,
+      "performance": 0.5
+    },
+    {
+      "timestamp": 1759435955176,
+      "performance": 0.5
+    },
+    {
+      "timestamp": 1759435955197,
+      "performance": 0.5
+    },
+    {
+      "timestamp": 1759435955203,
+      "performance": 0.5
+    }
+  ],
+  "weakAreas": [],
+  "strongAreas": []
+}

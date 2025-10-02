@@ -7,9 +7,9 @@
         "NODE_ENV": "production"
       }
     },
-    "k2gnn": {
+    "enhanced-k2gnn": {
       "command": "tsx",
-      "args": ["/home/main/devops/h2gnn/project/src/mcp/knowledge-graph-mcp.ts"],
+      "args": ["/home/main/devops/h2gnn/project/src/mcp/enhanced-h2gnn-mcp-server.ts"],
       "env": {
         "NODE_ENV": "production"
       }

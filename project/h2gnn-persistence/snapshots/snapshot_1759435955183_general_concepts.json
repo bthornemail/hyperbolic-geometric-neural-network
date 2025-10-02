@@ -1,0 +1,124 @@
+{
+  "id": "snapshot_1759435955183_general_concepts",
+  "timestamp": 1759435955183,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759435955159_2efeqq9hq",
+        "concept": "concept_1",
+        "embedding": [
+          0.12758224449469993,
+          0.057412010022614965,
+          0.47843341685512475,
+          0,
+          0.07087902471927773,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.06379112224734997,
+          0.03125764990120148,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.5371681992933315,
+          0.07673831418476164,
+          0.5069708772061274,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.5,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759435955175_hiu2zvcta",
+        "concept": "concept_2",
+        "embedding": [
+          0.1275822339813025,
+          0.05741200529158612,
+          0.4784333774298843,
+          0,
+          0.07087901887850137,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.06379111699065125,
+          0.03125764732541911,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.5371682731597575,
+          0.0767383247371082,
+          0.5069708393669847,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.5,
+        "confidence": 1
+      }
+    ],
+    "edges": [
+      {
+        "source": "memory_1759435955175_hiu2zvcta",
+        "target": "memory_1759435955159_2efeqq9hq",
+        "type": "semantic_relationship",
+        "strength": 1
+      }
+    ]
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "concept_1",
+      "target": "concept_0",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "concept_2",
+      "target": "concept_0",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "concept_2",
+      "target": "concept_1",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.500",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.5
+}

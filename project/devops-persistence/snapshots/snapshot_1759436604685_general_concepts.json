@@ -1,0 +1,129 @@
+{
+  "id": "snapshot_1759436604685_general_concepts",
+  "timestamp": 1759436604685,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436604680_eqwuwaiyo",
+        "concept": "consul",
+        "embedding": [
+          0.07579842345478831,
+          0.04547905407287298,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11369763518218247,
+          0.054574864887447574,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6439767382179664,
+          0.09199667688828092,
+          0.6025871377606425,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436604683_ai3x4susc",
+        "concept": "containerization",
+        "embedding": [
+          0.07521384529619951,
+          0.12034215247391922,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11282076794429925,
+          0.05415396861326364,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6390102397197414,
+          0.0912871771028202,
+          0.5979398219281876,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "consul",
+      "target": "logging",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "consul",
+      "target": "testing",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "consul",
+      "target": "nginx",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "consul",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "consul",
+      "target": "scaling",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

@@ -1,0 +1,159 @@
+{
+  "id": "snapshot_1759436604713_general_concepts",
+  "timestamp": 1759436604713,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436604707_q1wgnz8pg",
+        "concept": "nomad",
+        "embedding": [
+          0.07582799620901645,
+          0.037913998104508226,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11374199431352468,
+          0.05459615727049184,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6442282226990698,
+          0.09203260324272426,
+          0.6028222450257618,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436604712_sc806yk9r",
+        "concept": "compliance",
+        "embedding": [
+          0.07556795122329653,
+          0.07556795122329653,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11335192683494479,
+          0.06498843805203501,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6420189462935335,
+          0.09171699232764763,
+          0.6007549242550578,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "nomad",
+      "target": "nginx",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "nomad",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "nomad",
+      "target": "consul",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "nomad",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "nomad",
+      "target": "nginx",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "compliance",
+      "target": "deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "compliance",
+      "target": "monitoring",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "compliance",
+      "target": "automation",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "compliance",
+      "target": "kubernetes",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "compliance",
+      "target": "terraform",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

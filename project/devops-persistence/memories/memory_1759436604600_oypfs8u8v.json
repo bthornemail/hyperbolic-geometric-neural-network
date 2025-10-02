@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604600_oypfs8u8v",
+  "timestamp": 1759436604600,
+  "concept": "monitoring",
+  "embedding": [
+    0.07560712097242227,
+    0.07560712097242227,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11341068145863341,
+    0.058217483148765146,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6423507490893828,
+    0.09176439272705468,
+    0.6010662857582167,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "configuration",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "deployment",
+    "compliance",
+    "deployment",
+    "automation",
+    "compliance"
+  ],
+  "consolidated": true
+}

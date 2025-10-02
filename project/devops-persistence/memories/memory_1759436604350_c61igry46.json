@@ -1,0 +1,51 @@
+{
+  "id": "memory_1759436604350_c61igry46",
+  "timestamp": 1759436604350,
+  "concept": "monitoring",
+  "embedding": [
+    0.07559893632516687,
+    0.07559893632516687,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.1133984044877503,
+    0.05972315969688182,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6422790256528081,
+    0.09175414652182973,
+    0.6010011460147062,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "containerization",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "deployment",
+    "compliance",
+    "deployment"
+  ],
+  "consolidated": false
+}

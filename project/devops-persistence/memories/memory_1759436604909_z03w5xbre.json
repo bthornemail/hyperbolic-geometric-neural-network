@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604909_z03w5xbre",
+  "timestamp": 1759436604909,
+  "concept": "configuration",
+  "embedding": [
+    0.07544706470709572,
+    0.09808118411922442,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11317059706064357,
+    0.053567415942037955,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6409936249006334,
+    0.09157051784294762,
+    0.5997939502510882,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "testing",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "orchestration",
+    "orchestration",
+    "microservices",
+    "elasticsearch",
+    "orchestration"
+  ],
+  "consolidated": false
+}

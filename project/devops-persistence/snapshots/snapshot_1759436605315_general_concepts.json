@@ -1,0 +1,129 @@
+{
+  "id": "snapshot_1759436605315_general_concepts",
+  "timestamp": 1759436605315,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436605299_5aj8qvsol",
+        "concept": "infrastructure",
+        "embedding": [
+          0.057791227464304075,
+          0.08090771845002571,
+          0.5779122746430406,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.0866868411964561,
+          0.03929803467572677,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.4909933254160014,
+          0.07014190363085734,
+          0.4594325214068646,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436605308_reoh3d0je",
+        "concept": "configuration",
+        "embedding": [
+          0.0754579030127441,
+          0.09809527391656733,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11318685451911616,
+          0.051311374048665995,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6410891911672001,
+          0.09158417016674288,
+          0.5998802294699448,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "configuration",
+      "target": "orchestration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "configuration",
+      "target": "orchestration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "configuration",
+      "target": "microservices",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "configuration",
+      "target": "elasticsearch",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "configuration",
+      "target": "orchestration",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

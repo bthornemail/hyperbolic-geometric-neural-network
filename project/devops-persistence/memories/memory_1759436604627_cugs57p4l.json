@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604627_cugs57p4l",
+  "timestamp": 1759436604627,
+  "concept": "compliance",
+  "embedding": [
+    0.0756269899213694,
+    0.0756269899213694,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.1134404848820541,
+    0.054451432743385965,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6425197900822778,
+    0.0917885414403254,
+    0.6012242490665747,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "security",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "deployment",
+    "monitoring",
+    "deployment",
+    "monitoring",
+    "automation"
+  ],
+  "consolidated": true
+}

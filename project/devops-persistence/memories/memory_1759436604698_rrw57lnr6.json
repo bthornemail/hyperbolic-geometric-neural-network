@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604698_rrw57lnr6",
+  "timestamp": 1759436604698,
+  "concept": "nginx",
+  "embedding": [
+    0.07582800121849906,
+    0.03791400060924953,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11374200182774857,
+    0.05459616087731931,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6442281862717076,
+    0.09203259803881539,
+    0.6028222822175496,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "security",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "docker",
+    "consul",
+    "docker",
+    "kibana",
+    "vault"
+  ],
+  "consolidated": false
+}

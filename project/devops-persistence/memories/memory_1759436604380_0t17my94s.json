@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604380_0t17my94s",
+  "timestamp": 1759436604380,
+  "concept": "prometheus",
+  "embedding": [
+    0.07559891977784142,
+    0.07559891977784142,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11339837966676211,
+    0.059723146624494704,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6422791475650678,
+    0.09175416393786684,
+    0.6010010232156197,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "containerization",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "deployment",
+    "monitoring",
+    "compliance",
+    "deployment",
+    "monitoring"
+  ],
+  "consolidated": false
+}

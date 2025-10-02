@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436605218_ra54s7kwu",
+  "timestamp": 1759436605218,
+  "concept": "grafana",
+  "embedding": [
+    0.07574731488238101,
+    0.053023120417666714,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11362097232357152,
+    0.05756795931060957,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.643547240955535,
+    0.091935320136505,
+    0.6021809887967722,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "infrastructure",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "logging",
+    "security",
+    "testing",
+    "docker",
+    "consul"
+  ],
+  "consolidated": false
+}

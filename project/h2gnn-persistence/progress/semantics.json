@@ -1,0 +1,19 @@
+{
+  "domain": "semantics",
+  "totalConcepts": 2,
+  "learnedConcepts": 2,
+  "masteryLevel": 0.15,
+  "lastUpdated": 1759435954975,
+  "learningCurve": [
+    {
+      "timestamp": 1759435954962,
+      "performance": 0.8
+    },
+    {
+      "timestamp": 1759435954975,
+      "performance": 0.7
+    }
+  ],
+  "weakAreas": [],
+  "strongAreas": []
+}

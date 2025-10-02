@@ -1,0 +1,159 @@
+{
+  "id": "snapshot_1759436604750_general_concepts",
+  "timestamp": 1759436604750,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436604745_ytpqdq9d7",
+        "concept": "testing",
+        "embedding": [
+          0.07570415303794077,
+          0.05299290712655854,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11355622955691114,
+          0.06510557161262905,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6431763945822936,
+          0.09188234208318481,
+          0.6018377197769557,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436604748_k4tbicqlb",
+        "concept": "orchestration",
+        "embedding": [
+          0.07538479876300283,
+          0.09800023839190368,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11307719814450425,
+          0.06483092693618243,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6404632125264971,
+          0.09149474464664244,
+          0.5992988976005715,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "testing",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "testing",
+      "target": "logging",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "testing",
+      "target": "security",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "testing",
+      "target": "scaling",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "testing",
+      "target": "ansible",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "orchestration",
+      "target": "configuration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "orchestration",
+      "target": "microservices",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "orchestration",
+      "target": "elasticsearch",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "orchestration",
+      "target": "configuration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "orchestration",
+      "target": "elasticsearch",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

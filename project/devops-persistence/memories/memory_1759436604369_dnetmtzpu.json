@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604369_dnetmtzpu",
+  "timestamp": 1759436604369,
+  "concept": "kubernetes",
+  "embedding": [
+    0.07559892584519359,
+    0.07559892584519359,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11339838876779038,
+    0.05972315141770292,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6422791028639151,
+    0.09175415755198787,
+    0.601001068241948,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "containerization",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "deployment",
+    "monitoring",
+    "compliance",
+    "deployment",
+    "monitoring"
+  ],
+  "consolidated": false
+}
