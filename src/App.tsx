@@ -4,6 +4,7 @@ import { GeometricVisualizer, createVisualizer } from './visualization/geometric
 import { HyperbolicGeometricHGN, createH2GNN, createHierarchicalDataset } from './core/H2GNN';
 import { HyperbolicArithmetic, createVector } from './math/hyperbolic-arithmetic';
 import PocketFlowDemo from './components/PocketFlowDemo';
+import CodeEmbeddingVisualizer from './components/CodeEmbeddingVisualizer';
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -141,6 +142,7 @@ function App() {
             <div className="hidden md:flex space-x-8">
               <a href="#features" className="text-white hover:text-cyan-300 transition-colors">Features</a>
               <a href="#demo" className="text-white hover:text-cyan-300 transition-colors">Demo</a>
+              <a href="#code-embeddings" className="text-white hover:text-cyan-300 transition-colors">Code</a>
               <a href="#architecture" className="text-white hover:text-cyan-300 transition-colors">Architecture</a>
             </div>
             <button className="bg-cyan-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-cyan-400 transition duration-300">
@@ -416,6 +418,24 @@ function App() {
           </div>
           
           <PocketFlowDemo />
+        </div>
+      </section>
+
+      {/* Code Embedding Visualizer Section */}
+      <section id="code-embeddings" className="py-20">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-white mb-4">
+              Code Hyperbolic Embeddings
+          </h2>
+            <p className="text-xl text-blue-100 max-w-2xl mx-auto">
+              Visualize your codebase structure in hyperbolic space. See how files, classes, and functions relate to each other through geometric distance.
+            </p>
+          </div>
+          
+          <div className="bg-black/40 rounded-2xl backdrop-blur-sm border border-white/10 overflow-hidden">
+            <CodeEmbeddingVisualizer />
+          </div>
         </div>
       </section>
 

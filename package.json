@@ -30,7 +30,8 @@
     "mcp:server": "tsx src/mcp/h2gnn-mcp-server.ts",
     "mcp:demo": "npx tsx src/demo/mcp-collaboration-demo.ts",
     "wordnet:demo": "npx tsx src/demo/simple-wordnet-test.ts",
-    "demo:all": "npm run wordnet:demo && npm run mcp:demo"
+    "code:demo": "npx tsx src/demo/code-embedding-demo.ts",
+    "demo:all": "npm run wordnet:demo && npm run mcp:demo && npm run code:demo"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.2",
