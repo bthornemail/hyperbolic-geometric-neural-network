@@ -750,6 +750,81 @@ export class WordNetProcessor {
   getRAGNode(): RAGNode {
     return this.ragNode;
   }
+
+  /**
+   * Compute hyperbolic distance between two concepts
+   */
+  computeHyperbolicDistance(embedding1: number[], embedding2: number[]): number {
+    if (!embedding1 || !embedding2) {
+      throw new Error('Embeddings are required for distance computation');
+    }
+
+    if (embedding1.length !== embedding2.length) {
+      throw new Error('Embeddings must have the same dimension');
+    }
+
+    // Use hyperbolic distance formula: d(x,y) = arccosh(1 + 2 * ||x-y||² / ((1-||x||²)(1-||y||²)))
+    const diff = embedding1.map((val, i) => val - embedding2[i]);
+    const diffNormSquared = diff.reduce((sum, val) => sum + val * val, 0);
+    
+    const norm1Squared = embedding1.reduce((sum, val) => sum + val * val, 0);
+    const norm2Squared = embedding2.reduce((sum, val) => sum + val * val, 0);
+    
+    const denominator = (1 - norm1Squared) * (1 - norm2Squared);
+    
+    if (denominator <= 0) {
+      throw new Error('Invalid embeddings: norms must be less than 1 for hyperbolic space');
+    }
+    
+    const argument = 1 + (2 * diffNormSquared) / denominator;
+    
+    if (argument <= 1) {
+      return 0; // Same point
+    }
+    
+    return Math.acosh(argument);
+  }
+
+  /**
+   * Find similar concepts using hyperbolic distance
+   */
+  findSimilarConcepts(concept: string, maxResults: number = 10): Array<{concept: string, distance: number}> {
+    if (!this.hierarchy) {
+      throw new Error('Hierarchy not built. Call buildHierarchy() first.');
+    }
+
+    const targetNode = this.hierarchy.nodes.find(n => 
+      n.synset.words.some(w => w.toLowerCase().includes(concept.toLowerCase()))
+    );
+
+    if (!targetNode || !targetNode.embedding) {
+      throw new Error(`Concept "${concept}" not found or has no embedding`);
+    }
+
+    const similarities: Array<{concept: string, distance: number}> = [];
+
+    for (const node of this.hierarchy.nodes) {
+      if (node.id !== targetNode.id && node.embedding) {
+        try {
+          const distance = this.computeHyperbolicDistance(
+            targetNode.embedding.data,
+            node.embedding.data
+          );
+          similarities.push({
+            concept: node.synset.words.join(', '),
+            distance
+          });
+        } catch (error) {
+          // Skip nodes with invalid embeddings
+          continue;
+        }
+      }
+    }
+
+    return similarities
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, maxResults);
+  }
 }
 
 /**
