@@ -24,6 +24,7 @@ import {
 import EnhancedH2GNN, { PersistenceConfig } from '../core/enhanced-h2gnn';
 import { HyperbolicGeometricHGN } from '../core/H2GNN';
 import { AdvancedASTAnalyzer, AdvancedAnalysisResult } from '../analysis/advanced-ast-analyzer';
+import { AutomatedRefactoringTool } from '../refactoring/automated-refactoring-tool';
 import * as ts from 'typescript';
 import { parse } from '@babel/parser';
 
@@ -50,6 +51,7 @@ interface MCPLSPIntegration {
   lspCapabilities: LSPCapabilities;
   astAnalyzer: ASTAnalyzer;
   advancedAnalyzer: AdvancedASTAnalyzer;
+  refactoringTool: AutomatedRefactoringTool;
   h2gnn: EnhancedH2GNN;
 }
 
@@ -625,6 +627,7 @@ class MCPLSPIntegration {
     this.h2gnn = new EnhancedH2GNN(h2gnnConfig, persistenceConfig);
     this.astAnalyzer = new ASTAnalyzer(this.h2gnn);
     this.advancedAnalyzer = new AdvancedASTAnalyzer();
+    this.refactoringTool = new AutomatedRefactoringTool();
 
     this.lspCapabilities = {
       completion: true,
@@ -801,6 +804,34 @@ class MCPLSPIntegration {
               },
               required: ["code"]
             }
+          },
+          {
+            name: "propose_and_apply_refactoring",
+            description: "Propose and optionally apply automated refactoring suggestions",
+            inputSchema: {
+              type: "object",
+              properties: {
+                code: {
+                  type: "string",
+                  description: "Code to refactor"
+                },
+                language: {
+                  type: "string",
+                  description: "Programming language",
+                  default: "typescript"
+                },
+                filePath: {
+                  type: "string",
+                  description: "Optional file path for context"
+                },
+                autoApply: {
+                  type: "boolean",
+                  description: "Whether to automatically apply refactoring",
+                  default: false
+                }
+              },
+              required: ["code"]
+            }
           }
         ]
       };
@@ -824,6 +855,9 @@ class MCPLSPIntegration {
           
           case "advanced_code_analysis":
             return await this.provideAdvancedCodeAnalysis(args);
+          
+          case "propose_and_apply_refactoring":
+            return await this.provideRefactoring(args);
           
           default:
             throw new McpError(
@@ -1120,6 +1154,82 @@ ${h2gnnInsights.map((insight, index) =>
   }
 
   /**
+   * Provide refactoring suggestions and application
+   */
+  private async provideRefactoring(args: any): Promise<any> {
+    const { code, language = 'typescript', filePath, autoApply = false } = args;
+    
+    console.log(`🔧 Proposing refactoring for ${language} code`);
+    
+    try {
+      // Get refactoring opportunities and apply if requested
+      const result = await this.refactoringTool.proposeAndApplyRefactoring(
+        code,
+        language,
+        filePath,
+        autoApply
+      );
+      
+      const { opportunities, applied } = result;
+      
+      // Format results
+      const opportunitiesText = opportunities.map((opp, index) => 
+        `${index + 1}. ${opp.type.toUpperCase()} (${opp.severity})
+   Description: ${opp.description}
+   Confidence: ${opp.confidence.toFixed(3)}
+   Benefits: ${opp.benefits.join(', ')}
+   Risks: ${opp.risks.join(', ')}
+   Estimated Effort: ${opp.estimatedEffort} minutes
+   Location: Line ${opp.location.startLine}-${opp.location.endLine}`
+      ).join('\n\n');
+      
+      const appliedText = applied.length > 0 ? applied.map((result, index) => 
+        `${index + 1}. ${result.opportunity.type.toUpperCase()} - ${result.success ? 'SUCCESS' : 'FAILED'}
+   Changes: +${result.changes.linesAdded} -${result.changes.linesRemoved} ~${result.changes.linesModified} lines
+   ${result.errors ? `Errors: ${result.errors.join(', ')}` : ''}
+   ${result.warnings ? `Warnings: ${result.warnings.join(', ')}` : ''}`
+      ).join('\n\n') : 'No refactoring applied';
+      
+      const resultText = `Refactoring Analysis Results:
+- Language: ${language}
+- File: ${filePath || 'N/A'}
+- Auto-Apply: ${autoApply}
+
+🔍 Refactoring Opportunities Found: ${opportunities.length}
+${opportunitiesText}
+
+${applied.length > 0 ? `\n🔧 Applied Refactoring: ${applied.length}\n${appliedText}` : ''}
+
+📈 Summary:
+- Total Opportunities: ${opportunities.length}
+- High Severity: ${opportunities.filter(o => o.severity === 'high').length}
+- Medium Severity: ${opportunities.filter(o => o.severity === 'medium').length}
+- Low Severity: ${opportunities.filter(o => o.severity === 'low').length}
+- Total Estimated Effort: ${opportunities.reduce((sum, o) => sum + o.estimatedEffort, 0)} minutes
+- Applied: ${applied.length}
+- Successful: ${applied.filter(r => r.success).length}`;
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: resultText
+          }
+        ]
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Refactoring analysis failed: ${error instanceof Error ? error.message : String(error)}`
+          }
+        ]
+      };
+    }
+  }
+
+  /**
    * Setup resource handlers
    */
   private setupResourceHandlers(): void {
@@ -1347,6 +1457,15 @@ class UserService {
     filePath: '/src/services/UserService.ts'
   });
   console.log(advancedAnalysis.content[0].text);
+  
+  console.log('\n🔧 Testing Automated Refactoring:');
+  const refactoring = await integration['provideRefactoring']({
+    code: typescriptCode,
+    language: 'typescript',
+    filePath: '/src/services/UserService.ts',
+    autoApply: false
+  });
+  console.log(refactoring.content[0].text);
   
   console.log('\n🎉 LSP + AST + MCP Integration Demo Complete!');
   console.log('✅ All components working together successfully!');

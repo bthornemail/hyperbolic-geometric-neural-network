@@ -591,6 +591,7 @@ Knowledge has been consolidated and stored in the persistence layer.`
     }
 
     // Trigger memory consolidation
+    await enhancedH2GNN.consolidateMemories();
     const status = enhancedH2GNN.getSystemStatus();
 
     return {
