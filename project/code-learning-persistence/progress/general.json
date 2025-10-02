@@ -1,0 +1,19 @@
+{
+  "domain": "general",
+  "totalConcepts": 2,
+  "learnedConcepts": 2,
+  "masteryLevel": 0.14500000000000002,
+  "lastUpdated": 1759437623075,
+  "learningCurve": [
+    {
+      "timestamp": 1759437622982,
+      "performance": 0.65
+    },
+    {
+      "timestamp": 1759437623075,
+      "performance": 0.8
+    }
+  ],
+  "weakAreas": [],
+  "strongAreas": []
+}
