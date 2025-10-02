@@ -465,56 +465,27 @@ class H2GNNSelfOptimizer {
   }
 
   private async identifyOptimizations(): Promise<OptimizationSuggestion[]> {
-    console.log('\n🎯 Phase 4: Identifying Optimization Opportunities');
+    console.log('\n🎯 Phase 4: Identifying Semantic-Based Optimization Opportunities');
     
     const suggestions: OptimizationSuggestion[] = [];
     
-    // Analyze overly complex elements
-    const averageComplexity = this.codeElements.reduce((sum, e) => sum + e.complexity, 0) / this.codeElements.length;
-    const overlyComplex = this.codeElements.filter(e => e.complexity > averageComplexity * 2);
+    // Semantic analysis using WordNet concepts
+    const semanticSuggestions = await this.analyzeSemanticRelationships();
+    suggestions.push(...semanticSuggestions);
     
-    for (const element of overlyComplex) {
-      suggestions.push({
-        type: 'refactor',
-        priority: 'high',
-        description: `Break down overly complex ${element.type} "${element.name}" (complexity: ${element.complexity})`,
-        target: element.id,
-        impact: Math.min(element.complexity / 50, 1),
-        effort: 0.7
-      });
-    }
+    // Conceptual clustering analysis
+    const clusteringSuggestions = await this.analyzeConceptualClustering();
+    suggestions.push(...clusteringSuggestions);
     
-    // Analyze isolated elements
-    const isolated = this.identifyIsolatedElements();
-    for (const element of isolated) {
-      suggestions.push({
-        type: 'architecture',
-        priority: 'medium',
-        description: `Integrate isolated ${element.type} "${element.name}" with related components`,
-        target: element.id,
-        impact: 0.5,
-        effort: 0.6
-      });
-    }
+    // Semantic similarity analysis
+    const similaritySuggestions = await this.analyzeSemanticSimilarities();
+    suggestions.push(...similaritySuggestions);
     
-    // Analyze performance opportunities
-    const performanceIssues = this.identifyPerformanceIssues();
-    for (const issue of performanceIssues) {
-      suggestions.push({
-        type: 'performance',
-        priority: 'medium',
-        description: issue.description,
-        target: issue.target,
-        impact: issue.impact,
-        effort: issue.effort
-      });
-    }
+    // Hierarchical relationship analysis
+    const hierarchySuggestions = await this.analyzeHierarchicalRelationships();
+    suggestions.push(...hierarchySuggestions);
     
-    // Analyze test coverage
-    const testSuggestions = this.identifyTestOpportunities();
-    suggestions.push(...testSuggestions);
-    
-    console.log(`✅ Identified ${suggestions.length} optimization opportunities`);
+    console.log(`✅ Identified ${suggestions.length} semantic-based optimization opportunities`);
     
     return suggestions;
   }
@@ -560,6 +531,275 @@ class H2GNNSelfOptimizer {
         impact: 0.7,
         effort: 0.6
       });
+    }
+    
+    return issues;
+  }
+
+  private async analyzeSemanticRelationships(): Promise<OptimizationSuggestion[]> {
+    const suggestions: OptimizationSuggestion[] = [];
+    
+    console.log('🔍 Analyzing semantic relationships using WordNet concepts...');
+    
+    // Map code elements to semantic concepts
+    const semanticMappings = await this.mapCodeToSemanticConcepts();
+    
+    for (const mapping of semanticMappings) {
+      const element = this.codeElements.find(e => e.id === mapping.elementId);
+      if (!element) continue;
+      
+      // Find semantically related elements
+      const relatedElements = await this.findSemanticallyRelatedElements(mapping.concept, mapping.elementId);
+      
+      if (relatedElements.length > 0) {
+        suggestions.push({
+          type: 'architecture',
+          priority: 'medium',
+          description: `"${element.name}" is semantically related to "${mapping.concept}" - consider grouping with related components: ${relatedElements.map(e => e.name).join(', ')}`,
+          target: element.id,
+          impact: 0.7,
+          effort: 0.6
+        });
+      }
+    }
+    
+    return suggestions;
+  }
+
+  private async mapCodeToSemanticConcepts(): Promise<Array<{elementId: string, concept: string}>> {
+    const mappings: Array<{elementId: string, concept: string}> = [];
+    
+    for (const element of this.codeElements) {
+      const concept = this.extractSemanticConcept(element);
+      if (concept) {
+        mappings.push({ elementId: element.id, concept });
+      }
+    }
+    
+    return mappings;
+  }
+
+  private extractSemanticConcept(element: CodeElement): string | null {
+    const name = element.name.toLowerCase();
+    
+    // Map code element names to WordNet concepts
+    const conceptMap: Record<string, string> = {
+      'h2gnn': 'neural_network',
+      'hyperbolic': 'geometry',
+      'geometric': 'geometry',
+      'neural': 'neural_network',
+      'network': 'neural_network',
+      'embedding': 'representation',
+      'vector': 'mathematics',
+      'arithmetic': 'mathematics',
+      'distance': 'measurement',
+      'similarity': 'comparison',
+      'clustering': 'grouping',
+      'hierarchy': 'structure',
+      'graph': 'structure',
+      'node': 'component',
+      'edge': 'connection',
+      'flow': 'process',
+      'workflow': 'process',
+      'training': 'learning',
+      'learning': 'learning',
+      'concept': 'idea',
+      'semantic': 'meaning',
+      'wordnet': 'lexical_database',
+      'integration': 'combination',
+      'collaboration': 'cooperation',
+      'optimization': 'improvement',
+      'analysis': 'examination',
+      'visualization': 'display',
+      'demo': 'demonstration',
+      'test': 'validation',
+      'server': 'service',
+      'client': 'service',
+      'interface': 'connection',
+      'processor': 'handler',
+      'generator': 'creator',
+      'analyzer': 'examiner',
+      'trainer': 'instructor'
+    };
+    
+    // Find matching concept
+    for (const [keyword, concept] of Object.entries(conceptMap)) {
+      if (name.includes(keyword)) {
+        return concept;
+      }
+    }
+    
+    return null;
+  }
+
+  private async findSemanticallyRelatedElements(concept: string, excludeId: string): Promise<CodeElement[]> {
+    const related: CodeElement[] = [];
+    
+    for (const element of this.codeElements) {
+      if (element.id === excludeId) continue;
+      
+      const elementConcept = this.extractSemanticConcept(element);
+      if (elementConcept === concept) {
+        related.push(element);
+      }
+    }
+    
+    return related;
+  }
+
+  private async analyzeConceptualClustering(): Promise<OptimizationSuggestion[]> {
+    const suggestions: OptimizationSuggestion[] = [];
+    
+    console.log('🧠 Analyzing conceptual clustering...');
+    
+    // Find elements that should be conceptually grouped
+    const clusters = await this.findConceptualClusters();
+    
+    for (const cluster of clusters) {
+      if (cluster.elements.length > 1) {
+        const clusterName = this.generateClusterName(cluster.concept);
+        suggestions.push({
+          type: 'architecture',
+          priority: 'high',
+          description: `Create "${clusterName}" module to group semantically related components: ${cluster.elements.map(e => e.name).join(', ')}`,
+          target: cluster.elements[0].id,
+          impact: 0.8,
+          effort: 0.7
+        });
+      }
+    }
+    
+    return suggestions;
+  }
+
+  private async findConceptualClusters(): Promise<Array<{concept: string, elements: CodeElement[]}>> {
+    const clusters: Map<string, CodeElement[]> = new Map();
+    
+    for (const element of this.codeElements) {
+      const concept = this.extractSemanticConcept(element);
+      if (concept) {
+        if (!clusters.has(concept)) {
+          clusters.set(concept, []);
+        }
+        clusters.get(concept)!.push(element);
+      }
+    }
+    
+    return Array.from(clusters.entries()).map(([concept, elements]) => ({ concept, elements }));
+  }
+
+  private generateClusterName(concept: string): string {
+    const nameMap: Record<string, string> = {
+      'neural_network': 'NeuralNetwork',
+      'geometry': 'Geometry',
+      'mathematics': 'Math',
+      'representation': 'Representation',
+      'measurement': 'Metrics',
+      'comparison': 'Comparison',
+      'grouping': 'Clustering',
+      'structure': 'Structure',
+      'component': 'Components',
+      'connection': 'Connections',
+      'process': 'Process',
+      'learning': 'Learning',
+      'idea': 'Concepts',
+      'meaning': 'Semantics',
+      'lexical_database': 'Lexical',
+      'combination': 'Integration',
+      'cooperation': 'Collaboration',
+      'improvement': 'Optimization',
+      'examination': 'Analysis',
+      'display': 'Visualization',
+      'demonstration': 'Demos',
+      'validation': 'Testing',
+      'service': 'Services',
+      'handler': 'Handlers',
+      'creator': 'Generators',
+      'examiner': 'Analyzers',
+      'instructor': 'Trainers'
+    };
+    
+    return nameMap[concept] || concept.charAt(0).toUpperCase() + concept.slice(1);
+  }
+
+  private async analyzeSemanticSimilarities(): Promise<OptimizationSuggestion[]> {
+    const suggestions: OptimizationSuggestion[] = [];
+    
+    console.log('🔍 Analyzing semantic similarities...');
+    
+    // Find elements with similar semantic meaning but different implementations
+    const similarPairs = await this.findSemanticallySimilarPairs();
+    
+    for (const pair of similarPairs) {
+      suggestions.push({
+        type: 'refactor',
+        priority: 'medium',
+        description: `"${pair.element1.name}" and "${pair.element2.name}" have similar semantic meaning (${pair.concept}) - consider creating a common abstraction or interface`,
+        target: pair.element1.id,
+        impact: 0.6,
+        effort: 0.5
+      });
+    }
+    
+    return suggestions;
+  }
+
+  private async findSemanticallySimilarPairs(): Promise<Array<{element1: CodeElement, element2: CodeElement, concept: string}>> {
+    const pairs: Array<{element1: CodeElement, element2: CodeElement, concept: string}> = [];
+    
+    for (let i = 0; i < this.codeElements.length; i++) {
+      for (let j = i + 1; j < this.codeElements.length; j++) {
+        const element1 = this.codeElements[i];
+        const element2 = this.codeElements[j];
+        
+        const concept1 = this.extractSemanticConcept(element1);
+        const concept2 = this.extractSemanticConcept(element2);
+        
+        if (concept1 && concept2 && concept1 === concept2) {
+          pairs.push({ element1, element2, concept: concept1 });
+        }
+      }
+    }
+    
+    return pairs;
+  }
+
+  private async analyzeHierarchicalRelationships(): Promise<OptimizationSuggestion[]> {
+    const suggestions: OptimizationSuggestion[] = [];
+    
+    console.log('🌳 Analyzing hierarchical relationships...');
+    
+    // Find elements that should have hierarchical relationships
+    const hierarchyIssues = await this.findHierarchyIssues();
+    
+    for (const issue of hierarchyIssues) {
+      suggestions.push({
+        type: 'architecture',
+        priority: 'medium',
+        description: `"${issue.parent.name}" should be a parent/abstraction of "${issue.child.name}" - consider establishing proper inheritance or composition relationship`,
+        target: issue.parent.id,
+        impact: 0.6,
+        effort: 0.6
+      });
+    }
+    
+    return suggestions;
+  }
+
+  private async findHierarchyIssues(): Promise<Array<{parent: CodeElement, child: CodeElement}>> {
+    const issues: Array<{parent: CodeElement, child: CodeElement}> = [];
+    
+    // Look for potential parent-child relationships based on naming patterns
+    for (const element of this.codeElements) {
+      const potentialChildren = this.codeElements.filter(other => 
+        other.id !== element.id && 
+        other.name.toLowerCase().includes(element.name.toLowerCase()) &&
+        other.name.length > element.name.length
+      );
+      
+      for (const child of potentialChildren) {
+        issues.push({ parent: element, child });
+      }
     }
     
     return issues;

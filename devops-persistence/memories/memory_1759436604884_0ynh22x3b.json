@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604884_0ynh22x3b",
+  "timestamp": 1759436604884,
+  "concept": "logging",
+  "embedding": [
+    0.0757220799626863,
+    0.05300545597388042,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11358311994402946,
+    0.06209210556940277,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6433299185069112,
+    0.09190427407241587,
+    0.601980276997492,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "data_configuration",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "testing",
+    "scaling",
+    "docker",
+    "security",
+    "scaling"
+  ],
+  "consolidated": true
+}

@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604651_zt9mxhb7y",
+  "timestamp": 1759436604651,
+  "concept": "security",
+  "embedding": [
+    0.0757232811825412,
+    0.06057862494603296,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.1135849217738118,
+    0.05452076245142965,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6433380819189009,
+    0.0919054402741287,
+    0.6019897584634458,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "security",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "logging",
+    "testing",
+    "scaling",
+    "logging",
+    "scaling"
+  ],
+  "consolidated": false
+}

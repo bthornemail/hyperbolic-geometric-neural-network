@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604701_ylrzecxu5",
+  "timestamp": 1759436604701,
+  "concept": "microservices",
+  "embedding": [
+    0.07544338806454823,
+    0.0980764044839127,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11316508209682233,
+    0.05431923940647471,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6409605721417975,
+    0.09156579602025679,
+    0.5997646608995962,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "security",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "configuration",
+    "orchestration",
+    "orchestration",
+    "configuration",
+    "elasticsearch"
+  ],
+  "consolidated": true
+}

@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436605629_ps1n3cnj7",
+  "timestamp": 1759436605629,
+  "concept": "scaling",
+  "embedding": [
+    0.07576297381566595,
+    0.053034081670966175,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11364446072349893,
+    0.054549341147279475,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6436838828529501,
+    0.09195484040756431,
+    0.6023055953485372,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "devops",
+    "type": "concept"
+  },
+  "performance": 0.9,
+  "confidence": 1,
+  "relationships": [
+    "logging",
+    "security",
+    "testing",
+    "docker",
+    "consul"
+  ],
+  "consolidated": false
+}

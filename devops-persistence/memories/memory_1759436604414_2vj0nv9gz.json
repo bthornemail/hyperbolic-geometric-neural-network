@@ -1,0 +1,52 @@
+{
+  "id": "memory_1759436604414_2vj0nv9gz",
+  "timestamp": 1759436604414,
+  "concept": "configuration",
+  "embedding": [
+    0.07543970225430045,
+    0.09807161293059058,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11315955338145067,
+    0.05507098264563932,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6409267518878938,
+    0.0915609645554134,
+    0.5997352756792331,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "monitoring",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "orchestration",
+    "orchestration",
+    "microservices",
+    "elasticsearch"
+  ],
+  "consolidated": false
+}

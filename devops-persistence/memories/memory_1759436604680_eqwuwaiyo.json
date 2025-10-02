@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604680_eqwuwaiyo",
+  "timestamp": 1759436604680,
+  "concept": "consul",
+  "embedding": [
+    0.07579842345478831,
+    0.04547905407287298,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11369763518218247,
+    0.054574864887447574,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6439767382179664,
+    0.09199667688828092,
+    0.6025871377606425,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "security",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "logging",
+    "testing",
+    "nginx",
+    "docker",
+    "scaling"
+  ],
+  "consolidated": false
+}

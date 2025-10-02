@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436605317_79bj58qtd",
+  "timestamp": 1759436605317,
+  "concept": "security",
+  "embedding": [
+    0.0757379255895153,
+    0.060590340471612235,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11360688838427294,
+    0.0515017894008704,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6434683375949979,
+    0.09192404822785684,
+    0.6021063741061171,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "ci_cd",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "logging",
+    "testing",
+    "scaling",
+    "grafana",
+    "scaling"
+  ],
+  "consolidated": false
+}

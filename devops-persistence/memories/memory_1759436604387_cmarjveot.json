@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604387_cmarjveot",
+  "timestamp": 1759436604387,
+  "concept": "elasticsearch",
+  "embedding": [
+    0.07541555847755757,
+    0.09804022602082484,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11312333771633636,
+    0.05957829119727047,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6407213935541396,
+    0.09153162765059138,
+    0.5995433281130793,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "containerization",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "configuration",
+    "orchestration",
+    "orchestration",
+    "configuration",
+    "microservices"
+  ],
+  "consolidated": false
+}

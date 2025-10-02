@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436605011_hlozlt1ys",
+  "timestamp": 1759436605011,
+  "concept": "monitoring",
+  "embedding": [
+    0.07561097641419545,
+    0.07561097641419545,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11341646462129318,
+    0.05746434207478854,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.642387101319995,
+    0.09176958590285644,
+    0.6010970558861649,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "infrastructure",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "deployment",
+    "compliance",
+    "deployment",
+    "automation",
+    "compliance"
+  ],
+  "consolidated": true
+}

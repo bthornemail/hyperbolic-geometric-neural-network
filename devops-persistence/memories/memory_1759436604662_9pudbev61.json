@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604662_9pudbev61",
+  "timestamp": 1759436604662,
+  "concept": "docker",
+  "embedding": [
+    0.07579843346203277,
+    0.04547906007721966,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11369765019304916,
+    0.05457487209266359,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6439766653252321,
+    0.09199666647503316,
+    0.6025872120530923,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "security",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "logging",
+    "testing",
+    "nginx",
+    "consul",
+    "scaling"
+  ],
+  "consolidated": false
+}

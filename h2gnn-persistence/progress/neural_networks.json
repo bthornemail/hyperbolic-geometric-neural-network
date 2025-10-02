@@ -1,0 +1,15 @@
+{
+  "domain": "neural_networks",
+  "totalConcepts": 1,
+  "learnedConcepts": 1,
+  "masteryLevel": 0.08,
+  "lastUpdated": 1759435954928,
+  "learningCurve": [
+    {
+      "timestamp": 1759435954928,
+      "performance": 0.8
+    }
+  ],
+  "weakAreas": [],
+  "strongAreas": []
+}

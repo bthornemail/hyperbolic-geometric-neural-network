@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604837_2ygujxaoq",
+  "timestamp": 1759436604837,
+  "concept": "security",
+  "embedding": [
+    0.07568193631209671,
+    0.06054554904967737,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11352290446814506,
+    0.0620591877759193,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6429884489391018,
+    0.09185549270558598,
+    0.6016611266907115,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "data_configuration",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "logging",
+    "scaling",
+    "testing",
+    "terraform",
+    "ansible"
+  ],
+  "consolidated": true
+}

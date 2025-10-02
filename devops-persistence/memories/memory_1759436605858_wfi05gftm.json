@@ -1,0 +1,50 @@
+{
+  "id": "memory_1759436605858_wfi05gftm",
+  "timestamp": 1759436605858,
+  "concept": "prometheus_monitoring",
+  "embedding": [
+    0.14777808994440778,
+    0.15516699444162815,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11083356745830582,
+    0.06797792137442757,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6277649008084736,
+    0.08968070011549623,
+    0.5874081748138456,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "technology",
+    "type": "pattern"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "continuous_integration",
+    "continuous_deployment"
+  ],
+  "consolidated": false
+}

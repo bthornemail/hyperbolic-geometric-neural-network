@@ -1,0 +1,129 @@
+{
+  "id": "snapshot_1759436604957_general_concepts",
+  "timestamp": 1759436604957,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436604945_vou3h8r1g",
+        "concept": "logging",
+        "embedding": [
+          0.07576719268278134,
+          0.05303703487794695,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11365078902417201,
+          0.05379470680477475,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6437137282041628,
+          0.09195910402916611,
+          0.6023389348414624,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436604952_wd3zdbqjk",
+        "concept": "infrastructure",
+        "embedding": [
+          0.05778634529723367,
+          0.08090088341612715,
+          0.5778634529723367,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.0866795179458505,
+          0.0410283051610359,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.4909495257869055,
+          0.0701356465409865,
+          0.4593936314716884,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "logging",
+      "target": "security",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "logging",
+      "target": "testing",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "logging",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "logging",
+      "target": "consul",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "logging",
+      "target": "scaling",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

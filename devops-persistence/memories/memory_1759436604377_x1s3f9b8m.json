@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604377_x1s3f9b8m",
+  "timestamp": 1759436604377,
+  "concept": "jenkins",
+  "embedding": [
+    0.07573530937895417,
+    0.053014716565267926,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11360296406843125,
+    0.05983089440937379,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.643437870586156,
+    0.09191969579802228,
+    0.6020853009248538,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "containerization",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "logging",
+    "security",
+    "testing",
+    "docker",
+    "consul"
+  ],
+  "consolidated": false
+}

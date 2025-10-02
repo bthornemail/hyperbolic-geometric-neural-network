@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604622_sufm2khpu",
+  "timestamp": 1759436604622,
+  "concept": "deployment",
+  "embedding": [
+    0.07562699268233888,
+    0.07562699268233888,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11344048902350833,
+    0.05445143473128399,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.642519769773594,
+    0.09178853853908485,
+    0.6012242695570512,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "security",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "monitoring",
+    "compliance",
+    "monitoring",
+    "automation",
+    "compliance"
+  ],
+  "consolidated": false
+}

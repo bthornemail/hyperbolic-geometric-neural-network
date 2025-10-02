@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604404_d7ljo67lt",
+  "timestamp": 1759436604404,
+  "concept": "nomad",
+  "embedding": [
+    0.07579973286929266,
+    0.03789986643464633,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11369959930393898,
+    0.05988178896674119,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6439854415080598,
+    0.09199792021543712,
+    0.6025974667148456,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "containerization",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "nginx",
+    "docker",
+    "consul",
+    "docker",
+    "nginx"
+  ],
+  "consolidated": false
+}

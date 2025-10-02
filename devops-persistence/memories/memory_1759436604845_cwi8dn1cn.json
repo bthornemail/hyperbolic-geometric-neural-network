@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604845_cwi8dn1cn",
+  "timestamp": 1759436604845,
+  "concept": "compliance",
+  "embedding": [
+    0.07558578484829497,
+    0.07558578484829497,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11337867727244244,
+    0.06198034357560187,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6421716228000509,
+    0.09173880325715013,
+    0.6008967379302631,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "data_configuration",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "deployment",
+    "monitoring",
+    "deployment",
+    "monitoring",
+    "automation"
+  ],
+  "consolidated": true
+}

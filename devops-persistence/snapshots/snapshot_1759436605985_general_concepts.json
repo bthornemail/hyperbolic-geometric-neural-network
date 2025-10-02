@@ -1,0 +1,111 @@
+{
+  "id": "snapshot_1759436605985_general_concepts",
+  "timestamp": 1759436605985,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436605858_wfi05gftm",
+        "concept": "prometheus_monitoring",
+        "embedding": [
+          0.14777808994440778,
+          0.15516699444162815,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11083356745830582,
+          0.06797792137442757,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6277649008084736,
+          0.08968070011549623,
+          0.5874081748138456,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436605977_aj9k4kbqu",
+        "concept": "devops_file_analysis",
+        "embedding": [
+          0.16142938443668947,
+          0.10761958962445967,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.10761958962445967,
+          0.6037458977932186,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.4571713611529239,
+          0.06531019445041769,
+          0.42778080559885945,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.9,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "prometheus_monitoring",
+      "target": "continuous_integration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "prometheus_monitoring",
+      "target": "continuous_deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.850",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8500000000000001
+}

@@ -1,0 +1,51 @@
+{
+  "id": "memory_1759436604343_vu2mxz46j",
+  "timestamp": 1759436604343,
+  "concept": "nginx",
+  "embedding": [
+    0.07579976678437238,
+    0.03789988339218619,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11369965017655856,
+    0.059881815759654164,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6439851944861199,
+    0.09199788492658857,
+    0.6025977184963921,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "containerization",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "docker",
+    "consul",
+    "docker"
+  ],
+  "consolidated": false
+}

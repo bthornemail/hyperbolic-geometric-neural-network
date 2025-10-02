@@ -1,0 +1,159 @@
+{
+  "id": "snapshot_1759436605110_general_concepts",
+  "timestamp": 1759436605110,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436605086_eao4h76dy",
+        "concept": "docker",
+        "embedding": [
+          0.0757822886006304,
+          0.04546937316037823,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.1136734329009456,
+          0.0575945393364791,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6438432189821868,
+          0.09197760271174096,
+          0.6024589865709059,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436605099_f42fjlyqf",
+        "concept": "kubernetes",
+        "embedding": [
+          0.07561092785176658,
+          0.07561092785176658,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11341639177764987,
+          0.0574643051673426,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6423874588473127,
+          0.09176963697818756,
+          0.6010966954917875,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "docker",
+      "target": "logging",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "docker",
+      "target": "testing",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "docker",
+      "target": "nginx",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "docker",
+      "target": "consul",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "docker",
+      "target": "scaling",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "kubernetes",
+      "target": "deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "kubernetes",
+      "target": "monitoring",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "kubernetes",
+      "target": "compliance",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "kubernetes",
+      "target": "deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "kubernetes",
+      "target": "monitoring",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

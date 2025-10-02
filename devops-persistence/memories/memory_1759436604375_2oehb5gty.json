@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604375_2oehb5gty",
+  "timestamp": 1759436604375,
+  "concept": "ansible",
+  "embedding": [
+    0.07573531048809048,
+    0.05301471734166334,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11360296573213571,
+    0.05983089528559147,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6434378624779197,
+    0.0919196946397028,
+    0.6020853091579577,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "containerization",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "logging",
+    "security",
+    "testing",
+    "docker",
+    "consul"
+  ],
+  "consolidated": false
+}

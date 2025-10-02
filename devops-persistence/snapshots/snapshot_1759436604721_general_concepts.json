@@ -1,0 +1,129 @@
+{
+  "id": "snapshot_1759436604721_general_concepts",
+  "timestamp": 1759436604721,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436604716_tv7nspuk6",
+        "concept": "infrastructure",
+        "embedding": [
+          0.05775837254936865,
+          0.08086172156911613,
+          0.5775837254936864,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.08663755882405297,
+          0.04967220039245703,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.4907102932417363,
+          0.07010147046310518,
+          0.4591711993198842,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436604719_es15s09wy",
+        "concept": "monitoring",
+        "embedding": [
+          0.0755679473669806,
+          0.0755679473669806,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.1133519210504709,
+          0.06498843473560331,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6420189747546298,
+          0.09171699639351852,
+          0.6007548956386722,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "monitoring",
+      "target": "deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "monitoring",
+      "target": "automation",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "monitoring",
+      "target": "compliance",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "monitoring",
+      "target": "kubernetes",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "monitoring",
+      "target": "terraform",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

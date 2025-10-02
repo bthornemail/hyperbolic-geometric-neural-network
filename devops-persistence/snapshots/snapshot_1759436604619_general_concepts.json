@@ -1,0 +1,159 @@
+{
+  "id": "snapshot_1759436604619_general_concepts",
+  "timestamp": 1759436604619,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436604615_77a7cez6p",
+        "concept": "vault",
+        "embedding": [
+          0.07582804741707952,
+          0.03791402370853976,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11374207112561927,
+          0.05459619414029724,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6442278503301465,
+          0.09203255004716378,
+          0.6028226252086145,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436604618_6n5b82ux8",
+        "concept": "configuration",
+        "embedding": [
+          0.07544343356370736,
+          0.09807646363281958,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11316515034556104,
+          0.05431927216586929,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6409602339528144,
+          0.09156574770754493,
+          0.5997649984535169,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "vault",
+      "target": "nginx",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "vault",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "vault",
+      "target": "consul",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "vault",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "vault",
+      "target": "nginx",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "configuration",
+      "target": "orchestration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "configuration",
+      "target": "orchestration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "configuration",
+      "target": "microservices",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "configuration",
+      "target": "elasticsearch",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "configuration",
+      "target": "orchestration",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

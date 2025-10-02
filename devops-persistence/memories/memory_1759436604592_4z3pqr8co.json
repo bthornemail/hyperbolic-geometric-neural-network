@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604592_4z3pqr8co",
+  "timestamp": 1759436604592,
+  "concept": "docker",
+  "embedding": [
+    0.0757784530031059,
+    0.04546707180186353,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11366767950465884,
+    0.058349408812391534,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6438062991995558,
+    0.09197232845707941,
+    0.602428349663797,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "configuration",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "logging",
+    "testing",
+    "nginx",
+    "consul",
+    "scaling"
+  ],
+  "consolidated": false
+}

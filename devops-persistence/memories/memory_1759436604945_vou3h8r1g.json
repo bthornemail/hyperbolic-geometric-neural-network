@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604945_vou3h8r1g",
+  "timestamp": 1759436604945,
+  "concept": "logging",
+  "embedding": [
+    0.07576719268278134,
+    0.05303703487794695,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11365078902417201,
+    0.05379470680477475,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6437137282041628,
+    0.09195910402916611,
+    0.6023389348414624,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "testing",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "security",
+    "testing",
+    "docker",
+    "consul",
+    "scaling"
+  ],
+  "consolidated": false
+}

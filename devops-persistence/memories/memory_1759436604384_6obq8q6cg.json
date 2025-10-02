@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604384_6obq8q6cg",
+  "timestamp": 1759436604384,
+  "concept": "grafana",
+  "embedding": [
+    0.07573530549697725,
+    0.05301471384788408,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11360295824546587,
+    0.05983089134261202,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6434378989649803,
+    0.09191969985214003,
+    0.6020852721089915,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "containerization",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "logging",
+    "security",
+    "testing",
+    "docker",
+    "consul"
+  ],
+  "consolidated": false
+}

@@ -1,0 +1,129 @@
+{
+  "id": "snapshot_1759436604695_general_concepts",
+  "timestamp": 1759436604695,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436604689_scbvtvewc",
+        "concept": "service_mesh",
+        "embedding": [
+          0.1494497379611107,
+          0.0896698427766664,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11208730347083301,
+          0.053801905665999836,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6348559916763208,
+          0.09069371309661725,
+          0.5940525285734682,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436604693_8r8b4ob7y",
+        "concept": "kubernetes",
+        "embedding": [
+          0.07562695347658345,
+          0.07562695347658345,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11344043021487517,
+          0.05445140650314008,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6425200581567002,
+          0.09178857973667147,
+          0.6012239785923631,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "kubernetes",
+      "target": "deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "kubernetes",
+      "target": "monitoring",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "kubernetes",
+      "target": "compliance",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "kubernetes",
+      "target": "deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "kubernetes",
+      "target": "monitoring",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

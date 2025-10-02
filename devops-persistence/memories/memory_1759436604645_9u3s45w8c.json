@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604645_9u3s45w8c",
+  "timestamp": 1759436604645,
+  "concept": "monitoring",
+  "embedding": [
+    0.07562697998188025,
+    0.07562697998188025,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11344046997282038,
+    0.054451425586953775,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6425198631935216,
+    0.0917885518847888,
+    0.601224175300866,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "security",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "deployment",
+    "compliance",
+    "deployment",
+    "automation",
+    "compliance"
+  ],
+  "consolidated": true
+}
