@@ -1,43 +1,30 @@
 {
   "domain": "general",
-  "totalConcepts": 7,
-  "learnedConcepts": 7,
-  "masteryLevel": 0.58,
-  "lastUpdated": 1759438927562,
+  "totalConcepts": 4,
+  "learnedConcepts": 4,
+  "masteryLevel": 0.325,
+  "lastUpdated": 1759439597737,
   "learningCurve": [
     {
-      "timestamp": 1759438927208,
+      "timestamp": 1759439597597,
       "performance": 0.9
     },
     {
-      "timestamp": 1759438927209,
+      "timestamp": 1759439597604,
+      "performance": 0.55
+    },
+    {
+      "timestamp": 1759439597657,
       "performance": 0.8
     },
     {
-      "timestamp": 1759438927226,
-      "performance": 0.8
-    },
-    {
-      "timestamp": 1759438927228,
-      "performance": 0.9
-    },
-    {
-      "timestamp": 1759438927469,
-      "performance": 0.7
-    },
-    {
-      "timestamp": 1759438927523,
-      "performance": 0.7
-    },
-    {
-      "timestamp": 1759438927562,
+      "timestamp": 1759439597737,
       "performance": 1
     }
   ],
   "weakAreas": [],
   "strongAreas": [
     "centralized_config",
-    "database_connection",
-    "class_generation_auth_service"
+    "advanced_analysis_typescript"
   ]
 }

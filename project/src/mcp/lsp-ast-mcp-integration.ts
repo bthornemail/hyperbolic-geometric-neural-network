@@ -23,6 +23,7 @@ import {
 
 import EnhancedH2GNN, { PersistenceConfig } from '../core/enhanced-h2gnn';
 import { HyperbolicGeometricHGN } from '../core/H2GNN';
+import { AdvancedASTAnalyzer, AdvancedAnalysisResult } from '../analysis/advanced-ast-analyzer';
 import * as ts from 'typescript';
 import { parse } from '@babel/parser';
 
@@ -48,6 +49,7 @@ interface MCPLSPIntegration {
   server: Server;
   lspCapabilities: LSPCapabilities;
   astAnalyzer: ASTAnalyzer;
+  advancedAnalyzer: AdvancedASTAnalyzer;
   h2gnn: EnhancedH2GNN;
 }
 
@@ -622,6 +624,7 @@ class MCPLSPIntegration {
 
     this.h2gnn = new EnhancedH2GNN(h2gnnConfig, persistenceConfig);
     this.astAnalyzer = new ASTAnalyzer(this.h2gnn);
+    this.advancedAnalyzer = new AdvancedASTAnalyzer();
 
     this.lspCapabilities = {
       completion: true,
@@ -775,6 +778,29 @@ class MCPLSPIntegration {
               },
               required: ["code", "range"]
             }
+          },
+          {
+            name: "advanced_code_analysis",
+            description: "Perform advanced code analysis with cognitive complexity, code smells, and anti-patterns",
+            inputSchema: {
+              type: "object",
+              properties: {
+                code: {
+                  type: "string",
+                  description: "Code to analyze"
+                },
+                language: {
+                  type: "string",
+                  description: "Programming language",
+                  default: "typescript"
+                },
+                filePath: {
+                  type: "string",
+                  description: "Optional file path for context"
+                }
+              },
+              required: ["code"]
+            }
           }
         ]
       };
@@ -795,6 +821,10 @@ class MCPLSPIntegration {
             return await this.provideDiagnostics(args);
           case "lsp_code_actions":
             return await this.provideCodeActions(args);
+          
+          case "advanced_code_analysis":
+            return await this.provideAdvancedCodeAnalysis(args);
+          
           default:
             throw new McpError(
               ErrorCode.MethodNotFound,
@@ -1020,6 +1050,76 @@ class MCPLSPIntegration {
   }
 
   /**
+   * Provide advanced code analysis
+   */
+  private async provideAdvancedCodeAnalysis(args: any): Promise<any> {
+    const { code, language = 'typescript', filePath } = args;
+    
+    console.log(`🔍 Performing advanced code analysis on ${language} code`);
+    
+    try {
+      // Perform advanced analysis
+      const analysis = await this.advancedAnalyzer.analyzeCode(code, language, filePath);
+      
+      // Format results
+      const metrics = analysis.metrics;
+      const codeSmells = analysis.codeSmells;
+      const antiPatterns = analysis.antiPatterns;
+      const recommendations = analysis.recommendations;
+      const h2gnnInsights = analysis.h2gnnInsights;
+      
+      const result = `Advanced Code Analysis Results:
+- Language: ${language}
+- File: ${filePath || 'N/A'}
+
+📊 Code Metrics:
+- Cognitive Complexity: ${metrics.cognitiveComplexity}
+- Cyclomatic Complexity: ${metrics.cyclomaticComplexity}
+- Maintainability Index: ${metrics.maintainabilityIndex.toFixed(2)}
+- Lines of Code: ${metrics.linesOfCode}
+- Comment Density: ${metrics.commentDensity.toFixed(3)}
+
+⚠️ Code Smells Found: ${codeSmells.length}
+${codeSmells.map((smell, index) => 
+  `${index + 1}. ${smell.type} (${smell.severity}): ${smell.description}`
+).join('\n')}
+
+🚫 Anti-Patterns Found: ${antiPatterns.length}
+${antiPatterns.map((pattern, index) => 
+  `${index + 1}. ${pattern.type} (${pattern.severity}): ${pattern.description}`
+).join('\n')}
+
+📊 Quality Score: ${analysis.qualityScore.toFixed(1)}/100
+
+💡 Recommendations:
+${recommendations.map((rec, index) => `${index + 1}. ${rec}`).join('\n')}
+
+🧠 H²GNN Insights: ${h2gnnInsights.length}
+${h2gnnInsights.map((insight, index) => 
+  `${index + 1}. ${insight.concept} (confidence: ${insight.confidence.toFixed(3)})`
+).join('\n')}`;
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: result
+          }
+        ]
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Advanced code analysis failed: ${error instanceof Error ? error.message : String(error)}`
+          }
+        ]
+      };
+    }
+  }
+
+  /**
    * Setup resource handlers
    */
   private setupResourceHandlers(): void {
@@ -1239,6 +1339,14 @@ class UserService {
     language: 'typescript'
   });
   console.log(codeActions.content[0].text);
+  
+  console.log('\n🔍 Testing Advanced Code Analysis:');
+  const advancedAnalysis = await integration['provideAdvancedCodeAnalysis']({
+    code: typescriptCode,
+    language: 'typescript',
+    filePath: '/src/services/UserService.ts'
+  });
+  console.log(advancedAnalysis.content[0].text);
   
   console.log('\n🎉 LSP + AST + MCP Integration Demo Complete!');
   console.log('✅ All components working together successfully!');
