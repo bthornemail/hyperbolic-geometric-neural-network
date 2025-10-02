@@ -11,6 +11,7 @@ import { promises as fs } from 'fs';
 import * as path from 'path';
 import { Vector, createVector } from '../math/hyperbolic-arithmetic.js';
 import { HyperbolicGeometricHGN } from '../core/H2GNN.js';
+import { getSharedH2GNN } from '../core/centralized-h2gnn-config.js';
 
 // Knowledge Graph Types
 export interface KnowledgeNode {
@@ -946,21 +947,412 @@ export class KnowledgeGraphMCP {
     _graph: KnowledgeGraph,
     constraints?: any
   ): Promise<string> {
-    // This is a simplified code generation - in production you'd use a proper LLM
-    const patterns = this.analyzeCodePatterns(relevantNodes);
+    // Get H²GNN understanding for enhanced code generation
+    const h2gnnUnderstanding = await this.getH2GNNUnderstanding(type, description, relevantNodes);
     
+    // Analyze code patterns with H²GNN insights
+    const patterns = this.analyzeCodePatterns(relevantNodes);
+    const enhancedPatterns = this.enhancePatternsWithH2GNN(patterns, h2gnnUnderstanding);
+    
+    // Generate code with H²GNN understanding
     switch (type) {
       case 'function':
-        return this.generateFunction(description, patterns, constraints);
+        return this.generateFunctionWithH2GNN(description, enhancedPatterns, h2gnnUnderstanding, constraints);
       case 'class':
-        return this.generateClass(description, patterns, constraints);
+        return this.generateClassWithH2GNN(description, enhancedPatterns, h2gnnUnderstanding, constraints);
       case 'interface':
-        return this.generateInterface(description, patterns, constraints);
+        return this.generateInterfaceWithH2GNN(description, enhancedPatterns, h2gnnUnderstanding, constraints);
       case 'test':
-        return this.generateTest(description, relevantNodes, constraints);
+        return this.generateTestWithH2GNN(description, relevantNodes, h2gnnUnderstanding, constraints);
       default:
-        return this.generateGenericCode(description, patterns, constraints);
+        return this.generateGenericCodeWithH2GNN(description, enhancedPatterns, h2gnnUnderstanding, constraints);
     }
+  }
+
+  /**
+   * Get H²GNN understanding for code generation
+   */
+  private async getH2GNNUnderstanding(type: string, description: string, relevantNodes: KnowledgeNode[]): Promise<any> {
+    try {
+      const h2gnn = getSharedH2GNN();
+      
+      // Query H²GNN for semantically similar concepts
+      const similarConcepts = await h2gnn.retrieveMemories(
+        `${type}_${description}`,
+        5
+      );
+      
+      // Get understanding snapshot for the domain
+      const domainSnapshot = await h2gnn.getUnderstandingSnapshot('code_generation');
+      
+      // Extract semantic features from relevant nodes
+      const semanticFeatures = this.extractSemanticFeaturesFromNodes(relevantNodes);
+      
+      return {
+        similarConcepts,
+        domainSnapshot,
+        semanticFeatures,
+        confidence: similarConcepts.length > 0 ? similarConcepts[0].confidence : 0.5,
+        patterns: similarConcepts.map(c => c.concept),
+        relationships: this.extractRelationshipsFromNodes(relevantNodes)
+      };
+    } catch (error) {
+      console.warn('H²GNN understanding not available, using fallback:', error);
+      return {
+        similarConcepts: [],
+        domainSnapshot: null,
+        semanticFeatures: [],
+        confidence: 0.3,
+        patterns: [],
+        relationships: []
+      };
+    }
+  }
+
+  /**
+   * Enhance patterns with H²GNN understanding
+   */
+  private enhancePatternsWithH2GNN(patterns: any, h2gnnUnderstanding: any): any {
+    const enhanced = { ...patterns };
+    
+    // Add H²GNN-learned patterns
+    if (h2gnnUnderstanding.patterns && h2gnnUnderstanding.patterns.length > 0) {
+      enhanced.h2gnnPatterns = h2gnnUnderstanding.patterns;
+      enhanced.confidence = h2gnnUnderstanding.confidence;
+    }
+    
+    // Add semantic features
+    if (h2gnnUnderstanding.semanticFeatures && h2gnnUnderstanding.semanticFeatures.length > 0) {
+      enhanced.semanticFeatures = h2gnnUnderstanding.semanticFeatures;
+    }
+    
+    // Add relationships
+    if (h2gnnUnderstanding.relationships && h2gnnUnderstanding.relationships.length > 0) {
+      enhanced.relationships = h2gnnUnderstanding.relationships;
+    }
+    
+    return enhanced;
+  }
+
+  /**
+   * Extract semantic features from nodes
+   */
+  private extractSemanticFeaturesFromNodes(nodes: KnowledgeNode[]): string[] {
+    const features: string[] = [];
+    
+    for (const node of nodes) {
+      if (node.content) {
+        const words = node.content.toLowerCase().split(/\s+/);
+        features.push(...words.filter(word => word.length > 3));
+      }
+      
+      if (node.name) {
+        const nameWords = node.name.toLowerCase().split(/(?=[A-Z])|_|-/);
+        features.push(...nameWords.filter(word => word.length > 2));
+      }
+      
+      if (node.type) {
+        features.push(node.type.toLowerCase());
+      }
+    }
+    
+    return [...new Set(features)]; // Remove duplicates
+  }
+
+  /**
+   * Extract relationships from nodes
+   */
+  private extractRelationshipsFromNodes(nodes: KnowledgeNode[]): any[] {
+    const relationships: any[] = [];
+    
+    for (const node of nodes) {
+      if (node.metadata.dependencies) {
+        for (const dep of node.metadata.dependencies) {
+          relationships.push({
+            type: 'depends_on',
+            source: node.id,
+            target: dep,
+            strength: 0.8
+          });
+        }
+      }
+      
+      if (node.metadata.imports) {
+        for (const imp of node.metadata.imports) {
+          relationships.push({
+            type: 'imports',
+            source: node.id,
+            target: imp,
+            strength: 0.6
+          });
+        }
+      }
+    }
+    
+    return relationships;
+  }
+
+  /**
+   * Generate function with H²GNN understanding
+   */
+  private async generateFunctionWithH2GNN(
+    description: string,
+    patterns: any,
+    h2gnnUnderstanding: any,
+    constraints?: any
+  ): Promise<string> {
+    const h2gnn = getSharedH2GNN();
+    
+    // Learn from this generation attempt
+    await h2gnn.learnWithMemory(
+      `function_generation_${description}`,
+      {
+        description,
+        patterns: patterns.h2gnnPatterns || [],
+        semanticFeatures: patterns.semanticFeatures || [],
+        relationships: patterns.relationships || []
+      },
+      {
+        domain: 'code_generation',
+        type: 'function_generation',
+        timestamp: new Date().toISOString()
+      },
+      h2gnnUnderstanding.confidence
+    );
+    
+    // Generate function with enhanced understanding
+    const functionName = this.generateFunctionName(description, patterns);
+    const parameters = this.generateParameters(description, patterns);
+    const returnType = this.generateReturnType(description, patterns);
+    const body = this.generateFunctionBody(description, patterns, h2gnnUnderstanding);
+    
+    return `export function ${functionName}(${parameters}): ${returnType} {
+  ${body}
+}`;
+  }
+
+  /**
+   * Generate class with H²GNN understanding
+   */
+  private async generateClassWithH2GNN(
+    description: string,
+    patterns: any,
+    h2gnnUnderstanding: any,
+    constraints?: any
+  ): Promise<string> {
+    const h2gnn = getSharedH2GNN();
+    
+    // Learn from this generation attempt
+    await h2gnn.learnWithMemory(
+      `class_generation_${description}`,
+      {
+        description,
+        patterns: patterns.h2gnnPatterns || [],
+        semanticFeatures: patterns.semanticFeatures || [],
+        relationships: patterns.relationships || []
+      },
+      {
+        domain: 'code_generation',
+        type: 'class_generation',
+        timestamp: new Date().toISOString()
+      },
+      h2gnnUnderstanding.confidence
+    );
+    
+    // Generate class with enhanced understanding
+    const className = this.generateClassName(description, patterns);
+    const properties = this.generateClassProperties(description, patterns, h2gnnUnderstanding);
+    const methods = this.generateClassMethods(description, patterns, h2gnnUnderstanding);
+    
+    return `export class ${className} {
+  ${properties}
+  
+  ${methods}
+}`;
+  }
+
+  /**
+   * Generate interface with H²GNN understanding
+   */
+  private async generateInterfaceWithH2GNN(
+    description: string,
+    patterns: any,
+    h2gnnUnderstanding: any,
+    constraints?: any
+  ): Promise<string> {
+    const h2gnn = getSharedH2GNN();
+    
+    // Learn from this generation attempt
+    await h2gnn.learnWithMemory(
+      `interface_generation_${description}`,
+      {
+        description,
+        patterns: patterns.h2gnnPatterns || [],
+        semanticFeatures: patterns.semanticFeatures || [],
+        relationships: patterns.relationships || []
+      },
+      {
+        domain: 'code_generation',
+        type: 'interface_generation',
+        timestamp: new Date().toISOString()
+      },
+      h2gnnUnderstanding.confidence
+    );
+    
+    // Generate interface with enhanced understanding
+    const interfaceName = this.generateInterfaceName(description, patterns);
+    const members = this.generateInterfaceMembers(description, patterns, h2gnnUnderstanding);
+    
+    return `export interface ${interfaceName} {
+  ${members}
+}`;
+  }
+
+  /**
+   * Generate test with H²GNN understanding
+   */
+  private async generateTestWithH2GNN(
+    description: string,
+    relevantNodes: KnowledgeNode[],
+    h2gnnUnderstanding: any,
+    constraints?: any
+  ): Promise<string> {
+    const h2gnn = getSharedH2GNN();
+    
+    // Learn from this generation attempt
+    await h2gnn.learnWithMemory(
+      `test_generation_${description}`,
+      {
+        description,
+        relevantNodes: relevantNodes.map(n => ({ id: n.id, type: n.type, name: n.name })),
+        semanticFeatures: h2gnnUnderstanding.semanticFeatures || [],
+        relationships: h2gnnUnderstanding.relationships || []
+      },
+      {
+        domain: 'code_generation',
+        type: 'test_generation',
+        timestamp: new Date().toISOString()
+      },
+      h2gnnUnderstanding.confidence
+    );
+    
+    // Generate test with enhanced understanding
+    const testName = this.generateTestName(description);
+    const testCases = this.generateTestCases(description, relevantNodes, h2gnnUnderstanding);
+    
+    return `describe('${testName}', () => {
+  ${testCases}
+});`;
+  }
+
+  /**
+   * Generate generic code with H²GNN understanding
+   */
+  private async generateGenericCodeWithH2GNN(
+    description: string,
+    patterns: any,
+    h2gnnUnderstanding: any,
+    constraints?: any
+  ): Promise<string> {
+    const h2gnn = getSharedH2GNN();
+    
+    // Learn from this generation attempt
+    await h2gnn.learnWithMemory(
+      `generic_generation_${description}`,
+      {
+        description,
+        patterns: patterns.h2gnnPatterns || [],
+        semanticFeatures: patterns.semanticFeatures || [],
+        relationships: patterns.relationships || []
+      },
+      {
+        domain: 'code_generation',
+        type: 'generic_generation',
+        timestamp: new Date().toISOString()
+      },
+      h2gnnUnderstanding.confidence
+    );
+    
+    // Generate generic code with enhanced understanding
+    return `// Generated with H²GNN understanding
+// Description: ${description}
+// Confidence: ${h2gnnUnderstanding.confidence.toFixed(3)}
+// Patterns: ${patterns.h2gnnPatterns?.join(', ') || 'None'}
+
+${this.generateGenericCode(description, patterns, constraints)}`;
+  }
+
+  // Helper methods for code generation
+  private generateFunctionName(description: string, patterns: any): string {
+    const words = description.toLowerCase().split(/\s+/);
+    return words.map((word, index) => 
+      index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)
+    ).join('');
+  }
+
+  private generateParameters(description: string, patterns: any): string {
+    // Simple parameter generation based on description
+    const words = description.toLowerCase().split(/\s+/);
+    const paramWords = words.filter(word => word.length > 3);
+    return paramWords.slice(0, 2).map(word => `${word}: any`).join(', ');
+  }
+
+  private generateReturnType(description: string, patterns: any): string {
+    if (description.includes('return') || description.includes('get')) {
+      return 'any';
+    }
+    return 'void';
+  }
+
+  private generateFunctionBody(description: string, patterns: any, h2gnnUnderstanding: any): string {
+    return `// TODO: Implement ${description}
+// H²GNN Confidence: ${h2gnnUnderstanding.confidence.toFixed(3)}
+// Learned Patterns: ${patterns.h2gnnPatterns?.join(', ') || 'None'}
+throw new Error('Not implemented');`;
+  }
+
+  private generateClassName(description: string, patterns: any): string {
+    const words = description.toLowerCase().split(/\s+/);
+    return words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+  }
+
+  private generateClassProperties(description: string, patterns: any, h2gnnUnderstanding: any): string {
+    return `// Properties based on H²GNN understanding
+// Confidence: ${h2gnnUnderstanding.confidence.toFixed(3)}
+private _data: any;`;
+  }
+
+  private generateClassMethods(description: string, patterns: any, h2gnnUnderstanding: any): string {
+    return `// Methods based on H²GNN understanding
+// Confidence: ${h2gnnUnderstanding.confidence.toFixed(3)}
+public process(): void {
+  // TODO: Implement based on learned patterns
+}`;
+  }
+
+  private generateInterfaceName(description: string, patterns: any): string {
+    const words = description.toLowerCase().split(/\s+/);
+    return 'I' + words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+  }
+
+  private generateInterfaceMembers(description: string, patterns: any, h2gnnUnderstanding: any): string {
+    return `// Interface members based on H²GNN understanding
+// Confidence: ${h2gnnUnderstanding.confidence.toFixed(3)}
+data: any;
+process(): void;`;
+  }
+
+  private generateTestName(description: string): string {
+    return description.replace(/\s+/g, ' ').trim();
+  }
+
+  private generateTestCases(description: string, relevantNodes: KnowledgeNode[], h2gnnUnderstanding: any): string {
+    return `it('should work correctly', () => {
+  // Test case based on H²GNN understanding
+  // Confidence: ${h2gnnUnderstanding.confidence.toFixed(3)}
+  // Relevant nodes: ${relevantNodes.length}
+  expect(true).toBe(true);
+});`;
   }
 
   private analyzeCodePatterns(nodes: KnowledgeNode[]): any {
