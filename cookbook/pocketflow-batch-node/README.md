@@ -11,15 +11,17 @@ This example demonstrates the BatchNode concept in PocketFlow by implementing a 
   3. `post`: Combines results from all chunks
 
 ## Project Structure
+
 ```
 pocketflow-batch-node/
 ├── README.md
-├── requirements.txt
 ├── data/
 │   └── sales.csv      # Sample large CSV file
-├── main.py            # Entry point
-├── flow.py            # Flow definition
-└── nodes.py           # BatchNode implementation
+├── package.json
+├── src/
+│   ├── main.ts            # Entry point
+│   ├── flow.ts            # Flow definition
+│   └── nodes.ts           # BatchNode implementation
 ```
 
 ## How it Works
@@ -36,13 +38,13 @@ The example processes a large CSV file containing sales data:
 ## Installation
 
 ```bash
-pip install -r requirements.txt
+npm install
 ```
 
 ## Usage
 
 ```bash
-python main.py
+npm run main
 ```
 
 ## Sample Output
@@ -51,8 +53,8 @@ python main.py
 Processing sales.csv in chunks...
 
 Final Statistics:
-- Total Sales: $1,234,567.89
-- Average Sale: $123.45
+- Total Sales: $999,359.04
+- Average Sale: $99.94
 - Total Transactions: 10,000
 ```
 
@@ -60,4 +62,4 @@ Final Statistics:
 
 1. **Chunk-based Processing**: Shows how BatchNode handles large inputs by breaking them into manageable pieces
 2. **Independent Processing**: Demonstrates how each chunk is processed separately
-3. **Result Aggregation**: Shows how individual results are combined into a final output 
+3. **Result Aggregation**: Shows how individual results are combined into a final output

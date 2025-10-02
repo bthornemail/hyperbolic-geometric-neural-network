@@ -1,95 +1,77 @@
-# Dependencies
-node_modules/
-vendor/
-.pnp/
-.pnp.js
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.direnv
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# Build outputs
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Node
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+venv/
+ENV/
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Build output
 dist/
 build/
 out/
-*.pyc
-__pycache__/
 
-# Environment files
-.env
-.env.local
-.env.*.local
-.env.development
-.env.test
-.env.production
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# IDE - JetBrains
-.idea/
-*.iml
-*.iws
-*.ipr
-
-# IDE - Eclipse
-.project
-.classpath
-.settings/
-
-# Logs
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Operating System
-.DS_Store
-Thumbs.db
-*.swp
-*.swo
-
-# Testing
+# Coverage reports
 coverage/
-.nyc_output/
+.coverage
+.coverage.*
+htmlcov/
 
-# Temporary files
+# Misc
+*.bak
 *.tmp
 *.temp
-.cache/
 
-# Compiled files
-*.com
-*.class
-*.dll
-*.exe
-*.o
-*.so
 
-# Package files
-*.7z
-*.dmg
-*.gz
-*.iso
-*.jar
-*.rar
-*.tar
-*.zip
-
-# Database
-*.sqlite
-*.sqlite3
-*.db
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Optional REPL history
-.node_repl_history 
-
-#Ignore cursor AI rules
-.cursor/rules/codacy.mdc
+test.ipynb
+.pytest_cache/

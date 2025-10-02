@@ -7,11 +7,9 @@
  * to the H²GNN MCP Server system
  */
 
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { z } from "zod";
 import { promises as fs } from 'fs';
 import * as path from 'path';
-import { HyperbolicArithmetic, Vector, createVector } from '../math/hyperbolic-arithmetic.js';
+import { Vector, createVector } from '../math/hyperbolic-arithmetic.js';
 import { HyperbolicGeometricHGN } from '../core/H2GNN.js';
 
 // Knowledge Graph Types
@@ -110,9 +108,7 @@ export class KnowledgeGraphMCP {
   private async initializeH2GNN(): Promise<void> {
     try {
       this.h2gnn = new HyperbolicGeometricHGN({
-        inputDim: 128,
-        hiddenDim: 64,
-        outputDim: 32,
+        embeddingDim: 128,
         numLayers: 3,
         curvature: -1.0
       });
@@ -153,9 +149,9 @@ export class KnowledgeGraphMCP {
       const nodes: KnowledgeNode[] = [];
       const edges: KnowledgeEdge[] = [];
       const languages = new Set<string>();
-      let totalFiles = 0;
-      let totalLines = 0;
-      let totalComplexity = 0;
+      const totalFiles = 0;
+      const totalLines = 0;
+      const totalComplexity = 0;
 
       if (stats.isDirectory()) {
         await this.analyzeDirectory(absolutePath, nodes, edges, {
@@ -530,7 +526,7 @@ export class KnowledgeGraphMCP {
     }
   }
 
-  private extractCodeElements(content: string, filePath: string, extension: string): {
+  private extractCodeElements(content: string, _filePath: string, extension: string): {
     elements: any[];
     imports: string[];
     exports: string[];
@@ -675,7 +671,7 @@ export class KnowledgeGraphMCP {
     return '';
   }
 
-  private calculateComplexity(content: string, extension: string): number {
+  private calculateComplexity(content: string, _extension: string): number {
     // Simple cyclomatic complexity calculation
     const complexityPatterns = [
       /\bif\b/g,
@@ -722,7 +718,7 @@ export class KnowledgeGraphMCP {
     }
   }
 
-  private extractNodeFeatures(node: KnowledgeNode, nodes: KnowledgeNode[], edges: KnowledgeEdge[]): number[] {
+  private extractNodeFeatures(node: KnowledgeNode, _nodes: KnowledgeNode[], _edges: KnowledgeEdge[]): number[] {
     const features: number[] = [];
     
     // Type-based features
@@ -735,8 +731,8 @@ export class KnowledgeGraphMCP {
     features.push((node.metadata.lineEnd || 0) - (node.metadata.lineStart || 0) + 1);
     
     // Connectivity features
-    const incomingEdges = edges.filter(e => e.target === node.id);
-    const outgoingEdges = edges.filter(e => e.source === node.id);
+    const incomingEdges = _edges.filter((e: any) => e.target === node.id);
+    const outgoingEdges = _edges.filter((e: any) => e.source === node.id);
     features.push(incomingEdges.length);
     features.push(outgoingEdges.length);
     
@@ -769,9 +765,6 @@ export class KnowledgeGraphMCP {
       if (!this.h2gnn) {
         throw new Error('H²GNN not initialized');
       }
-      
-      // Convert features to tensor-like structure for H²GNN
-      const inputTensor = createVector(features);
       
       // For now, just project features to hyperbolic space
       // In a full implementation, this would use the trained H²GNN model
@@ -950,7 +943,7 @@ export class KnowledgeGraphMCP {
     type: string,
     description: string,
     relevantNodes: KnowledgeNode[],
-    graph: KnowledgeGraph,
+    _graph: KnowledgeGraph,
     constraints?: any
   ): Promise<string> {
     // This is a simplified code generation - in production you'd use a proper LLM
@@ -994,9 +987,9 @@ export class KnowledgeGraphMCP {
     return patterns;
   }
 
-  private generateFunction(description: string, patterns: any, constraints?: any): string {
+  private generateFunction(description: string, _patterns: any, _constraints?: any): string {
     const functionName = this.extractFunctionName(description);
-    const includeComments = constraints?.includeComments !== false;
+    const includeComments = _constraints?.includeComments !== false;
     
     return `${includeComments ? `/**\n * ${description}\n */\n` : ''}export function ${functionName}(): void {
   // TODO: Implement ${description}
@@ -1004,9 +997,9 @@ export class KnowledgeGraphMCP {
 }`;
   }
 
-  private generateClass(description: string, patterns: any, constraints?: any): string {
+  private generateClass(description: string, _patterns: any, _constraints?: any): string {
     const className = this.extractClassName(description);
-    const includeComments = constraints?.includeComments !== false;
+    const includeComments = _constraints?.includeComments !== false;
     
     return `${includeComments ? `/**\n * ${description}\n */\n` : ''}export class ${className} {
   constructor() {
@@ -1017,16 +1010,16 @@ export class KnowledgeGraphMCP {
 }`;
   }
 
-  private generateInterface(description: string, patterns: any, constraints?: any): string {
+  private generateInterface(description: string, _patterns: any, _constraints?: any): string {
     const interfaceName = this.extractInterfaceName(description);
-    const includeComments = constraints?.includeComments !== false;
+    const includeComments = _constraints?.includeComments !== false;
     
     return `${includeComments ? `/**\n * ${description}\n */\n` : ''}export interface ${interfaceName} {
   // TODO: Define properties for ${description}
 }`;
   }
 
-  private generateTest(description: string, relevantNodes: KnowledgeNode[], constraints?: any): string {
+  private generateTest(description: string, _relevantNodes: KnowledgeNode[], _constraints?: any): string {
     const testName = this.extractTestName(description);
     
     return `import { describe, it, expect } from 'vitest';
@@ -1039,7 +1032,7 @@ describe('${testName}', () => {
 });`;
   }
 
-  private generateGenericCode(description: string, patterns: any, constraints?: any): string {
+  private generateGenericCode(description: string, _patterns: any, _constraints?: any): string {
     return `// Generated code for: ${description}
 // TODO: Implement functionality based on the description
 export function generatedCode() {
@@ -1090,7 +1083,7 @@ export function generatedCode() {
     }
   }
 
-  private generateApiDocs(nodes: KnowledgeNode[], format: string, options?: any): string {
+  private generateApiDocs(nodes: KnowledgeNode[], _format: string, _options?: any): string {
     const apiNodes = nodes.filter(node => ['class', 'function', 'interface'].includes(node.type));
     
     let docs = '# API Documentation\n\n';
@@ -1103,7 +1096,7 @@ export function generatedCode() {
       if (node.metadata.filePath) {
         docs += `**File:** \`${node.metadata.filePath}\`\n\n`;
       }
-      if (options?.includeCodeExamples && node.content) {
+      if (_options?.includeCodeExamples && node.content) {
         docs += `**Code:**\n\`\`\`typescript\n${node.content}\n\`\`\`\n\n`;
       }
       docs += '---\n\n';
@@ -1112,7 +1105,7 @@ export function generatedCode() {
     return docs;
   }
 
-  private generateReadme(graph: KnowledgeGraph, format: string, options?: any): string {
+  private generateReadme(graph: KnowledgeGraph, _format: string, _options?: any): string {
     return `# Project Documentation
 
 ## Overview
@@ -1125,7 +1118,7 @@ This project contains ${graph.metadata.totalFiles} files with ${graph.metadata.t
 - **Interfaces:** ${graph.nodes.filter(n => n.type === 'interface').length}
 
 ## Architecture
-${options?.includeArchitectureDiagrams ? '```mermaid\ngraph TD\n  A[Root] --> B[Components]\n  A --> C[Utils]\n```\n' : ''}
+${_options?.includeArchitectureDiagrams ? '```mermaid\ngraph TD\n  A[Root] --> B[Components]\n  A --> C[Utils]\n```\n' : ''}
 
 Average complexity: ${graph.metadata.avgComplexity.toFixed(2)}
 
@@ -1133,7 +1126,7 @@ Generated on: ${graph.metadata.generatedAt.toISOString()}
 `;
   }
 
-  private generateArchitectureDocs(graph: KnowledgeGraph, format: string, options?: any): string {
+  private generateArchitectureDocs(graph: KnowledgeGraph, _format: string, _options?: any): string {
     return `# Architecture Documentation
 
 ## System Overview
@@ -1152,7 +1145,7 @@ The system shows a clustering coefficient of ${graph.metadata.clusteringCoeffici
 `;
   }
 
-  private generateTutorial(nodes: KnowledgeNode[], format: string, options?: any): string {
+  private generateTutorial(nodes: KnowledgeNode[], _format: string, _options?: any): string {
     return `# Tutorial
 
 ## Getting Started
@@ -1163,7 +1156,7 @@ ${nodes.slice(0, 5).map((node, index) => `
 ### ${index + 1}. ${node.name}
 ${node.metadata.description || 'Component description'}
 
-${options?.includeCodeExamples && node.content ? `\`\`\`typescript\n${node.content.split('\n').slice(0, 10).join('\n')}\n...\n\`\`\`` : ''}
+${_options?.includeCodeExamples && node.content ? `\`\`\`typescript\n${node.content.split('\n').slice(0, 10).join('\n')}\n...\n\`\`\`` : ''}
 `).join('\n')}
 
 ## Next Steps
@@ -1171,7 +1164,7 @@ Explore the codebase and experiment with the components.
 `;
   }
 
-  private generateGenericDocs(nodes: KnowledgeNode[], type: string, format: string, options?: any): string {
+  private generateGenericDocs(nodes: KnowledgeNode[], type: string, _format: string, _options?: any): string {
     return `# ${type.charAt(0).toUpperCase() + type.slice(1)} Documentation
 
 Generated documentation for ${nodes.length} components.
@@ -1203,7 +1196,7 @@ ${nodes.map(node => `## ${node.name}\n${node.metadata.description || 'No descrip
         }
         break;
 
-      case 'dependency':
+      case 'dependency': {
         // Find nodes related by dependencies
         const queryNode = graph.nodes.find(n => n.name.toLowerCase().includes(query.toLowerCase()));
         if (queryNode) {
@@ -1217,8 +1210,9 @@ ${nodes.map(node => `## ${node.name}\n${node.metadata.description || 'No descrip
           }
         }
         break;
+      }
 
-      case 'cluster':
+      case 'cluster': {
         // Find nodes in the same cluster
         const clusters = this.findClusters(graph);
         for (const cluster of clusters) {
@@ -1234,6 +1228,7 @@ ${nodes.map(node => `## ${node.name}\n${node.metadata.description || 'No descrip
           }
         }
         break;
+      }
 
       default:
         // Default similarity search

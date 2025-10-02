@@ -504,6 +504,10 @@ export class HyperbolicGeometricHGN {
     return [...this.trainingHistory];
   }
 
+  getConfig(): Required<H2GNNConfig> {
+    return this.config;
+  }
+
   /**
    * Get current geometric metrics
    */

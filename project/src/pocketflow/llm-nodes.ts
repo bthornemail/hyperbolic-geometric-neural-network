@@ -131,13 +131,13 @@ export class LLMNode extends HyperbolicNode {
     };
     
     const result = await this.h2gnn.predict(trainingData);
-    return result.embeddings[0] || createVector(new Array(16).fill(0));
+    return result.embeddings[0] || createVector(new Array(this.h2gnn.getConfig().embeddingDim).fill(0));
   }
 
   private textToFeatures(text: string): number[] {
     // Simple text feature extraction
-    const words = text.toLowerCase().split(/\s+/);
-    const features = new Array(16).fill(0);
+    const features = new Array(this.h2gnn.getConfig().embeddingDim).fill(0);
+    const words = text.split(/\s+/).filter(word => word.length > 0);
     
     // Basic features
     features[0] = Math.min(words.length / 100, 1); // Length feature
@@ -236,11 +236,11 @@ export class RAGNode extends HyperbolicNode {
     };
     
     const result = await this.h2gnn.predict(trainingData);
-    return result.embeddings[0] || createVector(new Array(16).fill(0));
+    return result.embeddings[0] || createVector(new Array(this.h2gnn.getConfig().embeddingDim).fill(0));
   }
 
   private textToAdvancedFeatures(text: string, context?: any): number[] {
-    const features = new Array(16).fill(0);
+    const features = new Array(this.h2gnn.getConfig().embeddingDim).fill(0);
     const words = text.toLowerCase().split(/\s+/);
     
     // Basic text features
@@ -438,11 +438,11 @@ Provide a structured comparison highlighting key relationships and hierarchical 
     };
     
     const result = await this.h2gnn.predict(trainingData);
-    return result.embeddings[0] || createVector(new Array(16).fill(0));
+    return result.embeddings[0] || createVector(new Array(this.h2gnn.getConfig().embeddingDim).fill(0));
   }
 
   private textToAgentFeatures(text: string, context?: any): number[] {
-    const features = new Array(16).fill(0);
+    const features = new Array(this.h2gnn.getConfig().embeddingDim).fill(0);
     
     // Agent-specific features
     const actionWords = ['search', 'analyze', 'compare', 'summarize', 'find', 'identify'];
@@ -591,11 +591,11 @@ Format as a structured list with clear hierarchy.`;
     };
     
     const result = await this.h2gnn.predict(trainingData);
-    return result.embeddings[0] || createVector(new Array(16).fill(0));
+    return result.embeddings[0] || createVector(new Array(this.h2gnn.getConfig().embeddingDim).fill(0));
   }
 
   private textToTaskFeatures(text: string, context?: any): number[] {
-    const features = new Array(16).fill(0);
+    const features = new Array(this.h2gnn.getConfig().embeddingDim).fill(0);
     
     // Task complexity indicators
     const complexityWords = ['analyze', 'create', 'design', 'implement', 'evaluate', 'synthesize'];

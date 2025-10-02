@@ -10,6 +10,7 @@ nav_order: 5
 In many use cases, you may want the LLM to output a specific structure, such as a list or a dictionary with predefined keys.
 
 There are several approaches to achieve a structured output:
+
 - **Prompting** the LLM to strictly return a defined structure.
 - Using LLMs that natively support **schema enforcement**.
 - **Post-processing** the LLM's response to extract structured content.
@@ -18,7 +19,7 @@ In practice, **Prompting** is simple and reliable for modern LLMs.
 
 ### Example Use Cases
 
-- Extracting Key Information 
+- Extracting Key Information
 
 ```yaml
 product:
@@ -38,59 +39,87 @@ summary:
   - Suitable for all skill levels.
 ```
 
-- Generating Configuration Files
+## TypeScript Implementation
 
-```yaml
-server:
-  host: 127.0.0.1
-  port: 8080
-  ssl: true
-```
+When using PocketFlow with structured output, follow these TypeScript patterns:
 
-## Prompt Engineering
-
-When prompting the LLM to produce **structured** output:
-1. **Wrap** the structure in code fences (e.g., `yaml`).
-2. **Validate** that all required fields exist (and let `Node` handles retry).
+1. **Define Types** for your structured input/output
+2. **Implement Validation** in your Node methods
+3. **Use Type-Safe Operations** throughout your flow
 
 ### Example Text Summarization
 
-```python
-class SummarizeNode(Node):
-    def exec(self, prep_res):
-        # Suppose `prep_res` is the text to summarize.
-        prompt = f"""
+````typescript
+// Define types
+type SummaryResult = {
+  summary: string[];
+};
+
+type SharedStorage = {
+  text?: string;
+  result?: SummaryResult;
+};
+
+class SummarizeNode extends Node<SharedStorage> {
+  async prep(shared: SharedStorage): Promise<string | undefined> {
+    return shared.text;
+  }
+
+  async exec(text: string | undefined): Promise<SummaryResult> {
+    if (!text) return { summary: ["No text provided"] };
+
+    const prompt = `
 Please summarize the following text as YAML, with exactly 3 bullet points
 
-{prep_res}
+${text}
 
-Now, output:
-```yaml
+Output:
+\`\`\`yaml
 summary:
   - bullet 1
   - bullet 2
   - bullet 3
-```"""
-        response = call_llm(prompt)
-        yaml_str = response.split("```yaml")[1].split("```")[0].strip()
+\`\`\``;
 
-        import yaml
-        structured_result = yaml.safe_load(yaml_str)
+    // Simulated LLM call
+    const response =
+      "```yaml\nsummary:\n  - First point\n  - Second insight\n  - Final conclusion\n```";
 
-        assert "summary" in structured_result
-        assert isinstance(structured_result["summary"], list)
+    // Parse YAML response
+    const yamlStr = response.split("```yaml")[1].split("```")[0].trim();
 
-        return structured_result
-```
+    // Extract bullet points
+    const result: SummaryResult = {
+      summary: yamlStr
+        .split("\n")
+        .filter((line) => line.trim().startsWith("- "))
+        .map((line) => line.trim().substring(2)),
+    };
 
-> Besides using `assert` statements, another popular way to validate schemas is [Pydantic](https://github.com/pydantic/pydantic)
-{: .note }
+    // Validate
+    if (!result.summary || !Array.isArray(result.summary)) {
+      throw new Error("Invalid summary structure");
+    }
+
+    return result;
+  }
+
+  async post(
+    shared: SharedStorage,
+    _: string | undefined,
+    result: SummaryResult
+  ): Promise<string | undefined> {
+    shared.result = result;
+    return "default";
+  }
+}
+````
 
 ### Why YAML instead of JSON?
 
 Current LLMs struggle with escaping. YAML is easier with strings since they don't always need quotes.
 
-**In JSON**  
+**In JSON**
 
 ```json
 {
@@ -98,10 +127,7 @@ Current LLMs struggle with escaping. YAML is easier with strings since they don'
 }
 ```
 
-- Every double quote inside the string must be escaped with `\"`.
-- Each newline in the dialogue must be represented as `\n`.
-
-**In YAML**  
+**In YAML**
 
 ```yaml
 dialogue: |
@@ -109,6 +135,3 @@ dialogue: |
   How are you?
   I am good."
 ```
-
-- No need to escape interior quotes—just place the entire text under a block literal (`|`).
-- Newlines are naturally preserved without needing `\n`.

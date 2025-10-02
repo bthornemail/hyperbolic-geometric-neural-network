@@ -11,17 +11,19 @@ This example demonstrates the BatchFlow concept in PocketFlow by implementing an
   3. Managing parameters across multiple Flow executions
 
 ## Project Structure
+
 ```
 pocketflow-batch-flow/
 ├── README.md
-├── requirements.txt
-├── images/
-│   ├── cat.jpg        # Sample image 1
-│   ├── dog.jpg        # Sample image 2
-│   └── bird.jpg       # Sample image 3
-├── main.py            # Entry point
-├── flow.py            # Flow and BatchFlow definitions
-└── nodes.py           # Node implementations for image processing
+├── package.json
+├── src/
+│   ├── images/
+│   │   ├── cat.jpg        # Sample image 1
+│   │   ├── dog.jpg        # Sample image 2
+│   │   └── bird.jpg       # Sample image 3
+│   ├── main.ts            # Entry point
+│   ├── flow.ts            # Flow and BatchFlow definitions
+│   └── nodes.ts           # Node implementations for image processing
 ```
 
 ## How it Works
@@ -29,6 +31,7 @@ pocketflow-batch-flow/
 The example processes multiple images with different filters:
 
 1. **Base Flow**: Processes a single image
+
    - Load image
    - Apply filter (grayscale, blur, or sepia)
    - Save processed image
@@ -41,13 +44,13 @@ The example processes multiple images with different filters:
 ## Installation
 
 ```bash
-pip install -r requirements.txt
+npm install
 ```
 
 ## Usage
 
 ```bash
-python main.py
+npm run main
 ```
 
 ## Sample Output
@@ -69,4 +72,4 @@ Check the 'output' directory for results.
 1. **Parameter Management**: Shows how BatchFlow manages different parameter sets
 2. **Flow Reuse**: Demonstrates running the same Flow multiple times
 3. **Batch Processing**: Shows how to process multiple items efficiently
-4. **Real-world Application**: Provides a practical example of batch processing 
+4. **Real-world Application**: Provides a practical example of batch processing

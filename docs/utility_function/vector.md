@@ -7,212 +7,421 @@ nav_order: 6
 
 # Vector Databases
 
+Below is a table of the popular vector search solutions:
 
-Below is a  table of the popular vector search solutions:
-
-| **Tool** | **Free Tier** | **Pricing Model** | **Docs** |
-| --- | --- | --- | --- |
-| **FAISS** | N/A, self-host | Open-source | [Faiss.ai](https://faiss.ai) |
-| **Pinecone** | 2GB free | From $25/mo | [pinecone.io](https://pinecone.io) |
-| **Qdrant** | 1GB free cloud | Pay-as-you-go | [qdrant.tech](https://qdrant.tech) |
-| **Weaviate** | 14-day sandbox | From $25/mo | [weaviate.io](https://weaviate.io) |
-| **Milvus** | 5GB free cloud | PAYG or $99/mo dedicated | [milvus.io](https://milvus.io) |
-| **Chroma** | N/A, self-host | Free (Apache 2.0) | [trychroma.com](https://trychroma.com) |
-| **Redis** | 30MB free | From $5/mo | [redis.io](https://redis.io) |
+| **Tool**     | **Free Tier**  | **Pricing Model**        | **Docs**                               |
+| ------------ | -------------- | ------------------------ | -------------------------------------- |
+| **FAISS**    | N/A, self-host | Open-source              | [Faiss.ai](https://faiss.ai)           |
+| **Pinecone** | 2GB free       | From $25/mo              | [pinecone.io](https://pinecone.io)     |
+| **Qdrant**   | 1GB free cloud | Pay-as-you-go            | [qdrant.tech](https://qdrant.tech)     |
+| **Weaviate** | 14-day sandbox | From $25/mo              | [weaviate.io](https://weaviate.io)     |
+| **Milvus**   | 5GB free cloud | PAYG or $99/mo dedicated | [milvus.io](https://milvus.io)         |
+| **Chroma**   | N/A, self-host | Free (Apache 2.0)        | [trychroma.com](https://trychroma.com) |
+| **Redis**    | 30MB free      | From $5/mo               | [redis.io](https://redis.io)           |
 
 ---
-## Example Python Code
+
+## Example TypeScript Code
 
 Below are basic usage snippets for each tool.
 
 ### FAISS
-```python
-import faiss
-import numpy as np
 
-# Dimensionality of embeddings
-d = 128
+```typescript
+import { IndexFlatL2 } from "faiss-node";
 
-# Create a flat L2 index
-index = faiss.IndexFlatL2(d)
+// Dimensionality of embeddings
+const dimension = 128;
 
-# Random vectors
-data = np.random.random((1000, d)).astype('float32')
-index.add(data)
+// Create a flat L2 index
+const index = new IndexFlatL2(dimension);
 
-# Query
-query = np.random.random((1, d)).astype('float32')
-D, I = index.search(query, k=5)
+// Create random vectors (using standard JS arrays)
+const data: number[] = [];
+for (let i = 0; i < 1000; i++) {
+  for (let j = 0; j < dimension; j++) {
+    data.push(Math.random());
+  }
+}
 
-print("Distances:", D)
-print("Neighbors:", I)
+// Add vectors to the index
+for (let i = 0; i < 1000; i++) {
+  const vector = data.slice(i * dimension, (i + 1) * dimension);
+  index.add(vector);
+}
+
+// Query
+const query = Array(dimension)
+  .fill(0)
+  .map(() => Math.random());
+const results = index.search(query, 5);
+
+console.log("Distances:", results.distances);
+console.log("Neighbors:", results.labels);
 ```
 
 ### Pinecone
-```python
-import pinecone
 
-pinecone.init(api_key="YOUR_API_KEY", environment="YOUR_ENV")
+```typescript
+import { PineconeClient } from "@pinecone-database/pinecone";
 
-index_name = "my-index"
+// Define interface for your metadata (optional)
+interface Metadata {
+  type: string;
+}
 
-# Create the index if it doesn't exist
-if index_name not in pinecone.list_indexes():
-    pinecone.create_index(name=index_name, dimension=128)
+const init = async () => {
+  // Initialize the client
+  const pinecone = new PineconeClient();
+  await pinecone.init({
+    apiKey: "YOUR_API_KEY",
+    environment: "YOUR_ENVIRONMENT",
+  });
 
-# Connect
-index = pinecone.Index(index_name)
+  const indexName = "my-index";
 
-# Upsert
-vectors = [
-    ("id1", [0.1]*128),
-    ("id2", [0.2]*128)
-]
-index.upsert(vectors)
+  // List indexes to check if it exists
+  const indexes = await pinecone.listIndexes();
 
-# Query
-response = index.query([[0.15]*128], top_k=3)
-print(response)
+  // Create index if it doesn't exist
+  if (!indexes.includes(indexName)) {
+    await pinecone.createIndex({
+      name: indexName,
+      dimension: 128,
+      metric: "cosine",
+    });
+  }
+
+  // Connect to the index
+  const index = pinecone.Index(indexName);
+
+  // Upsert vectors
+  await index.upsert({
+    upsertRequest: {
+      vectors: [
+        {
+          id: "id1",
+          values: Array(128).fill(0.1),
+          metadata: { type: "doc1" } as Metadata,
+        },
+        {
+          id: "id2",
+          values: Array(128).fill(0.2),
+          metadata: { type: "doc2" } as Metadata,
+        },
+      ],
+      namespace: "example-namespace",
+    },
+  });
+
+  // Query
+  const queryResult = await index.query({
+    queryRequest: {
+      vector: Array(128).fill(0.15),
+      topK: 3,
+      includeMetadata: true,
+      namespace: "example-namespace",
+    },
+  });
+
+  console.log(queryResult);
+};
+
+init();
 ```
 
 ### Qdrant
-```python
-import qdrant_client
-from qdrant_client.models import Distance, VectorParams, PointStruct
 
-client = qdrant_client.QdrantClient(
-    url="https://YOUR-QDRANT-CLOUD-ENDPOINT",
-    api_key="YOUR_API_KEY"
-)
+```typescript
+import { QdrantClient } from "@qdrant/js-client-rest";
 
-collection = "my_collection"
-client.recreate_collection(
-    collection_name=collection,
-    vectors_config=VectorParams(size=128, distance=Distance.COSINE)
-)
+const init = async () => {
+  const client = new QdrantClient({
+    url: "https://YOUR-QDRANT-CLOUD-ENDPOINT",
+    apiKey: "YOUR_API_KEY",
+  });
 
-points = [
-    PointStruct(id=1, vector=[0.1]*128, payload={"type": "doc1"}),
-    PointStruct(id=2, vector=[0.2]*128, payload={"type": "doc2"}),
-]
+  const collectionName = "my_collection";
 
-client.upsert(collection_name=collection, points=points)
+  // Create or recreate collection
+  await client.recreateCollection(collectionName, {
+    vectors: {
+      size: 128,
+      distance: "Cosine",
+    },
+  });
 
-results = client.search(
-    collection_name=collection,
-    query_vector=[0.15]*128,
-    limit=2
-)
-print(results)
+  // Insert points
+  await client.upsert(collectionName, {
+    wait: true,
+    points: [
+      {
+        id: "1",
+        vector: Array(128).fill(0.1),
+        payload: { type: "doc1" },
+      },
+      {
+        id: "2",
+        vector: Array(128).fill(0.2),
+        payload: { type: "doc2" },
+      },
+    ],
+  });
+
+  // Search
+  const searchResult = await client.search(collectionName, {
+    vector: Array(128).fill(0.15),
+    limit: 2,
+  });
+
+  console.log(searchResult);
+};
+
+init();
 ```
 
 ### Weaviate
-```python
-import weaviate
 
-client = weaviate.Client("https://YOUR-WEAVIATE-CLOUD-ENDPOINT")
+```typescript
+import weaviate from "weaviate-client";
 
-schema = {
-    "classes": [
-        {
-            "class": "Article",
-            "vectorizer": "none"
-        }
-    ]
-}
-client.schema.create(schema)
+const init = async () => {
+  // Connect to Weaviate
+  const client = weaviate.client({
+    scheme: "https",
+    host: "YOUR-WEAVIATE-CLOUD-ENDPOINT",
+  });
 
-obj = {
-    "title": "Hello World",
-    "content": "Weaviate vector search"
-}
-client.data_object.create(obj, "Article", vector=[0.1]*128)
+  // Create schema
+  const schema = {
+    classes: [
+      {
+        class: "Article",
+        vectorizer: "none",
+      },
+    ],
+  };
 
-resp = (
-    client.query
-    .get("Article", ["title", "content"])
-    .with_near_vector({"vector": [0.15]*128})
-    .with_limit(3)
-    .do()
-)
-print(resp)
+  await client.schema.create(schema);
+
+  // Add data
+  await client.data
+    .creator()
+    .withClassName("Article")
+    .withProperties({
+      title: "Hello World",
+      content: "Weaviate vector search",
+    })
+    .withVector(Array(128).fill(0.1))
+    .do();
+
+  // Query
+  const result = await client.graphql
+    .get()
+    .withClassName("Article")
+    .withFields(["title", "content"])
+    .withNearVector({
+      vector: Array(128).fill(0.15),
+    })
+    .withLimit(3)
+    .do();
+
+  console.log(result);
+};
+
+init();
 ```
 
 ### Milvus
-```python
-from pymilvus import connections, FieldSchema, CollectionSchema, DataType, Collection
-import numpy as np
 
-connections.connect(alias="default", host="localhost", port="19530")
+```typescript
+import { MilvusClient, DataType } from "@zilliz/milvus2-sdk-node";
 
-fields = [
-    FieldSchema(name="id", dtype=DataType.INT64, is_primary=True),
-    FieldSchema(name="embedding", dtype=DataType.FLOAT_VECTOR, dim=128)
-]
-schema = CollectionSchema(fields)
-collection = Collection("MyCollection", schema)
+const init = async () => {
+  // Connect to Milvus
+  const client = new MilvusClient("localhost:19530");
 
-emb = np.random.rand(10, 128).astype('float32')
-ids = list(range(10))
-collection.insert([ids, emb])
+  // Wait for connection to be established
+  await client.connectPromise;
 
-index_params = {
-    "index_type": "IVF_FLAT",
-    "params": {"nlist": 128},
-    "metric_type": "L2"
-}
-collection.create_index("embedding", index_params)
-collection.load()
+  const collectionName = "MyCollection";
 
-query_emb = np.random.rand(1, 128).astype('float32')
-results = collection.search(query_emb, "embedding", param={"nprobe": 10}, limit=3)
-print(results)
+  // Create collection
+  await client.createCollection({
+    collection_name: collectionName,
+    fields: [
+      {
+        name: "id",
+        data_type: DataType.Int64,
+        is_primary_key: true,
+        autoID: true,
+      },
+      {
+        name: "embedding",
+        data_type: DataType.FloatVector,
+        dim: 128,
+      },
+    ],
+  });
+
+  // Create random vectors
+  const vectors = [];
+  for (let i = 0; i < 10; i++) {
+    vectors.push(
+      Array(128)
+        .fill(0)
+        .map(() => Math.random())
+    );
+  }
+
+  // Insert data
+  await client.insert({
+    collection_name: collectionName,
+    fields_data: vectors.map((vector) => ({
+      embedding: vector,
+    })),
+  });
+
+  // Create index
+  await client.createIndex({
+    collection_name: collectionName,
+    field_name: "embedding",
+    extra_params: {
+      index_type: "IVF_FLAT",
+      metric_type: "L2",
+      params: JSON.stringify({ nlist: 128 }),
+    },
+  });
+
+  // Load collection to memory
+  await client.loadCollection({
+    collection_name: collectionName,
+  });
+
+  // Search
+  const searchResult = await client.search({
+    collection_name: collectionName,
+    vector: Array(128)
+      .fill(0)
+      .map(() => Math.random()),
+    search_params: {
+      anns_field: "embedding",
+      topk: 3,
+      metric_type: "L2",
+      params: JSON.stringify({ nprobe: 10 }),
+    },
+  });
+
+  console.log(searchResult);
+};
+
+init();
 ```
 
 ### Chroma
-```python
-import chromadb
-from chromadb.config import Settings
 
-client = chromadb.Client(Settings(
-    chroma_db_impl="duckdb+parquet",
-    persist_directory="./chroma_data"
-))
+```typescript
+import { ChromaClient, Collection } from "chromadb";
 
-coll = client.create_collection("my_collection")
+const init = async () => {
+  const client = new ChromaClient({
+    path: "http://localhost:8000", // Default path if using chroma server
+  });
 
-vectors = [[0.1, 0.2, 0.3], [0.2, 0.2, 0.2]]
-metas = [{"doc": "text1"}, {"doc": "text2"}]
-ids = ["id1", "id2"]
-coll.add(embeddings=vectors, metadatas=metas, ids=ids)
+  // Create or get collection
+  const collection: Collection = await client.createCollection({
+    name: "my_collection",
+    // Optional metadata
+    metadata: { description: "My test collection" },
+  });
 
-res = coll.query(query_embeddings=[[0.15, 0.25, 0.3]], n_results=2)
-print(res)
+  // Add vectors
+  await collection.add({
+    ids: ["id1", "id2"],
+    embeddings: [
+      [0.1, 0.2, 0.3],
+      [0.2, 0.2, 0.2],
+    ],
+    metadatas: [{ doc: "text1" }, { doc: "text2" }],
+  });
+
+  // Query
+  const result = await collection.query({
+    queryEmbeddings: [[0.15, 0.25, 0.3]],
+    nResults: 2,
+  });
+
+  console.log(result);
+};
+
+init();
 ```
 
 ### Redis
-```python
-import redis
-import struct
 
-r = redis.Redis(host="localhost", port=6379)
+```typescript
+import { createClient } from "redis";
+import { SchemaFieldTypes, VectorAlgorithms } from "@redis/search";
 
-# Create index
-r.execute_command(
-    "FT.CREATE", "my_idx", "ON", "HASH",
-    "SCHEMA", "embedding", "VECTOR", "FLAT", "6",
-    "TYPE", "FLOAT32", "DIM", "128",
-    "DISTANCE_METRIC", "L2"
-)
+const init = async () => {
+  // Connect to Redis
+  const client = createClient({
+    url: "redis://localhost:6379",
+  });
 
-# Insert
-vec = struct.pack('128f', *[0.1]*128)
-r.hset("doc1", mapping={"embedding": vec})
+  await client.connect();
 
-# Search
-qvec = struct.pack('128f', *[0.15]*128)
-q = "*=>[KNN 3 @embedding $BLOB AS dist]"
-res = r.ft("my_idx").search(q, query_params={"BLOB": qvec})
-print(res.docs)
+  const indexName = "my_idx";
+
+  // Create index for vector search
+  try {
+    await client.ft.create(
+      indexName,
+      {
+        embedding: {
+          type: SchemaFieldTypes.VECTOR,
+          ALGORITHM: VectorAlgorithms.FLAT,
+          TYPE: "FLOAT32",
+          DIM: 128,
+          DISTANCE_METRIC: "L2",
+        },
+      },
+      {
+        ON: "HASH",
+      }
+    );
+  } catch (e) {
+    console.log("Index might exist already");
+  }
+
+  // Create a Float32Array for the vectors
+  const createVector = (value: number): Buffer => {
+    const vector = new Float32Array(128).fill(value);
+    return Buffer.from(vector.buffer);
+  };
+
+  // Insert
+  await client.hSet("doc1", {
+    embedding: createVector(0.1),
+  });
+
+  // Search
+  const searchResults = await client.ft.search(
+    indexName,
+    "*=>[KNN 3 @embedding $BLOB AS dist]",
+    {
+      PARAMS: {
+        BLOB: createVector(0.15),
+      },
+      RETURN: ["dist"],
+      DIALECT: 2,
+    }
+  );
+
+  console.log(searchResults);
+
+  await client.quit();
+};
+
+init();
 ```
-

@@ -41,6 +41,8 @@ export class HierarchicalQAWorkflow {
   }
 
   private buildWorkflow(): void {
+    const wordnetProcessor = this.wordnetProcessor;
+
     // Question Analysis Node
     const analyzeQuestion = new LLMNode({
       systemPrompt: `You are a question analyzer. Analyze the given question and determine:
@@ -73,10 +75,10 @@ Respond in structured format.`,
         const concepts: any[] = [];
 
         for (const word of words) {
-          const wordData = this.wordnetProcessor.getWords().get(word);
+          const wordData = wordnetProcessor.getWords().get(word);
           if (wordData) {
             for (const synsetId of wordData.synsets) {
-              const synset = this.wordnetProcessor.getSynsets().get(synsetId);
+              const synset = wordnetProcessor.getSynsets().get(synsetId);
               if (synset) {
                 concepts.push({
                   word,
@@ -114,7 +116,7 @@ Respond in structured format.`,
         const hierarchies: any[] = [];
 
         for (const concept of concepts) {
-          const synset = this.wordnetProcessor.getSynsets().get(concept.synset);
+          const synset = wordnetProcessor.getSynsets().get(concept.synset);
           if (synset) {
             const hierarchy = {
               concept: concept.synset,
@@ -130,7 +132,7 @@ Respond in structured format.`,
       }
 
       private async calculateDepth(synsetId: string): Promise<number> {
-        const hierarchy = this.wordnetProcessor.getHierarchy();
+        const hierarchy = wordnetProcessor.getHierarchy();
         if (hierarchy) {
           const node = hierarchy.nodes.find(n => n.id === synsetId);
           return node?.depth || 0;
@@ -223,8 +225,14 @@ export class ConceptLearningWorkflow {
   }
 
   private buildWorkflow(): void {
+    const wordnetProcessor = this.wordnetProcessor;
+
     // Concept Discovery Node
     const discoverConcepts = new class extends AgentNode {
+      prep(shared: SharedStore): { domain: string } {
+        return { domain: shared.domain };
+      }
+
       async exec(prepRes: any): Promise<any> {
         const domain = prepRes.domain;
         
@@ -242,7 +250,7 @@ export class ConceptLearningWorkflow {
         const concepts: any[] = [];
         
         // Search WordNet for domain-related concepts
-        for (const [id, synset] of this.wordnetProcessor.getSynsets()) {
+        for (const [id, synset] of wordnetProcessor.getSynsets()) {
           if (this.isRelevantToDomain(synset, domain)) {
             concepts.push({
               id,
