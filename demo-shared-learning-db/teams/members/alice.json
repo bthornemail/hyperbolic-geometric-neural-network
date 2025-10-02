@@ -1,0 +1,14 @@
+{
+  "memberId": "alice",
+  "teamId": "frontend-team",
+  "role": "admin",
+  "permissions": [
+    "read",
+    "write",
+    "delete",
+    "manage_team",
+    "share_knowledge"
+  ],
+  "joinedAt": 1759444983166,
+  "lastActive": 1759444983166
+}

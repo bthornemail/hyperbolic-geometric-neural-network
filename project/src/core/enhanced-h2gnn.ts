@@ -15,6 +15,8 @@ import { HyperbolicGeometricHGN } from './H2GNN';
 import { createVector } from '../math/hyperbolic-arithmetic';
 import { promises as fs } from 'fs';
 import * as path from 'path';
+import { ProductionLLMService, LLMOptions } from '../llm/production-llm-service.js';
+import { StreamingLLMClient } from '../llm/streaming-llm-client.js';
 
 export interface LearningMemory {
   id: string;
@@ -67,13 +69,19 @@ export class EnhancedH2GNN {
   private metaLearningRate: number = 0.001;
   private transferLearningEnabled: boolean = true;
   private continualLearningEnabled: boolean = true;
+  private llmService: ProductionLLMService | null = null;
+  private streamingClient: StreamingLLMClient | null = null;
 
   constructor(
     h2gnnConfig: any,
-    persistenceConfig: PersistenceConfig
+    persistenceConfig: PersistenceConfig,
+    llmService?: ProductionLLMService,
+    streamingClient?: StreamingLLMClient
   ) {
     this.baseH2GNN = new HyperbolicGeometricHGN(h2gnnConfig);
     this.persistenceConfig = persistenceConfig;
+    this.llmService = llmService || null;
+    this.streamingClient = streamingClient || null;
     this.initializePersistence();
   }
 
@@ -389,29 +397,36 @@ export class EnhancedH2GNN {
    * Consolidate memories to improve understanding
    */
   private async consolidateMemories(): Promise<void> {
-    console.log('🧠 Consolidating memories...');
+    console.log('🧠 [DEBUG] Starting memory consolidation...');
     
-    // Group memories by concept similarity
     const conceptGroups = new Map<string, LearningMemory[]>();
-    
-    for (const memory of this.memories.values()) {
-      if (memory.consolidated) continue;
-      
+    const memoriesToProcess = Array.from(this.memories.values()).filter(m => !m.consolidated);
+    console.log(`🧠 [DEBUG] Found ${memoriesToProcess.length} non-consolidated memories to process.`);
+
+    for (const memory of memoriesToProcess) {
       const groupKey = this.findConceptGroup(memory.concept);
+      console.log(`🧠 [DEBUG] Memory '${memory.concept}' assigned to group '${groupKey}'.`);
       if (!conceptGroups.has(groupKey)) {
         conceptGroups.set(groupKey, []);
       }
       conceptGroups.get(groupKey)!.push(memory);
     }
     
-    // Consolidate each group
+    console.log(`🧠 [DEBUG] Created ${conceptGroups.size} concept groups.`);
+    conceptGroups.forEach((memories, key) => {
+      console.log(`🧠 [DEBUG] Group '${key}' has ${memories.length} memories.`);
+    });
+
     for (const [groupKey, memories] of conceptGroups) {
       if (memories.length > 1) {
+        console.log(`🧠 [DEBUG] Consolidating group '${groupKey}' with ${memories.length} memories.`);
         await this.consolidateConceptGroup(groupKey, memories);
+      } else {
+        console.log(`🧠 [DEBUG] Skipping group '${groupKey}' (only ${memories.length} memory).`);
       }
     }
     
-    console.log(`✅ Consolidated ${conceptGroups.size} concept groups`);
+    console.log(`✅ [DEBUG] Finished memory consolidation. Processed ${conceptGroups.size} concept groups.`);
   }
 
   /**
@@ -438,13 +453,10 @@ export class EnhancedH2GNN {
    * Consolidate a group of related memories
    */
   private async consolidateConceptGroup(groupKey: string, memories: LearningMemory[]): Promise<void> {
-    // Calculate average embedding
+    console.log(`🧠 [DEBUG] consolidateConceptGroup called for group '${groupKey}'.`);
     const avgEmbedding = this.calculateAverageEmbedding(memories.map(m => m.embedding));
-    
-    // Calculate average performance
     const avgPerformance = memories.reduce((sum, m) => sum + m.performance, 0) / memories.length;
     
-    // Create consolidated understanding snapshot
     const snapshot: UnderstandingSnapshot = {
       id: `snapshot_${Date.now()}_${groupKey}`,
       timestamp: Date.now(),
@@ -456,15 +468,15 @@ export class EnhancedH2GNN {
       confidence: avgPerformance
     };
     
+    console.log(`🧠 [DEBUG] Created snapshot with ID: ${snapshot.id}`);
     this.understandingSnapshots.set(snapshot.id, snapshot);
     
-    // Mark memories as consolidated
     for (const memory of memories) {
       memory.consolidated = true;
     }
     
-    // Persist snapshot
     await this.persistUnderstandingSnapshot(snapshot);
+    console.log(`🧠 [DEBUG] Successfully persisted snapshot ${snapshot.id}.`);
   }
 
   /**
@@ -598,6 +610,139 @@ export class EnhancedH2GNN {
    */
   getLearningProgress(): LearningProgress[] {
     return Array.from(this.learningProgress.values());
+  }
+
+  /**
+   * Set LLM service for enhanced learning
+   */
+  setLLMService(llmService: ProductionLLMService, streamingClient?: StreamingLLMClient): void {
+    this.llmService = llmService;
+    this.streamingClient = streamingClient || null;
+  }
+
+  /**
+   * Enhanced learning with LLM assistance
+   */
+  async learnWithLLMAssistance(
+    concept: string,
+    data: any,
+    context: any,
+    performance: number = 0.5
+  ): Promise<void> {
+    if (!this.llmService) {
+      console.warn('⚠️ LLM service not available, falling back to standard learning');
+      await this.learnWithMemory(concept, data, context, performance);
+      return;
+    }
+
+    try {
+      // Use LLM to enhance the learning process
+      const enhancedPrompt = this.buildLearningPrompt(concept, data, context);
+      const llmResponse = await this.llmService.generateResponse(enhancedPrompt, {
+        temperature: 0.7,
+        maxTokens: 1000,
+        systemPrompt: 'You are an AI assistant helping with concept learning. Provide insights and connections to enhance learning.'
+      });
+
+      // Extract insights from LLM response
+      const insights = this.extractInsightsFromLLMResponse(llmResponse.content);
+      
+      // Enhanced learning with LLM insights
+      await this.learnWithMemory(concept, data, { ...context, llmInsights: insights }, performance);
+      
+      console.log(`🧠 Enhanced learning completed for concept: ${concept}`);
+      
+    } catch (error) {
+      console.error('❌ LLM-assisted learning failed:', error);
+      // Fallback to standard learning
+      await this.learnWithMemory(concept, data, context, performance);
+    }
+  }
+
+  /**
+   * Build learning prompt for LLM
+   */
+  private buildLearningPrompt(concept: string, data: any, context: any): string {
+    return `
+Analyze this concept for enhanced learning:
+
+Concept: ${concept}
+Data: ${JSON.stringify(data, null, 2)}
+Context: ${JSON.stringify(context, null, 2)}
+
+Please provide:
+1. Key insights about this concept
+2. Related concepts and connections
+3. Learning recommendations
+4. Potential applications
+
+Format your response as structured insights.
+    `.trim();
+  }
+
+  /**
+   * Extract insights from LLM response
+   */
+  private extractInsightsFromLLMResponse(response: string): string[] {
+    // Simple extraction - in reality, you'd use more sophisticated parsing
+    const insights: string[] = [];
+    const lines = response.split('\n');
+    
+    for (const line of lines) {
+      if (line.trim().startsWith('-') || line.trim().startsWith('•')) {
+        insights.push(line.trim().substring(1).trim());
+      }
+    }
+    
+    return insights;
+  }
+
+  /**
+   * Stream learning with real-time feedback
+   */
+  async *streamLearningWithLLM(
+    concept: string,
+    data: any,
+    context: any
+  ): AsyncIterable<{ type: 'insight' | 'progress' | 'complete'; content: string }> {
+    if (!this.streamingClient) {
+      throw new Error('Streaming client not available');
+    }
+
+    const prompt = this.buildLearningPrompt(concept, data, context);
+    
+    try {
+      const { sessionId, stream } = await this.streamingClient.startStreamingSession(prompt, {
+        temperature: 0.7,
+        maxTokens: 1000
+      });
+
+      for await (const chunk of stream) {
+        if (chunk.content) {
+          yield {
+            type: 'insight',
+            content: chunk.content
+          };
+        }
+        
+        if (chunk.isComplete) {
+          // Process the complete response
+          const insights = this.extractInsightsFromLLMResponse(chunk.content);
+          
+          // Apply insights to learning
+          await this.learnWithMemory(concept, data, { ...context, llmInsights: insights }, 0.8);
+          
+          yield {
+            type: 'complete',
+            content: 'Learning completed with LLM assistance'
+          };
+        }
+      }
+      
+    } catch (error) {
+      console.error('❌ Streaming learning failed:', error);
+      throw error;
+    }
   }
 
   /**

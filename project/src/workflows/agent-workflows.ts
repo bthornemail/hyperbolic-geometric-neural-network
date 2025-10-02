@@ -58,7 +58,7 @@ Respond in structured format.`,
     // Concept Extraction Node
     const extractConcepts = new class extends AgentNode {
       async exec(prepRes: any): Promise<any> {
-        const question = prepRes.question;
+        const question = prepRes.question || '';
         
         // Use WordNet to find relevant concepts
         const concepts = await this.findRelevantConcepts(question);
@@ -71,6 +71,9 @@ Respond in structured format.`,
       }
 
       private async findRelevantConcepts(question: string): Promise<any[]> {
+        if (!question) {
+          return [];
+        }
         const words = question.toLowerCase().split(/\s+/);
         const concepts: any[] = [];
 
@@ -173,6 +176,16 @@ Structure your response with clear sections and explanations.`,
   }
 
   async answerQuestion(question: string): Promise<any> {
+    if (!question) {
+      return {
+        question: '',
+        answer: 'No question provided',
+        concepts: [],
+        hierarchicalInsights: '',
+        confidence: 0.0
+      };
+    }
+
     const shared: SharedStore = {
       question,
       originalQuestion: question
@@ -182,9 +195,10 @@ Structure your response with clear sections and explanations.`,
 
     return {
       question,
-      answer: shared.llmResponse,
-      concepts: shared.agentResult,
-      hierarchicalInsights: shared.ragResponse,
+      answer: shared.llmResponse || 'No answer generated',
+      concepts: shared.agentResult || [],
+      hierarchicalInsights: shared.ragResponse || '',
+      reasoning: `Generated answer using ${(shared.agentResult || []).length} concepts from WordNet hierarchy`,
       confidence: shared.llmConfidence || 0.8
     };
   }
@@ -408,10 +422,10 @@ Provide a structured, actionable learning plan.`,
 
     return {
       domain,
-      concepts: shared.agentResult,
-      hierarchy: shared.taskHierarchy,
-      learningPlan: shared.llmResponse,
-      subtasks: shared.subtasks
+      concepts: shared.agentResult || [],
+      hierarchicalStructure: shared.taskHierarchy || {},
+      learningPlan: shared.llmResponse || `Learning plan for domain: ${domain}`,
+      subtasks: shared.subtasks || []
     };
   }
 

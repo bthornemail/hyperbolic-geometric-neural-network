@@ -7,9 +7,23 @@
         "NODE_ENV": "production"
       }
     },
-    "enhanced-k2gnn": {
+    "enhanced-h2gnn": {
       "command": "tsx",
       "args": ["/home/main/devops/h2gnn/project/src/mcp/enhanced-h2gnn-mcp-server.ts"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "knowledge-graph": {
+      "command": "tsx",
+      "args": ["/home/main/devops/h2gnn/project/src/mcp/knowledge-graph-mcp.ts"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "lsp-ast": {
+      "command": "tsx",
+      "args": ["/home/main/devops/h2gnn/project/src/mcp/lsp-ast-mcp-server.ts"],
       "env": {
         "NODE_ENV": "production"
       }

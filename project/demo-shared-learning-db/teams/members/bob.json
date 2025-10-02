@@ -1,0 +1,12 @@
+{
+  "memberId": "bob",
+  "teamId": "frontend-team",
+  "role": "member",
+  "permissions": [
+    "read",
+    "write",
+    "share_knowledge"
+  ],
+  "joinedAt": 1759443765317,
+  "lastActive": 1759443765317
+}

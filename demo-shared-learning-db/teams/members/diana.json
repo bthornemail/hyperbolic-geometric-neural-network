@@ -1,0 +1,12 @@
+{
+  "memberId": "diana",
+  "teamId": "backend-team",
+  "role": "member",
+  "permissions": [
+    "read",
+    "write",
+    "share_knowledge"
+  ],
+  "joinedAt": 1759444983179,
+  "lastActive": 1759444983179
+}

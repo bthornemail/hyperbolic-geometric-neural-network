@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /**
  * Enhanced H²GNN MCP Server with Learning and Persistence
@@ -25,12 +26,12 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 
 import EnhancedH2GNN, { 
-  LearningMemory, 
-  UnderstandingSnapshot, 
+  // LearningMemory, 
+  // UnderstandingSnapshot, 
   LearningProgress,
   PersistenceConfig 
 } from '../core/enhanced-h2gnn.js';
-import { HyperbolicGeometricHGN } from '../core/H2GNN.js';
+// import { HyperbolicGeometricHGN } from '../core/H2GNN.js';
 
 // Global enhanced H²GNN instance
 let enhancedH2GNN: EnhancedH2GNN | null = null;

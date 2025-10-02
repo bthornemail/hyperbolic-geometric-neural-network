@@ -1,0 +1,21 @@
+{
+  "id": "memory_2",
+  "timestamp": 1759444983184,
+  "concept": "database-optimization",
+  "embedding": [
+    0.4,
+    0.5,
+    0.6
+  ],
+  "context": {
+    "team": "backend-team",
+    "contributor": "charlie"
+  },
+  "performance": 0.9,
+  "confidence": 0.95,
+  "relationships": [
+    "database",
+    "performance"
+  ],
+  "consolidated": false
+}

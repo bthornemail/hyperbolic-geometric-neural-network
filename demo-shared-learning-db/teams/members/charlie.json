@@ -1,0 +1,14 @@
+{
+  "memberId": "charlie",
+  "teamId": "backend-team",
+  "role": "admin",
+  "permissions": [
+    "read",
+    "write",
+    "delete",
+    "manage_team",
+    "share_knowledge"
+  ],
+  "joinedAt": 1759444983175,
+  "lastActive": 1759444983175
+}

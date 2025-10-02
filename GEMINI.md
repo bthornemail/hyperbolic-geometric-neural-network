@@ -340,6 +340,41 @@ my_project/
       main()
   ```
 
+## Beyond PocketFlow: The Enhanced H²GNN System
+
+While PocketFlow provides the foundational building blocks for LLM workflows, this project utilizes the **Enhanced H²GNN (Hyperbolic Hierarchical Graph Neural Network)**, a self-improving, collaborative AI system built on top of PocketFlow. Think of it as the "brain" that uses the PocketFlow "nervous system" to learn and act.
+
+### Core Concepts
+
+-   **Learning Organism:** The H²GNN is not just a static application; it's a dynamic system that learns from every interaction, analyzes code, and improves its own understanding.
+-   **Collaborative Intelligence:** It's designed for teams. It shares knowledge, enforces coding standards, and enables developers to learn from the collective intelligence of the team.
+-   **Persistence:** The system has a long-term memory, storing what it learns in a persistent database (`h2gnn-persistence/`, `demo-shared-learning-db/`).
+
+### Interacting with the H²GNN
+
+As an AI agent, you have access to a special set of tools to interact with the H²GNN's learning and memory capabilities. These tools go beyond the standard file system and shell commands.
+
+#### Key H²GNN Tools:
+
+-   `initialize_enhanced_h2gnn`: Initialize the learning system.
+-   `analyze_path_to_knowledge_graph`: Analyze a codebase to build a knowledge graph. **This should be one of your first steps when familiarizing yourself with a project.**
+-   `learn_concept`: Teach the system a new concept, linking it to data and context.
+-   `retrieve_memories`: Query the system's memory for relevant information.
+-   `get_understanding_snapshot`: Get a consolidated summary of the system's knowledge about a specific domain.
+-   `generate_code_from_graph`: Generate new code based on the system's understanding.
+-   `start_learning_session` / `end_learning_session`: Manage focused learning sessions.
+
+### Agentic Workflow with H²GNN
+
+When working on this project, your workflow should be adapted to leverage the H²GNN:
+
+1.  **Analyze & Understand:** Before making changes, use `analyze_path_to_knowledge_graph` to ensure the H²GNN understands the current state of the code.
+2.  **Query & Retrieve:** Use `retrieve_memories` and `get_understanding_snapshot` to gather context and insights from the system's memory. Don't just read files; ask the H²GNN what it knows.
+3.  **Implement & Teach:** As you implement new features or fix bugs, use `learn_concept` to teach the H²GNN about the changes. This ensures the system's knowledge stays up-to-date. For example, after implementing a new function, you could do: `learn_concept(concept='new authentication function', data={...}, context={...})`.
+4.  **Collaborate:** When working in a team context, be aware of the shared learning database. Your actions will contribute to the team's collective knowledge.
+
+By following this workflow, you transition from just "coding" to "co-evolving" the codebase with an intelligent system.
+
 ================================================
 File: docs/index.md
 ================================================

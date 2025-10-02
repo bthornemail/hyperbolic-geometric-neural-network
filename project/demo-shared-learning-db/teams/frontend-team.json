@@ -1,0 +1,21 @@
+{
+  "teamId": "frontend-team",
+  "name": "Frontend Team",
+  "description": "Frontend development team",
+  "members": [
+    "alice",
+    "bob"
+  ],
+  "learningDomains": [
+    "react",
+    "typescript",
+    "ui-ux"
+  ],
+  "sharedConcepts": [
+    "component-design",
+    "state-management"
+  ],
+  "privacyLevel": "private",
+  "createdAt": 1759443764827,
+  "updatedAt": 1759443765352
+}
