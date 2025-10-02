@@ -1,0 +1,21 @@
+{
+  "id": "memory_1",
+  "timestamp": 1759443765431,
+  "concept": "react-hooks",
+  "embedding": [
+    0.1,
+    0.2,
+    0.3
+  ],
+  "context": {
+    "team": "frontend-team",
+    "contributor": "alice"
+  },
+  "performance": 0.8,
+  "confidence": 0.9,
+  "relationships": [
+    "react",
+    "hooks"
+  ],
+  "consolidated": false
+}

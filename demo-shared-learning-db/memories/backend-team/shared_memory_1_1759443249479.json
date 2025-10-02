@@ -1,0 +1,24 @@
+{
+  "id": "shared_memory_1_1759443249479",
+  "timestamp": 1759443249479,
+  "concept": "react-hooks",
+  "embedding": [
+    0.1,
+    0.2,
+    0.3
+  ],
+  "context": {
+    "team": "frontend-team",
+    "contributor": "alice",
+    "sharedFrom": "frontend-team",
+    "sharedTo": "backend-team",
+    "originalId": "memory_1"
+  },
+  "performance": 0.8,
+  "confidence": 0.9,
+  "relationships": [
+    "react",
+    "hooks"
+  ],
+  "consolidated": false
+}

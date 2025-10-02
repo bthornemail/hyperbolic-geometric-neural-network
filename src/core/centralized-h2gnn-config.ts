@@ -10,6 +10,7 @@
 
 import EnhancedH2GNN, { PersistenceConfig } from './enhanced-h2gnn';
 import { HyperbolicGeometricHGN } from './H2GNN';
+import { SharedLearningDatabase, TeamConfig, TeamMember } from './shared-learning-database';
 
 export interface CentralizedH2GNNConfig {
   embeddingDim: number;
@@ -29,10 +30,13 @@ export class CentralizedH2GNNManager {
   private static instance: CentralizedH2GNNManager;
   private h2gnn: EnhancedH2GNN;
   private config: CentralizedH2GNNConfig;
+  private sharedDb: SharedLearningDatabase;
+  private currentTeamId: string | null = null;
 
   private constructor(config: CentralizedH2GNNConfig) {
     this.config = config;
     this.initializeH2GNN();
+    this.initializeSharedDatabase();
   }
 
   /**
@@ -96,6 +100,91 @@ export class CentralizedH2GNNManager {
    */
   public async getSystemStatus(): Promise<any> {
     return await this.h2gnn.getSystemStatus();
+  }
+
+  /**
+   * Initialize shared database
+   */
+  private initializeSharedDatabase(): void {
+    this.sharedDb = new SharedLearningDatabase(this.config.storagePath + '/shared-learning');
+  }
+
+  /**
+   * Set current team for collaborative learning
+   */
+  public setCurrentTeam(teamId: string): void {
+    this.currentTeamId = teamId;
+    console.log(`🤝 Set current team: ${teamId}`);
+  }
+
+  /**
+   * Create a new team
+   */
+  public async createTeam(teamId: string, config: TeamConfig): Promise<void> {
+    await this.sharedDb.createTeam(teamId, config);
+    console.log(`🤝 Created team: ${teamId}`);
+  }
+
+  /**
+   * Add team member
+   */
+  public async addTeamMember(teamId: string, memberId: string, role: 'admin' | 'member' | 'viewer' = 'member'): Promise<void> {
+    await this.sharedDb.addTeamMember(teamId, memberId, role);
+    console.log(`🤝 Added member ${memberId} to team ${teamId}`);
+  }
+
+  /**
+   * Learn with team context
+   */
+  public async learnWithTeamContext(
+    concept: string,
+    data: any,
+    context: any,
+    performance: number,
+    teamId?: string
+  ): Promise<any> {
+    const effectiveTeamId = teamId || this.currentTeamId;
+    
+    if (effectiveTeamId) {
+      // Store in shared database
+      const memory = await this.h2gnn.learnWithMemory(concept, data, context, performance);
+      await this.sharedDb.storeMemory(effectiveTeamId, memory);
+      console.log(`🤝 Learned concept ${concept} for team ${effectiveTeamId}`);
+      return memory;
+    } else {
+      // Fallback to individual learning
+      return await this.h2gnn.learnWithMemory(concept, data, context, performance);
+    }
+  }
+
+  /**
+   * Retrieve team memories
+   */
+  public async getTeamMemories(teamId: string, concept?: string): Promise<any[]> {
+    return await this.sharedDb.retrieveMemories(teamId, concept);
+  }
+
+  /**
+   * Get team learning progress
+   */
+  public async getTeamLearningProgress(teamId: string): Promise<any[]> {
+    return await this.sharedDb.getTeamLearningProgress(teamId);
+  }
+
+  /**
+   * Share knowledge between teams
+   */
+  public async shareKnowledge(sourceTeamId: string, targetTeamId: string, concepts: string[]): Promise<void> {
+    await this.sharedDb.shareKnowledge(sourceTeamId, targetTeamId, concepts);
+    console.log(`🤝 Shared knowledge from ${sourceTeamId} to ${targetTeamId}`);
+  }
+
+  /**
+   * Sync team memories
+   */
+  public async syncTeamMemories(teamId: string): Promise<void> {
+    await this.sharedDb.syncMemories(teamId);
+    console.log(`🤝 Synced memories for team ${teamId}`);
   }
 
   /**
@@ -217,6 +306,7 @@ export function getSharedH2GNN(): EnhancedH2GNN {
   const manager = CentralizedH2GNNManager.getInstance();
   return manager.getH2GNN();
 }
+
 
 /**
  * Demo function to show centralized configuration

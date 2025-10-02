@@ -1,0 +1,163 @@
+{
+  "id": "snapshot_1759440938554_general_concepts",
+  "timestamp": 1759440938554,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759440751981_1wtnrlswf",
+        "concept": "mcp_integration",
+        "embedding": [
+          0.14542762499773768,
+          0.10907071874830324,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.07271381249886884,
+          0.03853832062440048,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6526736348784534,
+          0.09323909069692192,
+          0.5792283503206094,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759440752008_47iuyc0ks",
+        "concept": "refactoring_typescript",
+        "embedding": [
+          0.1415189743974312,
+          0.1556708718371743,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.17689871799678897,
+          0.07146708207070275,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6351319811702186,
+          0.09073314016717407,
+          0.5636604678958268,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.5,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759440938548_8a3daxeg2",
+        "concept": "concept_4",
+        "embedding": [
+          0.12432771904344415,
+          0.05594747356954987,
+          0.46622894641291557,
+          0,
+          0.06907095502413563,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.06216385952172208,
+          0.030460291165643815,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.5593203908905843,
+          0.07990291298436919,
+          0.495233602696222,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.5,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "concept_4",
+      "target": "concept_0",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "concept_4",
+      "target": "concept_1",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "concept_4",
+      "target": "concept_2",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "concept_4",
+      "target": "concept_3",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.600",
+    "Concept diversity: 3 unique concepts",
+    "Recent learning activity: 3 concepts learned"
+  ],
+  "confidence": 0.6
+}

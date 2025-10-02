@@ -140,9 +140,9 @@ export class KnowledgeGraphMCP {
 
     try {
       const absolutePath = path.resolve(targetPath);
-      let stats;
+      let pathStats;
       try {
-        stats = await fs.stat(absolutePath);
+        pathStats = await fs.stat(absolutePath);
       } catch (error) {
         throw new Error(`Path does not exist: ${targetPath}`);
       }
@@ -150,11 +150,9 @@ export class KnowledgeGraphMCP {
       const nodes: KnowledgeNode[] = [];
       const edges: KnowledgeEdge[] = [];
       const languages = new Set<string>();
-      const totalFiles = 0;
-      const totalLines = 0;
-      const totalComplexity = 0;
+      const stats = { totalFiles: 0, totalLines: 0, totalComplexity: 0 };
 
-      if (stats.isDirectory()) {
+      if (pathStats.isDirectory()) {
         await this.analyzeDirectory(absolutePath, nodes, edges, {
           recursive,
           includeContent,
@@ -163,13 +161,13 @@ export class KnowledgeGraphMCP {
           filePatterns,
           excludePatterns,
           languages,
-          stats: { totalFiles, totalLines, totalComplexity }
+          stats
         });
       } else {
         await this.analyzeFile(absolutePath, nodes, edges, {
           includeContent,
           languages,
-          stats: { totalFiles, totalLines, totalComplexity }
+          stats
         });
       }
 
@@ -183,10 +181,10 @@ export class KnowledgeGraphMCP {
         metadata: {
           rootPath: absolutePath,
           generatedAt: new Date(),
-          totalFiles,
-          totalLines,
+          totalFiles: stats.totalFiles,
+          totalLines: stats.totalLines,
           languages: Array.from(languages),
-          avgComplexity: totalFiles > 0 ? totalComplexity / totalFiles : 0,
+          avgComplexity: stats.totalFiles > 0 ? stats.totalComplexity / stats.totalFiles : 0,
           clusteringCoefficient: this.calculateClusteringCoefficient(nodes, edges),
           diameter: this.calculateGraphDiameter(nodes, edges)
         }
@@ -201,12 +199,12 @@ export class KnowledgeGraphMCP {
           type: "text",
           text: `Knowledge graph generated successfully!\n\n` +
                 `📊 **Analysis Results:**\n` +
-                `- **Files analyzed:** ${totalFiles}\n` +
-                `- **Total lines:** ${totalLines.toLocaleString()}\n` +
+                `- **Files analyzed:** ${stats.totalFiles}\n` +
+                `- **Total lines:** ${stats.totalLines.toLocaleString()}\n` +
                 `- **Languages:** ${Array.from(languages).join(', ')}\n` +
                 `- **Nodes created:** ${nodes.length}\n` +
                 `- **Relationships:** ${edges.length}\n` +
-                `- **Average complexity:** ${(totalComplexity / totalFiles).toFixed(2)}\n` +
+                `- **Average complexity:** ${stats.totalFiles > 0 ? (stats.totalComplexity / stats.totalFiles).toFixed(2) : '0.00'}\n` +
                 `- **Graph ID:** ${graphId}\n\n` +
                 `🔗 **Graph Structure:**\n` +
                 `- **Clustering coefficient:** ${knowledgeGraph.metadata.clusteringCoefficient?.toFixed(3)}\n` +
