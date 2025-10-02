@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Obsidian URI
+Exec=/snap/bin/obsidian %u
+Type=Application
+NoDisplay=true
+MimeType=x-scheme-handler/obsidian;

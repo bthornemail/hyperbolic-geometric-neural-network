@@ -31,7 +31,8 @@
     "mcp:demo": "npx tsx src/demo/mcp-collaboration-demo.ts",
     "wordnet:demo": "npx tsx src/demo/simple-wordnet-test.ts",
     "code:demo": "npx tsx src/demo/code-embedding-demo.ts",
-    "demo:all": "npm run wordnet:demo && npm run mcp:demo && npm run code:demo"
+    "knowledge-graph:demo": "npx tsx src/demo/knowledge-graph-demo.ts",
+    "demo:all": "npm run wordnet:demo && npm run mcp:demo && npm run code:demo && npm run knowledge-graph:demo"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.2",

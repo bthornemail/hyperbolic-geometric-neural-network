@@ -19,12 +19,10 @@ import {
   ListPromptsRequestSchema,
   GetPromptRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import { z } from "zod";
-
 // Import our H²GNN system components
 import WordNetModule from '../datasets/wordnet-integration.js';
-import { HyperbolicArithmetic, Vector, createVector } from '../math/hyperbolic-arithmetic.js';
 import AgentWorkflows from '../workflows/agent-workflows.js';
+import { KnowledgeGraphMCP } from './knowledge-graph-mcp.js';
 
 const { WordNetProcessor } = WordNetModule;
 const { HierarchicalQAWorkflow, ConceptLearningWorkflow, SemanticExplorationWorkflow } = AgentWorkflows;
@@ -32,6 +30,7 @@ const { HierarchicalQAWorkflow, ConceptLearningWorkflow, SemanticExplorationWork
 // Global system state
 let wordnetProcessor: any = null;
 let activeWorkflows: Map<string, any> = new Map();
+let knowledgeGraphMCP: KnowledgeGraphMCP = new KnowledgeGraphMCP();
 
 /**
  * MCP Server for H²GNN System
@@ -207,6 +206,197 @@ class H2GNNMCPServer {
                 }
               }
             }
+          },
+          {
+            name: "analyze_path_to_knowledge_graph",
+            description: "Analyze files/folders and create knowledge graph with hyperbolic embeddings",
+            inputSchema: {
+              type: "object",
+              properties: {
+                path: {
+                  type: "string",
+                  description: "Path to file or directory to analyze"
+                },
+                recursive: {
+                  type: "boolean",
+                  description: "Whether to analyze subdirectories recursively",
+                  default: true
+                },
+                includeContent: {
+                  type: "boolean", 
+                  description: "Whether to include file content in analysis",
+                  default: true
+                },
+                maxDepth: {
+                  type: "number",
+                  description: "Maximum directory depth to analyze",
+                  default: 10
+                },
+                filePatterns: {
+                  type: "array",
+                  items: { type: "string" },
+                  description: "File patterns to include (glob patterns)",
+                  default: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.py", "**/*.md"]
+                },
+                excludePatterns: {
+                  type: "array",
+                  items: { type: "string" },
+                  description: "Patterns to exclude",
+                  default: ["**/node_modules/**", "**/dist/**", "**/.git/**"]
+                }
+              },
+              required: ["path"]
+            }
+          },
+          {
+            name: "generate_code_from_graph",
+            description: "Generate code based on knowledge graph insights",
+            inputSchema: {
+              type: "object",
+              properties: {
+                type: {
+                  type: "string",
+                  enum: ["function", "class", "interface", "module", "test", "documentation"],
+                  description: "Type of code to generate"
+                },
+                description: {
+                  type: "string",
+                  description: "Description of what to generate"
+                },
+                graphId: {
+                  type: "string",
+                  description: "Optional knowledge graph ID to use"
+                },
+                context: {
+                  type: "object",
+                  properties: {
+                    relatedNodes: {
+                      type: "array",
+                      items: { type: "string" },
+                      description: "Node IDs to use as context"
+                    },
+                    targetFile: {
+                      type: "string",
+                      description: "Target file for generated code"
+                    },
+                    style: {
+                      type: "string",
+                      enum: ["typescript", "javascript", "python", "markdown"],
+                      description: "Code style/language"
+                    },
+                    framework: {
+                      type: "string",
+                      description: "Framework to use"
+                    }
+                  }
+                },
+                constraints: {
+                  type: "object",
+                  properties: {
+                    maxLines: { type: "number" },
+                    includeComments: { type: "boolean" },
+                    includeTests: { type: "boolean" },
+                    followPatterns: {
+                      type: "array",
+                      items: { type: "string" }
+                    }
+                  }
+                }
+              },
+              required: ["type", "description"]
+            }
+          },
+          {
+            name: "generate_documentation_from_graph",
+            description: "Generate documentation from knowledge graph",
+            inputSchema: {
+              type: "object",
+              properties: {
+                type: {
+                  type: "string",
+                  enum: ["api_docs", "readme", "architecture", "tutorial", "changelog", "design_spec"],
+                  description: "Type of documentation to generate"
+                },
+                scope: {
+                  type: "array",
+                  items: { type: "string" },
+                  description: "Node IDs to include in documentation"
+                },
+                format: {
+                  type: "string",
+                  enum: ["markdown", "html", "pdf", "json"],
+                  description: "Output format"
+                },
+                graphId: {
+                  type: "string",
+                  description: "Optional knowledge graph ID to use"
+                },
+                options: {
+                  type: "object",
+                  properties: {
+                    includeCodeExamples: { type: "boolean" },
+                    includeArchitectureDiagrams: { type: "boolean" },
+                    targetAudience: {
+                      type: "string",
+                      enum: ["developer", "user", "architect", "stakeholder"]
+                    },
+                    detailLevel: {
+                      type: "string",
+                      enum: ["high", "medium", "low"]
+                    }
+                  }
+                }
+              },
+              required: ["type", "scope", "format"]
+            }
+          },
+          {
+            name: "query_knowledge_graph",
+            description: "Query knowledge graph for insights and relationships",
+            inputSchema: {
+              type: "object",
+              properties: {
+                query: {
+                  type: "string",
+                  description: "Query text to search for"
+                },
+                graphId: {
+                  type: "string",
+                  description: "Optional knowledge graph ID to query"
+                },
+                type: {
+                  type: "string",
+                  enum: ["similarity", "path", "cluster", "dependency", "impact"],
+                  description: "Type of query to perform",
+                  default: "similarity"
+                },
+                limit: {
+                  type: "number",
+                  description: "Maximum number of results",
+                  default: 10
+                }
+              },
+              required: ["query"]
+            }
+          },
+          {
+            name: "get_graph_visualization",
+            description: "Get knowledge graph visualization data",
+            inputSchema: {
+              type: "object",
+              properties: {
+                graphId: {
+                  type: "string",
+                  description: "Optional knowledge graph ID to visualize"
+                },
+                layout: {
+                  type: "string",
+                  enum: ["force", "hierarchical", "circular"],
+                  description: "Layout algorithm to use",
+                  default: "force"
+                }
+              }
+            }
           }
         ]
       };
@@ -238,6 +428,21 @@ class H2GNNMCPServer {
           
           case "analyze_hierarchy":
             return await this.analyzeHierarchy(args);
+          
+          case "analyze_path_to_knowledge_graph":
+            return await knowledgeGraphMCP.analyzePathToKnowledgeGraph(args as any);
+          
+          case "generate_code_from_graph":
+            return await knowledgeGraphMCP.generateCodeFromGraph(args as any);
+          
+          case "generate_documentation_from_graph":
+            return await knowledgeGraphMCP.generateDocumentationFromGraph(args as any);
+          
+          case "query_knowledge_graph":
+            return await knowledgeGraphMCP.queryKnowledgeGraph(args as any);
+          
+          case "get_graph_visualization":
+            return await knowledgeGraphMCP.getGraphVisualization(args as any);
           
           default:
             throw new McpError(
@@ -291,6 +496,18 @@ class H2GNNMCPServer {
             mimeType: "application/json",
             name: "System Status",
             description: "Current status of H²GNN system components"
+          },
+          {
+            uri: "h2gnn://knowledge-graphs/list",
+            mimeType: "application/json",
+            name: "Knowledge Graphs List",
+            description: "List of all available knowledge graphs"
+          },
+          {
+            uri: "h2gnn://knowledge-graphs/latest",
+            mimeType: "application/json",
+            name: "Latest Knowledge Graph",
+            description: "Most recently generated knowledge graph"
           }
         ]
       };
@@ -316,6 +533,12 @@ class H2GNNMCPServer {
           
           case "h2gnn://system/status":
             return await this.getSystemStatus();
+          
+          case "h2gnn://knowledge-graphs/list":
+            return await this.getKnowledgeGraphsList();
+          
+          case "h2gnn://knowledge-graphs/latest":
+            return await this.getLatestKnowledgeGraph();
           
           default:
             throw new McpError(
@@ -838,6 +1061,67 @@ class H2GNNMCPServer {
           uri: "h2gnn://system/status",
           mimeType: "application/json",
           text: JSON.stringify(status, null, 2)
+        }
+      ]
+    };
+  }
+
+  private async getKnowledgeGraphsList() {
+    const graphs = knowledgeGraphMCP.getKnowledgeGraphs();
+    
+    return {
+      contents: [
+        {
+          uri: "h2gnn://knowledge-graphs/list",
+          mimeType: "application/json",
+          text: JSON.stringify({ 
+            graphs,
+            count: graphs.length,
+            timestamp: new Date().toISOString()
+          }, null, 2)
+        }
+      ]
+    };
+  }
+
+  private async getLatestKnowledgeGraph() {
+    const graphs = knowledgeGraphMCP.getKnowledgeGraphs();
+    const latest = graphs.length > 0 ? graphs[graphs.length - 1] : null;
+    
+    if (!latest) {
+      return {
+        contents: [
+          {
+            uri: "h2gnn://knowledge-graphs/latest",
+            mimeType: "application/json",
+            text: JSON.stringify({ 
+              message: "No knowledge graphs available. Create one using analyze_path_to_knowledge_graph tool.",
+              timestamp: new Date().toISOString()
+            }, null, 2)
+          }
+        ]
+      };
+    }
+
+    const fullGraph = knowledgeGraphMCP.getKnowledgeGraph(latest.id);
+    
+    return {
+      contents: [
+        {
+          uri: "h2gnn://knowledge-graphs/latest",
+          mimeType: "application/json",
+          text: JSON.stringify({
+            id: latest.id,
+            metadata: latest.metadata,
+            nodeCount: fullGraph?.nodes.length || 0,
+            edgeCount: fullGraph?.edges.length || 0,
+            summary: {
+              totalFiles: fullGraph?.metadata.totalFiles || 0,
+              totalLines: fullGraph?.metadata.totalLines || 0,
+              languages: fullGraph?.metadata.languages || [],
+              avgComplexity: fullGraph?.metadata.avgComplexity || 0
+            }
+          }, null, 2)
         }
       ]
     };
