@@ -240,6 +240,46 @@ class EnhancedH2GNNMCPServer {
               },
               required: ["domain"]
             }
+          },
+          {
+            name: "learn_from_node",
+            description: "Learn from a knowledge graph node, creating direct link between code analysis and semantic understanding",
+            inputSchema: {
+              type: "object",
+              properties: {
+                nodeId: {
+                  type: "string",
+                  description: "ID of the knowledge graph node to learn from"
+                },
+                nodeData: {
+                  type: "object",
+                  description: "Data from the knowledge graph node",
+                  properties: {
+                    type: { type: "string" },
+                    name: { type: "string" },
+                    content: { type: "string" },
+                    relationships: { type: "array" },
+                    properties: { type: "object" }
+                  }
+                },
+                context: {
+                  type: "object",
+                  description: "Additional context for learning",
+                  properties: {
+                    domain: { type: "string" },
+                    language: { type: "string" },
+                    complexity: { type: "number" },
+                    patterns: { type: "array" }
+                  }
+                },
+                performance: {
+                  type: "number",
+                  description: "Performance score for this learning session",
+                  default: 0.7
+                }
+              },
+              required: ["nodeId", "nodeData"]
+            }
           }
         ]
       };
@@ -280,6 +320,9 @@ class EnhancedH2GNNMCPServer {
           
           case "adaptive_learning":
             return await this.adaptiveLearning(args);
+          
+          case "learn_from_node":
+            return await this.learnFromNode(args);
           
           default:
             throw new McpError(
@@ -646,6 +689,177 @@ ${status.learningProgress.map(p =>
         }
       ]
     };
+  }
+
+  /**
+   * Learn from a knowledge graph node
+   */
+  private async learnFromNode(args: any): Promise<any> {
+    if (!enhancedH2GNN) {
+      throw new McpError(ErrorCode.InvalidRequest, "Enhanced H²GNN not initialized");
+    }
+
+    const { nodeId, nodeData, context = {}, performance = 0.7 } = args;
+
+    // Extract semantic features from the node
+    const semanticFeatures = this.extractSemanticFeatures(nodeData);
+    const contextualFeatures = this.extractContextualFeatures(nodeData, context);
+    const relationshipFeatures = this.extractRelationshipFeatures(nodeData);
+
+    // Create a comprehensive learning concept
+    const concept = `node_${nodeId}_${nodeData.type}_${nodeData.name}`;
+    const learningData = {
+      nodeId,
+      nodeType: nodeData.type,
+      nodeName: nodeData.name,
+      content: nodeData.content,
+      semanticFeatures,
+      contextualFeatures,
+      relationshipFeatures,
+      relationships: nodeData.relationships || [],
+      properties: nodeData.properties || {},
+      complexity: context.complexity || 0.5,
+      patterns: context.patterns || [],
+      language: context.language || 'unknown'
+    };
+
+    // Learn the concept with enhanced context
+    const memory = await enhancedH2GNN.learnWithMemory(
+      concept,
+      learningData,
+      {
+        domain: context.domain || 'knowledge_graph',
+        type: 'node_learning',
+        source: 'knowledge_graph',
+        nodeId,
+        timestamp: new Date().toISOString()
+      },
+      performance
+    );
+
+    // Create relationships with other learned concepts
+    if (nodeData.relationships && nodeData.relationships.length > 0) {
+      for (const relationship of nodeData.relationships) {
+        const relatedConcept = `node_${relationship.target}_${relationship.type}`;
+        await enhancedH2GNN.learnWithMemory(
+          relatedConcept,
+          {
+            relationshipType: relationship.type,
+            sourceNode: nodeId,
+            targetNode: relationship.target,
+            strength: relationship.strength || 0.5
+          },
+          {
+            domain: context.domain || 'knowledge_graph',
+            type: 'relationship_learning',
+            source: 'knowledge_graph'
+          },
+          performance * 0.8
+        );
+      }
+    }
+
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Successfully learned from knowledge graph node "${nodeId}":
+- Node Type: ${nodeData.type}
+- Node Name: ${nodeData.name}
+- Concept: ${concept}
+- Memory ID: ${memory.id}
+- Confidence: ${memory.confidence.toFixed(3)}
+- Performance: ${performance}
+- Semantic Features: ${semanticFeatures.length}
+- Contextual Features: ${contextualFeatures.length}
+- Relationship Features: ${relationshipFeatures.length}
+- Relationships: ${nodeData.relationships?.length || 0}
+- Language: ${context.language || 'unknown'}
+- Domain: ${context.domain || 'knowledge_graph'}
+- Patterns: ${context.patterns?.join(', ') || 'None'}
+- Timestamp: ${new Date(memory.timestamp).toISOString()}
+
+This creates a direct link between code analysis and semantic understanding!`
+        }
+      ]
+    };
+  }
+
+  /**
+   * Extract semantic features from node data
+   */
+  private extractSemanticFeatures(nodeData: any): string[] {
+    const features: string[] = [];
+    
+    // Extract from content
+    if (nodeData.content) {
+      const words = nodeData.content.toLowerCase().split(/\s+/);
+      features.push(...words.filter(word => word.length > 3));
+    }
+    
+    // Extract from name
+    if (nodeData.name) {
+      const nameWords = nodeData.name.toLowerCase().split(/(?=[A-Z])|_|-/);
+      features.push(...nameWords.filter(word => word.length > 2));
+    }
+    
+    // Extract from type
+    if (nodeData.type) {
+      features.push(nodeData.type.toLowerCase());
+    }
+    
+    return [...new Set(features)]; // Remove duplicates
+  }
+
+  /**
+   * Extract contextual features from node data and context
+   */
+  private extractContextualFeatures(nodeData: any, context: any): string[] {
+    const features: string[] = [];
+    
+    // Add context domain
+    if (context.domain) {
+      features.push(`domain_${context.domain}`);
+    }
+    
+    // Add language
+    if (context.language) {
+      features.push(`lang_${context.language}`);
+    }
+    
+    // Add patterns
+    if (context.patterns && Array.isArray(context.patterns)) {
+      features.push(...context.patterns.map((p: string) => `pattern_${p}`));
+    }
+    
+    // Add complexity level
+    if (context.complexity) {
+      const complexityLevel = context.complexity < 0.3 ? 'low' : 
+                             context.complexity < 0.7 ? 'medium' : 'high';
+      features.push(`complexity_${complexityLevel}`);
+    }
+    
+    return features;
+  }
+
+  /**
+   * Extract relationship features from node data
+   */
+  private extractRelationshipFeatures(nodeData: any): string[] {
+    const features: string[] = [];
+    
+    if (nodeData.relationships && Array.isArray(nodeData.relationships)) {
+      for (const rel of nodeData.relationships) {
+        features.push(`rel_${rel.type}`);
+        if (rel.strength) {
+          const strengthLevel = rel.strength < 0.3 ? 'weak' : 
+                               rel.strength < 0.7 ? 'medium' : 'strong';
+          features.push(`strength_${strengthLevel}`);
+        }
+      }
+    }
+    
+    return features;
   }
 
   /**
