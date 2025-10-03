@@ -159,8 +159,8 @@ export class H2GNNBroker extends EventEmitter {
       const isValid = await this.validateMessageGeometry(message);
       
       if (isValid) {
-        // Update shared learning database
-        await this.sharedLearningDB.recordMessage(message);
+        // Note: Shared learning database doesn't have recordMessage method
+        // This could be implemented if needed for message tracking
         
         // Notify subscribers
         const subscribers = this.channels.get(message.channel);

@@ -71,10 +71,10 @@ export class SharedLearningDatabase {
   private conflicts: Map<string, MemoryConflict> = new Map();
   private insights: Map<string, TeamLearningInsight> = new Map();
   private syncInterval: NodeJS.Timeout | null = null;
-  private syncFrequency: number = 30000; // 30 seconds
+  private syncFrequency: number = parseInt(process.env.H2GNN_SYNC_FREQUENCY || '300000', 10); // 5 minutes (configurable via env)
 
-  constructor(storagePath: string = './shared-learning') {
-    this.storagePath = storagePath;
+  constructor(storagePath?: string) {
+    this.storagePath = storagePath || process.env.H2GNN_SHARED_LEARNING_PATH || './shared-learning';
     this.initializeDatabase();
   }
 
@@ -463,13 +463,17 @@ export class SharedLearningDatabase {
    * Start the sync process
    */
   private startSyncProcess(): void {
-    this.syncInterval = setInterval(async () => {
-      console.log('🤝 Running periodic sync...');
-      
-      for (const teamId of this.teams.keys()) {
-        await this.syncMemories(teamId);
-      }
-    }, this.syncFrequency);
+    if (this.syncFrequency > 0) {
+      this.syncInterval = setInterval(async () => {
+        if (process.env.H2GNN_DEBUG === 'true') {
+          console.log('🤝 Running periodic sync...');
+        }
+        
+        for (const teamId of this.teams.keys()) {
+          await this.syncMemories(teamId);
+        }
+      }, this.syncFrequency);
+    }
   }
 
   /**

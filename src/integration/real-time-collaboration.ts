@@ -136,10 +136,13 @@ export class RealTimeCollaborationEngine extends EventEmitter {
   }
 
   private startPresenceTracking(): void {
-    // Send presence heartbeat every 2 seconds
+    // Send presence heartbeat every 30 seconds (configurable via env)
+    const heartbeatInterval = parseInt(process.env.H2GNN_HEARTBEAT_INTERVAL || '30000', 10);
+    if (heartbeatInterval > 0) {
     setInterval(() => {
       this.userPresence.updatePresence();
-    }, 2000);
+      }, heartbeatInterval);
+    }
   }
 
   private async handleRealTimeVisualizationUpdate(data: any): Promise<void> {
@@ -489,9 +492,12 @@ export class UserPresenceManager {
   }
 
   private startPresenceHeartbeat(): void {
+    const heartbeatInterval = parseInt(process.env.H2GNN_HEARTBEAT_INTERVAL || '30000', 10);
+    if (heartbeatInterval > 0) {
     setInterval(() => {
       this.updatePresence();
-    }, 2000);
+      }, heartbeatInterval);
+    }
   }
 
   async updatePresence(): Promise<void> {
@@ -499,7 +505,9 @@ export class UserPresenceManager {
     
     // Broadcast presence update
     // Note: In real implementation, this would use the broker
+    if (process.env.H2GNN_DEBUG === 'true') {
     console.log(`💓 Presence heartbeat for ${this.currentUser.name}`);
+    }
   }
 
   async updateUserFocus(userId: string, focus: UserFocus): Promise<void> {
