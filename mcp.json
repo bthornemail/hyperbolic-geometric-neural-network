@@ -2,14 +2,14 @@
   "mcpServers": {
     "h2gnn": {
       "command": "tsx",
-      "args": ["/home/main/devops/h2gnn/project/src/mcp/h2gnn-mcp-server.ts"],
+      "args": ["/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/h2gnn-mcp-server.ts"],
       "env": {
         "NODE_ENV": "production"
       }
     },
     "knowledge-graph": {
       "command": "tsx",
-      "args": ["/home/main/devops/h2gnn/project/src/mcp/knowledge-graph-mcp.ts"],
+      "args": ["/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/knowledge-graph-mcp.ts"],
       "env": {
         "NODE_ENV": "production"
       }
