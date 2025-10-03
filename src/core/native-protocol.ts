@@ -9,6 +9,7 @@
 
 import { EventEmitter } from 'events';
 import { createHash, randomBytes } from 'crypto';
+import { TransportManager, TransportManagerConfig } from './transports/transport-manager.js';
 
 // 🔑 BIP32 HD Addressing Types
 export interface H2GNNAddress {
@@ -111,30 +112,7 @@ export interface ProtocolConfig {
   };
   
   // Transport Configuration
-  transports: {
-    mqtt: {
-      broker: string;
-      port: number;
-      username?: string;
-      password?: string;
-    };
-    webrtc: {
-      turn: {
-        server: string;
-        username: string;
-        credential: string;
-      };
-    };
-    websocket: {
-      server: string;
-      port: number;
-    };
-    redis: {
-      host: string;
-      port: number;
-      password?: string;
-    };
-  };
+  transports: TransportManagerConfig;
   
   // Authentication
   webauthn: {
@@ -276,12 +254,8 @@ export class NativeH2GNNProtocol extends EventEmitter {
   private config: ProtocolConfig;
   private isInitialized: boolean = false;
   
-  // Transport layers (will be implemented in separate files)
-  private mqttTransport?: any;
-  private webrtcTransport?: any;
-  private websocketTransport?: any;
-  private networkTransport?: any;
-  private ipcTransport?: any;
+  // Transport manager
+  private transportManager: TransportManager;
   
   // Data encoders (will be implemented in separate files)
   private binaryEncoder?: any;
@@ -297,6 +271,7 @@ export class NativeH2GNNProtocol extends EventEmitter {
     super();
     this.config = config;
     this.hdAddressing = new BIP32HDAddressing(config.bip32.seed, config.bip32.network);
+    this.transportManager = new TransportManager(config.transports);
   }
 
   /**
@@ -313,7 +288,7 @@ export class NativeH2GNNProtocol extends EventEmitter {
       
       // Initialize transport layers
       console.log('📡 Initializing transport layers...');
-      await this.initializeTransports();
+      await this.transportManager.initialize();
       
       // Initialize data encoders
       console.log('📊 Initializing data encoders...');
@@ -407,29 +382,8 @@ export class NativeH2GNNProtocol extends EventEmitter {
     
     console.log(`📤 Sending message via ${transport} to ${endpoint}`);
     
-    // Route to appropriate transport layer
-    switch (transport) {
-      case 'mqtt':
-        await this.sendViaMQTT(endpoint, message);
-        break;
-      case 'websocket':
-        await this.sendViaWebSocket(endpoint, message);
-        break;
-      case 'webrtc':
-        await this.sendViaWebRTC(endpoint, message);
-        break;
-      case 'tcp':
-        await this.sendViaTCP(endpoint, message);
-        break;
-      case 'udp':
-        await this.sendViaUDP(endpoint, message);
-        break;
-      case 'ipc':
-        await this.sendViaIPC(endpoint, message);
-        break;
-      default:
-        throw new Error(`Unsupported transport: ${transport}`);
-    }
+    // Use transport manager to send message
+    await this.transportManager.sendMessage(address, message);
   }
 
   /**
@@ -445,37 +399,11 @@ export class NativeH2GNNProtocol extends EventEmitter {
     
     console.log(`📥 Receiving messages via ${transport} from ${endpoint}`);
     
-    // Route to appropriate transport layer
-    switch (transport) {
-      case 'mqtt':
-        await this.receiveViaMQTT(endpoint, callback);
-        break;
-      case 'websocket':
-        await this.receiveViaWebSocket(endpoint, callback);
-        break;
-      case 'webrtc':
-        await this.receiveViaWebRTC(endpoint, callback);
-        break;
-      case 'tcp':
-        await this.receiveViaTCP(endpoint, callback);
-        break;
-      case 'udp':
-        await this.receiveViaUDP(endpoint, callback);
-        break;
-      case 'ipc':
-        await this.receiveViaIPC(endpoint, callback);
-        break;
-      default:
-        throw new Error(`Unsupported transport: ${transport}`);
-    }
+    // Use transport manager to receive messages
+    await this.transportManager.subscribe(address, callback);
   }
 
-  // Private methods for transport initialization
-  private async initializeTransports(): Promise<void> {
-    // TODO: Implement transport layer initialization
-    console.log('📡 Transport layers will be implemented in separate files');
-  }
-
+  // Private methods for initialization
   private async initializeEncoders(): Promise<void> {
     // TODO: Implement data encoder initialization
     console.log('📊 Data encoders will be implemented in separate files');
@@ -489,67 +417,6 @@ export class NativeH2GNNProtocol extends EventEmitter {
   private async initializeCaching(): Promise<void> {
     // TODO: Implement caching initialization
     console.log('💾 Caching will be implemented in separate files');
-  }
-
-  // Private methods for transport routing
-  private async sendViaMQTT(endpoint: string, message: ProtocolMessage): Promise<void> {
-    // TODO: Implement MQTT transport
-    console.log(`📤 MQTT send to ${endpoint}:`, message.header.messageId);
-  }
-
-  private async sendViaWebSocket(endpoint: string, message: ProtocolMessage): Promise<void> {
-    // TODO: Implement WebSocket transport
-    console.log(`📤 WebSocket send to ${endpoint}:`, message.header.messageId);
-  }
-
-  private async sendViaWebRTC(endpoint: string, message: ProtocolMessage): Promise<void> {
-    // TODO: Implement WebRTC transport
-    console.log(`📤 WebRTC send to ${endpoint}:`, message.header.messageId);
-  }
-
-  private async sendViaTCP(endpoint: string, message: ProtocolMessage): Promise<void> {
-    // TODO: Implement TCP transport
-    console.log(`📤 TCP send to ${endpoint}:`, message.header.messageId);
-  }
-
-  private async sendViaUDP(endpoint: string, message: ProtocolMessage): Promise<void> {
-    // TODO: Implement UDP transport
-    console.log(`📤 UDP send to ${endpoint}:`, message.header.messageId);
-  }
-
-  private async sendViaIPC(endpoint: string, message: ProtocolMessage): Promise<void> {
-    // TODO: Implement IPC transport
-    console.log(`📤 IPC send to ${endpoint}:`, message.header.messageId);
-  }
-
-  private async receiveViaMQTT(endpoint: string, callback: MessageHandler): Promise<void> {
-    // TODO: Implement MQTT receive
-    console.log(`📥 MQTT receive from ${endpoint}`);
-  }
-
-  private async receiveViaWebSocket(endpoint: string, callback: MessageHandler): Promise<void> {
-    // TODO: Implement WebSocket receive
-    console.log(`📥 WebSocket receive from ${endpoint}`);
-  }
-
-  private async receiveViaWebRTC(endpoint: string, callback: MessageHandler): Promise<void> {
-    // TODO: Implement WebRTC receive
-    console.log(`📥 WebRTC receive from ${endpoint}`);
-  }
-
-  private async receiveViaTCP(endpoint: string, callback: MessageHandler): Promise<void> {
-    // TODO: Implement TCP receive
-    console.log(`📥 TCP receive from ${endpoint}`);
-  }
-
-  private async receiveViaUDP(endpoint: string, callback: MessageHandler): Promise<void> {
-    // TODO: Implement UDP receive
-    console.log(`📥 UDP receive from ${endpoint}`);
-  }
-
-  private async receiveViaIPC(endpoint: string, callback: MessageHandler): Promise<void> {
-    // TODO: Implement IPC receive
-    console.log(`📥 IPC receive from ${endpoint}`);
   }
 
   // Helper methods

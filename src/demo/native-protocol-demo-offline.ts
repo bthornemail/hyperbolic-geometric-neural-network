@@ -1,47 +1,24 @@
 #!/usr/bin/env node
 
 /**
- * Native H²GNN Protocol Demo
+ * Native H²GNN Protocol Demo (Offline)
  * 
  * Demonstrates the complete Native H²GNN Communication Protocol
- * with BIP32 HD addressing, multi-transport layers, and data encoding
+ * without requiring external services (MQTT, Redis, etc.)
  */
 
 import { NativeH2GNNProtocol, ProtocolConfig, HyperbolicEmbedding } from '../core/native-protocol.js';
 import { ProtocolEncoder } from '../core/protocol-encoders.js';
 import { createHash, randomBytes } from 'crypto';
 
-// 🎯 Demo Configuration
+// 🎯 Demo Configuration (Offline - no external services)
 const DEMO_CONFIG: ProtocolConfig = {
   bip32: {
     seed: Buffer.from('h2gnn-demo-seed-for-deterministic-addressing', 'utf8'),
     network: 'testnet'
   },
   transports: {
-    mqtt: {
-      broker: 'localhost',
-      port: 1883,
-      clientId: 'h2gnn-demo'
-    },
-    webrtc: {
-      turn: {
-        server: 'turn.example.com',
-        username: 'demo-user',
-        credential: 'demo-pass'
-      }
-    },
-    websocket: {
-      server: 'localhost',
-      port: 8080
-    },
-    udp: {
-      host: 'localhost',
-      port: 3001
-    },
-    tcp: {
-      host: 'localhost',
-      port: 3000
-    },
+    // Only configure transports that don't require external services
     ipc: {
       socketPath: '/tmp/h2gnn-demo.sock'
     }
@@ -93,7 +70,7 @@ function generateSampleEmbeddings(count: number = 10): HyperbolicEmbedding[] {
 
 // 🚀 Main Demo Function
 async function runNativeProtocolDemo(): Promise<void> {
-  console.log('🚀 Native H²GNN Protocol Demo Starting...\n');
+  console.log('🚀 Native H²GNN Protocol Demo Starting (Offline Mode)...\n');
   
   try {
     // 1. Initialize Protocol
@@ -105,10 +82,10 @@ async function runNativeProtocolDemo(): Promise<void> {
     // 2. Create H²GNN Addresses
     console.log('2️⃣ Creating H²GNN addresses with BIP32 HD addressing...');
     
-    const brokerAddress = protocol.createAddress('broker', 0, 'external', 'mqtt', 'localhost', 1883);
-    const providerAddress = protocol.createAddress('provider', 0, 'external', 'websocket', 'localhost', 8080);
-    const consumerAddress = protocol.createAddress('consumer', 0, 'external', 'tcp', 'localhost', 3000);
-    const mcpAddress = protocol.createAddress('mcp', 0, 'external', 'ipc', '/tmp/h2gnn-mcp');
+    const brokerAddress = protocol.createAddress('broker', 0, 'external', 'ipc', '/tmp/h2gnn-broker.sock');
+    const providerAddress = protocol.createAddress('provider', 0, 'external', 'ipc', '/tmp/h2gnn-provider.sock');
+    const consumerAddress = protocol.createAddress('consumer', 0, 'external', 'ipc', '/tmp/h2gnn-consumer.sock');
+    const mcpAddress = protocol.createAddress('mcp', 0, 'external', 'ipc', '/tmp/h2gnn-mcp.sock');
     
     console.log('📍 Broker Address:', brokerAddress.path);
     console.log('📍 Provider Address:', providerAddress.path);
@@ -196,17 +173,20 @@ async function runNativeProtocolDemo(): Promise<void> {
     console.log('🔗 MCP RPC Endpoint:', mcpEndpoint);
     console.log('✅ RPC endpoints generated successfully\n');
     
-    // 7. Demonstrate Message Routing
+    // 7. Demonstrate Message Routing (Simulated)
     console.log('7️⃣ Demonstrating message routing (simulated)...');
     
-    console.log('📤 Sending embedding message via MQTT...');
-    await protocol.sendMessage(providerAddress, embeddingMessage);
+    console.log('📤 Simulating embedding message via IPC...');
+    console.log(`   Would send to: ${providerEndpoint}`);
+    console.log(`   Message ID: ${embeddingMessage.header.messageId}`);
     
-    console.log('📤 Sending training message via WebSocket...');
-    await protocol.sendMessage(consumerAddress, trainingMessage);
+    console.log('📤 Simulating training message via IPC...');
+    console.log(`   Would send to: ${consumerEndpoint}`);
+    console.log(`   Message ID: ${trainingMessage.header.messageId}`);
     
-    console.log('📤 Sending visualization message via MQTT...');
-    await protocol.sendMessage(brokerAddress, visualizationMessage);
+    console.log('📤 Simulating visualization message via IPC...');
+    console.log(`   Would send to: ${brokerEndpoint}`);
+    console.log(`   Message ID: ${visualizationMessage.header.messageId}`);
     
     console.log('✅ Message routing demonstrated successfully\n');
     
@@ -245,7 +225,18 @@ async function runNativeProtocolDemo(): Promise<void> {
     console.log(`⚡ Compression ratio: ${((largeBinaryData as ArrayBuffer).byteLength / (JSON.stringify(largeEmbeddings).length * 1.5)).toFixed(2)}x`);
     console.log('✅ Performance analysis completed\n');
     
-    // 10. Summary
+    // 10. Transport Statistics
+    console.log('🔟 Transport statistics...');
+    
+    // Note: In offline mode, we only have IPC transport configured
+    console.log('📊 IPC Transport: Available (no external dependencies)');
+    console.log('📊 MQTT Transport: Not configured (requires MQTT broker)');
+    console.log('📊 WebSocket Transport: Not configured (requires WebSocket server)');
+    console.log('📊 WebRTC Transport: Not configured (requires TURN server)');
+    console.log('📊 UDP/TCP Transport: Not configured (requires network setup)');
+    console.log('✅ Transport statistics completed\n');
+    
+    // 11. Summary
     console.log('🎉 Native H²GNN Protocol Demo Completed Successfully!');
     console.log('\n📊 Summary:');
     console.log('   ✅ BIP32 HD addressing implemented');
@@ -254,7 +245,13 @@ async function runNativeProtocolDemo(): Promise<void> {
     console.log('   ✅ Deterministic RPC endpoints generated');
     console.log('   ✅ Hyperbolic geometry calculations functional');
     console.log('   ✅ High-performance binary encoding optimized');
+    console.log('   ✅ IPC transport configured (offline mode)');
     console.log('\n🚀 The Native H²GNN Protocol is ready for production use!');
+    console.log('\n💡 To test with external services:');
+    console.log('   - Start MQTT broker: mosquitto -p 1883');
+    console.log('   - Start Redis server: redis-server');
+    console.log('   - Configure WebSocket server');
+    console.log('   - Set up TURN server for WebRTC');
     
   } catch (error) {
     console.error('❌ Demo failed:', error);
@@ -288,3 +285,4 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 }
 
 export { runNativeProtocolDemo };
+

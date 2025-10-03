@@ -4,7 +4,7 @@
  * Test script to verify the analyze_path_to_knowledge_graph fix
  */
 
-import { KnowledgeGraphMCP } from './src/mcp/knowledge-graph-mcp';
+import { KnowledgeGraphMCP } from '../src/mcp/knowledge-graph-mcp';
 
 async function testAnalysisFix(): Promise<void> {
   console.log('🧪 Testing analyze_path_to_knowledge_graph fix...');
@@ -16,7 +16,7 @@ async function testAnalysisFix(): Promise<void> {
     // Test with a single file
     console.log('\n📁 Testing single file analysis:');
     const singleFileResult = await kg.analyzePathToKnowledgeGraph({
-      path: './src/core/enhanced-h2gnn.ts',
+      path: '../src/core/enhanced-h2gnn.ts',
       recursive: false,
       includeContent: true
     });
@@ -26,7 +26,7 @@ async function testAnalysisFix(): Promise<void> {
     // Test with a directory
     console.log('\n📁 Testing directory analysis:');
     const dirResult = await kg.analyzePathToKnowledgeGraph({
-      path: './src/core',
+      path: '../src/core',
       recursive: true,
       includeContent: false,
       maxDepth: 2

@@ -73,7 +73,7 @@ export class SharedLearningDatabase {
   private syncInterval: NodeJS.Timeout | null = null;
   private syncFrequency: number = 30000; // 30 seconds
 
-  constructor(storagePath: string = './shared-learning-db') {
+  constructor(storagePath: string = './shared-learning') {
     this.storagePath = storagePath;
     this.initializeDatabase();
   }
@@ -608,7 +608,7 @@ async function demonstrateSharedLearningDatabase(): Promise<void> {
   console.log('🤝 Shared Learning Database Demo');
   console.log('================================');
   
-  const db = new SharedLearningDatabase('./demo-shared-learning-db');
+  const db = new SharedLearningDatabase('./persistence/shared-learning');
   await db.connect();
   
   // Create teams

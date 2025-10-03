@@ -10,11 +10,11 @@ echo "====================================================="
 
 # Get the directory of this script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
+cd "$SCRIPT_DIR/.."
 
 # Create logs directory
 mkdir -p logs
-LOG_DIR="$SCRIPT_DIR/logs"
+LOG_DIR="logs"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 
 # Function to log messages
@@ -270,10 +270,10 @@ main() {
     log "📄 Status report: $LOG_DIR/gemini-background-status-$TIMESTAMP.md"
     log ""
     log "💡 To stop all processes, run:"
-    log "   ./stop-gemini-background.sh"
+    log "   ./scripts/stop-gemini-background.sh"
     log ""
     log "💡 To check status, run:"
-    log "   ./check-gemini-status.sh"
+    log "   ./scripts/check-gemini-status.sh"
 }
 
 # Run main function

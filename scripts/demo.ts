@@ -11,9 +11,9 @@
  * - Geometric insights generation
  */
 
-import { HyperbolicArithmetic, createVector } from './src/math/hyperbolic-arithmetic';
-import { HyperbolicGeometricHGN, createH2GNN, createHierarchicalDataset } from './src/core/H2GNN';
-import { createObsidianSync } from './src/integration/obsidian-sync';
+import { HyperbolicArithmetic, createVector } from '../src/math/hyperbolic-arithmetic';
+import { HyperbolicGeometricHGN, createH2GNN, createHierarchicalDataset } from '../src/core/H2GNN';
+import { createObsidianSync } from '../src/integration/obsidian-sync';
 
 console.log('🌌 H²GNN: Hyperbolic Geometric Hypergraph Neural Network Demo\n');
 
@@ -112,7 +112,7 @@ console.log('=' .repeat(60));
 async function demonstrateObsidianSync() {
   // Create Obsidian sync system
   const obsidianSync = createObsidianSync({
-    vaultPath: './sample-vault',
+    vaultPath: '../sample-vault',
     autoSync: false,
     syncInterval: 5000,
     embedModel: 'h2gnn',

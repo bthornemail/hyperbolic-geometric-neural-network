@@ -32,10 +32,10 @@ class GeminiCollaborationTester {
   async startMCPServer() {
     console.log('🚀 Starting H²GNN MCP Server...');
     
-    const serverPath = join(__dirname, 'src', 'mcp', 'h2gnn-mcp-server.ts');
+    const serverPath = join(__dirname, '..', 'src', 'mcp', 'h2gnn-mcp-server.ts');
     const serverProcess = spawn('npx', ['tsx', serverPath], {
       stdio: ['pipe', 'pipe', 'pipe'],
-      cwd: __dirname
+      cwd: join(__dirname, '..')
     });
 
     this.processes.set('mcp-server', serverProcess);
@@ -67,7 +67,7 @@ class GeminiCollaborationTester {
   async runCollaborationDemo() {
     console.log('🤝 Running MCP Collaboration Demo...');
     
-    const demoPath = join(__dirname, 'src', 'demo', 'mcp-collaboration-demo.ts');
+    const demoPath = join(__dirname, '..', 'src', 'demo', 'mcp-collaboration-demo.ts');
     const demoProcess = spawn('npx', ['tsx', demoPath], {
       stdio: ['pipe', 'pipe', 'pipe'],
       cwd: __dirname

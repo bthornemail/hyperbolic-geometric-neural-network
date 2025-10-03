@@ -10,11 +10,11 @@ echo "=========================================="
 
 # Get the directory of this script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
+cd "$SCRIPT_DIR/.."
 
 # Create logs directory
 mkdir -p logs
-LOG_DIR="$SCRIPT_DIR/logs"
+LOG_DIR="logs"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 
 # Function to log messages

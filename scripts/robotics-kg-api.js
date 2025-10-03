@@ -217,7 +217,7 @@ function startInteractiveCLI() {
  */
 async function main() {
   // Find the most recent knowledge graph file
-  const files = fs.readdirSync('.').filter(f => f.startsWith('robotics-knowledge-graph-') && f.endsWith('.json'));
+  const files = fs.readdirSync('..').filter(f => f.startsWith('robotics-knowledge-graph-') && f.endsWith('.json'));
   
   if (files.length === 0) {
     console.log('❌ No knowledge graph files found. Please run the training script first.');
@@ -227,7 +227,7 @@ async function main() {
   const latestFile = files.sort().pop();
   console.log(`📁 Loading knowledge graph from: ${latestFile}`);
   
-  if (!loadKnowledgeGraph(latestFile)) {
+  if (!loadKnowledgeGraph(`../${latestFile}`)) {
     process.exit(1);
   }
   

@@ -348,7 +348,7 @@ While PocketFlow provides the foundational building blocks for LLM workflows, th
 
 -   **Learning Organism:** The H²GNN is not just a static application; it's a dynamic system that learns from every interaction, analyzes code, and improves its own understanding.
 -   **Collaborative Intelligence:** It's designed for teams. It shares knowledge, enforces coding standards, and enables developers to learn from the collective intelligence of the team.
--   **Persistence:** The system has a long-term memory, storing what it learns in a persistent database (`persistence/`, `demo-shared-learning-db/`).
+-   **Persistence:** The system has a long-term memory, storing what it learns in a persistent database (`persistencshared-learning/`).
 
 ### Interacting with the H²GNN
 
