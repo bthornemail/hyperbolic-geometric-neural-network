@@ -1,0 +1,304 @@
+{
+  "type": "Topology",
+  "objects": {
+    "h2gnn_codebase": {
+      "type": "GeometryCollection",
+      "geometries": [
+        {
+          "type": "Point",
+          "properties": {
+            "id": "H2GNN_Core",
+            "name": "H²GNN Core System",
+            "type": "Core_System",
+            "file": "src/core/H2GNN.ts",
+            "classes": ["HyperbolicGeometricHGN"],
+            "interfaces": ["H2GNNConfig", "TrainingData", "PredictionResult", "GeometricInsights"],
+            "functions": ["createH2GNN", "createHierarchicalDataset"],
+            "complexity": "high",
+            "dependencies": ["Hyperbolic_Layers", "Mathematical_Engine"],
+            "coordinates": [0, 0]
+          },
+          "coordinates": [0, 0]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "id": "Hyperbolic_Layers",
+            "name": "Hyperbolic Neural Network Layers",
+            "type": "Neural_Network_Components",
+            "file": "src/layers/hyperbolic-layers.ts",
+            "classes": ["HyperbolicLinear", "HyperbolicAttention", "HyperbolicBatchNorm", "HyperbolicActivations", "HyperbolicDropout", "HyperbolicMessagePassing"],
+            "interfaces": ["LayerConfig", "AttentionConfig"],
+            "functions": [],
+            "complexity": "high",
+            "dependencies": ["Mathematical_Engine"],
+            "coordinates": [1, 0]
+          },
+          "coordinates": [1, 0]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "id": "Mathematical_Engine",
+            "name": "Mathematical Operations Engine",
+            "type": "Mathematical_Components",
+            "files": ["src/math/hyperbolic-arithmetic.ts", "src/math/hyperbolic-projection-engine.ts"],
+            "classes": ["HyperbolicArithmetic", "HyperbolicProjectionEngine"],
+            "interfaces": ["Vector", "H2GNNEmbedding", "H2GNNBinarySchema"],
+            "functions": ["createVector", "mobiusAdd", "mobiusScalarMult", "distance", "expMap", "logMap"],
+            "complexity": "very_high",
+            "dependencies": [],
+            "coordinates": [0.5, -1]
+          },
+          "coordinates": [0.5, -1]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "id": "MCP_Services",
+            "name": "Model Context Protocol Services",
+            "type": "Service_Layer",
+            "files": ["src/mcp/h2gnn-mcp-server.ts", "src/mcp/geometric-tools-mcp-server.ts", "src/mcp/knowledge-graph-mcp-server.ts", "src/mcp/lsp-ast-mcp-server.ts", "src/mcp/enhanced-h2gnn-mcp-server.ts"],
+            "classes": ["H2GNNMCPServer", "MCPGeoIntelligenceServer", "KnowledgeGraphMCPServerHD", "LSPASTMCPServerHD"],
+            "interfaces": ["MCPNetworkConfig", "LSPCapabilities", "ASTAnalysis"],
+            "functions": [],
+            "complexity": "high",
+            "dependencies": ["H2GNN_Core", "Intelligence_System"],
+            "coordinates": [2, 1]
+          },
+          "coordinates": [2, 1]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "id": "Intelligence_System",
+            "name": "AI Intelligence System",
+            "type": "AI_Intelligence",
+            "files": ["src/intelligence/unified-system-integration.ts", "src/intelligence/system-audit-knowledge-graph.ts", "src/intelligence/persistent-knowledge-graph.ts", "src/intelligence/agent-workflows.ts"],
+            "classes": ["UnifiedSystemIntegration", "SystemAuditKnowledgeGraph", "PersistentKnowledgeGraphBuilder", "HierarchicalQAWorkflow", "ConceptLearningWorkflow", "SemanticExplorationWorkflow", "MultiAgentReasoningWorkflow"],
+            "interfaces": ["UnifiedSystemConfig", "SystemStatus", "SystemMetrics", "SystemComponent", "IntegrationNode"],
+            "functions": [],
+            "complexity": "very_high",
+            "dependencies": ["H2GNN_Core", "Knowledge_Graph", "MCP_Services"],
+            "coordinates": [1, 2]
+          },
+          "coordinates": [1, 2]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "id": "PocketFlow_Integration",
+            "name": "PocketFlow Workflow Framework",
+            "type": "Workflow_Framework",
+            "files": ["src/pocketflow/core.ts", "src/pocketflow/llm-nodes.ts"],
+            "classes": ["Node", "Flow", "LLMNode", "RAGNode", "AgentNode", "TaskDecompositionNode", "LLMCaller"],
+            "interfaces": ["Action", "SharedStore", "NodeParams", "NodeConfig", "LLMConfig", "LLMResponse"],
+            "functions": [],
+            "complexity": "medium",
+            "dependencies": ["H2GNN_Core"],
+            "coordinates": [0, 1]
+          },
+          "coordinates": [0, 1]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "id": "Workflow_System",
+            "name": "Workflow Management System",
+            "type": "Workflow_Management",
+            "files": ["src/workflows/team-standards-workflow.ts", "src/workflows/team-collaboration-workflow.ts", "src/workflows/knowledge-sharing-workflow.ts", "src/workflows/automated-refactoring-workflow.ts"],
+            "classes": ["DefineTeamStandardsNode", "EnforceTeamStandardsNode", "RefineTeamStandardsNode", "TeamStandardsWorkflow", "AnalyzeTeamCodeNode", "ShareTeamKnowledgeNode", "ConsolidateTeamLearningNode", "ApplyTeamInsightsNode", "TeamLearningWorkflow", "ExtractTeamKnowledgeNode", "ShareCrossTeamNode", "IntegrateTeamInsightsNode", "KnowledgeSharingWorkflow", "AnalyzeRefactoringOpportunitiesNode", "ProposeRefactoringNode", "ApplyRefactoringNode", "VerifyRefactoringNode", "LearnFromRefactoringNode"],
+            "interfaces": ["TeamStandardsState", "TeamStandardsResult", "TeamLearningState", "TeamLearningInsight", "RefactoringSuggestion", "TeamLearningResult", "KnowledgeSharingState", "SharedKnowledge", "IntegratedInsight", "KnowledgeSharingResult", "RefactoringWorkflowState"],
+            "functions": ["createAutomatedRefactoringWorkflow"],
+            "complexity": "high",
+            "dependencies": ["PocketFlow_Integration", "Intelligence_System"],
+            "coordinates": [-1, 1]
+          },
+          "coordinates": [-1, 1]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "id": "Visualization_System",
+            "name": "Visualization System",
+            "type": "User_Interface",
+            "files": ["src/visualization/d3-visualization-wrapper.ts"],
+            "classes": ["EnhancedD3Wrapper", "IntegratedD3VisualizationSystem"],
+            "interfaces": ["D3VisualizationOptions", "RealTimeOptions", "VisualizationUpdate"],
+            "functions": [],
+            "complexity": "medium",
+            "dependencies": ["Real_Time_Collaboration"],
+            "coordinates": [3, 0]
+          },
+          "coordinates": [3, 0]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "id": "Real_Time_Collaboration",
+            "name": "Real-time Collaboration Engine",
+            "type": "Collaboration_System",
+            "files": ["src/integration/real-time-collaboration.ts", "src/integration/collaboration-interface.ts", "src/integration/enhanced-collaboration-interface.ts"],
+            "classes": ["RealTimeCollaborationEngine", "CollaborationSession", "UserPresenceManager", "LiveTrainingDashboard", "RealTimeAnimator", "AIHumanCollaborationInterface", "EnhancedCollaborationInterface"],
+            "interfaces": [],
+            "functions": [],
+            "complexity": "high",
+            "dependencies": ["MCP_Services"],
+            "coordinates": [2, 0]
+          },
+          "coordinates": [2, 0]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "id": "Knowledge_Graph",
+            "name": "Knowledge Graph Management",
+            "type": "Knowledge_Management",
+            "files": ["src/intelligence/persistent-knowledge-graph.ts", "src/intelligence/system-audit-knowledge-graph.ts"],
+            "classes": ["PersistentKnowledgeGraphBuilder", "SystemAuditKnowledgeGraph"],
+            "interfaces": ["KnowledgeNode", "RelationshipEdge", "SystemComponent", "IntegrationNode"],
+            "functions": [],
+            "complexity": "high",
+            "dependencies": ["H2GNN_Core", "Intelligence_System"],
+            "coordinates": [0, 2]
+          },
+          "coordinates": [0, 2]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "id": "WordNet_Integration",
+            "name": "WordNet Knowledge Base",
+            "type": "Knowledge_Base",
+            "files": ["src/datasets/wordnet-integration.ts"],
+            "classes": ["WordNetProcessor"],
+            "interfaces": [],
+            "functions": ["createWordNetProcessor"],
+            "complexity": "medium",
+            "dependencies": ["H2GNN_Core"],
+            "coordinates": [-1, 0]
+          },
+          "coordinates": [-1, 0]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "id": "Analysis_System",
+            "name": "Code Analysis System",
+            "type": "Analysis_Components",
+            "files": ["src/analysis/advanced-ast-analyzer.ts", "src/analysis/code-embeddings.ts"],
+            "classes": ["AdvancedASTAnalyzer"],
+            "interfaces": ["CodeMetrics", "CodeSmell", "RefactoringOpportunity"],
+            "functions": [],
+            "complexity": "high",
+            "dependencies": ["Knowledge_Graph"],
+            "coordinates": [-2, 1]
+          },
+          "coordinates": [-2, 1]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "id": "Generation_System",
+            "name": "Code Generation System",
+            "type": "Code_Generation",
+            "files": ["src/generation/intelligent-code-generator.ts", "src/generation/knowledge-base-integrated.ts"],
+            "classes": ["IntelligentCodeGenerator", "KnowledgeBaseIntegratedCreator"],
+            "interfaces": ["CodePattern", "CodeSuggestion"],
+            "functions": [],
+            "complexity": "high",
+            "dependencies": ["Intelligence_System"],
+            "coordinates": [1, 3]
+          },
+          "coordinates": [1, 3]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "id": "Integration_Layer",
+            "name": "System Integration Layer",
+            "type": "Integration_Components",
+            "files": ["src/integration/unified-system-integration.ts", "src/integration/team-collaboration-demo.ts", "src/integration/transfer-learning-workflow.ts"],
+            "classes": ["UnifiedSystemIntegration", "TransferLearningWorkflow", "DomainAdaptationSystem"],
+            "interfaces": ["TransferLearningConfig", "TransferLearningResult", "ProgressiveTransferStep", "MultiDomainTransfer", "Domain", "DomainMapping", "AdaptationResult", "TransferMetrics"],
+            "functions": ["createTrainingPipeline"],
+            "complexity": "high",
+            "dependencies": ["Real_Time_Collaboration", "PocketFlow_Integration"],
+            "coordinates": [2, -1]
+          },
+          "coordinates": [2, -1]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "id": "Training_System",
+            "name": "Training Pipeline System",
+            "type": "Training_Components",
+            "files": ["src/training/training-pipeline.ts"],
+            "classes": ["TrainingPipeline"],
+            "interfaces": ["PipelineConfig", "TrainingMetrics", "EvaluationResult"],
+            "functions": ["createTrainingPipeline"],
+            "complexity": "medium",
+            "dependencies": ["H2GNN_Core"],
+            "coordinates": [0, -2]
+          },
+          "coordinates": [0, -2]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "id": "Refactoring_System",
+            "name": "Automated Refactoring System",
+            "type": "Refactoring_Components",
+            "files": ["src/refactoring/automated-refactoring-tool.ts"],
+            "classes": ["AutomatedRefactoringTool"],
+            "interfaces": ["RefactoringOpportunity", "RefactoringResult", "RefactoringWorkflow", "RefactoringStep"],
+            "functions": [],
+            "complexity": "medium",
+            "dependencies": ["Analysis_System"],
+            "coordinates": [-2, 0]
+          },
+          "coordinates": [-2, 0]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "id": "Coding_Standards",
+            "name": "Coding Standards Engine",
+            "type": "Standards_Components",
+            "files": ["src/rules/coding-standard-engine.ts"],
+            "classes": ["CodingStandardEngine"],
+            "interfaces": ["CodingStandardRule", "RuleViolation", "FixSuggestion", "TeamCodingStandards"],
+            "functions": [],
+            "complexity": "medium",
+            "dependencies": ["Analysis_System"],
+            "coordinates": [-3, 1]
+          },
+          "coordinates": [-3, 1]
+        }
+      ]
+    }
+  },
+  "arcs": [
+    [[0, 0], [1, 0]],  // H2GNN_Core -> Hyperbolic_Layers
+    [[0, 0], [0.5, -1]],  // H2GNN_Core -> Mathematical_Engine
+    [[0, 0], [2, 1]],  // H2GNN_Core -> MCP_Services
+    [[0, 0], [1, 2]],  // H2GNN_Core -> Intelligence_System
+    [[0, 0], [0, 1]],  // H2GNN_Core -> PocketFlow_Integration
+    [[0, 0], [0, 2]],  // H2GNN_Core -> Knowledge_Graph
+    [[0, 0], [-1, 0]],  // H2GNN_Core -> WordNet_Integration
+    [[0, 0], [0, -2]],  // H2GNN_Core -> Training_System
+    [[1, 0], [0.5, -1]],  // Hyperbolic_Layers -> Mathematical_Engine
+    [[2, 1], [1, 2]],  // MCP_Services -> Intelligence_System
+    [[2, 1], [2, 0]],  // MCP_Services -> Real_Time_Collaboration
+    [[1, 2], [0, 2]],  // Intelligence_System -> Knowledge_Graph
+    [[1, 2], [1, 3]],  // Intelligence_System -> Generation_System
+    [[0, 1], [-1, 1]],  // PocketFlow_Integration -> Workflow_System
+    [[0, 1], [2, -1]],  // PocketFlow_Integration -> Integration_Layer
+    [[2, 0], [3, 0]],  // Real_Time_Collaboration -> Visualization_System
+    [[2, 0], [2, -1]],  // Real_Time_Collaboration -> Integration_Layer
+    [[0, 2], [-2, 1]],  // Knowledge_Graph -> Analysis_System
+    [[-2, 1], [-2, 0]],  // Analysis_System -> Refactoring_System
+    [[-2, 1], [-3, 1]]  // Analysis_System -> Coding_Standards
+  ]
+}

@@ -4,7 +4,14 @@ globs:
 alwaysApply: false
 ---
 
-# H²GNN Core Operations
+# H²GNN Core Operations - TOOL-FIRST MANDATORY USAGE
+
+**CRITICAL**: Before ANY H²GNN operation, you MUST use the built-in tools:
+
+1. **ALWAYS INITIALIZE FIRST**: `mcp_enhanced-h2gnn_initialize_enhanced_h2gnn_hd`
+2. **ALWAYS CHECK STATUS**: `mcp_enhanced-h2gnn_get_system_status_hd`
+3. **ALWAYS USE LEARNING**: `mcp_enhanced-h2gnn_learn_concept_hd`
+4. **ALWAYS USE MEMORY**: `mcp_enhanced-h2gnn_retrieve_memories_hd`
 
 H²GNN (Hyperbolic Geometric Neural Network) provides revolutionary capabilities for hierarchical learning through hyperbolic geometry. This guide covers core operations and best practices.
 

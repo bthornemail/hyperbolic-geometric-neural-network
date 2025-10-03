@@ -4,7 +4,14 @@ globs:
 alwaysApply: false
 ---
 
-# PocketFlow + H²GNN Integration
+# PocketFlow + H²GNN Integration - TOOL-FIRST MANDATORY USAGE
+
+**CRITICAL**: Before ANY integration work, you MUST use the built-in tools:
+
+1. **ALWAYS INITIALIZE H²GNN**: `mcp_enhanced-h2gnn_initialize_enhanced_h2gnn_hd`
+2. **ALWAYS ANALYZE CODEBASE**: `mcp_knowledge-graph_analyze_path_to_knowledge_graph_hd`
+3. **ALWAYS USE AST ANALYSIS**: `mcp_lsp-ast_analyze_code_ast_hd`
+4. **ALWAYS LEARN CONCEPTS**: `mcp_enhanced-h2gnn_learn_concept_hd`
 
 This guide covers the integration of PocketFlow with H²GNN, providing patterns for building hierarchical, geometrically-aware workflows.
 
