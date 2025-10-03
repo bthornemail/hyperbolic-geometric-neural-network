@@ -10,6 +10,6 @@
       "forceConsistentCasingInFileNames": true,
       "rootDir": "./src"
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "project/tests/index.ts"],
     "exclude": ["node_modules", "dist", "tests"]
   }
