@@ -31,6 +31,7 @@ import {
 // Import our H²GNN system components
 import WordNetModule from '../datasets/wordnet-integration.js';
 import AgentWorkflows from '../workflows/agent-workflows.js';
+import IntegratedKnowledgeBaseCreator from '../generation/knowledge-base-integrated.js';
 
 // Fallback implementations for missing modules
 class FallbackEnhancedH2GNN {

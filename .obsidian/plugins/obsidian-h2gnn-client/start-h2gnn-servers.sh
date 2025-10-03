@@ -70,3 +70,4 @@ echo "To stop the servers, run:"
 echo "kill $H2GNN_PID $KG_PID $LSP_PID $GEO_PID"
 echo ""
 echo "Or use the 'Stop H²GNN Servers' command in Obsidian."
+

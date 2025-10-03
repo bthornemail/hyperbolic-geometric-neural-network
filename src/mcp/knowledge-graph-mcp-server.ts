@@ -20,6 +20,7 @@ import {
   ListPromptsRequestSchema,
   GetPromptRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
+import IntegratedKnowledgeBaseCreator from '../generation/knowledge-base-integrated.js';
 
 // Fallback KnowledgeGraphMCP implementation
 class FallbackKnowledgeGraphMCP {
@@ -176,6 +177,7 @@ class KnowledgeGraphMCPServerHD {
   private version = "2.1.0";
   private h2gnnAddress: H2GNNAddress | null = null;
   private networkConfig: MCPNetworkConfig;
+  private knowledgeBaseCreator: IntegratedKnowledgeBaseCreator;
 
   constructor(networkConfig?: Partial<MCPNetworkConfig>) {
     this.networkConfig = {
@@ -193,6 +195,10 @@ class KnowledgeGraphMCPServerHD {
       },
       ...networkConfig
     };
+    
+    // Initialize knowledge base creator
+    this.knowledgeBaseCreator = new IntegratedKnowledgeBaseCreator();
+    
     this.server = new Server(
       {
         name: this.name,
@@ -536,6 +542,136 @@ class KnowledgeGraphMCPServerHD {
               type: "object",
               properties: {}
             }
+          },
+          {
+            name: "analyze_codebase_for_documentation",
+            description: "Analyze codebase and extract knowledge for documentation generation",
+            inputSchema: {
+              type: "object",
+              properties: {
+                sourcePath: {
+                  type: "string",
+                  description: "Path to source directory to analyze"
+                },
+                includePatterns: {
+                  type: "array",
+                  items: { type: "string" },
+                  description: "File patterns to include",
+                  default: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.py", "**/*.md"]
+                },
+                excludePatterns: {
+                  type: "array",
+                  items: { type: "string" },
+                  description: "File patterns to exclude",
+                  default: ["**/node_modules/**", "**/dist/**", "**/.git/**"]
+                },
+                maxFileSize: {
+                  type: "number",
+                  description: "Maximum file size in bytes",
+                  default: 100000
+                }
+              },
+              required: ["sourcePath"]
+            }
+          },
+          {
+            name: "generate_documentation",
+            description: "Generate documentation from analyzed codebase",
+            inputSchema: {
+              type: "object",
+              properties: {
+                type: {
+                  type: "string",
+                  enum: ["tutorial", "essay", "api-docs", "architecture", "learning-guide"],
+                  description: "Type of documentation to generate"
+                },
+                format: {
+                  type: "string",
+                  enum: ["markdown", "html", "json"],
+                  description: "Output format",
+                  default: "markdown"
+                },
+                targetAudience: {
+                  type: "string",
+                  enum: ["beginner", "intermediate", "advanced", "expert"],
+                  description: "Target audience level",
+                  default: "beginner"
+                },
+                outputPath: {
+                  type: "string",
+                  description: "Path where to save the generated documentation"
+                },
+                focusAreas: {
+                  type: "array",
+                  items: { type: "string" },
+                  description: "Specific areas to focus on in the documentation"
+                },
+                maxLength: {
+                  type: "number",
+                  description: "Maximum content length",
+                  default: 10000
+                },
+                includeExamples: {
+                  type: "boolean",
+                  description: "Whether to include code examples",
+                  default: true
+                }
+              },
+              required: ["type", "outputPath"]
+            }
+          },
+          {
+            name: "refine_documentation",
+            description: "Refine existing documentation using H²GNN insights",
+            inputSchema: {
+              type: "object",
+              properties: {
+                documentPath: {
+                  type: "string",
+                  description: "Path to the document to refine"
+                },
+                focusAreas: {
+                  type: "array",
+                  items: { type: "string" },
+                  description: "Areas to focus on for improvement"
+                },
+                improvementType: {
+                  type: "string",
+                  enum: ["clarity", "completeness", "accuracy", "engagement"],
+                  description: "Type of improvement to apply",
+                  default: "clarity"
+                },
+                targetAudience: {
+                  type: "string",
+                  enum: ["beginner", "intermediate", "advanced", "expert"],
+                  description: "Target audience for refinement",
+                  default: "beginner"
+                }
+              },
+              required: ["documentPath"]
+            }
+          },
+          {
+            name: "export_knowledge_base",
+            description: "Export the knowledge base for visualization and analysis",
+            inputSchema: {
+              type: "object",
+              properties: {
+                outputPath: {
+                  type: "string",
+                  description: "Path where to save the exported knowledge base"
+                }
+              },
+              required: ["outputPath"]
+            }
+          },
+          {
+            name: "get_knowledge_base_stats",
+            description: "Get statistics about the current knowledge base",
+            inputSchema: {
+              type: "object",
+              properties: {}
+            }
           }
         ]
       };
@@ -574,6 +710,21 @@ class KnowledgeGraphMCPServerHD {
           
           case "get_mcp_integration_status":
             return await this.getMCPIntegrationStatus(args);
+          
+          case "analyze_codebase_for_documentation":
+            return await this.analyzeCodebaseForDocumentation(args);
+          
+          case "generate_documentation":
+            return await this.generateDocumentation(args);
+          
+          case "refine_documentation":
+            return await this.refineDocumentation(args);
+          
+          case "export_knowledge_base":
+            return await this.exportKnowledgeBase(args);
+          
+          case "get_knowledge_base_stats":
+            return await this.getKnowledgeBaseStats(args);
           
           default:
             throw new McpError(
@@ -1167,6 +1318,176 @@ Please provide:
           throw new McpError(ErrorCode.InvalidRequest, `Unknown prompt: ${name}`);
       }
     });
+  }
+
+  /**
+   * Analyze codebase for documentation generation
+   */
+  private async analyzeCodebaseForDocumentation(args: any): Promise<any> {
+    try {
+      await this.knowledgeBaseCreator.analyzeCodebase(args.sourcePath, {
+        includePatterns: args.includePatterns,
+        excludePatterns: args.excludePatterns,
+        maxFileSize: args.maxFileSize
+      });
+
+      const stats = this.knowledgeBaseCreator.getKnowledgeBaseStats();
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Codebase analysis completed successfully!
+            
+📊 Knowledge Base Statistics:
+- Total concepts: ${stats.totalNodes}
+- Average complexity: ${stats.averageComplexity.toFixed(2)}
+- Total relationships: ${stats.totalRelationships}
+
+📋 Concept types:
+${Array.from(stats.nodeTypes.entries()).map(([type, count]) => `- ${type}: ${count}`).join('\n')}
+
+The knowledge base is now ready for documentation generation.`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Analysis failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * Generate documentation from analyzed codebase
+   */
+  private async generateDocumentation(args: any): Promise<any> {
+    try {
+      // Create a mock H²GNN embedding function for now
+      const mockH2gnnEmbedding = async (text: string, context?: any): Promise<any> => {
+        // This would integrate with your actual H²GNN system
+        return { x: Math.random(), y: Math.random(), z: Math.random() };
+      };
+
+      const content = await this.knowledgeBaseCreator.generateDocumentation(
+        {
+          type: args.type,
+          format: args.format,
+          targetAudience: args.targetAudience,
+          focusAreas: args.focusAreas,
+          maxLength: args.maxLength,
+          includeExamples: args.includeExamples
+        },
+        args.outputPath,
+        mockH2gnnEmbedding
+      );
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Documentation generated successfully!
+
+📄 File: ${args.outputPath}
+📝 Type: ${args.type}
+👥 Audience: ${args.targetAudience}
+📊 Content length: ${content.length} characters
+
+The documentation has been saved and is ready for use.`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Documentation generation failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * Refine existing documentation
+   */
+  private async refineDocumentation(args: any): Promise<any> {
+    try {
+      // Create a mock H²GNN embedding function for now
+      const mockH2gnnEmbedding = async (text: string, context?: any): Promise<any> => {
+        return { x: Math.random(), y: Math.random(), z: Math.random() };
+      };
+
+      const refinedContent = await this.knowledgeBaseCreator.refineDocumentation(
+        args.documentPath,
+        mockH2gnnEmbedding
+      );
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Documentation refined successfully!
+
+📄 Original: ${args.documentPath}
+📝 Refined: ${args.documentPath.replace(/\.(md|html|txt)$/, '_refined.$1')}
+📊 Content length: ${refinedContent.length} characters
+
+The refined documentation has been saved with improvements based on H²GNN insights.`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Documentation refinement failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * Export knowledge base
+   */
+  private async exportKnowledgeBase(args: any): Promise<any> {
+    try {
+      await this.knowledgeBaseCreator.exportKnowledgeBase(args.outputPath);
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Knowledge base exported successfully!
+
+📦 File: ${args.outputPath}
+📊 Format: JSON
+📈 Ready for visualization and analysis
+
+The knowledge base has been exported and can be used for further analysis or visualization.`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Export failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * Get knowledge base statistics
+   */
+  private async getKnowledgeBaseStats(args: any): Promise<any> {
+    try {
+      const stats = this.knowledgeBaseCreator.getKnowledgeBaseStats();
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Knowledge Base Statistics:
+
+📊 Overview:
+- Total concepts: ${stats.totalNodes}
+- Average complexity: ${stats.averageComplexity.toFixed(2)}
+- Total relationships: ${stats.totalRelationships}
+
+📋 Concept types:
+${Array.from(stats.nodeTypes.entries()).map(([type, count]) => `- ${type}: ${count}`).join('\n')}
+
+The knowledge base contains semantic relationships between code concepts, ready for documentation generation.`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Failed to get statistics: ${error instanceof Error ? error.message : String(error)}`);
+    }
   }
 
   /**

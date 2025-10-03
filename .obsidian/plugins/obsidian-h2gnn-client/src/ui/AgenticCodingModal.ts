@@ -372,3 +372,4 @@ export class AgenticCodingModal extends Modal {
     contentEl.empty();
   }
 }
+

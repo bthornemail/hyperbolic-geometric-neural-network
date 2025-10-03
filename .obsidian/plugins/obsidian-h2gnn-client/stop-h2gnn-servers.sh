@@ -34,3 +34,4 @@ fi
 
 echo ""
 echo "🎉 H²GNN MCP Servers shutdown complete!"
+

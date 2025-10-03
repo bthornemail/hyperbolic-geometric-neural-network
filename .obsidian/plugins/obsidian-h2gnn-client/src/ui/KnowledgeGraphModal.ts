@@ -383,3 +383,4 @@ export class KnowledgeGraphModal extends Modal {
     contentEl.empty();
   }
 }
+
