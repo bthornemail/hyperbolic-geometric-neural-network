@@ -1,40 +1,138 @@
 {
+  "inputs": [
+    {
+      "id": "memory_file_path",
+      "type": "promptString",
+      "description": "Path to the memory storage file",
+      "default": "./data/memory.json",
+      "password": false
+    },
+    {
+      "id": "redis_url",
+      "type": "promptString",
+      "description": "Redis connection URL",
+      "default": "redis://127.0.0.1:6379",
+      "password": false
+    }
+  ],
   "mcpServers": {
-    "h2gnn": {
+    "codacy": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@codacy/codacy-mcp@latest"
+      ]
+    },
+    "enhanced-h2gnn": {
       "command": "tsx",
-      "args": ["/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/h2gnn-mcp-server.ts"],
+      "args": [
+        "/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/enhanced-h2gnn-mcp-server.ts"
+      ],
       "env": {
         "NODE_ENV": "production"
       }
     },
-    "enhanced-h2gnn": {
+    "geometric-tools-mcp-server": {
       "command": "tsx",
-      "args": ["/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/enhanced-h2gnn-mcp-server.ts"],
+      "args": [
+        "/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/geometric-tools-mcp-server.ts"
+      ],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "h2gnn": {
+      "command": "tsx",
+      "args": [
+        "/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/h2gnn-mcp-server.ts"
+      ],
       "env": {
         "NODE_ENV": "production"
       }
     },
     "knowledge-graph": {
       "command": "tsx",
-      "args": ["/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/knowledge-graph-mcp.ts"],
+      "args": [
+        "/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/knowledge-graph-mcp-server.ts"
+      ],
       "env": {
         "NODE_ENV": "production"
       }
     },
     "lsp-ast": {
       "command": "tsx",
-      "args": ["/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/lsp-ast-mcp-server.ts"],
+      "args": [
+        "/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/lsp-ast-mcp-server.ts"
+      ],
       "env": {
         "NODE_ENV": "production"
       }
     },
+    "memory": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory@latest"
+      ]
+    },
+    "sequentialthinking": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking@latest"
+      ]
+    },
     "redis": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-redis"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-redis"
+      ],
       "env": {
         "REDIS_URL": "redis://127.0.0.1:6379"
       }
+    },
+    "claude": {
+      "command": "claude",
+      "args": [
+        "mcp",
+        "serve"
+      ],
+      "env": {}
+    },
+    "ollama": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "ollama-mcp-server@latest"
+      ],
+      "env": {
+        "OLLAMA_BASE_URL": "http://localhost:11434"
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/main/devops/hyperbolic-geometric-neural-network"
+      ]
+    },
+    "screenshot-full-page-mcp": {
+      "command": "node",
+      "args": [
+        "/home/main/github/ScreenshotMCP/index.js"
+      ]
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "chrome-devtools-mcp@latest"
+      ]
     },
     "obsidian-mcp": {
       "type": "stdio",
@@ -54,7 +152,7 @@
       "server": "h2gnn"
     },
     {
-      "name": "query_wordnet", 
+      "name": "query_wordnet",
       "description": "Query WordNet for concept information and relationships",
       "server": "h2gnn"
     },
@@ -93,7 +191,7 @@
     },
     {
       "uri": "h2gnn://wordnet/hierarchy",
-      "name": "WordNet Hierarchy", 
+      "name": "WordNet Hierarchy",
       "description": "Hierarchical structure of WordNet concepts",
       "server": "h2gnn"
     },
