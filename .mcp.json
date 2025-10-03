@@ -2,10 +2,49 @@
   "mcpServers": {
     "h2gnn": {
       "command": "tsx",
-      "args": ["/home/main/github/PocketFlow-Tutorial-Cursor/project/src/mcp/h2gnn-mcp-server.ts"],
+      "args": ["/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/h2gnn-mcp-server.ts"],
       "env": {
         "NODE_ENV": "production"
       }
+    },
+    "enhanced-h2gnn": {
+      "command": "tsx",
+      "args": ["/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/enhanced-h2gnn-mcp-server.ts"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "knowledge-graph": {
+      "command": "tsx",
+      "args": ["/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/knowledge-graph-mcp.ts"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "lsp-ast": {
+      "command": "tsx",
+      "args": ["/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/lsp-ast-mcp-server.ts"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "redis": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-redis"],
+      "env": {
+        "REDIS_URL": "redis://127.0.0.1:6379"
+      }
+    },
+    "obsidian-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/home/main/devops/universal-life-protocol/packages/universal-life-vault/dist/obsidian-mcp.js"]
+    },
+    "identity-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/home/main/devops/universal-life-protocol/packages/universal-life-vault/dist/identity-mcp.js"]
     }
   },
   "tools": [
