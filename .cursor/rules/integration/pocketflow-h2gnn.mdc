@@ -1,0 +1,536 @@
+---
+description: Guidelines for integrating PocketFlow with H²GNN
+globs: 
+alwaysApply: false
+---
+
+# PocketFlow + H²GNN Integration
+
+This guide covers the integration of PocketFlow with H²GNN, providing patterns for building hierarchical, geometrically-aware workflows.
+
+## Core Integration Concepts
+
+### Hyperbolic Workflows
+- **Geometric Reasoning**: Use hyperbolic geometry for workflow decisions
+- **Hierarchical Organization**: Natural hierarchy representation in workflows
+- **Memory Consolidation**: Hierarchical memory management
+- **Geometric Addressing**: Deterministic positioning and routing
+
+### Enhanced Node Types
+- **HyperbolicNode**: Base class for H²GNN-enhanced nodes
+- **GeometricFlow**: Flow with geometric awareness
+- **HierarchicalBatch**: Batch processing with hierarchy
+- **MemoryConsolidation**: Hierarchical memory management
+
+## Implementation Patterns
+
+### 1. Basic Hyperbolic Workflow
+```typescript
+export class HyperbolicWorkflow {
+  private h2gnn: HyperbolicGeometricHGN;
+  private flow: Flow;
+  
+  constructor(config: H2GNNConfig) {
+    this.h2gnn = new HyperbolicGeometricHGN(config);
+    this.flow = this.createHyperbolicFlow();
+  }
+  
+  private createHyperbolicFlow(): Flow {
+    // Create hyperbolic nodes
+    const textProcessor = new HyperbolicTextProcessor({ h2gnn: this.h2gnn });
+    const similaritySearch = new HyperbolicSimilaritySearch({ h2gnn: this.h2gnn });
+    const clustering = new HyperbolicClustering({ h2gnn: this.h2gnn });
+    const memoryConsolidation = new MemoryConsolidation({ h2gnn: this.h2gnn });
+    
+    // Connect nodes with geometric awareness
+    textProcessor.next(similaritySearch);
+    similaritySearch.on('high_similarity', clustering);
+    similaritySearch.on('low_similarity', memoryConsolidation);
+    clustering.next(memoryConsolidation);
+    
+    return new Flow(textProcessor);
+  }
+  
+  async run(shared: SharedStore): Promise<void> {
+    await this.flow.run(shared);
+  }
+}
+```
+
+### 2. Hierarchical Task Decomposition
+```typescript
+export class HierarchicalTaskDecomposer extends HyperbolicNode {
+  async prep(shared: SharedStore): Promise<string> {
+    return shared.task || '';
+  }
+  
+  async exec(task: string): Promise<HierarchicalTask[]> {
+    // Generate task embedding
+    const taskEmbedding = await this.generateEmbedding(task);
+    
+    // Decompose into hierarchical subtasks
+    const subtasks = await this.decomposeTask(task, taskEmbedding);
+    
+    // Organize subtasks hierarchically using hyperbolic clustering
+    const hierarchicalTasks = await this.organizeHierarchically(subtasks);
+    
+    return hierarchicalTasks;
+  }
+  
+  async post(shared: SharedStore, prepRes: string, execRes: HierarchicalTask[]): Promise<Action> {
+    // Store hierarchical tasks
+    shared.hierarchicalTasks = execRes;
+    
+    // Determine next action based on task complexity
+    const complexity = this.computeTaskComplexity(execRes);
+    return complexity > 0.7 ? 'complex_hierarchy' : 'simple_hierarchy';
+  }
+  
+  private async decomposeTask(task: string, embedding: Vector): Promise<SubTask[]> {
+    // Use LLM to decompose task
+    const prompt = `
+    Decompose the following task into hierarchical subtasks:
+    Task: ${task}
+    
+    Return as JSON array of subtasks with:
+    - id: unique identifier
+    - description: subtask description
+    - priority: priority level (1-10)
+    - dependencies: array of subtask IDs this depends on
+    - estimatedComplexity: complexity estimate (0-1)
+    `;
+    
+    const response = await this.callLLM(prompt);
+    const subtasks = JSON.parse(response);
+    
+    // Generate embeddings for each subtask
+    for (const subtask of subtasks) {
+      subtask.embedding = await this.generateEmbedding(subtask.description);
+    }
+    
+    return subtasks;
+  }
+  
+  private async organizeHierarchically(subtasks: SubTask[]): Promise<HierarchicalTask[]> {
+    // Cluster subtasks using hyperbolic clustering
+    const embeddings = subtasks.map(st => st.embedding);
+    const clusters = await this.clusterEmbeddings(embeddings);
+    
+    // Create hierarchical structure
+    const hierarchicalTasks: HierarchicalTask[] = [];
+    
+    for (let i = 0; i < clusters.length; i++) {
+      const cluster = clusters[i];
+      const clusterSubtasks = cluster.map(embedding => 
+        subtasks.find(st => HyperbolicArithmetic.distance(st.embedding, embedding) < 0.01)
+      ).filter(Boolean);
+      
+      // Compute cluster centroid
+      const centroid = await this.computeFrechetMean(cluster);
+      
+      hierarchicalTasks.push({
+        id: `cluster_${i}`,
+        description: `Cluster ${i} with ${clusterSubtasks.length} subtasks`,
+        embedding: centroid,
+        subtasks: clusterSubtasks,
+        level: 0 // Top level
+      });
+    }
+    
+    return hierarchicalTasks;
+  }
+}
+```
+
+### 3. Geometric Flow Routing
+```typescript
+export class GeometricFlowRouter extends HyperbolicNode {
+  async prep(shared: SharedStore): Promise<{task: string, context: any}> {
+    return {
+      task: shared.currentTask || '',
+      context: shared.context || {}
+    };
+  }
+  
+  async exec({task, context}: {task: string, context: any}): Promise<RoutingDecision> {
+    // Generate task embedding
+    const taskEmbedding = await this.generateEmbedding(task);
+    
+    // Find similar completed tasks
+    const similarTasks = await this.findSimilarTasks(taskEmbedding);
+    
+    // Compute routing decision based on similarity
+    const routingDecision = await this.computeRoutingDecision(taskEmbedding, similarTasks);
+    
+    return routingDecision;
+  }
+  
+  async post(shared: SharedStore, prepRes: any, execRes: RoutingDecision): Promise<Action> {
+    // Store routing decision
+    shared.routingDecision = execRes;
+    
+    // Route to appropriate workflow
+    return execRes.nextWorkflow;
+  }
+  
+  private async findSimilarTasks(taskEmbedding: Vector): Promise<SimilarTask[]> {
+    // Find similar tasks using hyperbolic distance
+    const similarities = this.completedTasks.map(task => ({
+      task,
+      distance: HyperbolicArithmetic.distance(taskEmbedding, task.embedding)
+    }));
+    
+    // Sort by similarity and return top matches
+    return similarities
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, 5)
+      .map(item => ({
+        task: item.task,
+        similarity: 1 - item.distance,
+        confidence: this.computeConfidence(item.distance)
+      }));
+  }
+}
+```
+
+### 4. Memory Consolidation Flow
+```typescript
+export class MemoryConsolidationFlow extends HyperbolicNode {
+  async prep(shared: SharedStore): Promise<Memory[]> {
+    return shared.memories || [];
+  }
+  
+  async exec(memories: Memory[]): Promise<ConsolidatedMemory[]> {
+    if (memories.length === 0) return [];
+    
+    // Organize memories hierarchically
+    const hierarchicalMemories = await this.organizeMemoriesHierarchically(memories);
+    
+    // Consolidate at each level
+    const consolidatedMemories = await this.consolidateHierarchicalMemories(hierarchicalMemories);
+    
+    return consolidatedMemories;
+  }
+  
+  async post(shared: SharedStore, prepRes: Memory[], execRes: ConsolidatedMemory[]): Promise<Action> {
+    // Store consolidated memories
+    shared.consolidatedMemories = execRes;
+    
+    // Clean up old memories
+    shared.memories = [];
+    
+    return 'consolidated';
+  }
+  
+  private async organizeMemoriesHierarchically(memories: Memory[]): Promise<HierarchicalMemory[]> {
+    // Extract embeddings
+    const embeddings = memories.map(m => m.embedding);
+    
+    // Cluster memories using hyperbolic clustering
+    const clusters = await this.clusterEmbeddings(embeddings);
+    
+    // Create hierarchical structure
+    const hierarchicalMemories: HierarchicalMemory[] = [];
+    
+    for (let i = 0; i < clusters.length; i++) {
+      const cluster = clusters[i];
+      const clusterMemories = cluster.map(embedding => 
+        memories.find(m => HyperbolicArithmetic.distance(m.embedding, embedding) < 0.01)
+      ).filter(Boolean);
+      
+      // Compute cluster centroid
+      const centroid = await this.computeFrechetMean(cluster);
+      
+      hierarchicalMemories.push({
+        id: `hierarchy_${i}`,
+        level: 0,
+        embedding: centroid,
+        memories: clusterMemories,
+        children: [] // Will be populated recursively
+      });
+    }
+    
+    // Recursively organize sub-clusters
+    for (const hierarchicalMemory of hierarchicalMemories) {
+      if (hierarchicalMemory.memories.length > 10) {
+        const subClusters = await this.organizeMemoriesHierarchically(
+          hierarchicalMemory.memories
+        );
+        hierarchicalMemory.children = subClusters;
+      }
+    }
+    
+    return hierarchicalMemories;
+  }
+}
+```
+
+## Advanced Integration Patterns
+
+### 1. Multi-Agent Hyperbolic Coordination
+```typescript
+export class MultiAgentHyperbolicCoordinator {
+  private agents: Map<string, HyperbolicNode> = new Map();
+  private coordinator: HyperbolicNode;
+  
+  constructor(agentConfigs: AgentConfig[]) {
+    // Create agents
+    for (const config of agentConfigs) {
+      const agent = new HyperbolicAgent(config);
+      this.agents.set(config.id, agent);
+    }
+    
+    // Create coordinator
+    this.coordinator = new HyperbolicCoordinator();
+  }
+  
+  async coordinate(task: string, context: any): Promise<CoordinationResult> {
+    // Generate task embedding
+    const taskEmbedding = await this.coordinator.generateEmbedding(task);
+    
+    // Find best agents for task
+    const bestAgents = await this.findBestAgents(taskEmbedding);
+    
+    // Coordinate execution
+    const results = await this.executeCoordination(bestAgents, task, context);
+    
+    // Consolidate results
+    const consolidatedResult = await this.consolidateResults(results);
+    
+    return consolidatedResult;
+  }
+  
+  private async findBestAgents(taskEmbedding: Vector): Promise<Agent[]> {
+    const agentSimilarities: AgentSimilarity[] = [];
+    
+    for (const [id, agent] of this.agents) {
+      const agentEmbedding = await agent.getCapabilityEmbedding();
+      const similarity = 1 - HyperbolicArithmetic.distance(taskEmbedding, agentEmbedding);
+      
+      agentSimilarities.push({
+        agent,
+        similarity,
+        confidence: this.computeConfidence(similarity)
+      });
+    }
+    
+    // Sort by similarity and return top agents
+    return agentSimilarities
+      .sort((a, b) => b.similarity - a.similarity)
+      .slice(0, 3)
+      .map(item => item.agent);
+  }
+}
+```
+
+### 2. Hierarchical RAG with Hyperbolic Retrieval
+```typescript
+export class HierarchicalRAG extends HyperbolicNode {
+  private documentIndex: Map<string, Vector> = new Map();
+  private hierarchicalIndex: Map<string, Vector[]> = new Map();
+  
+  async prep(shared: SharedStore): Promise<string> {
+    return shared.query || '';
+  }
+  
+  async exec(query: string): Promise<RAGResult> {
+    // Generate query embedding
+    const queryEmbedding = await this.generateEmbedding(query);
+    
+    // Retrieve relevant documents
+    const relevantDocs = await this.retrieveDocuments(queryEmbedding);
+    
+    // Generate answer using retrieved context
+    const answer = await this.generateAnswer(query, relevantDocs);
+    
+    return {
+      query,
+      answer,
+      relevantDocs,
+      confidence: this.computeConfidence(relevantDocs)
+    };
+  }
+  
+  async post(shared: SharedStore, prepRes: string, execRes: RAGResult): Promise<Action> {
+    // Store RAG result
+    shared.ragResult = execRes;
+    
+    return 'default';
+  }
+  
+  private async retrieveDocuments(queryEmbedding: Vector): Promise<Document[]> {
+    // Find similar documents using hyperbolic distance
+    const similarities: DocumentSimilarity[] = [];
+    
+    for (const [docId, docEmbedding] of this.documentIndex) {
+      const distance = HyperbolicArithmetic.distance(queryEmbedding, docEmbedding);
+      const similarity = 1 - distance;
+      
+      if (similarity > 0.5) { // Threshold for relevance
+        similarities.push({
+          docId,
+          similarity,
+          distance
+        });
+      }
+    }
+    
+    // Sort by similarity and return top documents
+    const topSimilarities = similarities
+      .sort((a, b) => b.similarity - a.similarity)
+      .slice(0, 5);
+    
+    // Retrieve actual documents
+    const documents: Document[] = [];
+    for (const sim of topSimilarities) {
+      const doc = await this.getDocument(sim.docId);
+      if (doc) {
+        documents.push(doc);
+      }
+    }
+    
+    return documents;
+  }
+  
+  private async generateAnswer(query: string, documents: Document[]): Promise<string> {
+    // Create context from retrieved documents
+    const context = documents.map(doc => doc.content).join('\n\n');
+    
+    // Generate answer using LLM
+    const prompt = `
+    Context: ${context}
+    
+    Question: ${query}
+    
+    Answer based on the context provided:
+    `;
+    
+    return await this.callLLM(prompt);
+  }
+}
+```
+
+### 3. Geometric Workflow Optimization
+```typescript
+export class GeometricWorkflowOptimizer {
+  private h2gnn: HyperbolicGeometricHGN;
+  private flowAnalyzer: FlowAnalyzer;
+  
+  constructor(config: H2GNNConfig) {
+    this.h2gnn = new HyperbolicGeometricHGN(config);
+    this.flowAnalyzer = new FlowAnalyzer();
+  }
+  
+  async optimizeFlow(flow: Flow): Promise<OptimizedFlow> {
+    // Analyze flow structure
+    const analysis = await this.flowAnalyzer.analyzeFlow(flow);
+    
+    // Generate flow embedding
+    const flowEmbedding = await this.generateFlowEmbedding(analysis);
+    
+    // Find similar optimized flows
+    const similarFlows = await this.findSimilarOptimizedFlows(flowEmbedding);
+    
+    // Generate optimization suggestions
+    const optimizations = await this.generateOptimizations(analysis, similarFlows);
+    
+    // Apply optimizations
+    const optimizedFlow = await this.applyOptimizations(flow, optimizations);
+    
+    return optimizedFlow;
+  }
+  
+  private async generateFlowEmbedding(analysis: FlowAnalysis): Promise<Vector> {
+    // Convert flow analysis to features
+    const features = this.analysisToFeatures(analysis);
+    
+    // Generate embedding using H²GNN
+    return await this.h2gnn.generateEmbedding(features);
+  }
+  
+  private analysisToFeatures(analysis: FlowAnalysis): number[] {
+    const features = new Array(16).fill(0);
+    
+    // Node count feature
+    features[0] = analysis.nodeCount / 100; // Normalize
+    
+    // Depth feature
+    features[1] = analysis.maxDepth / 10; // Normalize
+    
+    // Complexity feature
+    features[2] = analysis.complexity;
+    
+    // Performance features
+    features[3] = analysis.avgExecutionTime / 1000; // Normalize
+    features[4] = analysis.memoryUsage / 1000000; // Normalize
+    
+    // Add more features as needed
+    
+    return features;
+  }
+}
+```
+
+## Best Practices
+
+### 1. Hyperbolic Node Design
+- **Always extend HyperbolicNode** for geometric awareness
+- **Use hyperbolic embeddings** for all data representations
+- **Maintain geometric consistency** across operations
+- **Implement proper error handling** for geometric operations
+
+### 2. Flow Organization
+- **Use hierarchical organization** for complex workflows
+- **Implement geometric routing** for dynamic flow control
+- **Leverage hyperbolic clustering** for natural grouping
+- **Maintain geometric consistency** across flow transitions
+
+### 3. Memory Management
+- **Organize memories hierarchically** using hyperbolic clustering
+- **Implement proper consolidation** at each level
+- **Use geometric attention** for memory retrieval
+- **Handle memory overflow** gracefully
+
+### 4. Performance Optimization
+- **Use batch operations** for multiple embeddings
+- **Implement efficient caching** for frequently used embeddings
+- **Optimize geometric operations** for better performance
+- **Use lazy evaluation** for expensive operations
+
+## Common Patterns
+
+### 1. Hyperbolic Workflow Creation
+```typescript
+// Create hyperbolic nodes → Connect with geometric awareness → Create flow
+const nodes = this.createHyperbolicNodes();
+const connections = this.connectWithGeometricAwareness(nodes);
+const flow = new Flow(nodes[0]);
+```
+
+### 2. Hierarchical Task Processing
+```typescript
+// Task → Decomposition → Hierarchical Organization → Execution → Consolidation
+const subtasks = await this.decomposeTask(task);
+const hierarchy = await this.organizeHierarchically(subtasks);
+const results = await this.executeHierarchy(hierarchy);
+const consolidated = await this.consolidateResults(results);
+```
+
+### 3. Geometric Routing
+```typescript
+// Task → Embedding → Similarity Search → Routing Decision → Flow Selection
+const embedding = await this.generateEmbedding(task);
+const similarities = await this.findSimilarTasks(embedding);
+const routing = await this.computeRoutingDecision(similarities);
+const flow = await this.selectFlow(routing);
+```
+
+## Integration Benefits
+
+The integration of PocketFlow with H²GNN provides:
+- **Hierarchical Reasoning**: Natural hierarchy representation
+- **Geometric Awareness**: Geometric operations for workflow decisions
+- **Memory Consolidation**: Hierarchical memory management
+- **Dynamic Routing**: Geometric routing for flow control
+- **Scalable Architecture**: Exponential capacity in hyperbolic space
+- **Natural Clustering**: Hyperbolic clustering for task organization

@@ -1,0 +1,369 @@
+---
+description: Guidelines for using H²GNN Enhanced Nodes in PocketFlow
+globs: 
+alwaysApply: false
+---
+
+# Hyperbolic Node
+
+The **HyperbolicNode** extends the standard PocketFlow `BaseNode` with H²GNN hyperbolic embeddings and geometric reasoning capabilities.
+
+## Core Concepts
+
+### Hyperbolic Embeddings
+- **Purpose**: Represent data in hyperbolic space for hierarchical reasoning
+- **Properties**: Maintain `||x|| < 1` constraint (Poincaré ball model)
+- **Benefits**: Exponential capacity, natural hierarchy representation
+
+### Geometric Addressing
+- **BIP32 HD Addressing**: Deterministic service addressing
+- **Hyperbolic Coordinates**: Geometric positioning in hyperbolic space
+- **Transport Layer**: Network abstraction for geometric operations
+
+## HyperbolicNode Implementation
+
+### Basic Structure
+```typescript
+export abstract class HyperbolicNode extends BaseNode {
+  protected h2gnn: HyperbolicGeometricHGN;
+  protected embeddings: Map<string, Vector> = new Map();
+  
+  constructor(config: NodeConfig & { h2gnn?: HyperbolicGeometricHGN }) {
+    super(config);
+    this.h2gnn = config.h2gnn || new HyperbolicGeometricHGN({
+      embeddingDim: 16,
+      curvature: -1.0
+    });
+  }
+}
+```
+
+### Key Methods
+
+#### 1. Embedding Generation
+```typescript
+async generateEmbedding(text: string, context?: any): Promise<Vector> {
+  // Check cache first
+  const cacheKey = this.getCacheKey(text, context);
+  if (this.embeddings.has(cacheKey)) {
+    return this.embeddings.get(cacheKey)!;
+  }
+  
+  // Generate new embedding
+  const embedding = await this.computeHyperbolicEmbedding(text, context);
+  
+  // Validate and cache
+  if (HyperbolicArithmetic.validateHyperbolic(embedding)) {
+    this.embeddings.set(cacheKey, embedding);
+    return embedding;
+  } else {
+    throw new Error('Generated embedding violates hyperbolic constraints');
+  }
+}
+```
+
+#### 2. Similarity Search
+```typescript
+async findSimilarEmbeddings(query: Vector, maxResults: number = 10): Promise<Vector[]> {
+  const similarities = Array.from(this.embeddings.values()).map(embedding => ({
+    embedding,
+    distance: HyperbolicArithmetic.distance(query, embedding)
+  }));
+  
+  return similarities
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, maxResults)
+    .map(item => item.embedding);
+}
+```
+
+#### 3. Hyperbolic Clustering
+```typescript
+async clusterEmbeddings(embeddings: Vector[]): Promise<Vector[][]> {
+  if (embeddings.length === 0) return [];
+  
+  // Use H²GNN for hyperbolic clustering
+  const clusters = await this.h2gnn.clusterEmbeddings(embeddings);
+  return clusters;
+}
+```
+
+## Implementation Patterns
+
+### 1. Text Processing Node
+```typescript
+export class HyperbolicTextProcessor extends HyperbolicNode {
+  async prep(shared: SharedStore): Promise<string> {
+    return shared.text || '';
+  }
+  
+  async exec(text: string): Promise<Vector> {
+    // Generate hyperbolic embedding for text
+    const embedding = await this.generateEmbedding(text);
+    
+    // Store in shared store for downstream nodes
+    shared.textEmbedding = embedding;
+    
+    return embedding;
+  }
+  
+  async post(shared: SharedStore, prepRes: string, execRes: Vector): Promise<Action> {
+    // Store embedding in shared store
+    shared.textEmbedding = execRes;
+    
+    // Determine next action based on embedding properties
+    const norm = HyperbolicArithmetic.norm(execRes);
+    return norm > 0.5 ? 'complex' : 'simple';
+  }
+}
+```
+
+### 2. Similarity Search Node
+```typescript
+export class HyperbolicSimilaritySearch extends HyperbolicNode {
+  async prep(shared: SharedStore): Promise<Vector> {
+    return shared.queryEmbedding || shared.textEmbedding;
+  }
+  
+  async exec(queryEmbedding: Vector): Promise<Vector[]> {
+    // Find similar embeddings
+    const similar = await this.findSimilarEmbeddings(queryEmbedding, 10);
+    
+    // Store results in shared store
+    shared.similarEmbeddings = similar;
+    
+    return similar;
+  }
+  
+  async post(shared: SharedStore, prepRes: Vector, execRes: Vector[]): Promise<Action> {
+    // Store results
+    shared.similarEmbeddings = execRes;
+    
+    // Determine next action based on similarity quality
+    const avgDistance = execRes.reduce((sum, emb) => 
+      sum + HyperbolicArithmetic.distance(prepRes, emb), 0
+    ) / execRes.length;
+    
+    return avgDistance < 0.5 ? 'high_similarity' : 'low_similarity';
+  }
+}
+```
+
+### 3. Clustering Node
+```typescript
+export class HyperbolicClusteringNode extends HyperbolicNode {
+  async prep(shared: SharedStore): Promise<Vector[]> {
+    return shared.embeddings || [];
+  }
+  
+  async exec(embeddings: Vector[]): Promise<Vector[][]> {
+    if (embeddings.length === 0) return [];
+    
+    // Perform hyperbolic clustering
+    const clusters = await this.clusterEmbeddings(embeddings);
+    
+    // Store results
+    shared.clusters = clusters;
+    
+    return clusters;
+  }
+  
+  async post(shared: SharedStore, prepRes: Vector[], execRes: Vector[][]): Promise<Action> {
+    // Store clusters
+    shared.clusters = execRes;
+    
+    // Determine next action based on cluster quality
+    const numClusters = execRes.length;
+    const avgClusterSize = prepRes.length / numClusters;
+    
+    if (avgClusterSize > 5) {
+      return 'large_clusters';
+    } else if (numClusters > 10) {
+      return 'many_clusters';
+    } else {
+      return 'balanced_clusters';
+    }
+  }
+}
+```
+
+## Advanced Patterns
+
+### 1. Memory Consolidation Node
+```typescript
+export class MemoryConsolidationNode extends HyperbolicNode {
+  async prep(shared: SharedStore): Promise<Memory[]> {
+    return shared.memories || [];
+  }
+  
+  async exec(memories: Memory[]): Promise<ConsolidatedMemory[]> {
+    if (memories.length === 0) return [];
+    
+    // Extract embeddings
+    const embeddings = memories.map(m => m.embedding);
+    
+    // Cluster memories
+    const clusters = await this.clusterEmbeddings(embeddings);
+    
+    // Create consolidated memories
+    const consolidated = await Promise.all(
+      clusters.map(async (cluster, index) => {
+        // Compute Fréchet mean for cluster centroid
+        const centroid = await this.computeFrechetMean(cluster);
+        
+        return {
+          id: `consolidated_${index}`,
+          embedding: centroid,
+          memories: cluster,
+          timestamp: Date.now()
+        };
+      })
+    );
+    
+    return consolidated;
+  }
+  
+  async post(shared: SharedStore, prepRes: Memory[], execRes: ConsolidatedMemory[]): Promise<Action> {
+    // Store consolidated memories
+    shared.consolidatedMemories = execRes;
+    
+    // Clean up old memories
+    shared.memories = [];
+    
+    return 'consolidated';
+  }
+  
+  private async computeFrechetMean(points: Vector[]): Promise<Vector> {
+    // Iterative Fréchet mean computation
+    let centroid = points[0];
+    
+    for (let i = 0; i < 10; i++) {
+      const tangentSum = points.map(p => 
+        HyperbolicArithmetic.logMap(p, centroid)
+      ).reduce((sum, log) => 
+        HyperbolicArithmetic.mobiusAdd(sum, log), 
+        HyperbolicArithmetic.createVector(new Array(centroid.dim).fill(0))
+      );
+      
+      const avgTangent = HyperbolicArithmetic.mobiusScalarMult(
+        1.0 / points.length, tangentSum
+      );
+      
+      centroid = HyperbolicArithmetic.expMap(avgTangent, centroid);
+    }
+    
+    return centroid;
+  }
+}
+```
+
+### 2. Attention Node
+```typescript
+export class HyperbolicAttentionNode extends HyperbolicNode {
+  async prep(shared: SharedStore): Promise<{query: Vector, keys: Vector[], values: Vector[]}> {
+    return {
+      query: shared.queryEmbedding,
+      keys: shared.keyEmbeddings || [],
+      values: shared.valueEmbeddings || []
+    };
+  }
+  
+  async exec({query, keys, values}: {query: Vector, keys: Vector[], values: Vector[]}): Promise<Vector> {
+    if (keys.length !== values.length) {
+      throw new Error('Keys and values must have same length');
+    }
+    
+    // Compute attention weights
+    const attentionWeights = keys.map(key => 
+      HyperbolicArithmetic.hyperbolicAttention(query, key)
+    );
+    
+    // Normalize weights
+    const totalWeight = attentionWeights.reduce((sum, w) => sum + w, 0);
+    const normalizedWeights = attentionWeights.map(w => w / totalWeight);
+    
+    // Weighted combination using Möbius operations
+    let result = HyperbolicArithmetic.mobiusScalarMult(normalizedWeights[0], values[0]);
+    for (let i = 1; i < values.length; i++) {
+      const weightedValue = HyperbolicArithmetic.mobiusScalarMult(
+        normalizedWeights[i], values[i]
+      );
+      result = HyperbolicArithmetic.mobiusAdd(result, weightedValue);
+    }
+    
+    return HyperbolicArithmetic.projectToPoincareBall(result);
+  }
+  
+  async post(shared: SharedStore, prepRes: any, execRes: Vector): Promise<Action> {
+    // Store attention result
+    shared.attentionResult = execRes;
+    
+    return 'default';
+  }
+}
+```
+
+## Best Practices
+
+### 1. Embedding Management
+- **Always validate embeddings** before use
+- **Use consistent caching** with proper key generation
+- **Handle boundary violations** gracefully
+- **Implement proper cleanup** for memory management
+
+### 2. Geometric Consistency
+- **Maintain hyperbolic constraints** across all operations
+- **Use Möbius operations** for geometric consistency
+- **Validate inputs and outputs** for geometric properties
+- **Handle numerical instability** appropriately
+
+### 3. Performance Optimization
+- **Use batch operations** for multiple embeddings
+- **Implement lazy evaluation** for expensive operations
+- **Cache frequently used embeddings**
+- **Use appropriate data structures** for geometric operations
+
+### 4. Error Handling
+- **Validate hyperbolic constraints** before operations
+- **Handle boundary violations** with projection
+- **Implement fallback mechanisms** for numerical instability
+- **Provide meaningful error messages** for debugging
+
+## Common Patterns
+
+### 1. Embedding Pipeline
+```typescript
+// Text → Features → Hyperbolic Embedding
+const features = this.textToFeatures(text);
+const embedding = await this.h2gnn.generateEmbedding(features);
+const validated = HyperbolicArithmetic.projectToPoincareBall(embedding);
+```
+
+### 2. Similarity Search
+```typescript
+// Query → Embedding → Distance Calculation → Ranking
+const queryEmbedding = await this.generateEmbedding(query);
+const similarities = this.embeddings.map(emb => ({
+  embedding: emb,
+  distance: HyperbolicArithmetic.distance(queryEmbedding, emb)
+}));
+const ranked = similarities.sort((a, b) => a.distance - b.distance);
+```
+
+### 3. Clustering Workflow
+```typescript
+// Embeddings → Clustering → Centroids → Consolidation
+const clusters = await this.clusterEmbeddings(embeddings);
+const centroids = await Promise.all(
+  clusters.map(cluster => this.computeFrechetMean(cluster))
+);
+```
+
+## Integration with PocketFlow
+
+HyperbolicNode integrates seamlessly with PocketFlow through:
+- **Standard Node Interface**: Implements `prep()`, `exec()`, `post()` methods
+- **Action-based Transitions**: Returns actions for flow control
+- **Shared Store Communication**: Uses shared store for data exchange
+- **Batch Processing**: Supports batch operations for efficiency
+- **Async Operations**: Handles asynchronous geometric operations

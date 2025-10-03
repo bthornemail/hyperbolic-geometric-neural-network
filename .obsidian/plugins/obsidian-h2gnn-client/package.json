@@ -1,32 +1,46 @@
 {
-	"name": "@opencode-obsidian-workspace/plugin",
-	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
-	"main": "main.js",
-	"scripts": {
-		"dev": "node esbuild.config.mjs",
-		"build": "node esbuild.config.mjs production",
-		"postbuild": "rsync -avP ../plugin ../../.obsidian/plugins/opencode-obsidian-agent --delete",
-		"version": "node version-bump.mjs && git add manifest.json versions.json"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "MIT",
-	"devDependencies": {
-		"@types/node": "^16.18.126",
-		"@types/react": "^18.3.24",
-		"@types/react-dom": "^18.3.7",
-		"@types/uuid": "^9.0.8",
-		"@typescript-eslint/eslint-plugin": "5.29.0",
-		"@typescript-eslint/parser": "5.29.0",
-		"builtin-modules": "3.3.0",
-		"esbuild": "^0.25.10",
-		"obsidian": "latest",
-		"tslib": "2.4.0",
-		"typescript": "4.7.4"
-	},
-	"dependencies": {
-		"@opencode-obsidian-workspace/core": "workspace:*",
-		"eslint": "^9.36.0"
-	}
+  "name": "obsidian-h2gnn-client",
+  "version": "1.0.0",
+  "description": "Enhanced Obsidian plugin with H²GNN integration for agentic coding and knowledge generation",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+    "version": "node version-bump.mjs && git add manifest.json versions.json",
+    "test": "jest"
+  },
+  "keywords": [
+    "obsidian",
+    "plugin",
+    "h2gnn",
+    "hyperbolic",
+    "neural-network",
+    "agentic-coding",
+    "knowledge-graph",
+    "lsp",
+    "ast",
+    "geometric",
+    "learning",
+    "ai"
+  ],
+  "author": "H²GNN Development Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^16.11.6",
+    "@types/uuid": "^8.3.4",
+    "@types/ws": "^8.5.5",
+    "@typescript-eslint/eslint-plugin": "5.29.0",
+    "@typescript-eslint/parser": "5.29.0",
+    "builtin-modules": "3.3.0",
+    "esbuild": "0.17.3",
+    "obsidian": "latest",
+    "tslib": "2.4.0",
+    "typescript": "4.7.4",
+    "uuid": "^9.0.0",
+    "ws": "^8.13.0"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0",
+    "ws": "^8.13.0"
+  }
 }

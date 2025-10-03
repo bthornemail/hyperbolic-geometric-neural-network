@@ -1,0 +1,201 @@
+---
+description: Guidelines for using H²GNN Core Operations and Hyperbolic Geometry
+globs: 
+alwaysApply: false
+---
+
+# H²GNN Core Operations
+
+H²GNN (Hyperbolic Geometric Neural Network) provides revolutionary capabilities for hierarchical learning through hyperbolic geometry. This guide covers core operations and best practices.
+
+## Mathematical Foundation
+
+### Hyperbolic Space Properties
+- **Poincaré Ball Model**: `{x ∈ ℝⁿ : ||x|| < 1}`
+- **Curvature**: Negative curvature (-1.0) for hierarchical representation
+- **Boundary**: Points approach but never reach the unit sphere
+- **Distance**: Hyperbolic distance grows exponentially near boundary
+
+### Core Operations
+
+#### 1. Möbius Addition: `u ⊕ v`
+```typescript
+// Fundamental operation in hyperbolic space
+const result = HyperbolicArithmetic.mobiusAdd(u, v);
+```
+- **Purpose**: Combines vectors in hyperbolic space
+- **Properties**: Non-commutative, preserves hyperbolic structure
+- **Use Cases**: Message passing, embedding combination
+
+#### 2. Möbius Scalar Multiplication: `r ⊗ v`
+```typescript
+// Scale vectors in hyperbolic space
+const scaled = HyperbolicArithmetic.mobiusScalarMult(scale, vector);
+```
+- **Purpose**: Scaling operations in hyperbolic space
+- **Properties**: Maintains hyperbolic constraints
+- **Use Cases**: Attention weights, feature scaling
+
+#### 3. Hyperbolic Distance: `d(u,v)`
+```typescript
+// Calculate distance between hyperbolic points
+const dist = HyperbolicArithmetic.distance(u, v);
+```
+- **Purpose**: Measure similarity in hyperbolic space
+- **Properties**: Exponential growth near boundary
+- **Use Cases**: Similarity search, clustering
+
+## H²GNN Network Operations
+
+### Network Initialization
+```typescript
+const h2gnn = new HyperbolicGeometricHGN({
+  embeddingDim: 64,
+  numLayers: 3,
+  curvature: -1.0,
+  learningRate: 0.001
+});
+```
+
+### Forward Pass
+```typescript
+const result = await h2gnn.forward(trainingData);
+// Returns hyperbolic embeddings for all nodes
+```
+
+### Training with Geometric Loss
+```typescript
+await h2gnn.train(trainingData);
+// Automatically computes geometric loss functions
+```
+
+## Best Practices
+
+### 1. Embedding Generation
+- **Always validate**: Check `||x|| < 1` for Poincaré ball constraint
+- **Use caching**: Cache embeddings to avoid recomputation
+- **Context awareness**: Include context in embedding generation
+
+```typescript
+// Good: Proper embedding generation
+async generateEmbedding(text: string, context?: any): Promise<Vector> {
+  const cacheKey = this.getCacheKey(text, context);
+  if (this.embeddings.has(cacheKey)) {
+    return this.embeddings.get(cacheKey)!;
+  }
+  
+  const embedding = await this.h2gnn.generateEmbedding(text, context);
+  this.embeddings.set(cacheKey, embedding);
+  return embedding;
+}
+```
+
+### 2. Geometric Consistency
+- **Maintain constraints**: Always validate hyperbolic properties
+- **Use parallel transport**: For embedding consistency across operations
+- **Handle boundary conditions**: Implement proper boundary checking
+
+```typescript
+// Good: Boundary validation
+static validateHyperbolic(v: Vector): boolean {
+  const norm = this.norm(v);
+  return norm < 1.0 - this.EPS;
+}
+```
+
+### 3. Memory Management
+- **Hierarchical organization**: Use hyperbolic clustering for memory
+- **Consolidation**: Regular memory consolidation to prevent overflow
+- **Retrieval**: Use hyperbolic distance for memory retrieval
+
+```typescript
+// Good: Hierarchical memory organization
+async consolidateMemories(): Promise<void> {
+  const clusters = await this.h2gnn.clusterEmbeddings(this.memories);
+  this.consolidatedMemories = clusters;
+}
+```
+
+## Common Patterns
+
+### 1. Similarity Search
+```typescript
+async findSimilarEmbeddings(query: Vector, maxResults: number = 10): Promise<Vector[]> {
+  const distances = this.embeddings.map(embedding => ({
+    embedding,
+    distance: HyperbolicArithmetic.distance(query, embedding)
+  }));
+  
+  return distances
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, maxResults)
+    .map(item => item.embedding);
+}
+```
+
+### 2. Hyperbolic Clustering
+```typescript
+async clusterEmbeddings(embeddings: Vector[]): Promise<Vector[][]> {
+  // Use Fréchet mean for hyperbolic clustering
+  const clusters = await this.h2gnn.clusterEmbeddings(embeddings);
+  return clusters;
+}
+```
+
+### 3. Geometric Attention
+```typescript
+async computeAttention(query: Vector, keys: Vector[], values: Vector[]): Vector {
+  const attentionWeights = keys.map(key => 
+    HyperbolicArithmetic.hyperbolicAttention(query, key)
+  );
+  
+  // Weighted combination using Möbius operations
+  let result = values[0];
+  for (let i = 1; i < values.length; i++) {
+    result = HyperbolicArithmetic.mobiusAdd(
+      result, 
+      HyperbolicArithmetic.mobiusScalarMult(attentionWeights[i], values[i])
+    );
+  }
+  
+  return result;
+}
+```
+
+## Error Handling
+
+### Boundary Violations
+```typescript
+// Always check and project to Poincaré ball
+const safeVector = HyperbolicArithmetic.projectToPoincareBall(vector);
+```
+
+### Dimension Mismatches
+```typescript
+// Validate dimensions before operations
+if (u.dim !== v.dim) {
+  throw new Error('Vector dimensions must match for hyperbolic operations');
+}
+```
+
+### Numerical Stability
+```typescript
+// Use epsilon for numerical stability
+private static readonly EPS = 1e-10;
+private static readonly BOUNDARY_EPS = 1e-6;
+```
+
+## Performance Considerations
+
+- **Batch operations**: Use `batchMobiusAdd` for multiple operations
+- **Caching**: Cache frequently used embeddings
+- **Lazy evaluation**: Generate embeddings only when needed
+- **Memory management**: Regular consolidation to prevent memory overflow
+
+## Integration with PocketFlow
+
+H²GNN integrates seamlessly with PocketFlow through:
+- **HyperbolicNode**: Base class for H²GNN-enhanced nodes
+- **Geometric addressing**: BIP32 HD addressing for deterministic positioning
+- **Memory consolidation**: Hierarchical memory organization
+- **WordNet integration**: Semantic relationship handling

@@ -1,0 +1,468 @@
+---
+description: Guidelines for BIP32 HD Addressing and Geometric Positioning in H²GNN
+globs: 
+alwaysApply: false
+---
+
+# Geometric Addressing
+
+Geometric addressing provides deterministic positioning and routing in H²GNN systems using BIP32 HD addressing and hyperbolic coordinates.
+
+## Core Concepts
+
+### BIP32 HD Addressing
+- **Hierarchical Deterministic**: Deterministic key derivation from master seed
+- **Path-based**: Structured paths like `m/44'/0'/0'/0/1`
+- **Network-aware**: Different networks (mainnet, testnet, etc.)
+- **Service-specific**: Different services (broker, provider, consumer, mcp)
+
+### Hyperbolic Coordinates
+- **Geometric Positioning**: Deterministic positioning in hyperbolic space
+- **Curvature**: Negative curvature (-1.0) for hierarchical representation
+- **Embedding**: Vector representation of geometric position
+- **Transport**: Network layer abstraction
+
+## Implementation Patterns
+
+### 1. HD Addressing Setup
+```typescript
+export class BIP32HDAddressing {
+  private seed: Buffer;
+  private network: string;
+  
+  constructor(seed: Buffer, network: string = 'mainnet') {
+    this.seed = seed;
+    this.network = network;
+  }
+  
+  /**
+   * Generate HD path for component
+   */
+  generatePath(
+    component: string, 
+    instance: number, 
+    transport: 'internal' | 'external'
+  ): string {
+    const componentIndex = this.getComponentIndex(component);
+    const transportIndex = transport === 'internal' ? 0 : 1;
+    
+    return `m/44'/${componentIndex}'/0'/${transportIndex}/${instance}`;
+  }
+  
+  private getComponentIndex(component: string): number {
+    const indices = {
+      'broker': 0,
+      'provider': 1, 
+      'consumer': 2,
+      'mcp': 3
+    };
+    return indices[component] || 0;
+  }
+}
+```
+
+### 2. Address Creation
+```typescript
+interface H2GNNAddress {
+  path: string;
+  component: {
+    type: string;
+    instance: number;
+    transport: string;
+  };
+  hyperbolic: {
+    curvature: number;
+    coordinates: number[];
+    embedding: Vector;
+  };
+  network: {
+    transport: string;
+    endpoint: string;
+    port?: number;
+  };
+}
+
+/**
+ * Create H²GNN address from component info
+ */
+createAddress(
+  component: 'broker' | 'provider' | 'consumer' | 'mcp',
+  instance: number,
+  transport: 'internal' | 'external',
+  networkTransport: 'mqtt' | 'webrtc' | 'websocket' | 'udp' | 'tcp' | 'ipc',
+  endpoint: string,
+  port?: number
+): H2GNNAddress {
+  const path = this.generatePath(component, instance, transport);
+  
+  return {
+    path,
+    component: {
+      type: component,
+      instance,
+      transport
+    },
+    hyperbolic: {
+      curvature: -1.0, // Default hyperbolic curvature
+      coordinates: this.generateHyperbolicCoordinates(path),
+      embedding: this.generateEmbedding(path)
+    },
+    network: {
+      transport: networkTransport,
+      endpoint,
+      port
+    }
+  };
+}
+```
+
+### 3. Hyperbolic Coordinate Generation
+```typescript
+/**
+ * Generate deterministic hyperbolic coordinates from HD path
+ */
+private generateHyperbolicCoordinates(path: string): number[] {
+  const hash = createHash('sha256').update(path).digest();
+  
+  // Convert hash to hyperbolic coordinates
+  const x = (hash.readUInt32BE(0) / 0xFFFFFFFF) * 0.8; // Scale to [0, 0.8]
+  const y = (hash.readUInt32BE(4) / 0xFFFFFFFF) * 0.8;
+  
+  // Ensure coordinates stay within Poincaré ball
+  const norm = Math.sqrt(x*x + y*y);
+  if (norm >= 1.0) {
+    const scale = 0.99 / norm;
+    return [x * scale, y * scale];
+  }
+  
+  return [x, y];
+}
+
+/**
+ * Generate embedding from HD path
+ */
+private generateEmbedding(path: string): Vector {
+  const hash = createHash('sha256').update(path).digest();
+  const embedding = new Array(16).fill(0);
+  
+  // Convert hash to embedding vector
+  for (let i = 0; i < 16; i++) {
+    embedding[i] = (hash[i] / 255) * 0.8; // Scale to [0, 0.8]
+  }
+  
+  // Ensure embedding stays within Poincaré ball
+  const norm = Math.sqrt(embedding.reduce((sum, x) => sum + x*x, 0));
+  if (norm >= 1.0) {
+    const scale = 0.99 / norm;
+    return HyperbolicArithmetic.createVector(embedding.map(x => x * scale));
+  }
+  
+  return HyperbolicArithmetic.createVector(embedding);
+}
+```
+
+## Service Integration Patterns
+
+### 1. MCP Server Addressing
+```typescript
+export class MCPAddressing {
+  private hdAddressing: BIP32HDAddressing;
+  
+  constructor(seed: Buffer) {
+    this.hdAddressing = new BIP32HDAddressing(seed, 'mainnet');
+  }
+  
+  /**
+   * Create MCP server address
+   */
+  createMCPServerAddress(
+    instance: number,
+    transport: 'internal' | 'external',
+    endpoint: string,
+    port: number
+  ): H2GNNAddress {
+    return this.hdAddressing.createAddress(
+      'mcp',
+      instance,
+      transport,
+      'tcp',
+      endpoint,
+      port
+    );
+  }
+  
+  /**
+   * Get RPC endpoint from address
+   */
+  getRPCEndpoint(address: H2GNNAddress): string {
+    return `${address.network.transport}://${address.network.endpoint}:${address.network.port}`;
+  }
+}
+```
+
+### 2. Broker Addressing
+```typescript
+export class BrokerAddressing {
+  private hdAddressing: BIP32HDAddressing;
+  
+  constructor(seed: Buffer) {
+    this.hdAddressing = new BIP32HDAddressing(seed, 'mainnet');
+  }
+  
+  /**
+   * Create broker address
+   */
+  createBrokerAddress(
+    instance: number,
+    transport: 'internal' | 'external',
+    endpoint: string,
+    port: number
+  ): H2GNNAddress {
+    return this.hdAddressing.createAddress(
+      'broker',
+      instance,
+      transport,
+      'mqtt',
+      endpoint,
+      port
+    );
+  }
+  
+  /**
+   * Get MQTT endpoint from address
+   */
+  getMQTTEndpoint(address: H2GNNAddress): string {
+    return `mqtt://${address.network.endpoint}:${address.network.port}`;
+  }
+}
+```
+
+### 3. Provider/Consumer Addressing
+```typescript
+export class ServiceAddressing {
+  private hdAddressing: BIP32HDAddressing;
+  
+  constructor(seed: Buffer) {
+    this.hdAddressing = new BIP32HDAddressing(seed, 'mainnet');
+  }
+  
+  /**
+   * Create provider address
+   */
+  createProviderAddress(
+    instance: number,
+    transport: 'internal' | 'external',
+    endpoint: string,
+    port: number
+  ): H2GNNAddress {
+    return this.hdAddressing.createAddress(
+      'provider',
+      instance,
+      transport,
+      'websocket',
+      endpoint,
+      port
+    );
+  }
+  
+  /**
+   * Create consumer address
+   */
+  createConsumerAddress(
+    instance: number,
+    transport: 'internal' | 'external',
+    endpoint: string,
+    port: number
+  ): H2GNNAddress {
+    return this.hdAddressing.createAddress(
+      'consumer',
+      instance,
+      transport,
+      'websocket',
+      endpoint,
+      port
+    );
+  }
+}
+```
+
+## Geographic Projection Integration
+
+### 1. Hyperbolic-to-Geographic Conversion
+```typescript
+export class GeographicProjection {
+  private projectionEngine: HyperbolicProjectionEngine;
+  
+  constructor() {
+    this.projectionEngine = new HyperbolicProjectionEngine();
+  }
+  
+  /**
+   * Convert hyperbolic coordinates to geographic
+   */
+  hyperbolicToGeographic(hyperbolicCoords: number[]): [number, number] {
+    return this.projectionEngine.poincareToGeographic(hyperbolicCoords);
+  }
+  
+  /**
+   * Convert geographic coordinates to hyperbolic
+   */
+  geographicToHyperbolic(geoCoords: [number, number]): number[] {
+    return this.projectionEngine.geographicToPoincare(geoCoords);
+  }
+  
+  /**
+   * Create geographic address from hyperbolic address
+   */
+  createGeographicAddress(h2gnnAddress: H2GNNAddress): GeographicAddress {
+    const [longitude, latitude] = this.hyperbolicToGeographic(
+      h2gnnAddress.hyperbolic.coordinates
+    );
+    
+    return {
+      path: h2gnnAddress.path,
+      component: h2gnnAddress.component,
+      geographic: {
+        longitude,
+        latitude,
+        elevation: 0
+      },
+      network: h2gnnAddress.network
+    };
+  }
+}
+```
+
+### 2. Geographic Clustering
+```typescript
+export class GeographicClustering {
+  private projection: GeographicProjection;
+  private h2gnn: HyperbolicGeometricHGN;
+  
+  constructor() {
+    this.projection = new GeographicProjection();
+    this.h2gnn = new HyperbolicGeometricHGN({
+      embeddingDim: 16,
+      curvature: -1.0
+    });
+  }
+  
+  /**
+   * Cluster geographic points using hyperbolic geometry
+   */
+  async clusterGeographicPoints(
+    points: GeographicPoint[]
+  ): Promise<GeographicCluster[]> {
+    // Convert to hyperbolic space
+    const hyperbolicPoints = points.map(point => 
+      this.projection.geographicToHyperbolic([point.longitude, point.latitude])
+    );
+    
+    // Cluster in hyperbolic space
+    const embeddings = hyperbolicPoints.map(coords => 
+      HyperbolicArithmetic.createVector(coords)
+    );
+    
+    const clusters = await this.h2gnn.clusterEmbeddings(embeddings);
+    
+    // Convert back to geographic coordinates
+    return clusters.map((cluster, index) => ({
+      id: `cluster_${index}`,
+      centroid: this.projection.hyperbolicToGeographic(
+        this.computeHyperbolicCentroid(cluster)
+      ),
+      points: cluster.map(embedding => {
+        const coords = this.projection.hyperbolicToGeographic(embedding.data);
+        return {
+          longitude: coords[0],
+          latitude: coords[1]
+        };
+      })
+    }));
+  }
+  
+  private computeHyperbolicCentroid(embeddings: Vector[]): number[] {
+    // Compute Fréchet mean in hyperbolic space
+    let centroid = embeddings[0];
+    
+    for (let i = 0; i < 10; i++) {
+      const tangentSum = embeddings.map(emb => 
+        HyperbolicArithmetic.logMap(emb, centroid)
+      ).reduce((sum, log) => 
+        HyperbolicArithmetic.mobiusAdd(sum, log), 
+        HyperbolicArithmetic.createVector(new Array(centroid.dim).fill(0))
+      );
+      
+      const avgTangent = HyperbolicArithmetic.mobiusScalarMult(
+        1.0 / embeddings.length, tangentSum
+      );
+      
+      centroid = HyperbolicArithmetic.expMap(avgTangent, centroid);
+    }
+    
+    return centroid.data;
+  }
+}
+```
+
+## Best Practices
+
+### 1. Address Management
+- **Use consistent seeds** for deterministic addressing
+- **Validate addresses** before use
+- **Implement proper cleanup** for address caches
+- **Handle network failures** gracefully
+
+### 2. Geometric Consistency
+- **Maintain hyperbolic constraints** in coordinate generation
+- **Validate coordinates** before projection
+- **Handle boundary conditions** appropriately
+- **Use consistent projection methods**
+
+### 3. Performance Optimization
+- **Cache frequently used addresses**
+- **Use batch operations** for multiple addresses
+- **Implement lazy evaluation** for expensive operations
+- **Optimize coordinate generation** algorithms
+
+### 4. Error Handling
+- **Validate HD paths** before processing
+- **Handle network failures** gracefully
+- **Implement fallback mechanisms** for addressing
+- **Provide meaningful error messages**
+
+## Common Patterns
+
+### 1. Service Discovery
+```typescript
+// Address → Hyperbolic Coordinates → Geographic Position → Service Lookup
+const address = this.createAddress(component, instance, transport, endpoint, port);
+const geoCoords = this.projection.hyperbolicToGeographic(address.hyperbolic.coordinates);
+const service = await this.discoverService(geoCoords);
+```
+
+### 2. Load Balancing
+```typescript
+// Multiple Addresses → Hyperbolic Clustering → Load Distribution
+const addresses = this.createMultipleAddresses(component, instances);
+const clusters = await this.clusterAddresses(addresses);
+const loadBalancer = new HyperbolicLoadBalancer(clusters);
+```
+
+### 3. Geographic Routing
+```typescript
+// Source → Destination → Hyperbolic Path → Geographic Route
+const source = this.createAddress(sourceComponent, sourceInstance, transport, endpoint, port);
+const destination = this.createAddress(destComponent, destInstance, transport, endpoint, port);
+const path = this.computeHyperbolicPath(source, destination);
+const route = this.projectPathToGeographic(path);
+```
+
+## Integration with PocketFlow
+
+Geometric addressing integrates with PocketFlow through:
+- **Node Addressing**: Each node can have a geometric address
+- **Flow Routing**: Use geometric addressing for flow routing
+- **Service Discovery**: Discover services using geometric coordinates
+- **Load Balancing**: Distribute load using hyperbolic clustering
+- **Geographic Awareness**: Incorporate geographic information into flows

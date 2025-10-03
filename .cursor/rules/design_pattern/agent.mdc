@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # Agent
 
-Agent is a powerful design pattern in which nodes can take dynamic actions based on the context.
+Agent is a powerful design pattern in which nodes can take dynamic actions based on the context. When enhanced with H²GNN, agents gain hierarchical reasoning capabilities through hyperbolic geometry.
 
 
 
@@ -51,6 +51,90 @@ The core of building **high-performance** and **reliable** agents boils down to:
 1. **Context Management:** Provide *relevant, minimal context.* For example, rather than including an entire chat history, retrieve the most relevant via [RAG](mdc:./rag.md). Even with larger context windows, LLMs still fall victim to ["lost in the middle"](https://arxiv.org/abs/2307.03172), overlooking mid-prompt content.
 
 2. **Action Space:** Provide *a well-structured and unambiguous* set of actions—avoiding overlap like separate `read_databases` or  `read_csvs`. Instead, import CSVs into the database.
+
+## H²GNN Enhanced Agent Patterns
+
+### Hyperbolic Context Management
+When using H²GNN, leverage hyperbolic embeddings for context management:
+
+```typescript
+export class HyperbolicAgent extends HyperbolicNode {
+  async prep(shared: SharedStore): Promise<{context: string, history: string[]}> {
+    // Generate context embedding for hierarchical reasoning
+    const contextEmbedding = await this.generateEmbedding(shared.context);
+    
+    // Find relevant historical context using hyperbolic distance
+    const relevantHistory = await this.findRelevantHistory(contextEmbedding, shared.history);
+    
+    return {
+      context: shared.context,
+      history: relevantHistory
+    };
+  }
+  
+  async exec({context, history}: {context: string, history: string[]}): Promise<AgentDecision> {
+    // Use hyperbolic attention for context weighting
+    const contextEmbedding = await this.generateEmbedding(context);
+    const historyEmbeddings = await Promise.all(
+      history.map(h => this.generateEmbedding(h))
+    );
+    
+    // Compute attention weights using hyperbolic operations
+    const attentionWeights = historyEmbeddings.map(emb => 
+      HyperbolicArithmetic.hyperbolicAttention(contextEmbedding, emb)
+    );
+    
+    // Weighted context combination
+    const weightedContext = await this.combineContextWithAttention(
+      context, history, attentionWeights
+    );
+    
+    // Make decision based on weighted context
+    return await this.makeDecision(weightedContext);
+  }
+}
+```
+
+### Hierarchical Action Space
+Organize actions hierarchically using hyperbolic clustering:
+
+```typescript
+export class HierarchicalActionSpace {
+  private actions: Map<string, Action> = new Map();
+  private actionEmbeddings: Map<string, Vector> = new Map();
+  
+  async organizeActionsHierarchically(): Promise<ActionCluster[]> {
+    // Extract action embeddings
+    const embeddings = Array.from(this.actionEmbeddings.values());
+    
+    // Cluster actions using hyperbolic clustering
+    const clusters = await this.clusterEmbeddings(embeddings);
+    
+    // Create hierarchical action clusters
+    const actionClusters: ActionCluster[] = [];
+    
+    for (let i = 0; i < clusters.length; i++) {
+      const cluster = clusters[i];
+      const clusterActions = cluster.map(embedding => 
+        Array.from(this.actionEmbeddings.entries())
+          .find(([_, emb]) => HyperbolicArithmetic.distance(emb, embedding) < 0.01)
+      ).filter(Boolean);
+      
+      // Compute cluster centroid
+      const centroid = await this.computeFrechetMean(cluster);
+      
+      actionClusters.push({
+        id: `action_cluster_${i}`,
+        centroid,
+        actions: clusterActions,
+        level: 0
+      });
+    }
+    
+    return actionClusters;
+  }
+}
+```
 
 ## Example Good Action Design
 

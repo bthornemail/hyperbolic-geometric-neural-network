@@ -1,94 +1,203 @@
-# Obsidian Sample Plugin
+# H²GNN Obsidian Plugin
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+An enhanced Obsidian plugin that integrates with the Hyperbolic Geometric Neural Network (H²GNN) system for agentic coding, knowledge generation, and intelligent document processing.
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+## Features
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+### 🤖 Agentic Coding
+- **Code Generation**: Generate code based on context and requirements using H²GNN
+- **Code Analysis**: Advanced code analysis using LSP/AST with hyperbolic embeddings
+- **Code Refactoring**: Intelligent code refactoring with learning capabilities
+- **Documentation Generation**: Automatic documentation generation from codebase
 
-## First time developing plugins?
+### 🧠 Knowledge Graph Operations
+- **Semantic Analysis**: Analyze codebases to create knowledge graphs
+- **Concept Relationships**: Discover relationships between concepts using hyperbolic geometry
+- **Query Interface**: Query the knowledge graph for insights and patterns
+- **Visualization**: Generate graph visualizations of knowledge structures
 
-Quick starting guide for new plugin devs:
+### 🔍 LSP/AST Integration
+- **Code Completion**: Intelligent code completion using hyperbolic embeddings
+- **Hover Information**: Context-aware hover information for symbols
+- **Diagnostics**: Advanced code diagnostics with hyperbolic analysis
+- **Refactoring Suggestions**: Automated refactoring suggestions based on learned patterns
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+### 🌐 Geographic-Hyperbolic Integration
+- **GeoJSON Maps**: Generate maps with hyperbolic projections
+- **Semantic Geography**: Query geographic locations using semantic similarity
+- **Hyperbolic Clustering**: Analyze geographic clusters using hyperbolic geometry
+- **Spatial Insights**: Generate insights about geographic patterns
 
-## Releasing new releases
+### 🎓 Learning and Memory
+- **Adaptive Learning**: Learn from coding patterns and improve over time
+- **Memory Consolidation**: Consolidate learning memories for better performance
+- **Progress Tracking**: Track learning progress across different domains
+- **System Status**: Monitor system health and performance
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
+## Installation
 
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
+1. Copy the plugin files to your Obsidian vault's `.obsidian/plugins/obsidian-h2gnn-client/` directory
+2. Ensure the H²GNN MCP servers are running in the parent directory
+3. Enable the plugin in Obsidian's settings
 
-## Adding your plugin to the community plugin list
+## Configuration
 
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+The plugin automatically configures itself to connect to the H²GNN MCP servers:
 
-## How to use
+- **H²GNN Server**: Core hyperbolic neural network operations
+- **Knowledge Graph Server**: Knowledge graph operations and analysis
+- **LSP/AST Server**: Language server protocol and AST analysis
+- **Geometric Tools Server**: Geographic and hyperbolic integration
+- **Enhanced H²GNN Server**: Advanced learning and memory operations
 
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
+## Usage
 
-## Manually installing the plugin
+### Commands
 
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
+The plugin provides several commands accessible through the command palette:
 
-## Improve code quality with eslint (optional)
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
-- To use eslint to analyze this project use this command:
-  - `eslint main.ts`
-  - eslint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
-  - `eslint ./src/`
+#### 🤖 Agentic Coding Commands
+- **🤖 H²GNN Agentic Coding**: Open the comprehensive agentic coding interface
+- **⚡ Generate Code with H²GNN**: Generate code based on the active file
+- **🔍 Analyze Code with H²GNN**: Analyze the active file using H²GNN
+- **🔧 Refactor Code with H²GNN**: Refactor the active file using learned patterns
+- **📚 Generate Documentation with H²GNN**: Generate documentation for the codebase
 
-## Funding URL
+#### 🧠 Knowledge Graph Commands
+- **🧠 H²GNN Knowledge Graph**: Open the knowledge graph interface
+- **🧠 Query Knowledge Graph**: Query the knowledge graph for insights
+- **📊 Get Learning Progress**: View learning progress across domains
+- **🔍 Get System Status**: Check system health and performance
+- **🧠 Consolidate Memories**: Consolidate learning memories
 
-You can include funding URLs where people who use your plugin can financially support it.
+### Agentic Coding Interface
 
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
+The main interface provides:
 
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
+1. **Code Generation**
+   - Context input for code generation
+   - Requirements specification
+   - Language and framework selection
+   - Test and comment generation options
+
+2. **Documentation Generation**
+   - Codebase path selection
+   - Output format options (Markdown, HTML, PDF, JSON)
+   - Target audience selection
+   - Detail level configuration
+
+3. **Code Refactoring**
+   - Code input area
+   - Refactoring type selection
+   - Language specification
+   - Auto-apply options
+
+4. **System Status**
+   - Learning progress monitoring
+   - System status checking
+   - Memory consolidation
+
+### Knowledge Graph Interface
+
+The knowledge graph interface provides:
+
+1. **Query Operations**
+   - Semantic search queries
+   - Query type selection (similarity, path, cluster, dependency, impact)
+   - Result limit configuration
+
+2. **Codebase Analysis**
+   - Path selection for analysis
+   - Recursive analysis options
+   - Content inclusion settings
+   - Depth configuration
+
+3. **Code Generation from Graph**
+   - Code type selection (function, class, interface, module, test, documentation)
+   - Description input
+   - Style and framework selection
+
+4. **Documentation Generation**
+   - Documentation type selection
+   - Output format options
+   - Target audience and detail level
+
+5. **Graph Visualization**
+   - Layout algorithm selection
+   - Visualization generation
+
+## Integration with Pocket Flow
+
+The plugin integrates with the Pocket Flow framework for:
+
+- **Workflow Management**: Orchestrate complex coding workflows
+- **Task Decomposition**: Break down complex tasks into manageable steps
+- **Agent Coordination**: Coordinate multiple AI agents for complex tasks
+- **RAG Operations**: Retrieve and generate content using knowledge graphs
+
+## Learning and Adaptation
+
+The plugin learns from your coding patterns and improves over time:
+
+- **Pattern Recognition**: Identifies common coding patterns
+- **Context Learning**: Learns from file contexts and relationships
+- **Performance Tracking**: Tracks learning performance across domains
+- **Memory Consolidation**: Consolidates learned patterns for better performance
+
+## Troubleshooting
+
+### Connection Issues
+- Ensure H²GNN MCP servers are running
+- Check server paths in the configuration
+- Verify network connectivity
+
+### Performance Issues
+- Consolidate memories regularly
+- Monitor system status
+- Check learning progress
+
+### Error Handling
+- Check console for detailed error messages
+- Verify file permissions
+- Ensure proper plugin installation
+
+## Development
+
+### Building the Plugin
+```bash
+npm install
+npm run build
 ```
 
-If you have multiple URLs, you can also do:
-
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
+### Testing
+```bash
+npm test
 ```
 
-## API Documentation
+### Contributing
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
-See https://github.com/obsidianmd/obsidian-api
+## License
+
+This plugin is licensed under the MIT License. See the LICENSE file for details.
+
+## Support
+
+For support and questions:
+- Check the console for error messages
+- Review the system status
+- Consult the H²GNN documentation
+- Submit issues on the repository
+
+## Changelog
+
+### Version 1.0.0
+- Initial release with H²GNN integration
+- Agentic coding capabilities
+- Knowledge graph operations
+- LSP/AST integration
+- Geographic-hyperbolic features
+- Learning and memory system
