@@ -576,7 +576,7 @@ export class EnhancedCollaborationInterface {
 
   private async startH2GNNServer(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.serverProcess = spawn("npx", ["tsx", "src/mcp/enhanced-h2gnn-mcp-server.ts"], {
+      this.serverProcess = spawn("npx", ["tsx", "src/mcp/h2gnn-mcp-server.ts"], {
         stdio: ['pipe', 'pipe', 'pipe']
       });
 

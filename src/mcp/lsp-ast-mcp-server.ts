@@ -47,6 +47,27 @@ interface ASTAnalysis {
   quality: number;
 }
 
+/**
+ * Network configuration interface
+ */
+interface MCPNetworkConfig {
+  mode: 'private' | 'protected' | 'public';
+  hdAddressing: {
+    enabled: boolean;
+    seed?: string;
+    network: 'mainnet' | 'testnet' | 'regtest';
+    deterministicRouting: boolean;
+  };
+  security: {
+    encryption: boolean;
+    authentication: boolean;
+    accessControl: boolean;
+  };
+}
+
+/**
+ * Consolidated LSP/AST MCP Server with HD Addressing Integration
+ */
 class LSPASTMCPServerHD {
   private server: Server;
   private h2gnn!: EnhancedH2GNN;
@@ -56,8 +77,24 @@ class LSPASTMCPServerHD {
   private hdAddressing: BIP32HDAddressing | null = null;
   private mcpIntegration: H2GNNMCPIntegration | null = null;
   private h2gnnAddress: H2GNNAddress | null = null;
+  private networkConfig: MCPNetworkConfig;
 
-  constructor() {
+  constructor(networkConfig?: Partial<MCPNetworkConfig>) {
+    this.networkConfig = {
+      mode: 'protected',
+      hdAddressing: {
+        enabled: true,
+        seed: 'lsp-ast-mcp-server-seed',
+        network: 'testnet',
+        deterministicRouting: true
+      },
+      security: {
+        encryption: true,
+        authentication: true,
+        accessControl: true
+      },
+      ...networkConfig
+    };
     this.server = new Server(
       {
         name: "lsp-ast-mcp-server-hd",

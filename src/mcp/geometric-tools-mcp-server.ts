@@ -23,15 +23,50 @@ import {
 import { H2GNNBroker } from '../core/pubsub-architecture.js';
 import { HyperbolicProjectionEngine, H2GNNEmbedding } from '../math/hyperbolic-projection-engine.js';
 import { RealTimeCollaborationEngine } from '../integration/real-time-collaboration.js';
+import { CentralizedH2GNNManager } from '../core/centralized-h2gnn-config.js';
 
-// 🌐 MCP GEO-INTELLIGENCE TOOLS
+/**
+ * Network configuration interface
+ */
+interface MCPNetworkConfig {
+  mode: 'private' | 'protected' | 'public';
+  hdAddressing: {
+    enabled: boolean;
+    seed?: string;
+    network: 'mainnet' | 'testnet' | 'regtest';
+    deterministicRouting: boolean;
+  };
+  security: {
+    encryption: boolean;
+    authentication: boolean;
+    accessControl: boolean;
+  };
+}
+
+// 🌐 Consolidated Geometric Tools MCP Server
 export class MCPGeoIntelligenceServer {
   private server: Server;
   private broker: H2GNNBroker;
   private projectionEngine: HyperbolicProjectionEngine;
   private collaborationEngine: RealTimeCollaborationEngine;
+  private networkConfig: MCPNetworkConfig;
 
-  constructor() {
+  constructor(networkConfig?: Partial<MCPNetworkConfig>) {
+    this.networkConfig = {
+      mode: 'protected',
+      hdAddressing: {
+        enabled: true,
+        seed: 'geometric-tools-mcp-server-seed',
+        network: 'testnet',
+        deterministicRouting: true
+      },
+      security: {
+        encryption: true,
+        authentication: true,
+        accessControl: true
+      },
+      ...networkConfig
+    };
     this.server = new Server(
       {
         name: "mcp-geo-intelligence-server",
@@ -46,6 +81,17 @@ export class MCPGeoIntelligenceServer {
       }
     );
 
+    // Initialize H2GNN system with default configuration
+    const defaultConfig = {
+      embeddingDim: 64,
+      numLayers: 3,
+      curvature: -1,
+      storagePath: './persistence',
+      maxMemories: 10000,
+      consolidationThreshold: 100
+    };
+    
+    CentralizedH2GNNManager.getInstance(defaultConfig);
     this.broker = new H2GNNBroker();
     this.projectionEngine = new HyperbolicProjectionEngine();
     this.collaborationEngine = new RealTimeCollaborationEngine();
@@ -886,4 +932,4 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   system.startSystem().catch(console.error);
 }
 
-export { MCPGeoIntelligenceServer, IntegratedGeoIntelligenceSystem };
+// Class is already exported above

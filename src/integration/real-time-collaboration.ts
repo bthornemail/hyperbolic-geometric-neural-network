@@ -7,6 +7,13 @@
  * for the H²GNN visualization system
  */
 
+// Fallback for requestAnimationFrame in Node.js
+if (typeof requestAnimationFrame === 'undefined') {
+  global.requestAnimationFrame = (callback: FrameRequestCallback) => {
+    return setTimeout(callback, 16); // ~60fps
+  };
+}
+
 import { EventEmitter } from 'events';
 import { H2GNNBroker, PubSubMessage } from '../core/pubsub-architecture.js';
 
@@ -810,12 +817,3 @@ class UpdateQueue {
   }
 }
 
-// Export for immediate use
-export {
-  RealTimeCollaborationEngine,
-  CollaborationSession,
-  RealTimeSyncEngine,
-  UserPresenceManager,
-  LiveTrainingDashboard,
-  RealTimeAnimator
-};

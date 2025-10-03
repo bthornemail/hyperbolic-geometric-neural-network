@@ -75,7 +75,7 @@ export class LSPASTIntegration {
       console.log("🚀 Initializing LSP + AST Integration...");
       
       // Start the LSP-AST MCP server
-      this.serverProcess = spawn('npx', ['tsx', 'src/mcp/lsp-ast-mcp-server-hd.ts'], {
+      this.serverProcess = spawn('npx', ['tsx', 'src/mcp/lsp-ast-mcp-server.ts'], {
         stdio: ['pipe', 'pipe', 'pipe'],
         cwd: process.cwd()
       });

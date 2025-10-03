@@ -281,11 +281,8 @@ export class H2GNNBroker extends EventEmitter {
     if (this.isInitialized) return;
     
     try {
-      // Initialize H²GNN manager
-      await this.h2gnnManager.initialize();
-      
-      // Initialize shared learning database
-      await this.sharedLearningDB.initialize();
+      // H²GNN manager is already initialized in constructor
+      // Shared learning database is already initialized in constructor
       
       this.isInitialized = true;
       console.log('🏗️ H²GNN Broker initialized successfully');
@@ -620,10 +617,3 @@ export class IntegratedH2GNNSystem {
   }
 }
 
-// Export for cross-platform usage
-export {
-  H2GNNBroker,
-  H2GNNProvider, 
-  H2GNNConsumer,
-  IntegratedH2GNNSystem
-};

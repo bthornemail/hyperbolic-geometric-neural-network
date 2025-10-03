@@ -36,11 +36,11 @@ import {
   RealTimeAnimator
 } from './real-time-collaboration.js';
 
-// MCP Geo-Intelligence Tools
-import { 
-  MCPGeoIntelligenceServer,
-  IntegratedGeoIntelligenceSystem 
-} from '../mcp.restored.old/mcp-geo-tools.js';
+// Consolidated MCP Services
+import { MCPGeoIntelligenceServer } from '../mcp/geometric-tools-mcp-server.js';
+import { H2GNNMCPServer } from '../mcp/h2gnn-mcp-server.js';
+import { KnowledgeGraphMCPServerHD } from '../mcp/knowledge-graph-mcp-server.js';
+import { LSPASTMCPServerHD } from '../mcp/lsp-ast-mcp-server.js';
 
 // D3 Visualization
 import { 
