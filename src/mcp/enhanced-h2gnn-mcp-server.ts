@@ -160,6 +160,21 @@ class EnhancedH2GNNMCPServerHD {
                   default: 100
                 }
               }
+            },
+            metadata: {
+              priority: 1,
+              category: "system_initialization",
+              useCases: [
+                "Starting any H²GNN analysis session",
+                "Initializing the system before other operations",
+                "Setting up persistence and learning capabilities"
+              ],
+              commonMistakes: [
+                "Calling other tools before initialization",
+                "Skipping this step in the workflow",
+                "Not providing required parameters"
+              ],
+              context: "MUST be called first in any H²GNN workflow"
             }
           },
           {
@@ -187,6 +202,21 @@ class EnhancedH2GNNMCPServerHD {
                 }
               },
               required: ["concept"]
+            },
+            metadata: {
+              priority: 4,
+              category: "learning",
+              useCases: [
+                "Storing new knowledge in the system",
+                "Learning from code analysis results",
+                "Building persistent memory of concepts"
+              ],
+              commonMistakes: [
+                "Not learning from analysis results",
+                "Skipping concept learning",
+                "Not providing proper context"
+              ],
+              context: "Critical for building persistent knowledge"
             }
           },
           {
@@ -206,6 +236,21 @@ class EnhancedH2GNNMCPServerHD {
                 }
               },
               required: ["query"]
+            },
+            metadata: {
+              priority: 5,
+              category: "memory_retrieval",
+              useCases: [
+                "Finding relevant past knowledge",
+                "Context retrieval for current tasks",
+                "Building on previous learning"
+              ],
+              commonMistakes: [
+                "Not retrieving relevant memories",
+                "Ignoring existing knowledge",
+                "Starting from scratch each time"
+              ],
+              context: "Essential for leveraging existing knowledge"
             }
           },
           {

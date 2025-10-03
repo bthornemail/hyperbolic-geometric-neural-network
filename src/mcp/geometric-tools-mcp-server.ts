@@ -127,6 +127,21 @@ export class MCPGeoIntelligenceServer {
                   default: true
                 }
               }
+            },
+            metadata: {
+              priority: 11,
+              category: "geographic_visualization",
+              useCases: [
+                "Creating geographic visualizations",
+                "Mapping hyperbolic embeddings to geographic space",
+                "Generating interactive maps with semantic filtering"
+              ],
+              commonMistakes: [
+                "Not using semantic filtering when needed",
+                "Choosing wrong projection type",
+                "Skipping hyperbolic metrics"
+              ],
+              context: "Use for geographic visualization and mapping"
             }
           },
           {
@@ -467,7 +482,7 @@ export class MCPGeoIntelligenceServer {
   private async getGeoJSONMap(args: any): Promise<any> {
     const { semantic_filter, projection_type, include_hyperbolic_metrics } = args;
     
-    console.log(`🌐 Generating GeoJSON map with filter: ${semantic_filter}`);
+    console.log(`Generating GeoJSON map with filter: ${semantic_filter}`);
     
     // Get embeddings from H²GNN
     const embeddings = await this.getHyperbolicEmbeddings();
@@ -640,7 +655,7 @@ export class MCPGeoIntelligenceServer {
   private async generateGeographicInsights(args: any): Promise<any> {
     const { analysis_type, focus_region, include_recommendations } = args;
     
-    console.log(`🧠 Generating geographic insights: ${analysis_type}`);
+    console.log(`Generating geographic insights: ${analysis_type}`);
     
     // Perform the requested analysis
     const insights = await this.performGeographicAnalysis(analysis_type, focus_region);
@@ -897,7 +912,7 @@ export class MCPGeoIntelligenceServer {
   async start(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.log("🌐 MCP Geo-Intelligence Server running on stdio");
+    console.log("MCP Geo-Intelligence Server running on stdio");
   }
 }
 
@@ -919,10 +934,10 @@ export class IntegratedGeoIntelligenceSystem {
     await this.geoServer.start();
     await this.collaborationEngine.joinSession();
     
-    console.log('🌐 Integrated Geo-Intelligence System Started');
-    console.log('🗺️ MCP Geo-Tools: ACTIVE');
-    console.log('🤝 Real-time Collaboration: ENABLED');
-    console.log('🧠 H²GNN Intelligence: OPERATIONAL');
+    console.log('Integrated Geo-Intelligence System Started');
+    console.log('MCP Geo-Tools: ACTIVE');
+    console.log('Real-time Collaboration: ENABLED');
+    console.log('H2GNN Intelligence: OPERATIONAL');
   }
 }
 

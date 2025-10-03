@@ -32,7 +32,7 @@ import {
 import WordNetModule from '../datasets/wordnet-integration.js';
 import AgentWorkflows from '../workflows/agent-workflows.js';
 import IntegratedKnowledgeBaseCreator from '../generation/knowledge-base-integrated.js';
-import IntelligentCodeGenerator from '../generation/intelligent-code-generator.js';
+import { IntelligentCodeGenerator } from '../generation/intelligent-code-generator.js';
 
 // Fallback implementations for missing modules
 class FallbackEnhancedH2GNN {

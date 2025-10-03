@@ -223,6 +223,21 @@ class LSPASTMCPServerHD {
                 }
               },
               required: ["code"]
+            },
+            metadata: {
+              priority: 7,
+              category: "code_analysis",
+              useCases: [
+                "Deep code understanding",
+                "Syntax analysis and parsing",
+                "Code structure examination"
+              ],
+              commonMistakes: [
+                "Not analyzing code syntax",
+                "Skipping AST analysis",
+                "Not understanding code structure"
+              ],
+              context: "Essential for deep code comprehension"
             }
           },
           {

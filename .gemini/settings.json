@@ -1,10 +1,71 @@
 {
+  "toolFirstPolicy": {
+    "enabled": true,
+    "mandatoryTools": [
+      "initialize_enhanced_h2gnn_hd",
+      "get_system_status_hd",
+      "get_learning_progress_hd",
+      "learn_concept_hd",
+      "retrieve_memories_hd",
+      "analyze_path_to_knowledge_graph_hd",
+      "analyze_code_ast_hd",
+      "consolidate_memories_hd"
+    ],
+    "workflow": {
+      "step1": "Initialize H²GNN system",
+      "step2": "Check system status",
+      "step3": "Check learning progress",
+      "step4": "Learn concepts",
+      "step5": "Retrieve memories",
+      "step6": "Analyze with knowledge graph",
+      "step7": "Analyze with AST",
+      "step8": "Consolidate memories"
+    },
+    "forbiddenActions": [
+      "Manual analysis without tools",
+      "Manual learning without persistence",
+      "Manual memory management",
+      "Manual geometric analysis"
+    ]
+  },
+  "toolSelectionOptimization": {
+    "enabled": true,
+    "strategies": [
+      "priority_based_selection",
+      "context_aware_matching",
+      "use_case_optimization",
+      "common_mistake_prevention"
+    ],
+    "selectionCriteria": {
+      "priority": "Higher priority tools selected first",
+      "mandatory": "Mandatory tools must be used",
+      "context": "Context determines tool relevance",
+      "useCases": "Use cases guide tool selection",
+      "commonMistakes": "Avoid common mistakes"
+    },
+    "optimizationFeatures": {
+      "streamlinedDescriptions": "Concise, clear tool descriptions",
+      "useCaseGuidance": "Specific use cases for each tool",
+      "mistakePrevention": "Common mistakes to avoid",
+      "contextAwareness": "Context-specific tool selection",
+      "priorityOrdering": "Priority-based tool ordering"
+    }
+  },
+  "h2gnnIntegration": {
+    "enabled": true,
+    "persistencePath": "./persistence",
+    "maxMemories": 10000,
+    "consolidationThreshold": 100,
+    "embeddingDim": 64,
+    "numLayers": 3,
+    "curvature": -1
+  },
   "inputs": [
     {
       "id": "memory_file_path",
       "type": "promptString",
       "description": "Path to the memory storage file",
-      "default": "./data/memory.json",
+      "default": "./persistence/memories",
       "password": false
     },
     {
@@ -12,6 +73,13 @@
       "type": "promptString",
       "description": "Redis connection URL",
       "default": "redis://127.0.0.1:6379",
+      "password": false
+    },
+    {
+      "id": "h2gnn_storage_path",
+      "type": "promptString",
+      "description": "H²GNN persistence storage path",
+      "default": "./persistence",
       "password": false
     }
   ],
@@ -147,39 +215,335 @@
   },
   "tools": [
     {
+      "name": "initialize_enhanced_h2gnn_hd",
+      "description": "Initialize Enhanced H²GNN with HD addressing and learning capabilities",
+      "server": "enhanced-h2gnn",
+      "priority": 1,
+      "mandatory": true,
+      "useCases": [
+        "Starting any H²GNN analysis session",
+        "Initializing the system before other operations",
+        "Setting up persistence and learning capabilities"
+      ],
+      "commonMistakes": [
+        "Calling other tools before initialization",
+        "Skipping this step in the workflow",
+        "Not providing required parameters"
+      ],
+      "context": "MUST be called first in any H²GNN workflow"
+    },
+    {
+      "name": "get_system_status_hd",
+      "description": "Get comprehensive system status including HD addressing info",
+      "server": "enhanced-h2gnn",
+      "priority": 2,
+      "mandatory": true,
+      "useCases": [
+        "Checking system health before operations",
+        "Verifying initialization was successful",
+        "Monitoring system performance"
+      ],
+      "commonMistakes": [
+        "Not checking status after initialization",
+        "Ignoring system health warnings",
+        "Proceeding without status verification"
+      ],
+      "context": "Required after initialization to verify system state"
+    },
+    {
+      "name": "get_learning_progress_hd",
+      "description": "Get learning progress for all domains using HD addressing",
+      "server": "enhanced-h2gnn",
+      "priority": 3,
+      "mandatory": true,
+      "useCases": [
+        "Understanding current learning state",
+        "Checking domain mastery levels",
+        "Planning learning strategies"
+      ],
+      "commonMistakes": [
+        "Not checking progress before learning",
+        "Ignoring domain-specific progress",
+        "Not using progress for context"
+      ],
+      "context": "Essential for understanding system learning state"
+    },
+    {
+      "name": "learn_concept_hd",
+      "description": "Learn a new concept with HD addressing and enhanced memory",
+      "server": "enhanced-h2gnn",
+      "priority": 4,
+      "mandatory": true,
+      "useCases": [
+        "Storing new knowledge in the system",
+        "Learning from code analysis results",
+        "Building persistent memory of concepts"
+      ],
+      "commonMistakes": [
+        "Not learning from analysis results",
+        "Skipping concept learning",
+        "Not providing proper context"
+      ],
+      "context": "Critical for building persistent knowledge"
+    },
+    {
+      "name": "retrieve_memories_hd",
+      "description": "Retrieve relevant memories using HD addressing",
+      "server": "enhanced-h2gnn",
+      "priority": 5,
+      "mandatory": true,
+      "useCases": [
+        "Finding relevant past knowledge",
+        "Context retrieval for current tasks",
+        "Building on previous learning"
+      ],
+      "commonMistakes": [
+        "Not retrieving relevant memories",
+        "Ignoring existing knowledge",
+        "Starting from scratch each time"
+      ],
+      "context": "Essential for leveraging existing knowledge"
+    },
+    {
+      "name": "analyze_path_to_knowledge_graph_hd",
+      "description": "Analyze files/folders and create knowledge graph with HD addressing",
+      "server": "knowledge-graph",
+      "priority": 6,
+      "mandatory": true,
+      "useCases": [
+        "Understanding codebase structure",
+        "Building knowledge graphs from code",
+        "Analyzing file relationships"
+      ],
+      "commonMistakes": [
+        "Not analyzing codebase structure",
+        "Skipping knowledge graph creation",
+        "Not using recursive analysis"
+      ],
+      "context": "Required for comprehensive codebase understanding"
+    },
+    {
+      "name": "analyze_code_ast_hd",
+      "description": "Analyze code using Abstract Syntax Tree with HD addressing",
+      "server": "lsp-ast",
+      "priority": 7,
+      "mandatory": true,
+      "useCases": [
+        "Deep code understanding",
+        "Syntax analysis and parsing",
+        "Code structure examination"
+      ],
+      "commonMistakes": [
+        "Not analyzing code syntax",
+        "Skipping AST analysis",
+        "Not understanding code structure"
+      ],
+      "context": "Essential for deep code comprehension"
+    },
+    {
+      "name": "consolidate_memories_hd",
+      "description": "Manually trigger memory consolidation with HD addressing",
+      "server": "enhanced-h2gnn",
+      "priority": 8,
+      "mandatory": true,
+      "useCases": [
+        "Optimizing memory storage",
+        "Consolidating learning sessions",
+        "Improving system performance"
+      ],
+      "commonMistakes": [
+        "Not consolidating memories",
+        "Skipping memory optimization",
+        "Not ending learning sessions properly"
+      ],
+      "context": "Required for memory optimization and cleanup"
+    },
+    {
+      "name": "generate_code_from_graph_hd",
+      "description": "Generate code based on knowledge graph insights with HD addressing",
+      "server": "knowledge-graph",
+      "priority": 9,
+      "useCases": [
+        "Creating new functions based on patterns",
+        "Generating code from knowledge graph",
+        "Automated code generation"
+      ],
+      "commonMistakes": [
+        "Generating code without knowledge graph",
+        "Not using graph insights",
+        "Skipping code generation"
+      ],
+      "context": "Use for intelligent code generation"
+    },
+    {
+      "name": "generate_documentation_from_graph_hd",
+      "description": "Generate documentation from knowledge graph with HD addressing",
+      "server": "knowledge-graph",
+      "priority": 10,
+      "useCases": [
+        "Creating comprehensive documentation",
+        "Generating docs from knowledge graph",
+        "Automated documentation creation"
+      ],
+      "commonMistakes": [
+        "Not generating documentation",
+        "Skipping doc generation",
+        "Not using knowledge graph insights"
+      ],
+      "context": "Use for intelligent documentation generation"
+    },
+    {
+      "name": "analyze_geographic_clusters",
+      "description": "Analyze geographic clustering patterns using hyperbolic geometry",
+      "server": "geometric-tools-mcp-server",
+      "priority": 11,
+      "useCases": [
+        "Geographic pattern analysis",
+        "Hyperbolic geometry clustering",
+        "Spatial relationship understanding"
+      ],
+      "commonMistakes": [
+        "Not using geometric analysis",
+        "Skipping spatial analysis",
+        "Ignoring hyperbolic geometry"
+      ],
+      "context": "Use for geometric and spatial analysis"
+    },
+    {
+      "name": "generate_geographic_insights",
+      "description": "Generate insights about geographic patterns using H²GNN analysis",
+      "server": "geometric-tools-mcp-server",
+      "priority": 12,
+      "useCases": [
+        "Creating geographic insights",
+        "Generating spatial recommendations",
+        "Understanding geographic patterns"
+      ],
+      "commonMistakes": [
+        "Not generating geographic insights",
+        "Skipping spatial insights",
+        "Not using H²GNN analysis"
+      ],
+      "context": "Use for geographic insight generation"
+    },
+    {
       "name": "initialize_wordnet",
       "description": "Initialize WordNet processor with hyperbolic embeddings",
-      "server": "h2gnn"
+      "server": "h2gnn",
+      "priority": 13,
+      "useCases": [
+        "Setting up WordNet processing",
+        "Initializing semantic analysis",
+        "Preparing hierarchical knowledge"
+      ],
+      "commonMistakes": [
+        "Not initializing WordNet",
+        "Skipping semantic setup",
+        "Not preparing hierarchical knowledge"
+      ],
+      "context": "Use for semantic and hierarchical analysis"
     },
     {
       "name": "query_wordnet",
       "description": "Query WordNet for concept information and relationships",
-      "server": "h2gnn"
+      "server": "h2gnn",
+      "priority": 14,
+      "useCases": [
+        "Finding concept relationships",
+        "Semantic query processing",
+        "Hierarchical knowledge retrieval"
+      ],
+      "commonMistakes": [
+        "Not querying WordNet",
+        "Skipping semantic queries",
+        "Not using hierarchical knowledge"
+      ],
+      "context": "Use for semantic and hierarchical queries"
     },
     {
       "name": "compute_hyperbolic_distance",
       "description": "Compute hyperbolic distance between two concepts",
-      "server": "h2gnn"
+      "server": "h2gnn",
+      "priority": 15,
+      "useCases": [
+        "Measuring concept similarity",
+        "Hyperbolic distance calculations",
+        "Semantic relationship analysis"
+      ],
+      "commonMistakes": [
+        "Not computing distances",
+        "Skipping similarity analysis",
+        "Not using hyperbolic geometry"
+      ],
+      "context": "Use for concept similarity and distance analysis"
     },
     {
       "name": "run_hierarchical_qa",
       "description": "Run hierarchical Q&A workflow using H²GNN",
-      "server": "h2gnn"
+      "server": "h2gnn",
+      "priority": 16,
+      "useCases": [
+        "Hierarchical question answering",
+        "Multi-level reasoning",
+        "Structured Q&A processing"
+      ],
+      "commonMistakes": [
+        "Not using hierarchical Q&A",
+        "Skipping structured reasoning",
+        "Not leveraging H²GNN workflows"
+      ],
+      "context": "Use for hierarchical reasoning and Q&A"
     },
     {
       "name": "explore_semantic_space",
       "description": "Explore semantic relationships in hyperbolic space",
-      "server": "h2gnn"
+      "server": "h2gnn",
+      "priority": 17,
+      "useCases": [
+        "Semantic space exploration",
+        "Concept relationship discovery",
+        "Hyperbolic space navigation"
+      ],
+      "commonMistakes": [
+        "Not exploring semantic space",
+        "Skipping relationship discovery",
+        "Not using hyperbolic space"
+      ],
+      "context": "Use for semantic exploration and discovery"
     },
     {
       "name": "train_concept_embeddings",
       "description": "Train hyperbolic embeddings for new concepts",
-      "server": "h2gnn"
+      "server": "h2gnn",
+      "priority": 18,
+      "useCases": [
+        "Training new concept embeddings",
+        "Learning concept representations",
+        "Building semantic models"
+      ],
+      "commonMistakes": [
+        "Not training embeddings",
+        "Skipping concept learning",
+        "Not building semantic models"
+      ],
+      "context": "Use for concept embedding training"
     },
     {
       "name": "analyze_hierarchy",
       "description": "Analyze hierarchical structure using hyperbolic geometry",
-      "server": "h2gnn"
+      "server": "h2gnn",
+      "priority": 19,
+      "useCases": [
+        "Hierarchical structure analysis",
+        "Tree structure examination",
+        "Hyperbolic hierarchy understanding"
+      ],
+      "commonMistakes": [
+        "Not analyzing hierarchies",
+        "Skipping structure analysis",
+        "Not using hyperbolic geometry"
+      ],
+      "context": "Use for hierarchical structure analysis"
     }
   ],
   "resources": [
