@@ -26,7 +26,7 @@ async function runEnhancedH2GNNLearningDemo(): Promise<void> {
   };
 
   const persistenceConfig: PersistenceConfig = {
-    storagePath: './h2gnn-persistence',
+    storagePath: './persistence',
     maxMemories: 1000,
     consolidationThreshold: 10,
     retrievalStrategy: 'hybrid',

@@ -91,7 +91,7 @@ The integrated improvements demo successfully demonstrated:
 
 #### **✅ Centralized Configuration**
 - **Embedding dimension**: 64
-- **Storage path**: ./h2gnn-persistence
+- **Storage path**: ./persistence
 - **Max memories**: 10,000
 - **Consolidation threshold**: 50
 

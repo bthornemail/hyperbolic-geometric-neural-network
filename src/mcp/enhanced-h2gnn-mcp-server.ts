@@ -97,7 +97,7 @@ class EnhancedH2GNNMCPServer {
                 storagePath: {
                   type: "string",
                   description: "Path for persistence storage",
-                  default: "./h2gnn-persistence"
+                  default: "./persistence"
                 },
                 maxMemories: {
                   type: "number",
@@ -362,7 +362,7 @@ class EnhancedH2GNNMCPServer {
     };
 
     const persistenceConfig: PersistenceConfig = {
-      storagePath: args.storagePath || "./h2gnn-persistence",
+      storagePath: args.storagePath || "./persistence",
       maxMemories: args.maxMemories || 10000,
       consolidationThreshold: args.consolidationThreshold || 100,
       retrievalStrategy: 'hybrid',

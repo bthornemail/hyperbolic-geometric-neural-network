@@ -1,8 +1,15 @@
 {
   "mcpServers": {
     "h2gnn": {
-      "command": "node",
-      "args": ["src/mcp/h2gnn-mcp-server.js"],
+      "command": "tsx",
+      "args": ["/home/main/devops/h2gnn/project/src/mcp/h2gnn-mcp-server.ts"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "knowledge-graph": {
+      "command": "tsx",
+      "args": ["/home/main/devops/h2gnn/project/src/mcp/knowledge-graph-mcp.ts"],
       "env": {
         "NODE_ENV": "production"
       }

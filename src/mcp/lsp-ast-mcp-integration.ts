@@ -617,7 +617,7 @@ class MCPLSPIntegration {
     };
 
     const persistenceConfig: PersistenceConfig = {
-      storagePath: './lsp-ast-persistence',
+      storagePath: './persistence',
       maxMemories: 10000,
       consolidationThreshold: 50,
       retrievalStrategy: 'hybrid',

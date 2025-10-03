@@ -173,7 +173,7 @@ async function demonstrateProductionLLMIntegration(): Promise<void> {
   };
   
   const persistenceConfig = {
-    storagePath: './h2gnn-persistence',
+    storagePath: './persistence',
     maxMemories: 10000,
     consolidationThreshold: 100,
     retrievalStrategy: 'hybrid' as const,

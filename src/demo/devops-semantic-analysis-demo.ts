@@ -60,7 +60,7 @@ class DevOpsSemanticAnalyzer {
     };
 
     const persistenceConfig: PersistenceConfig = {
-      storagePath: './devops-persistence',
+      storagePath: './persistence',
       maxMemories: 10000,
       consolidationThreshold: 50,
       retrievalStrategy: 'hybrid',

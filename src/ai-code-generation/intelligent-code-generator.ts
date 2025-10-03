@@ -78,7 +78,7 @@ class IntelligentCodeGenerator {
     };
 
     const persistenceConfig: PersistenceConfig = {
-      storagePath: './code-learning-persistence',
+      storagePath: './persistence',
       maxMemories: 50000,
       consolidationThreshold: 100,
       retrievalStrategy: 'hybrid',

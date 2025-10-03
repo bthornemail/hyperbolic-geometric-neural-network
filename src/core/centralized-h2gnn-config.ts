@@ -247,7 +247,7 @@ export const DEFAULT_H2GNN_CONFIG: CentralizedH2GNNConfig = {
   embeddingDim: 64,
   numLayers: 3,
   curvature: -1.0,
-  storagePath: './h2gnn-persistence',
+  storagePath: './persistence',
   maxMemories: 10000,
   consolidationThreshold: 50,
   retrievalStrategy: 'hybrid',

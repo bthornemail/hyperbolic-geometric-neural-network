@@ -1,0 +1,82 @@
+{
+  "id": "conflict_1759444983228_react-hooks",
+  "teamId": "backend-team",
+  "concept": "react-hooks",
+  "conflictingMemories": [
+    {
+      "id": "shared_memory_1_1759444983224",
+      "timestamp": 1759444983224,
+      "concept": "react-hooks",
+      "embedding": [
+        0.1,
+        0.2,
+        0.3
+      ],
+      "context": {
+        "team": "frontend-team",
+        "contributor": "alice",
+        "sharedFrom": "frontend-team",
+        "sharedTo": "backend-team",
+        "originalId": "memory_1"
+      },
+      "performance": 0.8,
+      "confidence": 0.9,
+      "relationships": [
+        "react",
+        "hooks"
+      ],
+      "consolidated": false
+    },
+    {
+      "id": "shared_memory_1_1759444981398",
+      "timestamp": 1759444981398,
+      "concept": "react-hooks",
+      "embedding": [
+        0.1,
+        0.2,
+        0.3
+      ],
+      "context": {
+        "team": "frontend-team",
+        "contributor": "alice",
+        "sharedFrom": "frontend-team",
+        "sharedTo": "backend-team",
+        "originalId": "memory_1"
+      },
+      "performance": 0.8,
+      "confidence": 0.9,
+      "relationships": [
+        "react",
+        "hooks"
+      ],
+      "consolidated": false
+    },
+    {
+      "id": "shared_memory_1_1759444982154",
+      "timestamp": 1759444982154,
+      "concept": "react-hooks",
+      "embedding": [
+        0.1,
+        0.2,
+        0.3
+      ],
+      "context": {
+        "team": "frontend-team",
+        "contributor": "alice",
+        "sharedFrom": "frontend-team",
+        "sharedTo": "backend-team",
+        "originalId": "memory_1"
+      },
+      "performance": 0.8,
+      "confidence": 0.9,
+      "relationships": [
+        "react",
+        "hooks"
+      ],
+      "consolidated": false
+    }
+  ],
+  "resolution": "merge",
+  "resolved": false,
+  "createdAt": 1759444983228
+}

@@ -1,0 +1,136 @@
+{
+  "mcpServers": {
+    "h2gnn": {
+      "command": "tsx",
+      "args": ["/home/main/devops/h2gnn/project/src/mcp/h2gnn-mcp-server.ts"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "enhanced-h2gnn": {
+      "command": "tsx",
+      "args": ["/home/main/devops/h2gnn/project/src/mcp/enhanced-h2gnn-mcp-server.ts"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "knowledge-graph": {
+      "command": "tsx",
+      "args": ["/home/main/devops/h2gnn/project/src/mcp/knowledge-graph-mcp.ts"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "lsp-ast": {
+      "command": "tsx",
+      "args": ["/home/main/devops/h2gnn/project/src/mcp/lsp-ast-mcp-server.ts"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "redis": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-redis"],
+      "env": {
+        "REDIS_URL": "redis://127.0.0.1:6379"
+      }
+    },
+    "obsidian-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/home/main/devops/universal-life-protocol/packages/universal-life-vault/dist/obsidian-mcp.js"]
+    },
+    "identity-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/home/main/devops/universal-life-protocol/packages/universal-life-vault/dist/identity-mcp.js"]
+    }
+  },
+  "tools": [
+    {
+      "name": "initialize_wordnet",
+      "description": "Initialize WordNet processor with hyperbolic embeddings",
+      "server": "h2gnn"
+    },
+    {
+      "name": "query_wordnet", 
+      "description": "Query WordNet for concept information and relationships",
+      "server": "h2gnn"
+    },
+    {
+      "name": "compute_hyperbolic_distance",
+      "description": "Compute hyperbolic distance between two concepts",
+      "server": "h2gnn"
+    },
+    {
+      "name": "run_hierarchical_qa",
+      "description": "Run hierarchical Q&A workflow using H²GNN",
+      "server": "h2gnn"
+    },
+    {
+      "name": "explore_semantic_space",
+      "description": "Explore semantic relationships in hyperbolic space",
+      "server": "h2gnn"
+    },
+    {
+      "name": "train_concept_embeddings",
+      "description": "Train hyperbolic embeddings for new concepts",
+      "server": "h2gnn"
+    },
+    {
+      "name": "analyze_hierarchy",
+      "description": "Analyze hierarchical structure using hyperbolic geometry",
+      "server": "h2gnn"
+    }
+  ],
+  "resources": [
+    {
+      "uri": "h2gnn://wordnet/synsets",
+      "name": "WordNet Synsets",
+      "description": "All loaded WordNet synsets with embeddings",
+      "server": "h2gnn"
+    },
+    {
+      "uri": "h2gnn://wordnet/hierarchy",
+      "name": "WordNet Hierarchy", 
+      "description": "Hierarchical structure of WordNet concepts",
+      "server": "h2gnn"
+    },
+    {
+      "uri": "h2gnn://embeddings/all",
+      "name": "Hyperbolic Embeddings",
+      "description": "All hyperbolic embeddings in the system",
+      "server": "h2gnn"
+    },
+    {
+      "uri": "h2gnn://workflows/active",
+      "name": "Active Workflows",
+      "description": "Currently running PocketFlow workflows",
+      "server": "h2gnn"
+    },
+    {
+      "uri": "h2gnn://system/status",
+      "name": "System Status",
+      "description": "Current status of H²GNN system components",
+      "server": "h2gnn"
+    }
+  ],
+  "prompts": [
+    {
+      "name": "concept_analysis",
+      "description": "Analyze a concept using hyperbolic geometry and WordNet",
+      "server": "h2gnn"
+    },
+    {
+      "name": "hierarchical_reasoning",
+      "description": "Perform hierarchical reasoning about concept relationships",
+      "server": "h2gnn"
+    },
+    {
+      "name": "semantic_exploration",
+      "description": "Guide semantic exploration in hyperbolic space",
+      "server": "h2gnn"
+    }
+  ]
+}
