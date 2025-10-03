@@ -20,10 +20,10 @@ import {
   GetPromptRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
-import EnhancedH2GNN, { PersistenceConfig } from '../core/enhanced-h2gnn';
-import { HyperbolicGeometricHGN } from '../core/H2GNN';
-import { AdvancedASTAnalyzer, AdvancedAnalysisResult } from '../analysis/advanced-ast-analyzer';
+import EnhancedH2GNN from '../core/enhanced-h2gnn';
+import { AdvancedASTAnalyzer } from '../analysis/advanced-ast-analyzer';
 import { AutomatedRefactoringTool } from '../refactoring/automated-refactoring-tool';
+import { CentralizedH2GNNManager, CentralizedH2GNNConfig } from '../core/centralized-h2gnn-config';
 import * as ts from 'typescript';
 import { parse } from '@babel/parser';
 
@@ -47,7 +47,7 @@ interface ASTAnalysis {
 
 class LSPASTMCPServer {
   private server: Server;
-  private h2gnn: EnhancedH2GNN;
+  private h2gnn!: EnhancedH2GNN;
   private astAnalyzer: AdvancedASTAnalyzer;
   private refactoringTool: AutomatedRefactoringTool;
   private capabilities: LSPCapabilities;
@@ -78,27 +78,30 @@ class LSPASTMCPServer {
     };
 
     this.initializeH2GNN();
+    // Initialize analyzers after H²GNN is set up
     this.astAnalyzer = new AdvancedASTAnalyzer();
     this.refactoringTool = new AutomatedRefactoringTool();
     this.setupHandlers();
   }
 
   private initializeH2GNN(): void {
-    const h2gnnConfig = {
+    const config: CentralizedH2GNNConfig = {
       embeddingDim: 64,
       numLayers: 3,
-      curvature: -1
-    };
-
-    const persistenceConfig: PersistenceConfig = {
+      curvature: -1,
       storagePath: './persistence',
       maxMemories: 10000,
       consolidationThreshold: 50,
       retrievalStrategy: 'hybrid',
-      compressionEnabled: true
+      compressionEnabled: true,
+      learningRate: 0.01,
+      batchSize: 32,
+      maxEpochs: 100
     };
 
-    this.h2gnn = new EnhancedH2GNN(h2gnnConfig, persistenceConfig);
+    // Initialize the centralized H²GNN manager
+    const manager = CentralizedH2GNNManager.getInstance(config);
+    this.h2gnn = manager.getH2GNN();
   }
 
   private setupHandlers(): void {
@@ -457,6 +460,9 @@ class LSPASTMCPServer {
 
       switch (name) {
         case "code_review_prompt":
+          if (!args) {
+            throw new Error('Arguments are required');
+          }
           return {
             description: "Generate a comprehensive code review with suggestions for improvement",
             messages: [
@@ -485,6 +491,9 @@ Focus on actionable feedback that will help improve the code.`
           };
 
         case "refactoring_suggestions_prompt":
+          if (!args) {
+            throw new Error('Arguments are required');
+          }
           return {
             description: "Generate specific refactoring suggestions for code improvement",
             messages: [
@@ -514,6 +523,9 @@ Make the suggestions practical and actionable.`
           };
 
         case "architecture_analysis_prompt":
+          if (!args) {
+            throw new Error('Arguments are required');
+          }
           return {
             description: "Analyze code architecture and suggest improvements",
             messages: [
@@ -521,9 +533,9 @@ Make the suggestions practical and actionable.`
                 role: "user",
                 content: {
                   type: "text",
-                  text: `Please analyze the architecture of the codebase at: ${args.codebase_path}
+                  text: `Please analyze the architecture of the codebase at: ${args!.codebase_path}
 
-Analysis depth: ${args.analysis_depth || 'medium'}
+Analysis depth: ${args!.analysis_depth || 'medium'}
 
 Please provide:
 1. Overall architecture assessment
@@ -573,6 +585,9 @@ Provide actionable insights for improving the overall system architecture.`
 
   // Tool implementations
   private async analyzeCodeAST(args: any): Promise<any> {
+    if (!args) {
+      throw new Error('Arguments are required');
+    }
     const { code, language = 'typescript', filePath } = args;
     
     console.log(`🔍 Analyzing ${language} code AST`);
@@ -634,6 +649,9 @@ ${analysis.suggestions.map((s, i) => `${i + 1}. ${s}`).join('\n')}`
   }
 
   private async provideCompletion(args: any): Promise<any> {
+    if (!args) {
+      throw new Error('Arguments are required');
+    }
     const { code, position, language = 'typescript' } = args;
     
     console.log(`💡 Providing LSP completion at line ${position.line}, character ${position.character}`);
@@ -686,6 +704,9 @@ ${filteredCompletions.slice(0, 3).map(comp => `• ${comp}`).join('\n')}`
   }
 
   private async provideHover(args: any): Promise<any> {
+    if (!args) {
+      throw new Error('Arguments are required');
+    }
     const { code, position, language = 'typescript' } = args;
     
     console.log(`🔍 Providing LSP hover at line ${position.line}, character ${position.character}`);
@@ -719,6 +740,9 @@ ${filteredCompletions.slice(0, 3).map(comp => `• ${comp}`).join('\n')}`
   }
 
   private async provideDiagnostics(args: any): Promise<any> {
+    if (!args) {
+      throw new Error('Arguments are required');
+    }
     const { code, language = 'typescript', filePath } = args;
     
     console.log(`⚠️ Providing LSP diagnostics for ${language} code`);
@@ -751,6 +775,9 @@ ${diagnostics.map((diag, i) =>
   }
 
   private async provideCodeActions(args: any): Promise<any> {
+    if (!args) {
+      throw new Error('Arguments are required');
+    }
     const { code, range, language = 'typescript' } = args;
     
     console.log(`🔧 Providing LSP code actions for range ${range.start.line}-${range.end.line}`);
@@ -921,7 +948,7 @@ ${applied.length > 0 ? `\n🔧 Applied Refactoring: ${applied.length}\n${applied
   }
 
   // Helper methods
-  private extractASTInsights(ast: any, language: string): ASTAnalysis {
+  private extractASTInsights(_ast: any, language: string): ASTAnalysis {
     // Simplified AST analysis
     const nodes: any[] = [];
     const patterns: string[] = [];
@@ -993,7 +1020,7 @@ ${applied.length > 0 ? `\n🔧 Applied Refactoring: ${applied.length}\n${applied
     return descriptions[symbol] || 'A code symbol';
   }
 
-  private getSymbolUsage(symbol: string): string {
+  private getSymbolUsage(_symbol: string): string {
     return `Used in ${Math.floor(Math.random() * 10) + 1} places`;
   }
 
@@ -1037,7 +1064,7 @@ ${applied.length > 0 ? `\n🔧 Applied Refactoring: ${applied.length}\n${applied
     return issues;
   }
 
-  private generateCodeActions(code: string, range: any, language: string): any[] {
+  private generateCodeActions(_code: string, _range: any, _language: string): any[] {
     const actions: any[] = [];
     
     actions.push({

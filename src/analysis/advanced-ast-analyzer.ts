@@ -1105,6 +1105,6 @@ class UserService {
 }
 
 // Run the demo
-demonstrateAdvancedASTAnalysis().catch(console.error);
+// demonstrateAdvancedASTAnalysis().catch(console.error);
 
 // Exports are already defined above in the class and interface definitions

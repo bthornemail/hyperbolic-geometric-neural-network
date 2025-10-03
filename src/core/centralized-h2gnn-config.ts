@@ -355,7 +355,7 @@ async function demonstrateCentralizedH2GNN(): Promise<void> {
   console.log('✅ All components using shared configuration!');
 }
 
-// Run the demo
-demonstrateCentralizedH2GNN().catch(console.error);
+// Run the demo (commented out for production)
+// demonstrateCentralizedH2GNN().catch(console.error);
 
 // Export is already done above in the class definition

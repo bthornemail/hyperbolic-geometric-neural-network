@@ -696,7 +696,7 @@ async function demonstrateSharedLearningDatabase(): Promise<void> {
   await db.disconnect();
 }
 
-// Run the demo
-demonstrateSharedLearningDatabase().catch(console.error);
+// Run the demo (commented out for production)
+// demonstrateSharedLearningDatabase().catch(console.error);
 
 // Exports are already defined above in the class and interface definitions

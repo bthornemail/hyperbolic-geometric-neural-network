@@ -12,6 +12,18 @@ import * as path from 'path';
 import { Vector, createVector } from '../math/hyperbolic-arithmetic.js';
 import { HyperbolicGeometricHGN } from '../core/H2GNN.js';
 import { getSharedH2GNN } from '../core/centralized-h2gnn-config.js';
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import {
+  CallToolRequestSchema,
+  ErrorCode,
+  ListResourcesRequestSchema,
+  ListToolsRequestSchema,
+  McpError,
+  ReadResourceRequestSchema,
+  ListPromptsRequestSchema,
+  GetPromptRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
 
 // Knowledge Graph Types
 export interface KnowledgeNode {
@@ -1860,4 +1872,396 @@ ${nodes.map(node => `## ${node.name}\n${node.metadata.description || 'No descrip
   getKnowledgeGraph(id: string): KnowledgeGraph | null {
     return this.knowledgeGraphs.get(id) || null;
   }
+
+  // Public method to get all knowledge graph IDs
+  getAllKnowledgeGraphs(): string[] {
+    return Array.from(this.knowledgeGraphs.keys());
+  }
+
+  // Public method to get the latest knowledge graph
+  getLatestKnowledgeGraph(): KnowledgeGraph | null {
+    if (this.knowledgeGraphs.size === 0) {
+      return null;
+    }
+    
+    // Get the most recently created graph
+    let latest: KnowledgeGraph | null = null;
+    let latestTime = 0;
+    
+    for (const graph of this.knowledgeGraphs.values()) {
+      const graphTime = graph.metadata.createdAt?.getTime() || 0;
+      if (graphTime > latestTime) {
+        latestTime = graphTime;
+        latest = graph;
+      }
+    }
+    
+    return latest;
+  }
 }
+
+/**
+ * MCP Server for Knowledge Graph
+ */
+
+class KnowledgeGraphMCPServer {
+  private server: Server;
+  private knowledgeGraphMCP: KnowledgeGraphMCP;
+
+  constructor() {
+    this.server = new Server(
+      {
+        name: "knowledge-graph-mcp-server",
+        version: "1.0.0",
+      },
+      {
+        capabilities: {
+          tools: {},
+          resources: {},
+          prompts: {},
+        },
+      }
+    );
+
+    this.knowledgeGraphMCP = new KnowledgeGraphMCP();
+    this.setupHandlers();
+  }
+
+  private setupHandlers(): void {
+    // List tools
+    this.server.setRequestHandler(ListToolsRequestSchema, async () => {
+      return {
+        tools: [
+          {
+            name: "analyze_path_to_knowledge_graph",
+            description: "Analyze files/folders and create knowledge graph with hyperbolic embeddings",
+            inputSchema: {
+              type: "object",
+              properties: {
+                path: {
+                  type: "string",
+                  description: "Path to file or directory to analyze"
+                },
+                recursive: {
+                  type: "boolean",
+                  description: "Whether to analyze subdirectories recursively",
+                  default: true
+                },
+                includeContent: {
+                  type: "boolean",
+                  description: "Whether to include file content in analysis",
+                  default: true
+                },
+                maxDepth: {
+                  type: "number",
+                  description: "Maximum directory depth to analyze",
+                  default: 10
+                },
+                filePatterns: {
+                  type: "array",
+                  items: { type: "string" },
+                  description: "File patterns to include",
+                  default: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.py", "**/*.md"]
+                },
+                excludePatterns: {
+                  type: "array",
+                  items: { type: "string" },
+                  description: "Patterns to exclude",
+                  default: ["**/node_modules/**", "**/dist/**", "**/.git/**"]
+                }
+              },
+              required: ["path"]
+            }
+          },
+          {
+            name: "generate_code_from_graph",
+            description: "Generate code based on knowledge graph insights",
+            inputSchema: {
+              type: "object",
+              properties: {
+                type: {
+                  type: "string",
+                  enum: ["function", "class", "interface", "module", "test", "documentation"],
+                  description: "Type of code to generate"
+                },
+                description: {
+                  type: "string",
+                  description: "Description of what to generate"
+                },
+                graphId: {
+                  type: "string",
+                  description: "Optional knowledge graph ID to use"
+                },
+                context: {
+                  type: "object",
+                  description: "Additional context for generation"
+                },
+                constraints: {
+                  type: "object",
+                  description: "Constraints for generation"
+                }
+              },
+              required: ["type", "description"]
+            }
+          },
+          {
+            name: "generate_documentation_from_graph",
+            description: "Generate documentation from knowledge graph",
+            inputSchema: {
+              type: "object",
+              properties: {
+                type: {
+                  type: "string",
+                  enum: ["api_docs", "readme", "architecture", "tutorial", "changelog", "design_spec"],
+                  description: "Type of documentation to generate"
+                },
+                scope: {
+                  type: "array",
+                  items: { type: "string" },
+                  description: "Node IDs to include in documentation"
+                },
+                format: {
+                  type: "string",
+                  enum: ["markdown", "html", "pdf", "json"],
+                  description: "Output format"
+                },
+                graphId: {
+                  type: "string",
+                  description: "Optional knowledge graph ID to use"
+                },
+                options: {
+                  type: "object",
+                  description: "Additional options for generation"
+                }
+              },
+              required: ["type", "scope", "format"]
+            }
+          },
+          {
+            name: "query_knowledge_graph",
+            description: "Query knowledge graph for insights and relationships",
+            inputSchema: {
+              type: "object",
+              properties: {
+                query: {
+                  type: "string",
+                  description: "Query text to search for"
+                },
+                graphId: {
+                  type: "string",
+                  description: "Optional knowledge graph ID to query"
+                },
+                type: {
+                  type: "string",
+                  enum: ["similarity", "path", "cluster", "dependency", "impact"],
+                  description: "Type of query to perform",
+                  default: "similarity"
+                },
+                limit: {
+                  type: "number",
+                  description: "Maximum number of results",
+                  default: 10
+                }
+              },
+              required: ["query"]
+            }
+          },
+          {
+            name: "get_graph_visualization",
+            description: "Get knowledge graph visualization data",
+            inputSchema: {
+              type: "object",
+              properties: {
+                graphId: {
+                  type: "string",
+                  description: "Optional knowledge graph ID to visualize"
+                },
+                layout: {
+                  type: "string",
+                  enum: ["force", "hierarchical", "circular"],
+                  description: "Layout algorithm to use",
+                  default: "force"
+                }
+              }
+            }
+          }
+        ]
+      };
+    });
+
+    // Call tool
+    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+      const { name, arguments: args } = request.params;
+
+      if (!args) {
+        throw new McpError(ErrorCode.InvalidRequest, "Arguments are required");
+      }
+
+      try {
+        switch (name) {
+          case "analyze_path_to_knowledge_graph":
+            return await this.knowledgeGraphMCP.analyzePathToKnowledgeGraph(args);
+          case "generate_code_from_graph":
+            return await this.knowledgeGraphMCP.generateCodeFromGraph(args);
+          case "generate_documentation_from_graph":
+            return await this.knowledgeGraphMCP.generateDocumentationFromGraph(args);
+          case "query_knowledge_graph":
+            return await this.knowledgeGraphMCP.queryKnowledgeGraph(args);
+          case "get_graph_visualization":
+            return await this.knowledgeGraphMCP.getGraphVisualization(args);
+          default:
+            throw new McpError(
+              ErrorCode.MethodNotFound,
+              `Unknown tool: ${name}`
+            );
+        }
+      } catch (error) {
+        throw new McpError(
+          ErrorCode.InternalError,
+          `Tool execution failed: ${error instanceof Error ? error.message : String(error)}`
+        );
+      }
+    });
+
+    // List resources
+    this.server.setRequestHandler(ListResourcesRequestSchema, async () => {
+      return {
+        resources: [
+          {
+            uri: "h2gnn://knowledge-graphs/list",
+            mimeType: "application/json",
+            name: "Knowledge Graphs List",
+            description: "List of all available knowledge graphs"
+          },
+          {
+            uri: "h2gnn://knowledge-graphs/latest",
+            mimeType: "application/json",
+            name: "Latest Knowledge Graph",
+            description: "Most recently generated knowledge graph"
+          }
+        ]
+      };
+    });
+
+    // Read resource
+    this.server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+      const { uri } = request.params;
+
+      switch (uri) {
+        case "h2gnn://knowledge-graphs/list":
+          const graphs = this.knowledgeGraphMCP.getAllKnowledgeGraphs();
+          return {
+            contents: [
+              {
+                uri,
+                mimeType: "application/json",
+                text: JSON.stringify({ graphs }, null, 2)
+              }
+            ]
+          };
+
+        case "h2gnn://knowledge-graphs/latest":
+          const latestGraph = this.knowledgeGraphMCP.getLatestKnowledgeGraph();
+          return {
+            contents: [
+              {
+                uri,
+                mimeType: "application/json",
+                text: JSON.stringify(latestGraph, null, 2)
+              }
+            ]
+          };
+
+        default:
+          throw new McpError(ErrorCode.InvalidRequest, `Unknown resource: ${uri}`);
+      }
+    });
+
+    // List prompts
+    this.server.setRequestHandler(ListPromptsRequestSchema, async () => {
+      return {
+        prompts: [
+          {
+            name: "graph_analysis",
+            description: "Analyze knowledge graph structure and relationships",
+            arguments: [
+              {
+                name: "graphId",
+                description: "Knowledge graph ID to analyze",
+                required: true
+              }
+            ]
+          },
+          {
+            name: "code_generation",
+            description: "Generate code based on knowledge graph insights",
+            arguments: [
+              {
+                name: "type",
+                description: "Type of code to generate",
+                required: true
+              },
+              {
+                name: "description",
+                description: "Description of what to generate",
+                required: true
+              }
+            ]
+          }
+        ]
+      };
+    });
+
+    // Get prompt
+    this.server.setRequestHandler(GetPromptRequestSchema, async (request) => {
+      const { name, arguments: args } = request.params;
+
+      switch (name) {
+        case "graph_analysis":
+          return {
+            description: `Analyze knowledge graph: ${args?.graphId || 'unknown'}`,
+            messages: [
+              {
+                role: "user",
+                content: {
+                  type: "text",
+                  text: `Please analyze the knowledge graph with ID: ${args?.graphId || 'unknown'}. Provide insights about its structure, relationships, and potential improvements.`
+                }
+              }
+            ]
+          };
+
+        case "code_generation":
+          return {
+            description: `Generate ${args?.type || 'code'} based on knowledge graph`,
+            messages: [
+              {
+                role: "user",
+                content: {
+                  type: "text",
+                  text: `Please generate ${args?.type || 'code'} based on the knowledge graph. Description: ${args?.description || 'No description provided'}.`
+                }
+              }
+            ]
+          };
+
+        default:
+          throw new McpError(ErrorCode.InvalidRequest, `Unknown prompt: ${name}`);
+      }
+    });
+  }
+
+  async start(): Promise<void> {
+    const transport = new StdioServerTransport();
+    await this.server.connect(transport);
+    console.log("Knowledge Graph MCP Server running on stdio");
+  }
+}
+
+// Start the server if this file is run directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const server = new KnowledgeGraphMCPServer();
+  server.start().catch(console.error);
+}
+
+export { KnowledgeGraphMCPServer };

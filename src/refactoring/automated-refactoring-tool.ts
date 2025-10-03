@@ -828,6 +828,6 @@ class UserService {
 }
 
 // Run the demo
-demonstrateAutomatedRefactoring().catch(console.error);
+// demonstrateAutomatedRefactoring().catch(console.error);
 
 // Exports are already defined above in the class and interface definitions

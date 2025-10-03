@@ -82,6 +82,121 @@
       "name": "analyze_hierarchy",
       "description": "Analyze hierarchical structure using hyperbolic geometry",
       "server": "h2gnn"
+    },
+    {
+      "name": "analyze_path_to_knowledge_graph",
+      "description": "Analyze files/folders and create knowledge graph with hyperbolic embeddings",
+      "server": "h2gnn"
+    },
+    {
+      "name": "generate_code_from_graph",
+      "description": "Generate code based on knowledge graph insights",
+      "server": "h2gnn"
+    },
+    {
+      "name": "generate_documentation_from_graph",
+      "description": "Generate documentation from knowledge graph",
+      "server": "h2gnn"
+    },
+    {
+      "name": "query_knowledge_graph",
+      "description": "Query knowledge graph for insights and relationships",
+      "server": "h2gnn"
+    },
+    {
+      "name": "get_graph_visualization",
+      "description": "Get knowledge graph visualization data",
+      "server": "h2gnn"
+    },
+    {
+      "name": "initialize_enhanced_h2gnn",
+      "description": "Initialize Enhanced H²GNN with learning and persistence capabilities",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "name": "learn_concept",
+      "description": "Learn a new concept with enhanced memory and understanding",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "name": "retrieve_memories",
+      "description": "Retrieve relevant memories for a query",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "name": "get_understanding_snapshot",
+      "description": "Get understanding snapshot for a domain",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "name": "get_learning_progress",
+      "description": "Get learning progress for all domains",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "name": "start_learning_session",
+      "description": "Start an interactive learning session",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "name": "end_learning_session",
+      "description": "End the current learning session and consolidate knowledge",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "name": "consolidate_memories",
+      "description": "Manually trigger memory consolidation",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "name": "get_system_status",
+      "description": "Get comprehensive system status including learning metrics",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "name": "adaptive_learning",
+      "description": "Perform adaptive learning based on performance history",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "name": "learn_from_node",
+      "description": "Learn from a knowledge graph node, creating direct link between code analysis and semantic understanding",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "name": "analyze_code_ast",
+      "description": "Analyze code using Abstract Syntax Tree (AST) to extract structure, patterns, and relationships",
+      "server": "lsp-ast"
+    },
+    {
+      "name": "lsp_completion",
+      "description": "Provide intelligent code completion suggestions using LSP",
+      "server": "lsp-ast"
+    },
+    {
+      "name": "lsp_hover",
+      "description": "Provide hover information for symbols at a specific position",
+      "server": "lsp-ast"
+    },
+    {
+      "name": "lsp_diagnostics",
+      "description": "Analyze code and provide diagnostic information (errors, warnings, hints)",
+      "server": "lsp-ast"
+    },
+    {
+      "name": "lsp_code_actions",
+      "description": "Provide code actions (quick fixes, refactorings) for a given range",
+      "server": "lsp-ast"
+    },
+    {
+      "name": "advanced_code_analysis",
+      "description": "Perform advanced code analysis with cognitive complexity, code smells, and anti-patterns",
+      "server": "lsp-ast"
+    },
+    {
+      "name": "propose_and_apply_refactoring",
+      "description": "Propose and optionally apply automated refactoring suggestions",
+      "server": "lsp-ast"
     }
   ],
   "resources": [
@@ -114,6 +229,60 @@
       "name": "System Status",
       "description": "Current status of H²GNN system components",
       "server": "h2gnn"
+    },
+    {
+      "uri": "h2gnn://knowledge-graphs/list",
+      "name": "Knowledge Graphs List",
+      "description": "List of all available knowledge graphs",
+      "server": "h2gnn"
+    },
+    {
+      "uri": "h2gnn://knowledge-graphs/latest",
+      "name": "Latest Knowledge Graph",
+      "description": "Most recently generated knowledge graph",
+      "server": "h2gnn"
+    },
+    {
+      "uri": "enhanced-h2gnn://memories/all",
+      "name": "Enhanced H²GNN Memories",
+      "description": "All learning memories from Enhanced H²GNN",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "uri": "enhanced-h2gnn://snapshots/all",
+      "name": "Understanding Snapshots",
+      "description": "All understanding snapshots by domain",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "uri": "enhanced-h2gnn://progress/all",
+      "name": "Learning Progress",
+      "description": "Learning progress across all domains",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "uri": "enhanced-h2gnn://status/system",
+      "name": "Enhanced System Status",
+      "description": "Comprehensive system status including learning metrics",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "uri": "lsp-ast://capabilities",
+      "name": "LSP Capabilities",
+      "description": "Available LSP capabilities",
+      "server": "lsp-ast"
+    },
+    {
+      "uri": "lsp-ast://ast-analysis",
+      "name": "AST Analysis Results",
+      "description": "Recent AST analysis results",
+      "server": "lsp-ast"
+    },
+    {
+      "uri": "lsp-ast://h2gnn-memories",
+      "name": "H²GNN Memories",
+      "description": "H²GNN learning memories",
+      "server": "lsp-ast"
     }
   ],
   "prompts": [
@@ -131,6 +300,26 @@
       "name": "semantic_exploration",
       "description": "Guide semantic exploration in hyperbolic space",
       "server": "h2gnn"
+    },
+    {
+      "name": "learning_session",
+      "description": "Start an interactive learning session with Enhanced H²GNN",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "name": "understanding_query",
+      "description": "Query understanding snapshots for a specific domain",
+      "server": "enhanced-h2gnn"
+    },
+    {
+      "name": "code_analysis",
+      "description": "Analyze code quality and provide improvement suggestions",
+      "server": "lsp-ast"
+    },
+    {
+      "name": "lsp_assistance",
+      "description": "Provide LSP-style code assistance",
+      "server": "lsp-ast"
     }
   ]
 }
