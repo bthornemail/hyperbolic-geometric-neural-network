@@ -5,8 +5,7 @@ alwaysApply: false
 ---
 # Vector Databases
 
-
-Below is a  table of the popular vector search solutions:
+Below is a table of the popular vector search solutions. When enhanced with H²GNN, vector databases can leverage hyperbolic geometry for hierarchical similarity search.
 
 | **Tool** | **Free Tier** | **Pricing Model** | **Docs** |
 | --- | --- | --- | --- |

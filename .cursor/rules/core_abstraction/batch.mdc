@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # Batch
 
-**Batch** makes it easier to handle large inputs in one Node or **rerun** a Flow multiple times. Example use cases:
+**Batch** makes it easier to handle large inputs in one Node or **rerun** a Flow multiple times. When enhanced with H²GNN, batch operations gain hierarchical organization through hyperbolic clustering. Example use cases:
 - **Chunk-based** processing (e.g., splitting large texts).
 - **Iterative** processing over lists of input items (e.g., user queries, files, URLs).
 

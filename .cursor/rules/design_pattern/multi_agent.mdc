@@ -6,7 +6,7 @@ alwaysApply: false
 # (Advanced) Multi-Agents
 
 Multiple [Agents](mdc:./flow.md) can work together by handling subtasks and communicating the progress. 
-Communication between agents is typically implemented using message queues in shared storage.
+Communication between agents is typically implemented using message queues in shared storage. When enhanced with H²GNN, multi-agent systems gain hierarchical coordination through hyperbolic geometry.
 
 > Most of time, you don't need Multi-Agents. Start with a simple solution first.
 {: .best-practice }

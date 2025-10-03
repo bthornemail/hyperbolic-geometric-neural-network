@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # Structured Output
 
-In many use cases, you may want the LLM to output a specific structure, such as a list or a dictionary with predefined keys.
+In many use cases, you may want the LLM to output a specific structure, such as a list or a dictionary with predefined keys. When enhanced with H²GNN, structured output can leverage hyperbolic embeddings for hierarchical organization.
 
 There are several approaches to achieve a structured output:
 - **Prompting** the LLM to strictly return a defined structure.

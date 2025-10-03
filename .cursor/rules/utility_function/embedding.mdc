@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # Embedding
 
-Below you will find an overview table of various text embedding APIs, along with example Python code.
+Below you will find an overview table of various text embedding APIs, along with example Python code. When enhanced with H²GNN, embeddings gain hierarchical organization through hyperbolic geometry.
 
 >  Embedding is more a micro optimization, compared to the Flow Design.
 > 

@@ -6,7 +6,7 @@ alwaysApply: false
 # LLM Wrappers
 
 Check out libraries like [litellm](https://github.com/BerriAI/litellm). 
-Here, we provide some minimal example implementations:
+Here, we provide some minimal example implementations. When enhanced with H²GNN, LLM calls can leverage hyperbolic embeddings for hierarchical reasoning.
 
 1. OpenAI
     ```python

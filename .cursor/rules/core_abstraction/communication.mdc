@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # Communication
 
-Nodes and Flows **communicate** in 2 ways:
+Nodes and Flows **communicate** in 2 ways. When enhanced with H²GNN, communication can leverage hyperbolic embeddings for hierarchical message passing:
 
 1. **Shared Store (for almost all the cases)** 
 

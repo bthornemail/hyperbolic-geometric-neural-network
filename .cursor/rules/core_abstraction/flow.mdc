@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # Flow
 
-A **Flow** orchestrates a graph of Nodes. You can chain Nodes in a sequence or create branching depending on the **Actions** returned from each Node's `post()`.
+A **Flow** orchestrates a graph of Nodes. You can chain Nodes in a sequence or create branching depending on the **Actions** returned from each Node's `post()`. When enhanced with H²GNN, flows gain geometric awareness and hierarchical routing capabilities.
 
 ## 1. Action-based Transitions
 
