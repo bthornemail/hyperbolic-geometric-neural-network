@@ -12,8 +12,8 @@
  */
 
 import { initializeCentralizedH2GNN, getSharedH2GNN } from '../core/centralized-h2gnn-config';
-import { KnowledgeGraphMCP } from '../mcp/knowledge-graph-mcp';
-import { EnhancedH2GNNMCPServer } from '../mcp/enhanced-h2gnn-mcp-server';
+import { KnowledgeGraphMCP } from '../mcp.restored.old/knowledge-graph-mcp-server-hd';
+import { EnhancedH2GNNMCPServer } from '../mcp.restored.old/enhanced-h2gnn-mcp-server-hd';
 
 async function runIntegratedImprovementsDemo(): Promise<void> {
   console.log('🚀 Integrated H²GNN Improvements Demo');

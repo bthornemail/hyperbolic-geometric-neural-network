@@ -20,10 +20,10 @@ import {
   GetPromptRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
-import EnhancedH2GNN from '../core/enhanced-h2gnn';
-import { AdvancedASTAnalyzer } from '../analysis/advanced-ast-analyzer';
-import { AutomatedRefactoringTool } from '../refactoring/automated-refactoring-tool';
-import { CentralizedH2GNNManager, CentralizedH2GNNConfig } from '../core/centralized-h2gnn-config';
+import EnhancedH2GNN from '../core/enhanced-h2gnn.js';
+import { AdvancedASTAnalyzer } from '../analysis/advanced-ast-analyzer.js';
+import { AutomatedRefactoringTool } from '../refactoring/automated-refactoring-tool.js';
+import { CentralizedH2GNNManager, CentralizedH2GNNConfig } from '../core/centralized-h2gnn-config.js';
 import { BIP32HDAddressing, H2GNNAddress } from '../core/native-protocol.js';
 import { H2GNNMCPIntegration, MCPIntegrationConfig } from '../core/mcp-hd-integration.js';
 import * as ts from 'typescript';

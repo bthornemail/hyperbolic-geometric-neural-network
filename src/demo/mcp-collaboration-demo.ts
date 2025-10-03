@@ -7,7 +7,7 @@
  * using H²GNN + PocketFlow + WordNet system
  */
 
-import { AIHumanCollaborationInterface } from '../mcp/collaboration-interface.js';
+import { AIHumanCollaborationInterface } from '../integration/collaboration-interface.js';
 
 async function runMCPCollaborationDemo() {
   console.log('🤖🤝👤 Starting MCP AI-Human Collaboration Demo\n');

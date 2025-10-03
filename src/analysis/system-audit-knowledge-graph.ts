@@ -346,7 +346,7 @@ export class SystemAuditKnowledgeGraph {
       suffix: '',
       separator: '-',
       convention: 'mixed',
-      examples: ['phase4-integrated-system.ts', 'mcp-geo-tools.ts', 'hyperbolic-projection-engine.ts']
+      examples: ['unified-system-integration.ts', 'mcp-geo-tools.ts', 'hyperbolic-projection-engine.ts']
     });
     
     return patterns;
@@ -365,7 +365,7 @@ export class SystemAuditKnowledgeGraph {
     dependencyMap.set('mcp-geo-tools.ts', ['pubsub-architecture.ts', 'hyperbolic-projection-engine.ts', 'real-time-collaboration.ts']);
     dependencyMap.set('real-time-collaboration.ts', ['pubsub-architecture.ts']);
     dependencyMap.set('d3-visualization-wrapper.ts', ['pubsub-architecture.ts', 'hyperbolic-projection-engine.ts', 'real-time-collaboration.ts']);
-    dependencyMap.set('phase4-integrated-system.ts', ['pubsub-architecture.ts', 'hyperbolic-projection-engine.ts', 'real-time-collaboration.ts', 'mcp-geo-tools.ts', 'd3-visualization-wrapper.ts']);
+    dependencyMap.set('unified-system-integration.ts', ['pubsub-architecture.ts', 'hyperbolic-projection-engine.ts', 'real-time-collaboration.ts', 'mcp-geo-tools.ts', 'd3-visualization-wrapper.ts']);
     
     // Store dependencies
     for (const [component, deps] of dependencyMap) {
@@ -453,7 +453,7 @@ export class SystemAuditKnowledgeGraph {
       {
         name: 'Integration Layer',
         purpose: 'System integration and external connections',
-        components: ['real-time-collaboration.ts', 'obsidian-sync.ts', 'phase4-integrated-system.ts'],
+        components: ['real-time-collaboration.ts', 'obsidian-sync.ts', 'unified-system-integration.ts'],
         dependencies: ['Core Layer'],
         interfaces: ['RealTimeCollaborationEngine', 'CollaborationSession']
       },

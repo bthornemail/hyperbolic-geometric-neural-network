@@ -9,7 +9,7 @@
 
 import { fileURLToPath } from 'url';
 import * as path from 'path';
-import { KnowledgeGraphMCP } from '../mcp/knowledge-graph-mcp.js';
+import { KnowledgeGraphMCP } from '../mcp.restored.old/knowledge-graph-mcp-server-hd.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

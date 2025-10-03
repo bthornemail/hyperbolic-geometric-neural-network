@@ -275,7 +275,7 @@ export class PersistentKnowledgeGraphBuilder {
         features: ['Geographic intelligence', 'Semantic search', 'Hyperbolic-geographic bridge'],
         interfaces: ['MCPGeoIntelligenceServer', 'IntegratedGeoIntelligenceSystem'],
         dependencies: ['pubsub-architecture', 'hyperbolic-projection-engine', 'real-time-collaboration'],
-        dependents: ['phase4-integrated-system'],
+        dependents: ['unified-system-integration'],
         lastModified: new Date(),
         description: 'MCP server for geographic-hyperbolic intelligence integration'
       },
@@ -325,7 +325,7 @@ export class PersistentKnowledgeGraphBuilder {
         features: ['D3.js integration', 'Real-time updates', 'Interactive visualizations'],
         interfaces: ['EnhancedD3Wrapper', 'IntegratedD3VisualizationSystem'],
         dependencies: ['pubsub-architecture', 'hyperbolic-projection-engine', 'real-time-collaboration'],
-        dependents: ['phase4-integrated-system'],
+        dependents: ['unified-system-integration'],
         lastModified: new Date(),
         description: 'D3.js wrapper for interactive hyperbolic-geographic visualizations'
       },
@@ -359,16 +359,16 @@ export class PersistentKnowledgeGraphBuilder {
         features: ['Multi-user collaboration', 'Presence awareness', 'Real-time sync'],
         interfaces: ['RealTimeCollaborationEngine', 'CollaborationSession', 'UserPresenceManager'],
         dependencies: ['pubsub-architecture'],
-        dependents: ['mcp-geo-tools', 'd3-visualization-wrapper', 'phase4-integrated-system'],
+        dependents: ['mcp-geo-tools', 'd3-visualization-wrapper', 'unified-system-integration'],
         lastModified: new Date(),
         description: 'Real-time collaboration system with presence awareness'
       },
       {
-        id: 'phase4-integrated-system',
+        id: 'unified-system-integration',
         name: 'Phase 4 Integrated System',
         type: 'integration',
         category: 'architecture',
-        path: 'src/integration/phase4-integrated-system.ts',
+        path: 'src/integration/unified-system-integration.ts',
         size: 618,
         complexity: 'critical',
         status: 'active',
@@ -393,7 +393,7 @@ export class PersistentKnowledgeGraphBuilder {
         features: ['Stereographic projection', 'Lorentz stabilization', 'Geographic conversion'],
         interfaces: ['HyperbolicProjectionEngine', 'H2GNNBinarySchema', 'OptimizedH2GNNProvider'],
         dependencies: [],
-        dependents: ['mcp-geo-tools', 'd3-visualization-wrapper', 'phase4-integrated-system'],
+        dependents: ['mcp-geo-tools', 'd3-visualization-wrapper', 'unified-system-integration'],
         lastModified: new Date(),
         description: 'Advanced hyperbolic-to-geographic projection engine with Lorentz stabilization'
       }
@@ -503,7 +503,7 @@ export class PersistentKnowledgeGraphBuilder {
       // Phase 4 system dependencies
       {
         id: 'phase4-to-pubsub',
-        source: 'phase4-integrated-system',
+        source: 'unified-system-integration',
         target: 'pubsub-architecture',
         type: 'import',
         strength: 'critical',
@@ -512,7 +512,7 @@ export class PersistentKnowledgeGraphBuilder {
       },
       {
         id: 'phase4-to-projection',
-        source: 'phase4-integrated-system',
+        source: 'unified-system-integration',
         target: 'hyperbolic-projection-engine',
         type: 'import',
         strength: 'critical',
@@ -521,7 +521,7 @@ export class PersistentKnowledgeGraphBuilder {
       },
       {
         id: 'phase4-to-collaboration',
-        source: 'phase4-integrated-system',
+        source: 'unified-system-integration',
         target: 'real-time-collaboration',
         type: 'import',
         strength: 'critical',
@@ -530,7 +530,7 @@ export class PersistentKnowledgeGraphBuilder {
       },
       {
         id: 'phase4-to-mcp-geo',
-        source: 'phase4-integrated-system',
+        source: 'unified-system-integration',
         target: 'mcp-geo-tools',
         type: 'import',
         strength: 'critical',
@@ -539,7 +539,7 @@ export class PersistentKnowledgeGraphBuilder {
       },
       {
         id: 'phase4-to-d3',
-        source: 'phase4-integrated-system',
+        source: 'unified-system-integration',
         target: 'd3-visualization-wrapper',
         type: 'import',
         strength: 'critical',
@@ -692,7 +692,7 @@ export class PersistentKnowledgeGraphBuilder {
         id: 'mixed-pattern',
         pattern: 'mixed',
         convention: 'mixed',
-        examples: ['phase4-integrated-system.ts', 'mcp-geo-tools.ts', 'hyperbolic-projection-engine.ts'],
+        examples: ['unified-system-integration.ts', 'mcp-geo-tools.ts', 'hyperbolic-projection-engine.ts'],
         usage: ['Specialized components', 'Integration systems', 'Complex names'],
         description: 'Mixed naming pattern for specialized components'
       }
@@ -737,7 +737,7 @@ export class PersistentKnowledgeGraphBuilder {
         id: 'integration-cluster',
         name: 'Integration Cluster',
         type: 'integration',
-        nodes: ['real-time-collaboration', 'phase4-integrated-system'],
+        nodes: ['real-time-collaboration', 'unified-system-integration'],
         description: 'System integration and external connections',
         importance: 'critical',
         dependencies: ['core-architecture-cluster', 'mcp-integration-cluster', 'visualization-cluster']
@@ -796,7 +796,7 @@ export class PersistentKnowledgeGraphBuilder {
       },
       {
         id: 'phase4-orchestrates-all',
-        source: 'phase4-integrated-system',
+        source: 'unified-system-integration',
         target: 'pubsub-architecture',
         type: 'orchestrates',
         strength: 1.0,

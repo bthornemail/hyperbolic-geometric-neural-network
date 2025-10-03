@@ -40,7 +40,7 @@ import {
 import { 
   MCPGeoIntelligenceServer,
   IntegratedGeoIntelligenceSystem 
-} from '../mcp/mcp-geo-tools.js';
+} from '../mcp.restored.old/mcp-geo-tools.js';
 
 // D3 Visualization
 import { 
