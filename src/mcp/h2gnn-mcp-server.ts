@@ -32,6 +32,7 @@ import {
 import WordNetModule from '../datasets/wordnet-integration.js';
 import AgentWorkflows from '../workflows/agent-workflows.js';
 import IntegratedKnowledgeBaseCreator from '../generation/knowledge-base-integrated.js';
+import IntelligentCodeGenerator from '../generation/intelligent-code-generator.js';
 
 // Fallback implementations for missing modules
 class FallbackEnhancedH2GNN {
@@ -246,6 +247,7 @@ class H2GNNMCPServer {
   private learningSessionId: string | null = null;
   private h2gnnAddress: H2GNNAddress | null = null;
   private networkConfig: MCPNetworkConfig;
+  private intelligentCodeGenerator: IntelligentCodeGenerator;
 
   constructor(networkConfig?: Partial<MCPNetworkConfig>) {
     this.networkConfig = {
@@ -263,6 +265,9 @@ class H2GNNMCPServer {
       },
       ...networkConfig
     };
+
+    // Initialize intelligent code generator
+    this.intelligentCodeGenerator = new IntelligentCodeGenerator();
 
     this.server = new Server(
       {
@@ -857,6 +862,118 @@ class H2GNNMCPServer {
               type: "object",
               properties: {}
             }
+          },
+          {
+            name: "generate_code_suggestions",
+            description: "Generate intelligent code suggestions using H²GNN learning",
+            inputSchema: {
+              type: "object",
+              properties: {
+                codeContext: {
+                  type: "object",
+                  description: "Current code context including file path, language, and cursor position",
+                  properties: {
+                    filePath: { type: "string" },
+                    language: { type: "string" },
+                    currentCode: { type: "string" },
+                    cursorPosition: { type: "number" }
+                  },
+                  required: ["filePath", "language", "currentCode"]
+                },
+                suggestionType: {
+                  type: "string",
+                  enum: ["completion", "optimization", "refactoring", "pattern"],
+                  description: "Type of code suggestion to generate",
+                  default: "completion"
+                },
+                maxSuggestions: {
+                  type: "number",
+                  description: "Maximum number of suggestions to return",
+                  default: 5
+                }
+              },
+              required: ["codeContext"]
+            }
+          },
+          {
+            name: "analyze_code_quality",
+            description: "Analyze code quality using H²GNN semantic understanding",
+            inputSchema: {
+              type: "object",
+              properties: {
+                code: {
+                  type: "string",
+                  description: "Code to analyze"
+                },
+                language: {
+                  type: "string",
+                  description: "Programming language",
+                  default: "typescript"
+                },
+                filePath: {
+                  type: "string",
+                  description: "File path for context",
+                  default: ""
+                }
+              },
+              required: ["code"]
+            }
+          },
+          {
+            name: "learn_from_code_patterns",
+            description: "Learn from code patterns and improve H²GNN understanding",
+            inputSchema: {
+              type: "object",
+              properties: {
+                code: {
+                  type: "string",
+                  description: "Code to learn from"
+                },
+                patternType: {
+                  type: "string",
+                  description: "Type of pattern to extract",
+                  default: "general"
+                },
+                quality: {
+                  type: "number",
+                  description: "Quality score of the code (0-1)",
+                  default: 0.5
+                },
+                context: {
+                  type: "object",
+                  description: "Additional context for learning",
+                  properties: {
+                    domain: { type: "string" },
+                    complexity: { type: "number" },
+                    bestPractices: { type: "array", items: { type: "string" } }
+                  }
+                }
+              },
+              required: ["code"]
+            }
+          },
+          {
+            name: "get_code_insights",
+            description: "Get insights about code patterns and suggestions",
+            inputSchema: {
+              type: "object",
+              properties: {
+                query: {
+                  type: "string",
+                  description: "Query for code insights"
+                },
+                context: {
+                  type: "object",
+                  description: "Context for the query",
+                  properties: {
+                    language: { type: "string" },
+                    domain: { type: "string" },
+                    complexity: { type: "number" }
+                  }
+                }
+              },
+              required: ["query"]
+            }
           }
         ]
       };
@@ -940,6 +1057,18 @@ class H2GNNMCPServer {
           
           case "get_mcp_integration_status":
             return await this.getMCPIntegrationStatus(args);
+          
+          case "generate_code_suggestions":
+            return await this.generateCodeSuggestions(args);
+          
+          case "analyze_code_quality":
+            return await this.analyzeCodeQuality(args);
+          
+          case "learn_from_code_patterns":
+            return await this.learnFromCodePatterns(args);
+          
+          case "get_code_insights":
+            return await this.getCodeInsights(args);
           
           default:
             throw new McpError(
@@ -2190,6 +2319,169 @@ RPC Endpoint: ${this.h2gnnAddress ? hdAddressing?.getRPCEndpoint(this.h2gnnAddre
     }
 
     return actions;
+  }
+
+  /**
+   * Generate intelligent code suggestions using H²GNN learning
+   */
+  private async generateCodeSuggestions(args: any): Promise<any> {
+    try {
+      const suggestions = await this.intelligentCodeGenerator.generateSuggestions(
+        args.codeContext,
+        args.suggestionType || 'completion',
+        args.maxSuggestions || 5
+      );
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Intelligent Code Suggestions Generated:
+
+🎯 Type: ${args.suggestionType || 'completion'}
+📊 Suggestions: ${suggestions.length}
+
+${suggestions.map((suggestion, index) => `
+${index + 1}. **${suggestion.type}** (Confidence: ${(suggestion.confidence * 100).toFixed(1)}%)
+   Description: ${suggestion.description}
+   Impact: ${suggestion.impact}
+   Reasoning: ${suggestion.reasoning}
+   
+   Code:
+   \`\`\`${args.codeContext.language}
+   ${suggestion.code}
+   \`\`\`
+   
+   ${suggestion.alternatives.length > 0 ? `Alternatives: ${suggestion.alternatives.join(', ')}` : ''}
+`).join('\n')}
+
+These suggestions are powered by H²GNN semantic understanding and learned patterns.`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Code suggestion generation failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * Analyze code quality using H²GNN semantic understanding
+   */
+  private async analyzeCodeQuality(args: any): Promise<any> {
+    try {
+      const analysis = await this.intelligentCodeGenerator.analyzeCodeQuality(
+        args.code,
+        args.language || 'typescript',
+        args.filePath || ''
+      );
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Code Quality Analysis:
+
+📊 Quality Score: ${(analysis.overallScore * 100).toFixed(1)}%
+🔍 Complexity: ${analysis.complexity.toFixed(2)}
+📈 Maintainability: ${analysis.maintainability.toFixed(2)}
+🎯 Readability: ${analysis.readability.toFixed(2)}
+
+📋 Issues Found:
+${analysis.issues.map(issue => `- ${issue.severity.toUpperCase()}: ${issue.description} (Line ${issue.line})`).join('\n')}
+
+💡 Suggestions:
+${analysis.suggestions.map(suggestion => `- ${suggestion}`).join('\n')}
+
+🏆 Best Practices:
+${analysis.bestPractices.map(practice => `- ${practice}`).join('\n')}
+
+This analysis uses H²GNN semantic understanding to evaluate code quality.`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Code quality analysis failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * Learn from code patterns and improve H²GNN understanding
+   */
+  private async learnFromCodePatterns(args: any): Promise<any> {
+    try {
+      const learningResult = await this.intelligentCodeGenerator.learnFromPatterns(
+        args.code,
+        args.patternType || 'general',
+        args.quality || 0.5,
+        args.context || {}
+      );
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Code Pattern Learning Completed:
+
+🧠 Pattern Type: ${args.patternType || 'general'}
+📊 Quality Score: ${(args.quality || 0.5) * 100}%
+🎯 Learning Confidence: ${(learningResult.confidence * 100).toFixed(1)}%
+
+📈 Patterns Extracted:
+${learningResult.patterns.map(pattern => `- ${pattern.name}: ${pattern.description} (Quality: ${(pattern.quality * 100).toFixed(1)}%)`).join('\n')}
+
+🔗 Relationships Discovered:
+${learningResult.relationships.map(rel => `- ${rel.type}: ${rel.description}`).join('\n')}
+
+💡 Insights:
+${learningResult.insights.map(insight => `- ${insight}`).join('\n')}
+
+The H²GNN system has been updated with these new patterns and relationships.`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Pattern learning failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  /**
+   * Get insights about code patterns and suggestions
+   */
+  private async getCodeInsights(args: any): Promise<any> {
+    try {
+      const insights = await this.intelligentCodeGenerator.getInsights(
+        args.query,
+        args.context || {}
+      );
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Code Insights for: "${args.query}"
+
+🔍 Semantic Analysis:
+${insights.semanticAnalysis.map(analysis => `- ${analysis}`).join('\n')}
+
+📊 Pattern Matches:
+${insights.patternMatches.map(match => `- ${match.name}: ${match.description} (Confidence: ${(match.confidence * 100).toFixed(1)}%)`).join('\n')}
+
+💡 Recommendations:
+${insights.recommendations.map(rec => `- ${rec}`).join('\n')}
+
+🎯 Best Practices:
+${insights.bestPractices.map(practice => `- ${practice}`).join('\n')}
+
+🔗 Related Concepts:
+${insights.relatedConcepts.map(concept => `- ${concept.name}: ${concept.description}`).join('\n')}
+
+These insights are generated using H²GNN semantic understanding and learned code patterns.`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Insights generation failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
   }
 
   /**
