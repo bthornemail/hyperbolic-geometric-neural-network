@@ -1,282 +1,188 @@
-# H²GNN + PocketFlow + WordNet: Integrated AI System
+<div align="center">
+  <img src="https://raw.githubusercontent.com/The-Pocket/.github/main/assets/title.png" width="600"/>
+</div>
 
-> **Revolutionary AI System for Hierarchical Learning & Agent Workflows**
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+[![Docs](https://img.shields.io/badge/docs-latest-blue)](https://the-pocket.github.io/PocketFlow/)
+<a href="https://discord.gg/hUHHE9Sa6T">
+<img src="https://img.shields.io/discord/1346833819172601907?logo=discord&style=flat">
+</a>
 
-A groundbreaking implementation that combines:
-- **H²GNN**: Hyperbolic Geometric Hypergraph Neural Networks for hierarchical learning
-- **PocketFlow**: LLM framework for Agents, Task Decomposition, and RAG
-- **WordNet**: Hierarchical knowledge base integration
+# PocketFlow.js
 
-This creates a powerful platform for hierarchical reasoning, semantic understanding, and intelligent agent workflows using hyperbolic geometry.
+PocketFlow.js is a TypeScript port of the original [Python version](https://github.com/The-Pocket/PocketFlow) - a minimalist LLM framework.
 
-## 🌌 Overview
+## Table of Contents
 
-This integrated system represents a paradigm shift in AI by combining three powerful technologies:
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Documentation](#documentation)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [Community](#community)
+- [License](#license)
 
-### 🧮 H²GNN Core
-H²GNN implements **true hyperbolic arithmetic** in neural networks, operating natively in hyperbolic space using Möbius gyrovector operations for exponentially efficient hierarchical representation.
+## Features
 
-### 🔄 PocketFlow Framework  
-A minimalist LLM framework that models workflows as graphs with shared stores, enabling sophisticated agent behaviors, task decomposition, and retrieval-augmented generation.
+- **Lightweight**: Zero bloat, zero dependencies, zero vendor lock-in.
 
-### 📚 WordNet Integration
-Hierarchical knowledge base providing semantic relationships, concept taxonomies, and structured domain knowledge for training and reasoning.
+- **Expressive**: Everything you love—([Multi-](https://the-pocket.github.io/PocketFlow/design_pattern/multi_agent.html))[Agents](https://the-pocket.github.io/PocketFlow/design_pattern/agent.html), [Workflow](https://the-pocket.github.io/PocketFlow/design_pattern/workflow.html), [RAG](https://the-pocket.github.io/PocketFlow/design_pattern/rag.html), and more.
 
-Together, these components create an AI system capable of understanding and reasoning about hierarchical knowledge with unprecedented efficiency and sophistication.
+- **[Agentic Coding](https://zacharyhuang.substack.com/p/agentic-coding-the-most-fun-way-to)**: Let AI Agents (e.g., Cursor AI) build Agents—10x productivity boost!
 
-### Key Innovations
-
-- **🎯 Möbius Gyrovector Space Operations**: Native hyperbolic arithmetic (⊕, ⊗) replacing Euclidean operations
-- **📐 Dual Geometry System**: Toggle between Euclidean and Hyperbolic spaces with real-time curvature adjustment
-- **🌟 Hyperbolic Message Passing**: Messages follow geodesics in curved space
-- **🔥 Geometric Attention**: `exp(-d_H(q,k))` naturally encodes hierarchical relationships
-- **🎨 Poincaré Disk Visualization**: Real-time geometric visualization of knowledge structures
-- **🚀 Cross-Platform Integration**: Web, mobile, cloud, and desktop deployment
-
-## 🧠 Architecture
-
-### Core Components
-
-```
-H²GNN/
-├── hyperbolic-arithmetic/     # Möbius operations & geometric primitives
-├── hyperbolic-layers/         # Neural network layers in hyperbolic space
-├── geometric-visualization/   # Poincaré disk & tiling visualizations
-├── knowledge-integration/     # Obsidian MD & cross-platform sync
-├── training-system/          # Geometric loss functions & optimization
-└── deployment/               # Cross-platform deployment configs
-```
-
-### Mathematical Foundation
-
-The system implements the complete Möbius gyrovector space:
-
-- **Möbius Addition**: `u ⊕ v = (u + v) / (1 + ⟨u,v⟩)`
-- **Möbius Scalar Multiplication**: `r ⊗ v = tanh(r·artanh(||v||)) · v/||v||`
-- **Hyperbolic Distance**: `d_H(u,v) = artanh(||(-u) ⊕ v||)`
-- **Exponential/Logarithmic Maps**: For tangent space operations
-
-## 🚀 Features
-
-### 1. Hyperbolic Geometric Deep Learning
-- **Exponential Representation Capacity**: Leverages hyperbolic space's exponential growth
-- **Natural Hierarchy Encoding**: Tree structures emerge automatically
-- **Geodesic Message Passing**: Information flows along shortest hyperbolic paths
-- **Curvature-Aware Attention**: Geometric attention mechanisms
-
-### 2. Advanced Geometric Visualization
-- **Poincaré Disk Model**: Projects infinite hyperbolic plane to finite disk
-- **{5,3} & {3,5} Tilings**: Hyperbolic tessellations for spatial context
-- **Real-time Geodesics**: Visualize curved paths and distances
-- **Interactive Exploration**: Navigate hyperbolic space intuitively
-
-### 3. Knowledge Management Integration
-- **Obsidian MD Sync**: Direct integration with personal knowledge vaults
-- **Hierarchical Organization**: Automatic knowledge structure discovery
-- **Cross-Platform Sync**: Seamless synchronization across devices
-- **AI-Generated Insights**: Geometric analysis of knowledge patterns
-
-### 4. Production-Ready Framework
-- **Robust Training System**: Geometric loss functions and optimization
-- **Numerical Stability**: Lorentz model conversions for edge cases
-- **Scalable Architecture**: Handles large-scale hierarchical datasets
-- **Comprehensive Testing**: Mathematical consistency validation
-
-## 🛠️ Installation
-
-### Prerequisites
-- Node.js 18+
-- TypeScript 5+
-- Modern browser with WebGL support
-
-### Quick Start
+## Installation
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd project
+npm install pocketflow
+```
 
+Alternatively, you can simply copy the [source code](src/index.ts) directly into your project.
+
+## Quick Start
+
+Run the following command to create a new PocketFlow project:
+
+```bash
+npx create-pocketflow
+```
+
+Use cursor/windsurf/any other LLM builtin IDE to open the project.  
+You can type the following prompt to the agent to confirm the project is setup correctly:
+
+```
+Help me describe briefly about PocketFlow.js
+```
+
+Simply start typing your prompt, and the AI agent will build the project for you.  
+Here's a simple example:
+
+```
+I want to create an application that can write novel:
+
+1. User can enter a novel title
+2. It will generate a outline of the novel
+3. It will generate a chapter based on the outline
+4. It will save the chapter to ./output/title_name.md
+
+First, read the requirements carefully.
+Then, start with design.md first. Stop there until further instructions.
+```
+
+Once you have the design, and you have no questions, start the implementation by simply typing:
+
+```
+Start implementing the design.
+```
+
+## Documentation
+
+- Check out the [official documentation](https://the-pocket.github.io/PocketFlow/) for comprehensive guides and examples. The TypeScript version is still under development, so some features may not be available.
+- For an in-depth design explanation, read our [design essay](https://github.com/The-Pocket/.github/blob/main/profile/pocketflow.md)
+
+## Testing
+
+To run tests locally:
+
+```bash
 # Install dependencies
 npm install
 
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-```
-
-## 📖 Usage
-
-### Basic H²GNN Network
-
-```typescript
-import { HyperbolicGeometricHGN } from './src/core/H2GNN';
-
-// Initialize the network
-const h2gnn = new HyperbolicGeometricHGN({
-  curvature: -1.0,           // Hyperbolic curvature
-  embeddingDim: 8,           // Embedding dimension
-  learningRate: 0.01         // Learning rate
-});
-
-// Train on hierarchical data
-await h2gnn.train(hierarchicalDataset);
-
-// Perform inference
-const predictions = await h2gnn.predict(inputData);
-```
-
-### Hyperbolic Operations
-
-```typescript
-import { hyperbolicArithmetic } from './src/math/hyperbolic-arithmetic';
-
-// Möbius addition
-const sum = hyperbolicArithmetic.mobiusAdd(u, v);
-
-// Möbius scalar multiplication
-const scaled = hyperbolicArithmetic.mobiusScalarMult(r, v);
-
-// Hyperbolic distance
-const distance = hyperbolicArithmetic.distance(u, v);
-```
-
-### Geometric Visualization
-
-```typescript
-import { GeometricVisualizer } from './src/visualization/geometric-visualizer';
-
-const visualizer = new GeometricVisualizer({
-  model: 'poincare-disk',
-  tiling: '{5,3}',
-  showGeodesics: true
-});
-
-// Visualize embeddings
-visualizer.renderEmbeddings(embeddings);
-```
-
-## 🎯 Applications
-
-### Hierarchical Data Analysis
-- **Knowledge Graphs**: Represent complex ontologies and taxonomies
-- **Social Networks**: Model hierarchical community structures
-- **Biological Systems**: Analyze phylogenetic trees and protein hierarchies
-- **Language Models**: Capture semantic hierarchies in text
-
-### Personal AI Assistant
-- **Knowledge Organization**: Automatically structure personal notes and documents
-- **Insight Generation**: Discover hidden connections in knowledge bases
-- **Cross-Platform Sync**: Maintain consistent AI across all devices
-- **Continuous Learning**: Adapt to user patterns and preferences
-
-## 🔬 Technical Details
-
-### Hyperbolic Geometry Implementation
-
-The system implements the Poincaré ball model of hyperbolic geometry:
-
-```typescript
-// Poincaré ball constraint: ||x|| < 1
-function projectToPoincareBall(x: Vector): Vector {
-  const norm = x.norm();
-  if (norm >= 1.0) {
-    return x.scale((1.0 - 1e-6) / norm);
-  }
-  return x;
-}
-```
-
-### Numerical Stability
-
-For numerical stability near the boundary, the system uses:
-- **Lorentz Model Conversions**: Switch models for edge cases
-- **Gradient Clipping**: Prevent exploding gradients in curved space
-- **Adaptive Precision**: Increase precision near hyperbolic boundary
-
-### Performance Optimizations
-
-- **Vectorized Operations**: SIMD-optimized hyperbolic arithmetic
-- **GPU Acceleration**: WebGL shaders for geometric computations
-- **Memory Pooling**: Efficient tensor memory management
-- **Lazy Evaluation**: Compute geometric operations on-demand
-
-## 🧪 Testing
-
-```bash
-# Run all tests
+# Run tests
 npm test
-
-# Test hyperbolic arithmetic
-npm run test:math
-
-# Test geometric consistency
-npm run test:geometry
-
-# Test visualization
-npm run test:viz
 ```
 
-## 📊 Benchmarks
+## Contributing
 
-### Representation Efficiency
-- **Tree Structures**: 10x more efficient than Euclidean embeddings
-- **Hierarchical Datasets**: Exponential capacity scaling
-- **Memory Usage**: 50% reduction in embedding dimensions
+We welcome contributions from the community! Here's how you can help:
 
-### Training Performance
-- **Convergence Speed**: 3x faster on hierarchical tasks
-- **Geometric Consistency**: 99.9% geodesic preservation
-- **Numerical Stability**: Stable training up to 1000 epochs
+### Code of Conduct
 
-## 🤝 Contributing
+Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md) to foster an inclusive community.
 
-We welcome contributions to advance hyperbolic geometric deep learning!
+### CI/CD Workflow
+
+We use GitHub Actions for continuous integration and deployment:
+
+- **CI Workflow**: Automatically runs tests and builds the project on each push and pull request to the main branch.
+- **Code Quality**: Checks TypeScript compilation to ensure code quality.
+- **Release**: Publishes the package to npm when a new release is created.
+
+Note: To publish to npm, maintainers need to configure the `NPM_TOKEN` secret in the repository settings.
+
+### How to Contribute
+
+1. **Fork the Repository**
+
+   - Create your own fork of the repo
+
+2. **Create a Branch**
+
+   - Create a feature branch (`git checkout -b feature/amazing-feature`)
+   - For bug fixes, use (`git checkout -b fix/bug-description`)
+
+3. **Make Your Changes**
+
+   - Follow the code style and conventions
+   - Add or update tests as needed
+   - Keep your changes focused and related to a single issue
+
+4. **Test Your Changes**
+
+   - Ensure all tests pass with `npm test`
+   - Add new tests if appropriate
+
+5. **Commit Your Changes**
+
+   - Use clear and descriptive commit messages
+   - Reference issue numbers in commit messages when applicable
+
+6. **Submit a Pull Request**
+   - Provide a clear description of the changes
+   - Link any related issues
+   - Answer any questions or feedback during review
+
+### Creating a CursorRule
+
+To create a CursorRule to make AI agents work more effectively on the codebase:
+
+1. Visit [gitingest.com](https://gitingest.com/)
+2. Paste the link to the docs folder (e.g., https://github.com/The-Pocket/PocketFlow-Typescript/tree/main/docs) to generate content
+3. Remove the following from the generated result:
+   - All utility function files except for llm
+   - The design_pattern/multi_agent.md file
+   - All \_config.yaml and index.md files, except for docs/index.md
+4. Save the result as a CursorRule to help AI agents understand the codebase structure better
 
 ### Development Setup
 
 ```bash
-# Install development dependencies
-npm install --dev
+# Clone your forked repository
+git clone https://github.com/yourusername/PocketFlow-Typescript.git
+cd PocketFlow-Typescript
 
-# Run linting
-npm run lint
+# Install dependencies
+npm install
 
-# Format code
-npm run format
-
-# Type checking
-npm run type-check
+# Run tests
+npm test
 ```
 
-### Research Areas
+### Reporting Bugs
 
-- **Advanced Geometric Layers**: New hyperbolic neural architectures
-- **Optimization Algorithms**: Riemannian optimization methods
-- **Applications**: Novel use cases for hyperbolic learning
-- **Theoretical Analysis**: Mathematical properties and guarantees
+When reporting bugs, please include:
 
-## 📚 References
+- A clear, descriptive title
+- Detailed steps to reproduce the issue
+- Expected and actual behavior
+- Environment information (OS, Node.js version, etc.)
+- Any additional context or screenshots
 
-### Mathematical Foundation
-- Ungar, A.A. (2008). *Analytic Hyperbolic Geometry and Albert Einstein's Special Theory of Relativity*
-- Cannon, J.W. et al. (1997). *Hyperbolic Geometry*
-- Ratcliffe, J.G. (2006). *Foundations of Hyperbolic Manifolds*
+## Community
 
-### Geometric Deep Learning
-- Bronstein, M.M. et al. (2021). *Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges*
-- Nickel, M. & Kiela, D. (2017). *Poincaré Embeddings for Learning Hierarchical Representations*
-- Chami, I. et al. (2019). *Hyperbolic Neural Networks*
+- Join our [Discord server](https://discord.gg/hUHHE9Sa6T) for discussions and support
+- Follow us on [GitHub](https://github.com/The-Pocket)
 
-## 📄 License
+## License
 
-MIT License - see [LICENSE](LICENSE) for details.
-
-## 🌟 Acknowledgments
-
-This project represents a breakthrough in geometric deep learning, implementing the first truly hyperbolic geometric hypergraph neural network. The mathematical foundations draw from decades of research in hyperbolic geometry, differential geometry, and geometric deep learning.
-
----
-
-**H²GNN: Where Geometry Meets Intelligence** 🚀
+This project is licensed under the MIT License - see the LICENSE file for details.

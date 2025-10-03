@@ -1,10 +1,15 @@
 {
-  "compilerOptions": {
-    "noImplicitAny": false
-  },
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
-}
+    "compilerOptions": {
+      "target": "es2018",
+      "module": "commonjs",
+      "declaration": true,
+      "outDir": "./dist",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "rootDir": "./src"
+    },
+    "include": ["src/**/*", "project/tests/index.ts"],
+    "exclude": ["node_modules", "dist", "tests"]
+  }
