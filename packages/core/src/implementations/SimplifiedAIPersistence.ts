@@ -380,7 +380,7 @@ export class SimplifiedAIPersistence {
       await this.restoreFromState(state);
       console.log('State loaded from file');
     } catch (error) {
-      if (error.code === 'ENOENT') {
+      if ((error as any).code === 'ENOENT') {
         console.log('No previous state found, starting fresh');
       } else {
         console.error('Failed to load state:', error);

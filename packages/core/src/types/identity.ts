@@ -17,9 +17,9 @@ export interface AIIdentity {
   curvature: number;
   
   // Capabilities and Limitations
-  capabilities: Capability[];
-  limitations: Limitation[];
-  preferences: Preferences;
+  capabilities: string[];
+  limitations: string[];
+  preferences: Record<string, any>;
   
   // Relationships
   relationships: Relationship[];
@@ -126,9 +126,9 @@ export interface IdentityEvolution {
 }
 
 export interface Verification {
-  status: VerificationStatus;
-  methods: VerificationMethod[];
-  level: VerificationLevel;
+  status: 'pending' | 'verified' | 'failed';
+  methods: string[];
+  level: 'basic' | 'advanced' | 'expert';
   lastVerified: Date;
   expiresAt?: Date;
 }

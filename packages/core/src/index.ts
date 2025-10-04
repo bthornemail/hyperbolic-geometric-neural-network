@@ -11,9 +11,10 @@ export * from './interfaces/AIPersistenceCore';
 export * from './implementations/AIPersistenceCoreImpl';
 
 // Type definitions
-export * from './types/identity';
-export * from './types/memory';
-export * from './types/security';
+// Export only specific types to avoid conflicts
+export type { AIIdentity, IdentityStatus, HyperbolicPosition, HyperbolicEmbedding } from './types/identity';
+export type { Memory, MemoryType, MemoryMetadata } from './types/memory';
+export type { SecurityFramework, EncryptedData, Credentials, AuthResult } from './types/security';
 
 // Core classes
 export class AIPersistenceCore {
@@ -22,81 +23,10 @@ export class AIPersistenceCore {
   }
 }
 
-// Re-export types for convenience
-export type {
-  AIIdentity,
-  HyperbolicPosition,
-  HyperbolicEmbedding,
-  Capability,
-  Limitation,
-  Preferences,
-  Relationship,
-  TrustNetwork,
-  IdentityHistory,
-  IdentityEvolution,
-  Verification,
-  Certificate,
-  Permission
-} from './types/identity';
+// Import the implementation
+import { AIPersistenceCoreImpl } from './implementations/AIPersistenceCoreImpl';
 
-export type {
-  Memory,
-  MemoryType,
-  MemoryMetadata,
-  MemoryRelationship,
-  AccessControl,
-  MemoryLifecycle,
-  EpisodicMemory,
-  SemanticMemory,
-  ProceduralMemory,
-  WorkingMemory,
-  MetaMemory,
-  HyperbolicMemory,
-  HyperbolicEmbedding,
-  HyperbolicRelationship,
-  HyperbolicHierarchy,
-  HyperbolicCluster,
-  MemoryConsolidation,
-  TemporalConsolidation,
-  SemanticConsolidation,
-  EmotionalConsolidation,
-  HierarchicalConsolidation
-} from './types/memory';
-
-export type {
-  SecurityFramework,
-  EncryptionService,
-  AuthenticationService,
-  AuthorizationService,
-  PrivacyService,
-  AnonymizationService,
-  AuditService,
-  MonitoringService,
-  EncryptedData,
-  Credentials,
-  AuthResult,
-  Identity,
-  Resource,
-  Action,
-  Permission,
-  Role,
-  AnonymizedData,
-  PseudonymizedData,
-  PrivateData,
-  CleanedData,
-  PrivacyPolicy,
-  ComplianceReport,
-  SecurityEvent,
-  AuditReport,
-  SecurityAnalysis,
-  Anomaly,
-  SecurityAlert,
-  SecurityActivity,
-  SecurityIncident,
-  SecurityMetrics,
-  TrendAnalysis,
-  ThreatPrediction
-} from './types/security';
+// Types are already exported above
 
 // Core configuration types
 export interface PersistenceConfig {
@@ -108,8 +38,9 @@ export interface PersistenceConfig {
 export interface IdentityConfig {
   name: string;
   type: string;
-  capabilities: any[];
-  preferences: any;
+  capabilities: string[];
+  preferences: Record<string, any>;
+  security: SecurityConfig;
 }
 
 export interface MemoryConfig {
@@ -169,7 +100,23 @@ export const DEFAULT_CONFIG: PersistenceConfig = {
     name: 'AI Identity',
     type: 'ai',
     capabilities: [],
-    preferences: {}
+    preferences: {},
+    security: {
+      encryption: {
+        algorithm: 'AES-256',
+        keySize: 256,
+        mode: 'CBC'
+      },
+      authentication: {
+        method: 'token',
+        strength: 8,
+        timeout: 3600000
+      },
+      authorization: {
+        model: 'rbac',
+        policies: []
+      }
+    }
   },
   memory: {
     storage: {

@@ -15,13 +15,13 @@
     "type-check": "npm run type-check --workspaces"
   },
   "devDependencies": {
-    "@types/node": "^22.13.1",
-    "eslint": "^9.36.0",
-    "husky": "^9.0.0",
-    "jest": "^29.7.0",
-    "lint-staged": "^15.0.0",
+    "@types/node": "^24.6.2",
+    "eslint": "^9.37.0",
+    "husky": "^9.1.7",
+    "jest": "^30.2.0",
+    "lint-staged": "^16.2.3",
     "prettier": "^3.6.2",
-    "tsup": "^8.4.0",
+    "tsup": "^8.5.0",
     "typescript": "^5.9.3"
   },
   "engines": {
@@ -33,7 +33,7 @@
     "url": "https://github.com/h2gnn/ai-persistence-package.git"
   },
   "dependencies": {
-    "@types/uuid": "^10.0.0",
+    "@types/uuid": "^11.0.0",
     "uuid": "^13.0.0"
   }
 }

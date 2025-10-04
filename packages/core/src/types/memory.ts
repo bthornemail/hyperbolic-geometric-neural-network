@@ -5,30 +5,22 @@
  */
 
 export interface MemorySystem {
-  // Memory Types
-  episodic: EpisodicMemory;
-  semantic: SemanticMemory;
-  procedural: ProceduralMemory;
-  working: WorkingMemory;
-  meta: MetaMemory;
-  
-  // Memory Operations
-  store: MemoryStore;
-  retrieve: MemoryRetrieve;
-  consolidate: MemoryConsolidate;
-  compress: MemoryCompress;
-  index: MemoryIndex;
+  store(memory: Memory): Promise<void>;
+  retrieve(query: any): Promise<Memory[]>;
+  consolidate(): Promise<void>;
+  compress(): Promise<void>;
+  initialize(): Promise<void>;
+  shutdown(): Promise<void>;
+  getMemories(): Promise<Memory[]>;
+  setMemories(memories: Memory[]): Promise<void>;
 }
 
 export interface Memory {
   id: string;
-  type: MemoryType;
-  content: any;
-  metadata: MemoryMetadata;
-  embedding: HyperbolicEmbedding;
-  relationships: MemoryRelationship[];
-  access: AccessControl;
-  lifecycle: MemoryLifecycle;
+  type: string;
+  content: string;
+  metadata: Record<string, any>;
+  timestamp: Date;
 }
 
 export interface EpisodicMemory {
@@ -39,7 +31,7 @@ export interface EpisodicMemory {
   
   // Operations
   addEvent(event: Event): Promise<void>;
-  getEvents(timeRange: TimeRange): Promise<Event[]>;
+  getEvents(timeRange: { start: Date; end: Date }): Promise<Event[]>;
   findAssociations(event: Event): Promise<Association[]>;
   createTimeline(events: Event[]): Promise<Timeline>;
   addEmotionalContext(event: Event, emotion: Emotion): Promise<void>;
@@ -67,7 +59,7 @@ export interface ProceduralMemory {
   
   // Operations
   learnSkill(skill: Skill): Promise<void>;
-  executeProcedure(procedure: Procedure): Promise<Result>;
+  executeProcedure(procedure: Procedure): Promise<any>;
   createAutomation(automation: Automation): Promise<void>;
   formHabit(habit: Habit): Promise<void>;
 }
@@ -82,19 +74,18 @@ export interface WorkingMemory {
   add(memory: MemoryItem): Promise<void>;
   remove(id: string): Promise<void>;
   focus(attention: AttentionFocus): Promise<void>;
-  process(task: ProcessingTask): Promise<ProcessingResult>;
+  process(task: ProcessingTask): Promise<any>;
 }
 
 export interface MetaMemory {
   memories: Memory[];
   strategies: MemoryStrategy[];
   monitoring: MemoryMonitoring;
-  control: MemoryControl;
   
   // Operations
   remember(memory: Memory): Promise<void>;
   forget(memoryId: string): Promise<void>;
-  monitor(): Promise<MemoryStatus>;
+  monitor(): Promise<any>;
   control(strategy: MemoryStrategy): Promise<void>;
 }
 
@@ -119,7 +110,7 @@ export interface HyperbolicEmbedding {
   norm: number;
   curvature: number;
   timestamp: Date;
-  metadata: EmbeddingMetadata;
+  metadata: { dimension: number; quality: number; confidence: number; source: string };
   relationships: string[];
 }
 
@@ -153,8 +144,8 @@ export interface MemoryConsolidation {
   // Consolidation Strategies
   temporal: TemporalConsolidation;
   semantic: SemanticConsolidation;
-  emotional: EmotionalConsolidation;
-  hierarchical: HierarchicalConsolidation;
+  emotional: any;
+  hierarchical: any;
   
   // Consolidation Operations
   consolidate(memories: Memory[]): Promise<ConsolidatedMemory>;

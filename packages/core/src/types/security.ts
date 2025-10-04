@@ -5,21 +5,12 @@
  */
 
 export interface SecurityFramework {
-  // Encryption
-  encryption: EncryptionService;
-  keyManagement: KeyManagementService;
-  
-  // Authentication
-  authentication: AuthenticationService;
-  authorization: AuthorizationService;
-  
-  // Privacy
-  privacy: PrivacyService;
-  anonymization: AnonymizationService;
-  
-  // Audit
-  audit: AuditService;
-  monitoring: MonitoringService;
+  encrypt(data: any): Promise<EncryptedData>;
+  decrypt(encryptedData: EncryptedData): Promise<any>;
+  authenticate(credentials: Credentials): Promise<AuthResult>;
+  authorize(identity: string, resource: string, action: string): Promise<boolean>;
+  initialize(): Promise<void>;
+  shutdown(): Promise<void>;
 }
 
 export interface EncryptionService {
@@ -43,7 +34,7 @@ export interface AuthenticationService {
   revokeToken(token: string): Promise<void>;
   
   // Multi-Factor Authentication
-  enableMFA(identityId: string, method: MFAMethod): Promise<void>;
+  enableMFA(identityId: string, method: string): Promise<void>;
   verifyMFA(identityId: string, code: string): Promise<boolean>;
   
   // Biometric Authentication
@@ -105,7 +96,7 @@ export interface AuditService {
 
 export interface MonitoringService {
   // Monitoring Operations
-  monitor(metric: SecurityMetric): Promise<MonitoringResult>;
+  monitor(metric: any): Promise<any>;
   alert(alert: SecurityAlert): Promise<void>;
   track(activity: SecurityActivity): Promise<void>;
   report(incident: SecurityIncident): Promise<void>;
@@ -135,17 +126,15 @@ export interface SecureChannel {
 }
 
 export interface Credentials {
-  type: CredentialType;
-  value: string;
-  metadata: CredentialMetadata;
+  username: string;
+  password: string;
 }
 
 export interface AuthResult {
   success: boolean;
   token?: string;
-  expires?: Date;
-  permissions?: Permission[];
-  metadata?: AuthMetadata;
+  expiresAt?: Date;
+  identity?: string;
 }
 
 export interface Biometric {
@@ -538,12 +527,7 @@ export interface Recommendation {
   impact: Impact;
 }
 
-export interface ComplianceStandard {
-  name: string;
-  version: string;
-  requirements: Requirement[];
-  controls: Control[];
-}
+// ComplianceStandard is already defined as enum above
 
 export interface AuditSummary {
   totalEvents: number;

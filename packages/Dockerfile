@@ -27,13 +27,15 @@ COPY security/ ./security/
 COPY communication/ ./communication/
 COPY tests/ ./tests/
 COPY *.md ./
+COPY build-core-only.sh ./
+COPY server.mjs ./
 
 # Install dependencies
 RUN npm ci --only=production
 
 # Build the application
-RUN chmod +x build-production.sh
-RUN ./build-production.sh
+RUN chmod +x build-core-only.sh
+RUN ./build-core-only.sh
 
 # Stage 2: Production stage
 FROM node:18-alpine AS production
@@ -56,8 +58,11 @@ COPY --from=builder /app/dist/production ./
 # Copy package.json
 COPY --from=builder /app/package.json ./
 
+# Copy server.mjs
+COPY --from=builder /app/server.mjs ./
+
 # Install production dependencies
-RUN npm ci --only=production && npm cache clean --force
+RUN npm install --only=production && npm cache clean --force
 
 # Create necessary directories
 RUN mkdir -p /app/persistence /app/logs /app/state && \
@@ -86,7 +91,7 @@ WORKDIR /app
 
 # Start the application
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["node", "index.js"]
+CMD ["node", "server.mjs"]
 
 # Labels
 LABEL maintainer="H²GNN Team"

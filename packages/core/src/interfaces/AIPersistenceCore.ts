@@ -55,16 +55,13 @@ export interface IdentityUpdate {
 }
 
 export interface MemoryQuery {
-  type: MemoryType;
+  type?: string;
   content?: string;
-  timeRange?: TimeRange;
-  tags?: string[];
   limit?: number;
-  offset?: number;
 }
 
 export interface SystemStatus {
-  status: SystemStatusType;
+  status: 'running' | 'shutdown';
   uptime: number;
   memory: MemoryStatus;
   performance: PerformanceStatus;
@@ -103,7 +100,7 @@ export interface SecurityStatus {
 
 export interface ComponentHealth {
   name: string;
-  status: ComponentStatus;
+  status: 'healthy' | 'degraded' | 'unhealthy';
   metrics: ComponentMetrics;
   lastChecked: Date;
 }
@@ -133,9 +130,9 @@ export interface ComponentMetrics {
 // Supporting Types
 export interface Memory {
   id: string;
-  type: MemoryType;
-  content: any;
-  metadata: MemoryMetadata;
+  type: string;
+  content: string;
+  metadata: Record<string, any>;
   timestamp: Date;
 }
 
@@ -227,16 +224,15 @@ export interface EncryptedData {
 }
 
 export interface Credentials {
-  type: string;
-  value: string;
-  metadata: Record<string, any>;
+  username: string;
+  password: string;
 }
 
 export interface AuthResult {
   success: boolean;
   token?: string;
-  expires?: Date;
-  permissions?: Permission[];
+  expiresAt?: Date;
+  identity?: string;
 }
 
 export interface Permission {

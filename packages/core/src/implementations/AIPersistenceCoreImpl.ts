@@ -6,18 +6,42 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
-import { AIPersistenceCore, IdentityConfig, IdentityUpdate, MemoryQuery, SystemStatus, HealthStatus } from '../interfaces/AIPersistenceCore';
+import { AIPersistenceCore, MemoryQuery, SystemStatus, HealthStatus } from '../interfaces/AIPersistenceCore';
 import { AIIdentity, IdentityStatus, HyperbolicPosition, HyperbolicEmbedding } from '../types/identity';
-import { MemorySystem, Memory, MemoryType, MemoryMetadata } from '../types/memory';
+import { MemorySystem, Memory } from '../types/memory';
 import { SecurityFramework, EncryptedData, Credentials, AuthResult } from '../types/security';
+import { SecurityFrameworkImpl } from './SecurityFrameworkImpl';
+import { MemorySystemImpl } from './MemorySystemImpl';
 
 export class AIPersistenceCoreImpl implements AIPersistenceCore {
   private initialized: boolean = false;
   private startTime: Date = new Date();
   private identities: Map<string, AIIdentity> = new Map();
+  public identity: AIIdentity = {
+    id: '',
+    fingerprint: '',
+    version: '1.0.0',
+    status: 'pending' as any,
+    hyperbolicPosition: { coordinates: [], norm: 0, curvature: -1, timestamp: new Date() },
+    embedding: { id: '', vector: [], norm: 0, curvature: -1, timestamp: new Date(), metadata: { dimension: 0, quality: 0, confidence: 0, source: '' } },
+    curvature: -1,
+    capabilities: [],
+    limitations: [],
+    preferences: {},
+    relationships: [],
+    trustNetwork: { nodes: [], edges: [], centrality: { degree: 0, betweenness: 0, closeness: 0, eigenvector: 0 }, clustering: { coefficient: 0, modularity: 0, communities: [] }, resilience: { robustness: 0, recovery: 0, adaptation: 0 } },
+    history: { events: [], timeline: { start: new Date(), end: new Date(), events: [], phases: [] }, milestones: [] },
+    verification: { status: 'pending' as any, methods: [], level: 'basic' as any, lastVerified: new Date() },
+    certificates: [],
+    permissions: [],
+    evolution: { adaptations: [], learnings: [], transformations: [], stages: [] },
+    updatedAt: new Date(),
+    createdAt: new Date(),
+    lastAccessed: new Date()
+  };
   private memories: Map<string, Memory> = new Map();
-  private security: SecurityFramework;
-  private memory: MemorySystem;
+  public security: SecurityFramework;
+  public memory: MemorySystem;
   private state: SystemState = {
     identities: [],
     memories: [],
@@ -99,7 +123,7 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
     const securityStatus = await this.getSecurityStatus();
 
     return {
-      status: this.initialized ? 'running' : 'shutdown',
+      status: this.initialized ? 'running' as const : 'shutdown' as const,
       uptime,
       memory: memoryStatus,
       performance: performanceStatus,
@@ -121,7 +145,10 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
 
     return {
       healthy,
-      components,
+      components: components.map(comp => ({
+        ...comp,
+        status: comp.status as 'healthy' | 'degraded' | 'unhealthy'
+      })),
       metrics,
       alerts,
       lastChecked: new Date()
@@ -170,9 +197,9 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
         transformations: []
       },
       verification: {
-        status: 'pending',
+        status: 'pending' as const,
         methods: [],
-        level: 'basic',
+        level: 'basic' as const,
         lastVerified: new Date()
       },
       certificates: [],
@@ -186,7 +213,7 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
     return identity;
   }
 
-  async updateIdentity(id: string, updates: IdentityUpdate): Promise<AIIdentity> {
+  async updateIdentity(id: string, updates: { name?: string; capabilities?: string[]; preferences?: Record<string, any> }): Promise<AIIdentity> {
     if (!this.initialized) {
       throw new Error('AI Persistence Core is not initialized');
     }
@@ -249,15 +276,17 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
   }
 
   // Memory Operations
-  async storeMemory(memory: Memory): Promise<void> {
+  async storeMemory(memory: { type: string; content: string; metadata: Record<string, any> }): Promise<void> {
     if (!this.initialized) {
       throw new Error('AI Persistence Core is not initialized');
     }
 
     const id = uuidv4();
     const memoryWithId: Memory = {
-      ...memory,
       id,
+      type: memory.type,
+      content: memory.content,
+      metadata: memory.metadata,
       timestamp: new Date()
     };
 
@@ -343,7 +372,7 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
     
     // Store as memory
     await this.storeMemory({
-      type: 'semantic',
+      type: 'semantic' as const,
       content: conceptData.concept,
       metadata: {
         source: 'learning',
@@ -351,7 +380,8 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
         confidence: 0.8,
         importance: 0.7,
         tags: ['learning', 'concept'],
-        context: conceptData.context
+        context: conceptData.context,
+        timestamp: new Date()
       }
     });
 
@@ -397,7 +427,7 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
     console.log('State saved successfully');
   }
 
-  async loadState(): Promise<SystemState> {
+  async loadState(): Promise<SystemState | null> {
     if (!this.initialized) {
       throw new Error('AI Persistence Core is not initialized');
     }
@@ -407,14 +437,10 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
       return null;
     }
     const state = await this.decrypt(encryptedState);
-    return state;
+    return state as SystemState;
   }
 
   async restoreState(): Promise<void> {
-    if (!this.initialized) {
-      throw new Error('AI Persistence Core is not initialized');
-    }
-
     try {
       const state = await this.loadState();
       if (state) {
@@ -630,7 +656,7 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
       const stateString = await fs.readFile('state.json', 'utf8');
       return JSON.parse(stateString);
     } catch (error) {
-      if (error.code === 'ENOENT') {
+      if ((error as any).code === 'ENOENT') {
         return null;
       }
       throw error;
@@ -743,7 +769,7 @@ export interface CheckpointData {
 }
 
 // Mock implementations for dependencies
-class SecurityFrameworkImpl implements SecurityFramework {
+class MockSecurityFrameworkImpl {
   constructor(private config: SecurityConfig) {}
 
   async initialize(): Promise<void> {
@@ -758,8 +784,8 @@ class SecurityFrameworkImpl implements SecurityFramework {
     return {
       success: true,
       token: 'mock-token',
-      expires: new Date(Date.now() + 3600000),
-      permissions: []
+      expiresAt: new Date(Date.now() + 3600000),
+      identity: credentials.username
     };
   }
 
@@ -772,6 +798,7 @@ class SecurityFrameworkImpl implements SecurityFramework {
       data: Buffer.from(JSON.stringify(data)).toString('base64'),
       algorithm: 'AES-256',
       keyId: 'mock-key',
+      iv: 'mock-iv',
       timestamp: new Date()
     };
   }
@@ -781,7 +808,7 @@ class SecurityFrameworkImpl implements SecurityFramework {
   }
 }
 
-class MemorySystemImpl implements MemorySystem {
+class MockMemorySystemImpl {
   constructor(private config: MemoryConfig) {}
 
   async initialize(): Promise<void> {
@@ -806,5 +833,13 @@ class MemorySystemImpl implements MemorySystem {
 
   async compress(): Promise<void> {
     console.log('Memory compressed');
+  }
+
+  async getMemories(): Promise<Memory[]> {
+    return [];
+  }
+
+  async setMemories(memories: Memory[]): Promise<void> {
+    console.log(`Restored ${memories.length} memories to memory system`);
   }
 }
