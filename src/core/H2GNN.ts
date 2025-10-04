@@ -38,6 +38,14 @@ export interface H2GNNConfig {
   crossPlatformSync?: boolean;
 }
 
+// Training configuration accepted by train(); kept minimal for compatibility
+export interface TrainingConfig {
+  learningRate: number;
+  batchSize: number;
+  epochs: number;
+  validationData?: TrainingData;
+}
+
 export interface TrainingData {
   nodes: Vector[];
   edges: [number, number][];
@@ -179,7 +187,7 @@ export class HyperbolicGeometricHGN {
   /**
    * Training loop with geometric loss functions
    */
-  async train(trainingData: TrainingData[]): Promise<void> {
+  async train(trainingData: TrainingData[], _config?: Partial<TrainingConfig>): Promise<void> {
     console.log('🚀 Starting H²GNN Training...');
     
     for (let epoch = 0; epoch < this.config.maxEpochs; epoch++) {
@@ -509,6 +517,13 @@ export class HyperbolicGeometricHGN {
    */
   getGeometricMetrics(): GeometricInsights | undefined {
     return this.geometricMetrics;
+  }
+
+  /**
+   * Get the configured embedding dimensionality
+   */
+  getEmbeddingDim(): number {
+    return this.config.embeddingDim;
   }
 
   /**
