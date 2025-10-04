@@ -7,14 +7,14 @@
  * Category: Core Components
  */
 
-import { redis-hd-caching } from '../../core/redis-hd-caching';
+import { RedisHdCaching } from '../../core/redis-hd-caching';
 
 describe('redis-hd-caching', () => {
-  let instance: redis-hd-caching;
+  let instance: RedisHdCaching;
 
   beforeEach(() => {
     // Setup test instance
-    instance = new redis-hd-caching();
+    instance = new RedisHdCaching();
   });
 
   afterEach(() => {

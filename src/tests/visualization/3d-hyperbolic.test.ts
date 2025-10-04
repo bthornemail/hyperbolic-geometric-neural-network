@@ -5,7 +5,7 @@
  * Converted from src/demo/phase4-3d-visualization-demo.ts
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+// Using Vitest globals
 
 describe('3D Hyperbolic Visualization', () => {
   let renderer: any;

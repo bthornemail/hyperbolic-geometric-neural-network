@@ -5,7 +5,7 @@
  * Converted from src/demo/phase4-production-llm-demo.ts
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+// Using Vitest globals
 
 describe('Production LLM Integration', () => {
   let llmService: any;

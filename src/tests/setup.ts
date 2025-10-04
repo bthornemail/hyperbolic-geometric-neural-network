@@ -12,6 +12,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { vi } from 'vitest';
 
 // Global test configuration
 const TEST_CONFIG = {
@@ -188,10 +189,10 @@ global.mocks = {
    * Mock H2GNN instance
    */
   mockH2GNN: {
-    learnWithMemory: jest.fn().mockResolvedValue(undefined),
-    getMemories: jest.fn().mockResolvedValue([]),
-    consolidateMemories: jest.fn().mockResolvedValue(undefined),
-    getSystemStatus: jest.fn().mockResolvedValue({
+    learnWithMemory: vi.fn().mockResolvedValue(undefined),
+    getMemories: vi.fn().mockResolvedValue([]),
+    consolidateMemories: vi.fn().mockResolvedValue(undefined),
+    getSystemStatus: vi.fn().mockResolvedValue({
       totalMemories: 0,
       understandingSnapshots: 0,
       learningDomains: 0,
@@ -203,21 +204,21 @@ global.mocks = {
    * Mock file system operations
    */
   mockFileSystem: {
-    existsSync: jest.fn(),
-    mkdirSync: jest.fn(),
-    writeFileSync: jest.fn(),
-    readFileSync: jest.fn(),
-    rmSync: jest.fn()
+    existsSync: vi.fn(),
+    mkdirSync: vi.fn(),
+    writeFileSync: vi.fn(),
+    readFileSync: vi.fn(),
+    rmSync: vi.fn()
   },
 
   /**
    * Mock console operations
    */
   mockConsole: {
-    log: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-    info: jest.fn()
+    log: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn()
   }
 };
 
@@ -240,7 +241,10 @@ afterAll(() => {
 });
 
 // Global test timeout
-jest.setTimeout(TEST_CONFIG.timeout);
+// Note: Vitest handles timeouts differently, this is for Jest compatibility
+if (typeof jest !== 'undefined') {
+  jest.setTimeout(TEST_CONFIG.timeout);
+}
 
 // Export test utilities for use in tests
 export { TEST_CONFIG };

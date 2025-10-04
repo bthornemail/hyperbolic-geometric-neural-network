@@ -7,7 +7,7 @@
  * Category: Core Components
  */
 
-import { IpcTransport } from '../../core/transports/ipc-transport';
+import { IPCTransport } from '../../core/transports/ipc-transport';
 
 describe('ipc-transport', () => {
   let instance: IpcTransport;

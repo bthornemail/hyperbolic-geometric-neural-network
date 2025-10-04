@@ -5,7 +5,7 @@
  * Converted from src/demo/wordnet-training-demo.ts
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+// Using Vitest globals
 
 describe('WordNet Training Pipeline', () => {
   let wordnet: any;

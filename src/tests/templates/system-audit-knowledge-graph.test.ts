@@ -7,14 +7,14 @@
  * Category: Analysis Components
  */
 
-import { system-audit-knowledge-graph } from '../../analysis/system-audit-knowledge-graph';
+import { SystemAuditKnowledgeGraph } from '../../analysis/system-audit-knowledge-graph';
 
 describe('system-audit-knowledge-graph', () => {
-  let instance: system-audit-knowledge-graph;
+  let instance: SystemAuditKnowledgeGraph;
 
   beforeEach(() => {
     // Setup test instance
-    instance = new system-audit-knowledge-graph();
+    instance = new SystemAuditKnowledgeGraph();
   });
 
   afterEach(() => {

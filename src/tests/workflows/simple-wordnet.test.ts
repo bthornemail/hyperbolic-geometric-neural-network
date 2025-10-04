@@ -5,7 +5,7 @@
  * Converted from src/demo/simple-wordnet-test.ts
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+// Using Vitest globals
 
 describe('Simple WordNet Integration', () => {
   let wordnet: any;

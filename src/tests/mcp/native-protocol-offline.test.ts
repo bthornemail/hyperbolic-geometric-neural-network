@@ -5,7 +5,7 @@
  * Converted from src/demo/native-protocol-demo-offline.ts
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+// Using Vitest globals
 
 describe('Native Protocol Offline', () => {
   let offlineProtocol: any;

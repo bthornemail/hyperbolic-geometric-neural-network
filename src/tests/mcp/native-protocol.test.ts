@@ -5,7 +5,7 @@
  * Converted from src/demo/native-protocol-demo.ts
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+// Using Vitest globals
 
 describe('Native Protocol Communication', () => {
   let protocol: any;

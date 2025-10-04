@@ -5,7 +5,7 @@
  * Converted from src/demo/native-protocol-demo-core.ts
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+// Using Vitest globals
 
 describe('Native Protocol Core', () => {
   let protocolCore: any;
