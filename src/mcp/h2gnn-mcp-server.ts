@@ -29,8 +29,8 @@ const { HierarchicalQAWorkflow, ConceptLearningWorkflow, SemanticExplorationWork
 
 // Global system state
 let wordnetProcessor: any = null;
-let activeWorkflows: Map<string, any> = new Map();
-let knowledgeGraphMCP: KnowledgeGraphMCP = new KnowledgeGraphMCP();
+const activeWorkflows: Map<string, any> = new Map();
+const knowledgeGraphMCP: KnowledgeGraphMCP = new KnowledgeGraphMCP();
 
 /**
  * MCP Server for H²GNN System

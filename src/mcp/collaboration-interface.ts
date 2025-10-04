@@ -326,7 +326,7 @@ export class AIHumanCollaborationInterface {
     const session = this.getSession(sessionId);
     
     const participantContributions: Record<string, number> = {};
-    let conceptsExplored: Set<string> = new Set();
+    const conceptsExplored: Set<string> = new Set();
     let reasoningChains = 0;
 
     // Analyze session history

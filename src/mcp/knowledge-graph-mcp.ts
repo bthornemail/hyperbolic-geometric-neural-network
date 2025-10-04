@@ -153,9 +153,9 @@ export class KnowledgeGraphMCP {
       const nodes: KnowledgeNode[] = [];
       const edges: KnowledgeEdge[] = [];
       const languages = new Set<string>();
-      let totalFiles = 0;
-      let totalLines = 0;
-      let totalComplexity = 0;
+      const totalFiles = 0;
+      const totalLines = 0;
+      const totalComplexity = 0;
 
       if (stats.isDirectory()) {
         await this.analyzeDirectory(absolutePath, nodes, edges, {
