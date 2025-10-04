@@ -22,7 +22,7 @@ describe('Hyperbolic Projection Engine', () => {
   describe('Projection Operations', () => {
     it('should project to hyperbolic space', () => {
       const euclideanPoint = [0.5, 0.3, 0.8];
-      const hyperbolicPoint = engine.projectToHyperbolic(euclideanPoint);
+      const hyperbolicPoint = engine.poincareToGeographic(euclideanPoint);
       
       expect(hyperbolicPoint).toBeDefined();
       expect(hyperbolicPoint.length).toBe(4); // Lorentz coordinates
@@ -30,7 +30,7 @@ describe('Hyperbolic Projection Engine', () => {
 
     it('should maintain hyperbolic constraints', () => {
       const point = [0.5, 0.3, 0.8];
-      const projected = engine.projectToHyperbolic(point);
+      const projected = engine.poincareToGeographic(point);
       
       // Check Lorentz constraint: x₀² - x₁² - x₂² - x₃² = 1
       const constraint = projected[0]**2 - projected[1]**2 - projected[2]**2 - projected[3]**2;
@@ -47,7 +47,7 @@ describe('Hyperbolic Projection Engine', () => {
 
     it('should maintain round-trip consistency', () => {
       const originalPoint = [0.3, 0.4, 0.5];
-      const hyperbolic = engine.projectToHyperbolic(originalPoint);
+      const hyperbolic = engine.poincareToGeographic(originalPoint);
       const backToEuclidean = engine.projectFromHyperbolic(hyperbolic);
       
       expect(backToEuclidean[0]).toBeCloseTo(originalPoint[0], 3);
@@ -140,8 +140,8 @@ describe('Hyperbolic Projection Engine', () => {
       const point1 = [0.1, 0.2, 0.3];
       const point2 = [0.4, 0.5, 0.6];
       
-      const hyperbolic1 = engine.projectToHyperbolic(point1);
-      const hyperbolic2 = engine.projectToHyperbolic(point2);
+      const hyperbolic1 = engine.poincareToGeographic(point1);
+      const hyperbolic2 = engine.poincareToGeographic(point2);
       
       const distance = engine.computeHyperbolicDistance(hyperbolic1, hyperbolic2);
       
@@ -157,7 +157,7 @@ describe('Hyperbolic Projection Engine', () => {
       ];
       
       const hyperbolicPoints = testPoints.map(point => 
-        engine.projectToHyperbolic(point)
+        engine.poincareToGeographic(point)
       );
       
       // Check that all points maintain hyperbolic constraints
@@ -169,7 +169,7 @@ describe('Hyperbolic Projection Engine', () => {
 
     it('should handle edge cases near boundary', () => {
       const nearBoundaryPoint = [0.999, 0.001];
-      const projected = engine.projectToHyperbolic(nearBoundaryPoint);
+      const projected = engine.poincareToGeographic(nearBoundaryPoint);
       
       expect(projected).toBeDefined();
       expect(projected.length).toBe(3);
@@ -191,7 +191,7 @@ describe('Hyperbolic Projection Engine', () => {
       ]);
       
       const projections = points.map(point => 
-        engine.projectToHyperbolic(point)
+        engine.poincareToGeographic(point)
       );
       
       const endTime = Date.now();
@@ -210,7 +210,7 @@ describe('Hyperbolic Projection Engine', () => {
       ]);
       
       const projections = points.map(point => 
-        engine.projectToHyperbolic(point)
+        engine.poincareToGeographic(point)
       );
       
       const finalMemory = process.memoryUsage().heapUsed;
@@ -223,22 +223,22 @@ describe('Hyperbolic Projection Engine', () => {
 
   describe('Error Handling', () => {
     it('should handle invalid input dimensions', () => {
-      expect(() => engine.projectToHyperbolic([0.5])) // 1D input
+      expect(() => engine.poincareToGeographic([0.5])) // 1D input
         .toThrow('Invalid input dimensions');
     });
 
     it('should handle points outside valid range', () => {
       const invalidPoint = [2.0, 1.5, 1.0]; // Outside unit ball
       
-      expect(() => engine.projectToHyperbolic(invalidPoint))
+      expect(() => engine.poincareToGeographic(invalidPoint))
         .toThrow('Point outside valid hyperbolic range');
     });
 
     it('should handle null or undefined inputs', () => {
-      expect(() => engine.projectToHyperbolic(null as any))
+      expect(() => engine.poincareToGeographic(null as any))
         .toThrow('Input cannot be null or undefined');
       
-      expect(() => engine.projectToHyperbolic(undefined as any))
+      expect(() => engine.poincareToGeographic(undefined as any))
         .toThrow('Input cannot be null or undefined');
     });
   });

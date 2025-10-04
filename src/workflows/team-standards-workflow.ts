@@ -501,7 +501,7 @@ export class TeamStandardsWorkflow extends Flow<TeamStandardsState> {
   private refineTeamStandards: RefineTeamStandardsNode;
 
   constructor() {
-    super();
+    super({ start: new DefineTeamStandardsNode() });
     
     // Create nodes
     this.defineTeamStandards = new DefineTeamStandardsNode();

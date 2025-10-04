@@ -505,7 +505,7 @@ export class TeamLearningWorkflow extends Flow<TeamLearningState> {
   private applyTeamInsights: ApplyTeamInsightsNode;
 
   constructor() {
-    super();
+    super({ start: new AnalyzeTeamCodeNode() });
     
     // Create nodes
     this.analyzeTeamCode = new AnalyzeTeamCodeNode();

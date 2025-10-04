@@ -139,7 +139,7 @@ export class EnhancedD3Wrapper extends EventEmitter {
   }
 
   // 🎨 MAIN RENDERING METHODS
-  async renderGeoJSON(geoJSON: any, options: D3VisualizationOptions = {}): Promise<void> {
+  async renderGeoJSON(geoJSON: any, options: D3VisualizationOptions = { container: 'body' }): Promise<void> {
     this.currentData = geoJSON;
     
     console.warn('🎨 Rendering GeoJSON with D3');
@@ -634,11 +634,4 @@ export class IntegratedD3VisualizationSystem {
   }
 }
 
-// Export for immediate use
-export {
-  EnhancedD3Wrapper,
-  IntegratedD3VisualizationSystem,
-  CollaborationOverlay,
-  ConfidenceVisualizer,
-  RealTimeAnimator
-};
+// Classes are already exported above with 'export class'

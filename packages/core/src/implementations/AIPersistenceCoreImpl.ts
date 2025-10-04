@@ -5,6 +5,7 @@
  */
 
 import { v4 as uuidv4 } from 'uuid';
+import { promises as fs } from 'fs';
 import { AIPersistenceCore, IdentityConfig, IdentityUpdate, MemoryQuery, SystemStatus, HealthStatus } from '../interfaces/AIPersistenceCore';
 import { AIIdentity, IdentityStatus, HyperbolicPosition, HyperbolicEmbedding } from '../types/identity';
 import { MemorySystem, Memory, MemoryType, MemoryMetadata } from '../types/memory';
@@ -365,9 +366,12 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
       throw new Error('AI Persistence Core is not initialized');
     }
 
+    // Get memories from memory system to ensure we have the latest state
+    const memories = await this.memory.getMemories();
+    
     return {
       identities: Array.from(this.identities.values()),
-      memories: Array.from(this.memories.values()),
+      memories: memories,
       learningProgress: Array.from(this.learningProgress.values()),
       checkpoints: Array.from(this.checkpoints.values()),
       timestamp: new Date()
@@ -393,6 +397,9 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
     }
 
     const encryptedState = await this.loadPersistedState();
+    if (!encryptedState) {
+      return null;
+    }
     const state = await this.decrypt(encryptedState);
     return state;
   }
@@ -404,8 +411,10 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
 
     try {
       const state = await this.loadState();
-      await this.restoreFromState(state);
-      console.log('State restored successfully');
+      if (state) {
+        await this.restoreFromState(state);
+        console.log('State restored successfully');
+      }
     } catch (error) {
       console.log('No previous state found, starting fresh');
     }
@@ -417,10 +426,11 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
       this.identities.set(identity.id, identity);
     }
 
-    // Restore memories
+    // Restore memories to both local storage and memory system
     for (const memory of state.memories) {
       this.memories.set(memory.id, memory);
     }
+    await this.memory.setMemories(state.memories);
 
     // Restore learning progress
     for (const progress of state.learningProgress) {
@@ -483,10 +493,12 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
 
     try {
       const state = await this.loadState();
-      for (const progress of state.learningProgress) {
-        this.learningProgress.set(progress.id, progress);
+      if (state) {
+        for (const progress of state.learningProgress) {
+          this.learningProgress.set(progress.id, progress);
+        }
+        console.log('Learning progress restored');
       }
-      console.log('Learning progress restored');
     } catch (error) {
       console.log('No learning progress found to restore');
     }
@@ -602,18 +614,21 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
   }
 
   private async persistState(encryptedState: EncryptedData): Promise<void> {
-    // Implementation to persist state to storage
+    const stateString = JSON.stringify(encryptedState, null, 2);
+    await fs.writeFile('state.json', stateString, 'utf8');
     console.log('State persisted to storage');
   }
 
-  private async loadPersistedState(): Promise<EncryptedData> {
-    // Implementation to load state from storage
-    return {
-      data: 'mock-encrypted-state',
-      algorithm: 'AES-256',
-      keyId: 'mock-key',
-      timestamp: new Date()
-    };
+  private async loadPersistedState(): Promise<EncryptedData | null> {
+    try {
+      const stateString = await fs.readFile('state.json', 'utf8');
+      return JSON.parse(stateString);
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        return null;
+      }
+      throw error;
+    }
   }
 }
 

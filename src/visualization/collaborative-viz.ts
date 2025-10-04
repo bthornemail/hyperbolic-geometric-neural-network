@@ -11,7 +11,7 @@
  * - Session management
  */
 
-import { HyperbolicEmbedding } from './3d-hyperbolic-renderer.js';
+import { HyperbolicEmbedding, HyperbolicPoint } from './3d-hyperbolic-renderer.js';
 import { ConceptNavigator, NavigationState } from './concept-navigator.js';
 
 export interface CollaborationSession {

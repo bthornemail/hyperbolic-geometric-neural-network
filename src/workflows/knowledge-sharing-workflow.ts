@@ -422,7 +422,7 @@ export class KnowledgeSharingWorkflow extends Flow<KnowledgeSharingState> {
   private integrateTeamInsights: IntegrateTeamInsightsNode;
 
   constructor() {
-    super();
+    super({ start: new ExtractTeamKnowledgeNode() });
     
     // Create nodes
     this.extractTeamKnowledge = new ExtractTeamKnowledgeNode();

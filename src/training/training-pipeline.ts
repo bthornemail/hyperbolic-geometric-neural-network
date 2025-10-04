@@ -9,7 +9,15 @@
  * - Continuous learning capabilities
  */
 
-import { HyperbolicGeometricHGN, TrainingData, TrainingConfig } from '../core/H2GNN';
+import { HyperbolicGeometricHGN, TrainingData } from '../core/H2GNN';
+
+// Define TrainingConfig interface locally
+interface TrainingConfig {
+  learningRate: number;
+  epochs: number;
+  batchSize: number;
+  validationSplit: number;
+}
 import { WordNetProcessor, WordNetTrainingPipeline, createWordNetPipeline } from '../datasets/wordnet-integration';
 import AgentWorkflows from '../workflows/agent-workflows';
 
@@ -98,6 +106,8 @@ export class TrainingPipeline {
 
   constructor(config?: Partial<PipelineConfig>) {
     this.config = this.mergeConfig(config);
+    this.h2gnn = new HyperbolicGeometricHGN();
+    this.wordnetPipeline = createWordNetPipeline();
     this.initializeComponents();
   }
 
@@ -350,7 +360,7 @@ export class TrainingPipeline {
       console.warn(`    Epoch ${epoch}/${this.config.h2gnn.epochs}`);
       
       // Train one epoch
-      await this.h2gnn.train([trainData], trainingConfig);
+      await this.h2gnn.train([trainData]);
       
       // Evaluate
       const valResult = await this.h2gnn.predict(valData);

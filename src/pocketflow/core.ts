@@ -138,6 +138,13 @@ class NodeConnector {
 }
 
 /**
+ * Generic Node class for type-safe workflows
+ */
+export abstract class Node<T = any> extends BaseNode {
+  // Generic node implementation
+}
+
+/**
  * Batch Node - processes iterables
  */
 export abstract class BatchNode extends BaseNode {
@@ -190,7 +197,7 @@ export abstract class BatchNode extends BaseNode {
 /**
  * Flow - orchestrates nodes through actions
  */
-export class Flow extends BaseNode {
+export class Flow<T = any> extends BaseNode {
   private startNode: BaseNode;
 
   constructor(config: FlowConfig & { start: BaseNode }) {

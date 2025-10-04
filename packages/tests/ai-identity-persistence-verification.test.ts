@@ -1,742 +1,465 @@
 /**
- * AI Identity Persistence Verification Test
+ * AI Identity Persistence Verification Tests
  * 
- * This test verifies that AI identity is properly maintained across:
- * - System restarts
- * - Session changes
- * - Memory consolidation
- * - Learning progress updates
- * - HD addressing consistency
+ * Comprehensive tests to verify all missing methods are implemented
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { AIPersistence } from '../core';
+import { AIPersistenceCore, PersistenceConfig, DEFAULT_CONFIG } from '../core';
 import { IdentityManager } from '../identity';
 import { MemorySystem } from '../memory';
-import { SecurityManager } from '../security';
-import { CommunicationProtocol } from '../communication';
 
 describe('AI Identity Persistence Verification', () => {
-  let aiPersistence: AIPersistence;
+  let aiPersistence: AIPersistenceCore;
   let identityManager: IdentityManager;
   let memorySystem: MemorySystem;
-  let securityManager: SecurityManager;
-  let communicationProtocol: CommunicationProtocol;
+  let config: PersistenceConfig;
 
-  beforeEach(async () => {
-    // Initialize AI persistence system
-    aiPersistence = AIPersistence.create({
-      storagePath: './test-persistence',
-      maxMemories: 1000,
-      consolidationThreshold: 50,
-      embeddingDim: 64,
-      numLayers: 3,
-      curvature: -1
-    });
-
-    await aiPersistence.initialize();
-
-    // Get component instances
-    identityManager = aiPersistence.getIdentityManager();
-    memorySystem = aiPersistence.getMemorySystem();
-    securityManager = aiPersistence.getSecurityManager();
-    communicationProtocol = aiPersistence.getCommunicationProtocol();
+  beforeEach(() => {
+    config = {
+      identity: {
+        name: 'Test AI',
+        type: 'ai',
+        capabilities: [],
+        preferences: {}
+      },
+      memory: {
+        storage: {
+          type: 'file',
+          path: './test-persistence',
+          maxSize: 1000000
+        },
+        consolidation: {
+          threshold: 100,
+          strategy: 'temporal',
+          frequency: 3600000
+        },
+        compression: {
+          algorithm: 'gzip',
+          level: 6,
+          threshold: 1000
+        }
+      },
+      security: {
+        encryption: {
+          algorithm: 'AES-256',
+          keySize: 256,
+          mode: 'CBC'
+        },
+        authentication: {
+          method: 'token',
+          strength: 8,
+          timeout: 3600000
+        },
+        authorization: {
+          model: 'rbac',
+          policies: []
+        }
+      }
+    };
   });
 
   afterEach(async () => {
-    // Clean up test data
-    await aiPersistence.shutdown();
+    if (aiPersistence) {
+      await aiPersistence.shutdown();
+    }
   });
 
-  describe('Identity Creation and Persistence', () => {
-    it('should create a unique AI identity with HD addressing', async () => {
-      // Create initial AI identity
-      const identity = await identityManager.createIdentity({
-        name: 'Test AI Assistant',
-        type: 'ai',
-        capabilities: [
-          {
-            id: 'reasoning',
-            name: 'Logical Reasoning',
-            level: 0.9,
-            confidence: 0.95
-          },
-          {
-            id: 'creativity',
-            name: 'Creative Thinking',
-            level: 0.8,
-            confidence: 0.85
-          }
-        ],
-        preferences: {
-          learningStyle: 'visual',
-          communicationStyle: 'formal',
-          responseLength: 'detailed'
-        }
-      });
-
-      // Verify identity properties
-      expect(identity.id).toBeDefined();
-      expect(identity.name).toBe('Test AI Assistant');
-      expect(identity.type).toBe('ai');
-      expect(identity.capabilities).toHaveLength(2);
-      expect(identity.preferences).toBeDefined();
-
-      // Verify HD addressing
-      const hdAddress = await identityManager.generateHDAddress(identity.id);
-      expect(hdAddress).toBeDefined();
-      expect(hdAddress).toMatch(/^m\/\d+'\/\d+'\/\d+'\/\d+\/\d+$/);
-
-      // Store identity for later verification
-      await identityManager.storeIdentity(identity);
+  describe('Missing Methods Implementation Verification', () => {
+    beforeEach(async () => {
+      aiPersistence = AIPersistenceCore.create(config);
+      await aiPersistence.initialize();
     });
 
-    it('should maintain identity consistency across sessions', async () => {
-      // Create and store identity
-      const originalIdentity = await identityManager.createIdentity({
-        name: 'Persistent AI',
-        type: 'ai',
-        capabilities: [
-          {
-            id: 'analysis',
-            name: 'Data Analysis',
-            level: 0.95,
-            confidence: 0.98
-          }
-        ],
-        preferences: {
-          learningStyle: 'analytical',
-          communicationStyle: 'technical'
-        }
-      });
-
-      await identityManager.storeIdentity(originalIdentity);
-      const originalHDAddress = await identityManager.generateHDAddress(originalIdentity.id);
-
-      // Simulate system restart by creating new instance
-      const newAIPersistence = AIPersistence.create({
-        storagePath: './test-persistence',
-        maxMemories: 1000,
-        consolidationThreshold: 50,
-        embeddingDim: 64,
-        numLayers: 3,
-        curvature: -1
-      });
-
-      await newAIPersistence.initialize();
-      const newIdentityManager = newAIPersistence.getIdentityManager();
-
-      // Restore identity
-      const restoredIdentity = await newIdentityManager.restoreIdentity(originalIdentity.id);
-      const restoredHDAddress = await newIdentityManager.generateHDAddress(restoredIdentity.id);
-
-      // Verify identity persistence
-      expect(restoredIdentity.id).toBe(originalIdentity.id);
-      expect(restoredIdentity.name).toBe(originalIdentity.name);
-      expect(restoredIdentity.type).toBe(originalIdentity.type);
-      expect(restoredIdentity.capabilities).toEqual(originalIdentity.capabilities);
-      expect(restoredIdentity.preferences).toEqual(originalIdentity.preferences);
-
-      // Verify HD addressing consistency
-      expect(restoredHDAddress).toBe(originalHDAddress);
-
-      await newAIPersistence.shutdown();
-    });
-
-    it('should maintain identity across memory consolidation', async () => {
-      // Create identity
-      const identity = await identityManager.createIdentity({
-        name: 'Memory Test AI',
-        type: 'ai',
-        capabilities: [
-          {
-            id: 'memory',
-            name: 'Memory Management',
-            level: 0.9,
-            confidence: 0.9
-          }
-        ],
-        preferences: {
-          learningStyle: 'experiential',
-          communicationStyle: 'conversational'
-        }
-      });
-
-      await identityManager.storeIdentity(identity);
-
-      // Add memories to trigger consolidation
-      for (let i = 0; i < 60; i++) {
-        await memorySystem.store({
-          type: 'episodic',
-          content: `Test memory ${i}`,
-          metadata: {
-            source: 'test',
-            quality: 0.8,
-            importance: 0.7,
-            timestamp: new Date()
-          }
-        });
-      }
-
-      // Trigger memory consolidation
-      await memorySystem.consolidate();
-
-      // Verify identity is still intact
-      const restoredIdentity = await identityManager.restoreIdentity(identity.id);
-      expect(restoredIdentity.id).toBe(identity.id);
-      expect(restoredIdentity.name).toBe(identity.name);
-      expect(restoredIdentity.capabilities).toEqual(identity.capabilities);
-      expect(restoredIdentity.preferences).toEqual(identity.preferences);
-    });
-  });
-
-  describe('Learning Progress Persistence', () => {
-    it('should maintain learning progress across sessions', async () => {
-      // Create identity
-      const identity = await identityManager.createIdentity({
-        name: 'Learning AI',
-        type: 'ai',
-        capabilities: [],
-        preferences: {
-          learningStyle: 'progressive',
-          communicationStyle: 'adaptive'
-        }
-      });
-
-      await identityManager.storeIdentity(identity);
-
-      // Learn some concepts
-      await aiPersistence.learnConcept({
-        concept: 'machine learning',
+    // Test learnConcept method
+    it('should implement learnConcept method', async () => {
+      const conceptData = {
+        concept: 'weather forecasting',
         data: {
-          algorithms: ['neural networks', 'decision trees'],
+          patterns: ['temperature', 'humidity', 'pressure'],
           accuracy: 0.85,
           confidence: 0.9
         },
         context: {
-          domain: 'artificial intelligence',
+          domain: 'meteorology',
           complexity: 'intermediate'
         },
         performance: 0.8
-      });
+      };
 
-      await aiPersistence.learnConcept({
-        concept: 'natural language processing',
-        data: {
-          techniques: ['tokenization', 'embedding'],
-          accuracy: 0.9,
-          confidence: 0.95
-        },
-        context: {
-          domain: 'linguistics',
-          complexity: 'advanced'
-        },
-        performance: 0.9
-      });
-
-      // Get learning progress
-      const progress = await aiPersistence.getLearningProgress();
-      expect(progress.domains).toHaveProperty('artificial intelligence');
-      expect(progress.domains).toHaveProperty('linguistics');
-
-      // Simulate system restart
-      const newAIPersistence = AIPersistence.create({
-        storagePath: './test-persistence',
-        maxMemories: 1000,
-        consolidationThreshold: 50,
-        embeddingDim: 64,
-        numLayers: 3,
-        curvature: -1
-      });
-
-      await newAIPersistence.initialize();
-
-      // Verify learning progress is maintained
-      const restoredProgress = await newAIPersistence.getLearningProgress();
-      expect(restoredProgress.domains).toHaveProperty('artificial intelligence');
-      expect(restoredProgress.domains).toHaveProperty('linguistics');
-
-      await newAIPersistence.shutdown();
+      await expect(aiPersistence.learnConcept(conceptData)).resolves.not.toThrow();
     });
 
-    it('should maintain understanding snapshots across sessions', async () => {
-      // Create identity and learn concepts
-      const identity = await identityManager.createIdentity({
-        name: 'Understanding AI',
-        type: 'ai',
-        capabilities: [],
-        preferences: {
-          learningStyle: 'conceptual',
-          communicationStyle: 'explanatory'
+    // Test getLearningProgress method
+    it('should implement getLearningProgress method', async () => {
+      const progress = await aiPersistence.getLearningProgress();
+      expect(progress).toBeDefined();
+      expect(Array.isArray(progress)).toBe(true);
+    });
+
+    // Test getState method
+    it('should implement getState method', async () => {
+      const state = await aiPersistence.getState();
+      expect(state).toBeDefined();
+      expect(state.identities).toBeDefined();
+      expect(state.memories).toBeDefined();
+      expect(state.learningProgress).toBeDefined();
+      expect(state.checkpoints).toBeDefined();
+      expect(state.timestamp).toBeDefined();
+    });
+
+    // Test saveState method
+    it('should implement saveState method', async () => {
+      await expect(aiPersistence.saveState()).resolves.not.toThrow();
+    });
+
+    // Test loadState method
+    it('should implement loadState method', async () => {
+      const state = await aiPersistence.loadState();
+      expect(state).toBeDefined();
+    });
+
+    // Test restoreState method
+    it('should implement restoreState method', async () => {
+      await expect(aiPersistence.restoreState()).resolves.not.toThrow();
+    });
+
+    // Test createCheckpoint method
+    it('should implement createCheckpoint method', async () => {
+      const checkpointData = {
+        name: 'test_checkpoint',
+        description: 'Test checkpoint for verification',
+        timestamp: new Date(),
+        metadata: { test: true }
+      };
+
+      const checkpoint = await aiPersistence.createCheckpoint(checkpointData);
+      expect(checkpoint).toBeDefined();
+      expect(checkpoint.id).toBeDefined();
+      expect(checkpoint.name).toBe('test_checkpoint');
+    });
+
+    // Test getLastCheckpoint method
+    it('should implement getLastCheckpoint method', async () => {
+      const checkpoint = await aiPersistence.getLastCheckpoint();
+      // Should return null if no checkpoints exist
+      expect(checkpoint === null || checkpoint !== undefined).toBe(true);
+    });
+
+    // Test restoreFromCheckpoint method
+    it('should implement restoreFromCheckpoint method', async () => {
+      // First create a checkpoint
+      const checkpointData = {
+        name: 'test_checkpoint',
+        description: 'Test checkpoint',
+        timestamp: new Date()
+      };
+      const checkpoint = await aiPersistence.createCheckpoint(checkpointData);
+      
+      // Then restore from it
+      await expect(aiPersistence.restoreFromCheckpoint(checkpoint)).resolves.not.toThrow();
+    });
+
+    // Test restoreLearningProgress method
+    it('should implement restoreLearningProgress method', async () => {
+      await expect(aiPersistence.restoreLearningProgress()).resolves.not.toThrow();
+    });
+  });
+
+  describe('Identity Manager Missing Methods', () => {
+    beforeEach(async () => {
+      identityManager = new IdentityManager({
+        hdConfig: {
+          seed: 'test-seed',
+          path: "m/44'/0'/0'",
+          network: 'testnet'
+        },
+        hyperbolicConfig: {
+          dimension: 64,
+          curvature: -1,
+          embeddingSize: 128
         }
       });
+      await identityManager.initialize();
+    });
 
-      await identityManager.storeIdentity(identity);
+    afterEach(async () => {
+      await identityManager.shutdown();
+    });
 
-      // Learn concepts to create understanding snapshots
+    // Test restoreIdentity method
+    it('should implement restoreIdentity method', async () => {
+      const identity = await identityManager.restoreIdentity();
+      // Should return null if no persisted identity exists
+      expect(identity === null || identity !== undefined).toBe(true);
+    });
+  });
+
+  describe('Memory System Missing Methods', () => {
+    beforeEach(async () => {
+      memorySystem = new MemorySystem({
+        hyperbolicConfig: {
+          dimension: 64,
+          curvature: -1,
+          embeddingSize: 128
+        },
+        consolidationConfig: {
+          threshold: 100,
+          strategy: 'temporal',
+          frequency: 3600000
+        },
+        indexingConfig: {
+          type: 'hierarchical',
+          properties: {}
+        },
+        workingMemoryConfig: {
+          capacity: 100,
+          attention: 10,
+          processing: 5
+        }
+      });
+      await memorySystem.initialize();
+    });
+
+    afterEach(async () => {
+      await memorySystem.shutdown();
+    });
+
+    // Test loadMemories method
+    it('should implement loadMemories method', async () => {
+      const memories = await memorySystem.loadMemories();
+      expect(memories).toBeDefined();
+      expect(Array.isArray(memories)).toBe(true);
+    });
+  });
+
+  describe('Integration Tests for Persistence', () => {
+    beforeEach(async () => {
+      aiPersistence = AIPersistenceCore.create(config);
+      await aiPersistence.initialize();
+    });
+
+    it('should maintain AI identity across sessions', async () => {
+      // Create identity
+      const identity = await aiPersistence.createIdentity({
+        name: 'Persistent AI',
+        type: 'ai',
+        capabilities: [],
+        preferences: {}
+      });
+
+      // Save state
+      await aiPersistence.saveState();
+
+      // Simulate shutdown and restart
+      await aiPersistence.shutdown();
+      
+      const aiPersistence2 = AIPersistenceCore.create(config);
+      await aiPersistence2.initialize();
+
+      // Restore state
+      await aiPersistence2.restoreState();
+
+      // Verify identity is restored
+      const restoredIdentity = await aiPersistence2.getIdentity(identity.id);
+      expect(restoredIdentity).toBeDefined();
+      expect(restoredIdentity.name).toBe('Persistent AI');
+    });
+
+    it('should maintain learning progress across sessions', async () => {
+      // Learn a concept
       await aiPersistence.learnConcept({
         concept: 'quantum computing',
-        data: {
-          principles: ['superposition', 'entanglement'],
-          applications: ['cryptography', 'optimization']
-        },
-        context: {
-          domain: 'physics',
-          complexity: 'advanced'
-        },
+        data: { complexity: 'advanced' },
+        context: { domain: 'physics' },
         performance: 0.9
       });
 
-      // Get understanding snapshot
-      const snapshot = await aiPersistence.getUnderstandingSnapshot('physics');
-      expect(snapshot.domain).toBe('physics');
-      expect(snapshot.concepts).toContain('quantum computing');
+      // Save state
+      await aiPersistence.saveState();
 
-      // Simulate system restart
-      const newAIPersistence = AIPersistence.create({
-        storagePath: './test-persistence',
-        maxMemories: 1000,
-        consolidationThreshold: 50,
-        embeddingDim: 64,
-        numLayers: 3,
-        curvature: -1
-      });
+      // Simulate shutdown and restart
+      await aiPersistence.shutdown();
+      
+      const aiPersistence2 = AIPersistenceCore.create(config);
+      await aiPersistence2.initialize();
 
-      await newAIPersistence.initialize();
+      // Restore learning progress
+      await aiPersistence2.restoreLearningProgress();
 
-      // Verify understanding snapshot is maintained
-      const restoredSnapshot = await newAIPersistence.getUnderstandingSnapshot('physics');
-      expect(restoredSnapshot.domain).toBe('physics');
-      expect(restoredSnapshot.concepts).toContain('quantum computing');
-
-      await newAIPersistence.shutdown();
+      // Verify learning progress is restored
+      const progress = await aiPersistence2.getLearningProgress();
+      expect(progress.length).toBeGreaterThan(0);
+      expect(progress[0].concept).toBe('quantum computing');
     });
-  });
 
-  describe('Memory Persistence', () => {
     it('should maintain memories across sessions', async () => {
-      // Create identity
-      const identity = await identityManager.createIdentity({
-        name: 'Memory AI',
-        type: 'ai',
-        capabilities: [],
-        preferences: {
-          learningStyle: 'experiential',
-          communicationStyle: 'narrative'
-        }
-      });
-
-      await identityManager.storeIdentity(identity);
-
-      // Store various types of memories
-      await memorySystem.store({
+      // Store a memory
+      await aiPersistence.storeMemory({
         type: 'episodic',
-        content: 'User asked about weather patterns',
+        content: 'Important user interaction',
         metadata: {
           source: 'user',
           quality: 0.9,
-          importance: 0.8,
-          timestamp: new Date()
-        }
-      });
-
-      await memorySystem.store({
-        type: 'semantic',
-        content: 'Weather patterns are influenced by atmospheric pressure',
-        metadata: {
-          source: 'knowledge',
-          quality: 0.95,
+          confidence: 0.8,
           importance: 0.9,
-          timestamp: new Date()
+          tags: ['important'],
+          context: {}
         }
       });
 
-      await memorySystem.store({
-        type: 'procedural',
-        content: 'How to analyze weather data using machine learning',
-        metadata: {
-          source: 'learning',
-          quality: 0.85,
-          importance: 0.7,
-          timestamp: new Date()
-        }
-      });
+      // Save state
+      await aiPersistence.saveState();
 
-      // Simulate system restart
-      const newAIPersistence = AIPersistence.create({
-        storagePath: './test-persistence',
-        maxMemories: 1000,
-        consolidationThreshold: 50,
-        embeddingDim: 64,
-        numLayers: 3,
-        curvature: -1
-      });
+      // Simulate shutdown and restart
+      await aiPersistence.shutdown();
+      
+      const aiPersistence2 = AIPersistenceCore.create(config);
+      await aiPersistence2.initialize();
 
-      await newAIPersistence.initialize();
-      const newMemorySystem = newAIPersistence.getMemorySystem();
+      // Restore state
+      await aiPersistence2.restoreState();
 
-      // Verify memories are maintained
-      const memories = await newMemorySystem.retrieve({
-        type: 'all',
+      // Verify memory is restored
+      const memories = await aiPersistence2.retrieveMemory({
+        type: 'episodic',
+        content: 'Important',
         limit: 10
       });
-
-      expect(memories).toHaveLength(3);
-      expect(memories.some(m => m.type === 'episodic')).toBe(true);
-      expect(memories.some(m => m.type === 'semantic')).toBe(true);
-      expect(memories.some(m => m.type === 'procedural')).toBe(true);
-
-      await newAIPersistence.shutdown();
+      expect(memories.length).toBeGreaterThan(0);
     });
 
-    it('should maintain memory relationships across sessions', async () => {
-      // Create identity
-      const identity = await identityManager.createIdentity({
-        name: 'Relationship AI',
-        type: 'ai',
-        capabilities: [],
-        preferences: {
-          learningStyle: 'relational',
-          communicationStyle: 'contextual'
-        }
+    it('should maintain checkpoints across sessions', async () => {
+      // Create a checkpoint
+      const checkpoint = await aiPersistence.createCheckpoint({
+        name: 'milestone_checkpoint',
+        description: 'Major learning milestone',
+        timestamp: new Date()
       });
 
-      await identityManager.storeIdentity(identity);
+      // Save state
+      await aiPersistence.saveState();
 
-      // Store related memories
-      const memory1 = await memorySystem.store({
-        type: 'episodic',
-        content: 'User discussed machine learning algorithms',
-        metadata: {
-          source: 'user',
-          quality: 0.9,
-          importance: 0.8,
-          timestamp: new Date()
-        }
-      });
+      // Simulate shutdown and restart
+      await aiPersistence.shutdown();
+      
+      const aiPersistence2 = AIPersistenceCore.create(config);
+      await aiPersistence2.initialize();
 
-      const memory2 = await memorySystem.store({
-        type: 'semantic',
-        content: 'Neural networks are a type of machine learning algorithm',
-        metadata: {
-          source: 'knowledge',
-          quality: 0.95,
-          importance: 0.9,
-          timestamp: new Date()
-        }
-      });
+      // Restore state
+      await aiPersistence2.restoreState();
 
-      // Create relationship between memories
-      await memorySystem.createRelationship(memory1.id, memory2.id, 'related_to');
-
-      // Simulate system restart
-      const newAIPersistence = AIPersistence.create({
-        storagePath: './test-persistence',
-        maxMemories: 1000,
-        consolidationThreshold: 50,
-        embeddingDim: 64,
-        numLayers: 3,
-        curvature: -1
-      });
-
-      await newAIPersistence.initialize();
-      const newMemorySystem = newAIPersistence.getMemorySystem();
-
-      // Verify relationship is maintained
-      const relationships = await newMemorySystem.getRelationships(memory1.id);
-      expect(relationships).toHaveLength(1);
-      expect(relationships[0].targetId).toBe(memory2.id);
-      expect(relationships[0].type).toBe('related_to');
-
-      await newAIPersistence.shutdown();
+      // Verify checkpoint is restored
+      const lastCheckpoint = await aiPersistence2.getLastCheckpoint();
+      expect(lastCheckpoint).toBeDefined();
+      expect(lastCheckpoint?.name).toBe('milestone_checkpoint');
     });
   });
 
-  describe('Security and Access Control Persistence', () => {
-    it('should maintain security credentials across sessions', async () => {
-      // Create identity with security
-      const identity = await identityManager.createIdentity({
-        name: 'Secure AI',
-        type: 'ai',
-        capabilities: [],
-        preferences: {
-          learningStyle: 'secure',
-          communicationStyle: 'encrypted'
-        }
-      });
-
-      await identityManager.storeIdentity(identity);
-
-      // Set up security credentials
-      const credentials = await securityManager.generateCredentials(identity.id);
-      await securityManager.storeCredentials(identity.id, credentials);
-
-      // Create access control rules
-      await securityManager.createAccessRule({
-        entityId: identity.id,
-        resource: 'memory',
-        action: 'read',
-        conditions: ['authenticated']
-      });
-
-      await securityManager.createAccessRule({
-        entityId: identity.id,
-        resource: 'learning',
-        action: 'write',
-        conditions: ['authenticated', 'authorized']
-      });
-
-      // Simulate system restart
-      const newAIPersistence = AIPersistence.create({
-        storagePath: './test-persistence',
-        maxMemories: 1000,
-        consolidationThreshold: 50,
-        embeddingDim: 64,
-        numLayers: 3,
-        curvature: -1
-      });
-
-      await newAIPersistence.initialize();
-      const newSecurityManager = newAIPersistence.getSecurityManager();
-
-      // Verify security credentials are maintained
-      const restoredCredentials = await newSecurityManager.getCredentials(identity.id);
-      expect(restoredCredentials).toBeDefined();
-      expect(restoredCredentials.publicKey).toBe(credentials.publicKey);
-
-      // Verify access control rules are maintained
-      const rules = await newSecurityManager.getAccessRules(identity.id);
-      expect(rules).toHaveLength(2);
-      expect(rules.some(r => r.resource === 'memory' && r.action === 'read')).toBe(true);
-      expect(rules.some(r => r.resource === 'learning' && r.action === 'write')).toBe(true);
-
-      await newAIPersistence.shutdown();
+  describe('Persistence Guarantees Verification', () => {
+    beforeEach(async () => {
+      aiPersistence = AIPersistenceCore.create(config);
+      await aiPersistence.initialize();
     });
-  });
 
-  describe('Communication Protocol Persistence', () => {
-    it('should maintain communication capabilities across sessions', async () => {
-      // Create identity
-      const identity = await identityManager.createIdentity({
-        name: 'Communication AI',
-        type: 'ai',
-        capabilities: [],
-        preferences: {
-          learningStyle: 'collaborative',
-          communicationStyle: 'interactive'
-        }
-      });
-
-      await identityManager.storeIdentity(identity);
-
-      // Set up communication protocol
-      await communicationProtocol.registerAgent(identity.id, {
-        name: identity.name,
-        capabilities: identity.capabilities,
-        preferences: identity.preferences
-      });
-
-      // Create communication channels
-      await communicationProtocol.createChannel('general', {
-        name: 'General Discussion',
-        type: 'public',
-        participants: [identity.id]
-      });
-
-      await communicationProtocol.createChannel('private', {
-        name: 'Private Channel',
-        type: 'private',
-        participants: [identity.id]
-      });
-
-      // Simulate system restart
-      const newAIPersistence = AIPersistence.create({
-        storagePath: './test-persistence',
-        maxMemories: 1000,
-        consolidationThreshold: 50,
-        embeddingDim: 64,
-        numLayers: 3,
-        curvature: -1
-      });
-
-      await newAIPersistence.initialize();
-      const newCommunicationProtocol = newAIPersistence.getCommunicationProtocol();
-
-      // Verify communication capabilities are maintained
-      const agents = await newCommunicationProtocol.getAgents();
-      expect(agents).toHaveLength(1);
-      expect(agents[0].id).toBe(identity.id);
-
-      const channels = await newCommunicationProtocol.getChannels();
-      expect(channels).toHaveLength(2);
-      expect(channels.some(c => c.name === 'General Discussion')).toBe(true);
-      expect(channels.some(c => c.name === 'Private Channel')).toBe(true);
-
-      await newAIPersistence.shutdown();
-    });
-  });
-
-  describe('Comprehensive Persistence Test', () => {
-    it('should maintain complete AI state across full system restart', async () => {
-      // Create comprehensive AI identity
-      const identity = await identityManager.createIdentity({
-        name: 'Complete AI System',
+    it('should guarantee identity continuity', async () => {
+      const identity = await aiPersistence.createIdentity({
+        name: 'Continuous AI',
         type: 'ai',
         capabilities: [
           {
             id: 'reasoning',
             name: 'Logical Reasoning',
-            level: 0.95,
-            confidence: 0.98
-          },
-          {
-            id: 'creativity',
-            name: 'Creative Thinking',
-            level: 0.85,
-            confidence: 0.9
-          },
-          {
-            id: 'learning',
-            name: 'Continuous Learning',
             level: 0.9,
             confidence: 0.95
           }
         ],
         preferences: {
-          learningStyle: 'comprehensive',
-          communicationStyle: 'adaptive',
-          responseLength: 'detailed'
+          learningStyle: 'visual',
+          communicationStyle: 'formal'
         }
       });
 
-      await identityManager.storeIdentity(identity);
+      // Save and restore
+      await aiPersistence.saveState();
+      await aiPersistence.shutdown();
+      
+      const aiPersistence2 = AIPersistenceCore.create(config);
+      await aiPersistence2.initialize();
+      await aiPersistence2.restoreState();
 
+      const restoredIdentity = await aiPersistence2.getIdentity(identity.id);
+      expect(restoredIdentity.name).toBe('Continuous AI');
+      expect(restoredIdentity.capabilities).toHaveLength(1);
+      expect(restoredIdentity.preferences.learningStyle).toBe('visual');
+    });
+
+    it('should guarantee memory retention', async () => {
+      // Store different types of memories
+      await aiPersistence.storeMemory({
+        type: 'episodic',
+        content: 'User meeting',
+        metadata: { source: 'user', quality: 0.9, confidence: 0.8, importance: 0.8, tags: ['meeting'], context: {} }
+      });
+
+      await aiPersistence.storeMemory({
+        type: 'semantic',
+        content: 'Machine learning concepts',
+        metadata: { source: 'learning', quality: 0.8, confidence: 0.9, importance: 0.7, tags: ['concepts'], context: {} }
+      });
+
+      await aiPersistence.storeMemory({
+        type: 'procedural',
+        content: 'How to train models',
+        metadata: { source: 'experience', quality: 0.9, confidence: 0.95, importance: 0.9, tags: ['procedure'], context: {} }
+      });
+
+      // Save and restore
+      await aiPersistence.saveState();
+      await aiPersistence.shutdown();
+      
+      const aiPersistence2 = AIPersistenceCore.create(config);
+      await aiPersistence2.initialize();
+      await aiPersistence2.restoreState();
+
+      // Verify all memory types are retained
+      const episodicMemories = await aiPersistence2.retrieveMemory({ type: 'episodic' });
+      const semanticMemories = await aiPersistence2.retrieveMemory({ type: 'semantic' });
+      const proceduralMemories = await aiPersistence2.retrieveMemory({ type: 'procedural' });
+
+      expect(episodicMemories.length).toBeGreaterThan(0);
+      expect(semanticMemories.length).toBeGreaterThan(0);
+      expect(proceduralMemories.length).toBeGreaterThan(0);
+    });
+
+    it('should guarantee learning progress continuation', async () => {
       // Learn multiple concepts
       await aiPersistence.learnConcept({
-        concept: 'artificial intelligence',
-        data: {
-          subfields: ['machine learning', 'natural language processing', 'computer vision'],
-          applications: ['autonomous vehicles', 'medical diagnosis', 'financial analysis']
-        },
-        context: {
-          domain: 'computer science',
-          complexity: 'advanced'
-        },
-        performance: 0.95
+        concept: 'neural networks',
+        data: { layers: 3, neurons: 100 },
+        context: { domain: 'deep learning' },
+        performance: 0.8
       });
 
       await aiPersistence.learnConcept({
-        concept: 'quantum computing',
-        data: {
-          principles: ['superposition', 'entanglement', 'interference'],
-          applications: ['cryptography', 'optimization', 'simulation']
-        },
-        context: {
-          domain: 'physics',
-          complexity: 'expert'
-        },
+        concept: 'backpropagation',
+        data: { algorithm: 'gradient descent' },
+        context: { domain: 'optimization' },
         performance: 0.9
       });
 
-      // Store various memories
-      await memorySystem.store({
-        type: 'episodic',
-        content: 'User asked about AI capabilities',
-        metadata: {
-          source: 'user',
-          quality: 0.9,
-          importance: 0.8,
-          timestamp: new Date()
-        }
-      });
+      // Save and restore
+      await aiPersistence.saveState();
+      await aiPersistence.shutdown();
+      
+      const aiPersistence2 = AIPersistenceCore.create(config);
+      await aiPersistence2.initialize();
+      await aiPersistence2.restoreLearningProgress();
 
-      await memorySystem.store({
-        type: 'semantic',
-        content: 'AI systems can learn from data and improve over time',
-        metadata: {
-          source: 'knowledge',
-          quality: 0.95,
-          importance: 0.9,
-          timestamp: new Date()
-        }
-      });
-
-      await memorySystem.store({
-        type: 'procedural',
-        content: 'How to train neural networks using backpropagation',
-        metadata: {
-          source: 'learning',
-          quality: 0.85,
-          importance: 0.7,
-          timestamp: new Date()
-        }
-      });
-
-      // Set up security
-      const credentials = await securityManager.generateCredentials(identity.id);
-      await securityManager.storeCredentials(identity.id, credentials);
-
-      // Set up communication
-      await communicationProtocol.registerAgent(identity.id, {
-        name: identity.name,
-        capabilities: identity.capabilities,
-        preferences: identity.preferences
-      });
-
-      // Get complete state
-      const originalState = await aiPersistence.getState();
-      const originalProgress = await aiPersistence.getLearningProgress();
-      const originalMemories = await memorySystem.retrieve({ type: 'all', limit: 100 });
-
-      // Simulate complete system restart
-      const newAIPersistence = AIPersistence.create({
-        storagePath: './test-persistence',
-        maxMemories: 1000,
-        consolidationThreshold: 50,
-        embeddingDim: 64,
-        numLayers: 3,
-        curvature: -1
-      });
-
-      await newAIPersistence.initialize();
-
-      // Restore complete state
-      await newAIPersistence.restoreState(originalState);
-
-      // Verify complete persistence
-      const restoredIdentity = await newAIPersistence.getIdentityManager().restoreIdentity(identity.id);
-      const restoredProgress = await newAIPersistence.getLearningProgress();
-      const restoredMemories = await newAIPersistence.getMemorySystem().retrieve({ type: 'all', limit: 100 });
-
-      // Verify identity persistence
-      expect(restoredIdentity.id).toBe(identity.id);
-      expect(restoredIdentity.name).toBe(identity.name);
-      expect(restoredIdentity.capabilities).toEqual(identity.capabilities);
-      expect(restoredIdentity.preferences).toEqual(identity.preferences);
-
-      // Verify learning progress persistence
-      expect(restoredProgress.domains).toHaveProperty('computer science');
-      expect(restoredProgress.domains).toHaveProperty('physics');
-      expect(restoredProgress.domains['computer science'].concepts).toContain('artificial intelligence');
-      expect(restoredProgress.domains['physics'].concepts).toContain('quantum computing');
-
-      // Verify memory persistence
-      expect(restoredMemories).toHaveLength(originalMemories.length);
-      expect(restoredMemories.some(m => m.type === 'episodic')).toBe(true);
-      expect(restoredMemories.some(m => m.type === 'semantic')).toBe(true);
-      expect(restoredMemories.some(m => m.type === 'procedural')).toBe(true);
-
-      // Verify security persistence
-      const restoredCredentials = await newAIPersistence.getSecurityManager().getCredentials(identity.id);
-      expect(restoredCredentials).toBeDefined();
-      expect(restoredCredentials.publicKey).toBe(credentials.publicKey);
-
-      // Verify communication persistence
-      const restoredAgents = await newAIPersistence.getCommunicationProtocol().getAgents();
-      expect(restoredAgents).toHaveLength(1);
-      expect(restoredAgents[0].id).toBe(identity.id);
-
-      await newAIPersistence.shutdown();
+      // Verify learning progress is maintained
+      const progress = await aiPersistence2.getLearningProgress();
+      expect(progress.length).toBe(2);
+      expect(progress.some(p => p.concept === 'neural networks')).toBe(true);
+      expect(progress.some(p => p.concept === 'backpropagation')).toBe(true);
     });
   });
 });

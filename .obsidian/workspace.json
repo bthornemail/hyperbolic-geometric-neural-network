@@ -170,6 +170,8 @@
   },
   "active": "4f00e0c2f9f7d877",
   "lastOpenFiles": [
+    "packages/tests/file-based-persistence.test.ts",
+    "packages/MISSING_METHODS_IMPLEMENTATION.md",
     "packages/AI_IDENTITY_PERSISTENCE_VERIFICATION.md",
     "packages/tests/verify-ai-persistence.ts",
     "packages/core/src/implementations/1759545548156-AIPersistenceCoreImpl.ts",

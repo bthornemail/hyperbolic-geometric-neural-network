@@ -234,6 +234,26 @@ export class MemorySystem {
     return await this.hyperbolic.cluster(embeddings);
   }
 
+  // NEW: Memory Loading Operations
+  async loadMemories(): Promise<Memory[]> {
+    try {
+      // Load memories from persistent storage
+      const persistedMemories = await this.loadPersistedMemories();
+      if (persistedMemories && persistedMemories.length > 0) {
+        // Restore memories to the system
+        for (const memory of persistedMemories) {
+          this.memories.set(memory.id, memory);
+        }
+        console.log(`Loaded ${persistedMemories.length} memories from storage`);
+        return persistedMemories;
+      }
+      return [];
+    } catch (error) {
+      console.log('No persisted memories found');
+      return [];
+    }
+  }
+
   // Private helper methods
   private async storeInMemorySystem(memory: Memory): Promise<void> {
     switch (memory.type) {
@@ -288,6 +308,35 @@ export class MemorySystem {
     );
     
     this.hyperbolic.embeddings = embeddings;
+  }
+
+  private async loadPersistedMemories(): Promise<Memory[]> {
+    // Implementation to load memories from persistent storage
+    // This would typically involve reading from a database or file
+    console.log('Loading persisted memories...');
+    return []; // Mock implementation - return empty array for now
+  }
+
+  // NEW: Methods to integrate with AIPersistenceCoreImpl
+  async getMemories(): Promise<Memory[]> {
+    return Array.from(this.memories.values());
+  }
+
+  async setMemories(memories: Memory[]): Promise<void> {
+    this.memories.clear();
+    for (const memory of memories) {
+      this.memories.set(memory.id, memory);
+    }
+    console.log(`Restored ${memories.length} memories to memory system`);
+  }
+
+  async getMemoryCount(): Promise<number> {
+    return this.memories.size;
+  }
+
+  async clearMemories(): Promise<void> {
+    this.memories.clear();
+    console.log('All memories cleared from memory system');
   }
 }
 

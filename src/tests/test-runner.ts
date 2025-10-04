@@ -503,4 +503,4 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     });
 }
 
-export { TeamCollaborationTestRunner };
+// TeamCollaborationTestRunner is already exported above with 'export class'

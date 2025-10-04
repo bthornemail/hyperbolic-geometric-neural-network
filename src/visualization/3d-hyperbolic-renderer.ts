@@ -297,7 +297,7 @@ export class Hyperbolic3DRenderer {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     
     if (this.shaderProgram && this.embeddings.size > 0) {
-      this.renderEmbeddings();
+      this.renderAllEmbeddings();
     }
     
     this.animationFrame = requestAnimationFrame(() => this.render());
@@ -306,7 +306,7 @@ export class Hyperbolic3DRenderer {
   /**
    * Render all embeddings
    */
-  private renderEmbeddings(): void {
+  private renderAllEmbeddings(): void {
     if (!this.shaderProgram) return;
     
     this.gl.useProgram(this.shaderProgram);
