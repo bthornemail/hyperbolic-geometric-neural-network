@@ -7,14 +7,14 @@
  * Category: Core Components
  */
 
-import { centralized-h2gnn-config } from '../../core/centralized-h2gnn-config';
+import { CentralizedH2GNNConfig } from '../../core/centralized-h2gnn-config';
 
 describe('centralized-h2gnn-config', () => {
-  let instance: centralized-h2gnn-config;
+  let instance: CentralizedH2GNNConfig;
 
   beforeEach(() => {
     // Setup test instance
-    instance = new centralized-h2gnn-config();
+    instance = new CentralizedH2GNNConfig();
   });
 
   afterEach(() => {

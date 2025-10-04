@@ -7,14 +7,14 @@
  * Category: Analysis Components
  */
 
-import { code-embeddings } from '../../analysis/code-embeddings';
+import { CodeEmbeddings } from '../../analysis/code-embeddings';
 
 describe('code-embeddings', () => {
-  let instance: code-embeddings;
+  let instance: CodeEmbeddings;
 
   beforeEach(() => {
     // Setup test instance
-    instance = new code-embeddings();
+    instance = new CodeEmbeddings();
   });
 
   afterEach(() => {

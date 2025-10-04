@@ -7,14 +7,14 @@
  * Category: Core Components
  */
 
-import { mcp-hd-integration } from '../../core/mcp-hd-integration';
+import { McpHdIntegration } from '../../core/mcp-hd-integration';
 
 describe('mcp-hd-integration', () => {
-  let instance: mcp-hd-integration;
+  let instance: McpHdIntegration;
 
   beforeEach(() => {
     // Setup test instance
-    instance = new mcp-hd-integration();
+    instance = new McpHdIntegration();
   });
 
   afterEach(() => {

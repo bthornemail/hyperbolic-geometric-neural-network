@@ -7,14 +7,14 @@
  * Category: Analysis Components
  */
 
-import { advanced-ast-analyzer } from '../../analysis/advanced-ast-analyzer';
+import { AdvancedAstAnalyzer } from '../../analysis/advanced-ast-analyzer';
 
 describe('advanced-ast-analyzer', () => {
-  let instance: advanced-ast-analyzer;
+  let instance: AdvancedAstAnalyzer;
 
   beforeEach(() => {
     // Setup test instance
-    instance = new advanced-ast-analyzer();
+    instance = new AdvancedAstAnalyzer();
   });
 
   afterEach(() => {

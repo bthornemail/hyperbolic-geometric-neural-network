@@ -7,14 +7,14 @@
  * Category: Core Components
  */
 
-import { ipc-transport } from '../../core/transports/ipc-transport';
+import { IpcTransport } from '../../core/transports/ipc-transport';
 
 describe('ipc-transport', () => {
-  let instance: ipc-transport;
+  let instance: IpcTransport;
 
   beforeEach(() => {
     // Setup test instance
-    instance = new ipc-transport();
+    instance = new IpcTransport();
   });
 
   afterEach(() => {

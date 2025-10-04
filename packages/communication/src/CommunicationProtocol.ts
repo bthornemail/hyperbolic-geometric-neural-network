@@ -1,142 +1,157 @@
 /**
  * AI Persistence Communication Protocol
  * 
- * MCP-based communication for AI collaboration
+ * MCP-based communication protocol for AI persistence systems
  */
 
 import { v4 as uuidv4 } from 'uuid';
-import { CommunicationProtocol, Message, Channel, Session, Collaboration, ProtocolConfig } from '../types/communication';
+import { CommunicationProtocol, Message, MessageType, ProtocolConfig, CommunicationSession, Participant, MessageHandler, ErrorHandler, SuccessHandler } from '../types/communication';
 import { MCPServer } from './MCPServer';
-import { WebSocketServer } from './WebSocketServer';
-import { MessageQueue } from './MessageQueue';
+import { MessageRouter } from './MessageRouter';
+import { SessionManager } from './SessionManager';
 
 export class CommunicationProtocolImpl implements CommunicationProtocol {
   private mcpServer: MCPServer;
-  private wsServer: WebSocketServer;
-  private messageQueue: MessageQueue;
-  private channels: Map<string, Channel> = new Map();
-  private sessions: Map<string, Session> = new Map();
-  private collaborations: Map<string, Collaboration> = new Map();
+  private messageRouter: MessageRouter;
+  private sessionManager: SessionManager;
+  private sessions: Map<string, CommunicationSession> = new Map();
+  private participants: Map<string, Participant> = new Map();
 
   constructor(
     private config: ProtocolConfig
   ) {
     this.mcpServer = new MCPServer(config.mcpConfig);
-    this.wsServer = new WebSocketServer(config.wsConfig);
-    this.messageQueue = new MessageQueue(config.queueConfig);
+    this.messageRouter = new MessageRouter(config.routingConfig);
+    this.sessionManager = new SessionManager(config.sessionConfig);
   }
 
   async initialize(): Promise<void> {
     await this.mcpServer.initialize();
-    await this.wsServer.initialize();
-    await this.messageQueue.initialize();
+    await this.messageRouter.initialize();
+    await this.sessionManager.initialize();
   }
 
   async shutdown(): Promise<void> {
     await this.mcpServer.shutdown();
-    await this.wsServer.shutdown();
-    await this.messageQueue.shutdown();
+    await this.messageRouter.shutdown();
+    await this.sessionManager.shutdown();
   }
 
   // Message Operations
   async sendMessage(message: Message): Promise<void> {
-    await this.messageQueue.enqueue(message);
-    await this.wsServer.broadcast(message);
+    await this.messageRouter.route(message);
   }
 
   async receiveMessage(messageId: string): Promise<Message> {
-    return await this.messageQueue.dequeue(messageId);
+    return await this.messageRouter.get(messageId);
   }
 
-  async getMessages(channelId: string, limit: number = 100): Promise<Message[]> {
-    return await this.messageQueue.getMessages(channelId, limit);
-  }
-
-  // Channel Operations
-  async createChannel(channel: Channel): Promise<void> {
-    this.channels.set(channel.id, channel);
-    await this.mcpServer.registerChannel(channel);
-  }
-
-  async joinChannel(channelId: string, participantId: string): Promise<void> {
-    const channel = this.channels.get(channelId);
-    if (!channel) {
-      throw new Error(`Channel ${channelId} not found`);
+  async broadcastMessage(message: Message, participants: string[]): Promise<void> {
+    for (const participantId of participants) {
+      const participant = this.participants.get(participantId);
+      if (participant) {
+        await this.sendMessage({
+          ...message,
+          recipient: participantId
+        });
+      }
     }
-    
-    channel.participants.push(participantId);
-    await this.wsServer.joinChannel(channelId, participantId);
   }
 
-  async leaveChannel(channelId: string, participantId: string): Promise<void> {
-    const channel = this.channels.get(channelId);
-    if (!channel) {
-      throw new Error(`Channel ${channelId} not found`);
-    }
-    
-    channel.participants = channel.participants.filter(id => id !== participantId);
-    await this.wsServer.leaveChannel(channelId, participantId);
-  }
-
-  // Session Operations
-  async createSession(session: Session): Promise<void> {
+  // Session Management
+  async createSession(config: SessionConfig): Promise<CommunicationSession> {
+    const session = await this.sessionManager.createSession(config);
     this.sessions.set(session.id, session);
-    await this.mcpServer.registerSession(session);
+    return session;
   }
 
-  async joinSession(sessionId: string, participantId: string): Promise<void> {
+  async joinSession(sessionId: string, participant: Participant): Promise<void> {
     const session = this.sessions.get(sessionId);
     if (!session) {
       throw new Error(`Session ${sessionId} not found`);
     }
-    
-    session.participants.push(participantId);
-    await this.wsServer.joinSession(sessionId, participantId);
+
+    await this.sessionManager.addParticipant(sessionId, participant);
+    this.participants.set(participant.id, participant);
   }
 
   async leaveSession(sessionId: string, participantId: string): Promise<void> {
+    await this.sessionManager.removeParticipant(sessionId, participantId);
+    this.participants.delete(participantId);
+  }
+
+  async getSession(sessionId: string): Promise<CommunicationSession> {
     const session = this.sessions.get(sessionId);
     if (!session) {
       throw new Error(`Session ${sessionId} not found`);
     }
-    
-    session.participants = session.participants.filter(id => id !== participantId);
-    await this.wsServer.leaveSession(sessionId, participantId);
+    return session;
   }
 
-  // Collaboration Operations
-  async startCollaboration(collaboration: Collaboration): Promise<void> {
-    this.collaborations.set(collaboration.id, collaboration);
-    await this.mcpServer.registerCollaboration(collaboration);
+  // Participant Management
+  async registerParticipant(participant: Participant): Promise<void> {
+    this.participants.set(participant.id, participant);
   }
 
-  async endCollaboration(collaborationId: string): Promise<void> {
-    const collaboration = this.collaborations.get(collaborationId);
-    if (!collaboration) {
-      throw new Error(`Collaboration ${collaborationId} not found`);
+  async unregisterParticipant(participantId: string): Promise<void> {
+    this.participants.delete(participantId);
+  }
+
+  async getParticipant(participantId: string): Promise<Participant> {
+    const participant = this.participants.get(participantId);
+    if (!participant) {
+      throw new Error(`Participant ${participantId} not found`);
     }
-    
-    collaboration.status = 'ended';
-    await this.mcpServer.unregisterCollaboration(collaborationId);
-  }
-
-  async getCollaboration(collaborationId: string): Promise<Collaboration> {
-    const collaboration = this.collaborations.get(collaborationId);
-    if (!collaboration) {
-      throw new Error(`Collaboration ${collaborationId} not found`);
-    }
-    
-    return collaboration;
+    return participant;
   }
 
   // Protocol Operations
+  async establishConnection(participantId: string): Promise<Connection> {
+    const participant = this.participants.get(participantId);
+    if (!participant) {
+      throw new Error(`Participant ${participantId} not found`);
+    }
+
+    const connection = await this.mcpServer.establishConnection(participant);
+    return connection;
+  }
+
+  async closeConnection(connectionId: string): Promise<void> {
+    await this.mcpServer.closeConnection(connectionId);
+  }
+
+  async getConnectionStatus(connectionId: string): Promise<ConnectionStatus> {
+    return await this.mcpServer.getConnectionStatus(connectionId);
+  }
+
+  // Message Handlers
+  async registerMessageHandler(type: MessageType, handler: MessageHandler): Promise<void> {
+    await this.messageRouter.registerHandler(type, handler);
+  }
+
+  async unregisterMessageHandler(type: MessageType): Promise<void> {
+    await this.messageRouter.unregisterHandler(type);
+  }
+
+  async registerErrorHandler(handler: ErrorHandler): Promise<void> {
+    await this.messageRouter.registerErrorHandler(handler);
+  }
+
+  async registerSuccessHandler(handler: SuccessHandler): Promise<void> {
+    await this.messageRouter.registerSuccessHandler(handler);
+  }
+
+  // Protocol Status
   async getProtocolStatus(): Promise<ProtocolStatus> {
+    const connections = await this.mcpServer.getConnections();
+    const sessions = Array.from(this.sessions.values());
+    const participants = Array.from(this.participants.values());
+
     return {
       status: 'running',
-      channels: this.channels.size,
-      sessions: this.sessions.size,
-      collaborations: this.collaborations.size,
-      messages: await this.messageQueue.getMessageCount(),
+      connections: connections.length,
+      sessions: sessions.length,
+      participants: participants.length,
       lastUpdated: new Date()
     };
   }
@@ -146,15 +161,9 @@ export class CommunicationProtocolImpl implements CommunicationProtocol {
     const health = {
       healthy: status.status === 'running',
       status,
-      metrics: {
-        latency: 50,
-        throughput: 1000,
-        errorRate: 0.01,
-        availability: 99.9
-      },
       lastChecked: new Date()
     };
-    
+
     return health;
   }
 }
@@ -162,54 +171,68 @@ export class CommunicationProtocolImpl implements CommunicationProtocol {
 // Supporting types and interfaces
 export interface ProtocolConfig {
   mcpConfig: MCPConfig;
-  wsConfig: WebSocketConfig;
-  queueConfig: QueueConfig;
+  routingConfig: RoutingConfig;
+  sessionConfig: SessionConfig;
 }
 
 export interface MCPConfig {
+  server: string;
   port: number;
-  host: string;
   protocol: string;
   timeout: number;
+  retries: number;
 }
 
-export interface WebSocketConfig {
-  port: number;
-  host: string;
-  path: string;
+export interface RoutingConfig {
+  strategy: string;
+  loadBalancing: boolean;
+  failover: boolean;
+}
+
+export interface SessionConfig {
+  maxParticipants: number;
   timeout: number;
+  persistence: boolean;
 }
 
-export interface QueueConfig {
-  type: string;
-  maxSize: number;
-  retention: number;
+export interface SessionConfig {
+  name: string;
+  description: string;
+  maxParticipants: number;
+  timeout: number;
+  persistence: boolean;
+}
+
+export interface Connection {
+  id: string;
+  participant: string;
+  status: ConnectionStatus;
+  established: Date;
+  lastActivity: Date;
+}
+
+export interface ConnectionStatus {
+  connected: boolean;
+  latency: number;
+  throughput: number;
+  errors: number;
 }
 
 export interface ProtocolStatus {
   status: string;
-  channels: number;
+  connections: number;
   sessions: number;
-  collaborations: number;
-  messages: number;
+  participants: number;
   lastUpdated: Date;
 }
 
 export interface ProtocolHealth {
   healthy: boolean;
   status: ProtocolStatus;
-  metrics: ProtocolMetrics;
   lastChecked: Date;
 }
 
-export interface ProtocolMetrics {
-  latency: number;
-  throughput: number;
-  errorRate: number;
-  availability: number;
-}
-
-// Mock implementations
+// Mock implementations for dependencies
 class MCPServer {
   constructor(private config: MCPConfig) {}
 
@@ -221,166 +244,93 @@ class MCPServer {
     console.log('MCP Server shutdown');
   }
 
-  async registerChannel(channel: Channel): Promise<void> {
-    console.log(`Channel registered: ${channel.id}`);
+  async establishConnection(participant: Participant): Promise<Connection> {
+    return {
+      id: uuidv4(),
+      participant: participant.id,
+      status: { connected: true, latency: 10, throughput: 1000, errors: 0 },
+      established: new Date(),
+      lastActivity: new Date()
+    };
   }
 
-  async registerSession(session: Session): Promise<void> {
-    console.log(`Session registered: ${session.id}`);
+  async closeConnection(connectionId: string): Promise<void> {
+    console.log(`Connection closed: ${connectionId}`);
   }
 
-  async registerCollaboration(collaboration: Collaboration): Promise<void> {
-    console.log(`Collaboration registered: ${collaboration.id}`);
+  async getConnectionStatus(connectionId: string): Promise<ConnectionStatus> {
+    return { connected: true, latency: 10, throughput: 1000, errors: 0 };
   }
 
-  async unregisterCollaboration(collaborationId: string): Promise<void> {
-    console.log(`Collaboration unregistered: ${collaborationId}`);
+  async getConnections(): Promise<Connection[]> {
+    return [];
   }
 }
 
-class WebSocketServer {
-  constructor(private config: WebSocketConfig) {}
+class MessageRouter {
+  constructor(private config: RoutingConfig) {}
 
   async initialize(): Promise<void> {
-    console.log('WebSocket Server initialized');
+    console.log('Message Router initialized');
   }
 
   async shutdown(): Promise<void> {
-    console.log('WebSocket Server shutdown');
+    console.log('Message Router shutdown');
   }
 
-  async broadcast(message: Message): Promise<void> {
-    console.log(`Message broadcasted: ${message.id}`);
+  async route(message: Message): Promise<void> {
+    console.log(`Message routed: ${message.id}`);
   }
 
-  async joinChannel(channelId: string, participantId: string): Promise<void> {
-    console.log(`Participant ${participantId} joined channel ${channelId}`);
+  async get(messageId: string): Promise<Message> {
+    return {} as Message;
   }
 
-  async leaveChannel(channelId: string, participantId: string): Promise<void> {
-    console.log(`Participant ${participantId} left channel ${channelId}`);
+  async registerHandler(type: MessageType, handler: MessageHandler): Promise<void> {
+    console.log(`Handler registered for type: ${type}`);
   }
 
-  async joinSession(sessionId: string, participantId: string): Promise<void> {
-    console.log(`Participant ${participantId} joined session ${sessionId}`);
+  async unregisterHandler(type: MessageType): Promise<void> {
+    console.log(`Handler unregistered for type: ${type}`);
   }
 
-  async leaveSession(sessionId: string, participantId: string): Promise<void> {
-    console.log(`Participant ${participantId} left session ${sessionId}`);
+  async registerErrorHandler(handler: ErrorHandler): Promise<void> {
+    console.log('Error handler registered');
+  }
+
+  async registerSuccessHandler(handler: SuccessHandler): Promise<void> {
+    console.log('Success handler registered');
   }
 }
 
-class MessageQueue {
-  private messages: Map<string, Message> = new Map();
-
-  constructor(private config: QueueConfig) {}
+class SessionManager {
+  constructor(private config: SessionConfig) {}
 
   async initialize(): Promise<void> {
-    console.log('Message Queue initialized');
+    console.log('Session Manager initialized');
   }
 
   async shutdown(): Promise<void> {
-    console.log('Message Queue shutdown');
+    console.log('Session Manager shutdown');
   }
 
-  async enqueue(message: Message): Promise<void> {
-    this.messages.set(message.id, message);
+  async createSession(config: SessionConfig): Promise<CommunicationSession> {
+    return {
+      id: uuidv4(),
+      name: config.name,
+      description: config.description,
+      participants: [],
+      messages: [],
+      created: new Date(),
+      lastActivity: new Date()
+    };
   }
 
-  async dequeue(messageId: string): Promise<Message> {
-    const message = this.messages.get(messageId);
-    if (!message) {
-      throw new Error(`Message ${messageId} not found`);
-    }
-    return message;
+  async addParticipant(sessionId: string, participant: Participant): Promise<void> {
+    console.log(`Participant added to session: ${sessionId}`);
   }
 
-  async getMessages(channelId: string, limit: number): Promise<Message[]> {
-    const messages = Array.from(this.messages.values())
-      .filter(msg => msg.channelId === channelId)
-      .slice(0, limit);
-    return messages;
+  async removeParticipant(sessionId: string, participantId: string): Promise<void> {
+    console.log(`Participant removed from session: ${sessionId}`);
   }
-
-  async getMessageCount(): Promise<number> {
-    return this.messages.size;
-  }
-}
-
-// Additional supporting types
-export interface Message {
-  id: string;
-  type: MessageType;
-  content: any;
-  sender: string;
-  channelId: string;
-  timestamp: Date;
-  metadata: MessageMetadata;
-}
-
-export interface Channel {
-  id: string;
-  name: string;
-  type: ChannelType;
-  participants: string[];
-  created: Date;
-  updated: Date;
-}
-
-export interface Session {
-  id: string;
-  name: string;
-  type: SessionType;
-  participants: string[];
-  created: Date;
-  updated: Date;
-}
-
-export interface Collaboration {
-  id: string;
-  name: string;
-  type: CollaborationType;
-  participants: string[];
-  status: CollaborationStatus;
-  created: Date;
-  updated: Date;
-}
-
-export interface MessageMetadata {
-  priority: number;
-  encryption: boolean;
-  compression: boolean;
-  routing: string[];
-}
-
-export enum MessageType {
-  TEXT = 'text',
-  BINARY = 'binary',
-  COMMAND = 'command',
-  RESPONSE = 'response',
-  EVENT = 'event'
-}
-
-export enum ChannelType {
-  PUBLIC = 'public',
-  PRIVATE = 'private',
-  SECURE = 'secure'
-}
-
-export enum SessionType {
-  COLLABORATION = 'collaboration',
-  MEETING = 'meeting',
-  WORKSHOP = 'workshop'
-}
-
-export enum CollaborationType {
-  PEER_TO_PEER = 'peer_to_peer',
-  HIERARCHICAL = 'hierarchical',
-  DISTRIBUTED = 'distributed'
-}
-
-export enum CollaborationStatus {
-  ACTIVE = 'active',
-  PAUSED = 'paused',
-  ENDED = 'ended'
 }
