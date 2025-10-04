@@ -3,287 +3,493 @@
 /**
  * Team Collaboration Demo
  * 
- * This demo showcases the Phase 3: Collaborative & Team-Wide Learning features:
+ * This demo showcases Phase 3 collaborative features:
+ * - Team creation and management
  * - Shared learning database
- * - Team-based learning
- * - Knowledge sharing between teams
- * - Collaborative code improvement
+ * - Coding standards enforcement
+ * - Cross-team knowledge sharing
+ * - Team learning workflows
  */
 
-import { CentralizedH2GNNManager } from '../core/centralized-h2gnn-config';
-import { TeamConfig } from '../core/shared-learning-database';
+import { SharedLearningDatabase, TeamConfig } from '../core/shared-learning-database';
+import { CodingStandardEngine, CodingStandardRule } from '../rules/coding-standard-engine';
+import { TeamLearningWorkflow } from '../workflows/team-collaboration-workflow';
+import { KnowledgeSharingWorkflow } from '../workflows/knowledge-sharing-workflow';
+import { TeamStandardsWorkflow } from '../workflows/team-standards-workflow';
+import { getSharedH2GNN } from '../core/centralized-h2gnn-config';
 
-async function demonstrateTeamCollaboration(): Promise<void> {
-  console.warn('🤝 Team Collaboration Demo');
-  console.warn('==========================');
-  
-  // Initialize the centralized manager
-  const manager = CentralizedH2GNNManager.getInstance();
-  
-  console.warn('\n📊 Phase 1: Creating Teams');
-  console.warn('----------------------------');
-  
-  // Create frontend team
-  const frontendTeam: TeamConfig = {
-    teamId: 'frontend-team',
-    name: 'Frontend Team',
-    description: 'Frontend development team specializing in React and TypeScript',
-    members: [],
-    learningDomains: ['react', 'typescript', 'ui-ux', 'frontend-architecture'],
-    sharedConcepts: ['component-design', 'state-management', 'performance-optimization'],
-    privacyLevel: 'private',
-    createdAt: Date.now(),
-    updatedAt: Date.now()
-  };
-  
-  // Create backend team
-  const backendTeam: TeamConfig = {
-    teamId: 'backend-team',
-    name: 'Backend Team',
-    description: 'Backend development team specializing in Node.js and databases',
-    members: [],
-    learningDomains: ['nodejs', 'databases', 'apis', 'backend-architecture'],
-    sharedConcepts: ['api-design', 'database-optimization', 'security-patterns'],
-    privacyLevel: 'private',
-    createdAt: Date.now(),
-    updatedAt: Date.now()
-  };
-  
-  // Create DevOps team
-  const devopsTeam: TeamConfig = {
-    teamId: 'devops-team',
-    name: 'DevOps Team',
-    description: 'DevOps team specializing in infrastructure and deployment',
-    members: [],
-    learningDomains: ['docker', 'kubernetes', 'ci-cd', 'monitoring'],
-    sharedConcepts: ['containerization', 'orchestration', 'automation'],
-    privacyLevel: 'private',
-    createdAt: Date.now(),
-    updatedAt: Date.now()
-  };
-  
-  await manager.createTeam('frontend-team', frontendTeam);
-  await manager.createTeam('backend-team', backendTeam);
-  await manager.createTeam('devops-team', devopsTeam);
-  
-  console.warn('\n👥 Phase 2: Adding Team Members');
-  console.warn('---------------------------------');
-  
-  // Add frontend team members
-  await manager.addTeamMember('frontend-team', 'alice', 'admin');
-  await manager.addTeamMember('frontend-team', 'bob', 'member');
-  await manager.addTeamMember('frontend-team', 'carol', 'member');
-  
-  // Add backend team members
-  await manager.addTeamMember('backend-team', 'david', 'admin');
-  await manager.addTeamMember('backend-team', 'eve', 'member');
-  await manager.addTeamMember('backend-team', 'frank', 'member');
-  
-  // Add DevOps team members
-  await manager.addTeamMember('devops-team', 'grace', 'admin');
-  await manager.addTeamMember('devops-team', 'henry', 'member');
-  await manager.addTeamMember('devops-team', 'ivy', 'member');
-  
-  console.warn('\n🧠 Phase 3: Team Learning Sessions');
-  console.warn('-----------------------------------');
-  
-  // Frontend team learning
-  manager.setCurrentTeam('frontend-team');
-  
-  console.warn('\n🎨 Frontend Team Learning:');
-  await manager.learnWithTeamContext(
-    'react-hooks',
-    { 
-      type: 'frontend-pattern', 
-      features: ['state-management', 'lifecycle', 'performance'],
-      complexity: 'intermediate',
-      bestPractices: ['useCallback', 'useMemo', 'custom-hooks']
-    },
-    { domain: 'frontend', team: 'frontend-team', contributor: 'alice' },
-    0.9
-  );
-  
-  await manager.learnWithTeamContext(
-    'typescript-advanced',
-    { 
-      type: 'language-feature', 
-      features: ['generics', 'utility-types', 'decorators'],
-      complexity: 'advanced',
-      bestPractices: ['type-safety', 'code-reusability']
-    },
-    { domain: 'frontend', team: 'frontend-team', contributor: 'bob' },
-    0.85
-  );
-  
-  await manager.learnWithTeamContext(
-    'component-architecture',
-    { 
-      type: 'architecture-pattern', 
-      features: ['composition', 'inheritance', 'props-drilling'],
-      complexity: 'advanced',
-      bestPractices: ['compound-components', 'render-props', 'context-api']
-    },
-    { domain: 'frontend', team: 'frontend-team', contributor: 'carol' },
-    0.92
-  );
-  
-  // Backend team learning
-  manager.setCurrentTeam('backend-team');
-  
-  console.warn('\n⚙️ Backend Team Learning:');
-  await manager.learnWithTeamContext(
-    'api-design-patterns',
-    { 
-      type: 'backend-pattern', 
-      features: ['rest', 'graphql', 'versioning'],
-      complexity: 'intermediate',
-      bestPractices: ['resource-based', 'stateless', 'cacheable']
-    },
-    { domain: 'backend', team: 'backend-team', contributor: 'david' },
-    0.88
-  );
-  
-  await manager.learnWithTeamContext(
-    'database-optimization',
-    { 
-      type: 'performance-pattern', 
-      features: ['indexing', 'query-optimization', 'connection-pooling'],
-      complexity: 'advanced',
-      bestPractices: ['query-analysis', 'index-strategy', 'connection-management']
-    },
-    { domain: 'backend', team: 'backend-team', contributor: 'eve' },
-    0.91
-  );
-  
-  await manager.learnWithTeamContext(
-    'microservices-architecture',
-    { 
-      type: 'architecture-pattern', 
-      features: ['service-discovery', 'load-balancing', 'circuit-breaker'],
-      complexity: 'advanced',
-      bestPractices: ['domain-driven-design', 'event-sourcing', 'saga-pattern']
-    },
-    { domain: 'backend', team: 'backend-team', contributor: 'frank' },
-    0.87
-  );
-  
-  // DevOps team learning
-  manager.setCurrentTeam('devops-team');
-  
-  console.warn('\n🔧 DevOps Team Learning:');
-  await manager.learnWithTeamContext(
-    'container-orchestration',
-    { 
-      type: 'infrastructure-pattern', 
-      features: ['kubernetes', 'docker-swarm', 'service-mesh'],
-      complexity: 'advanced',
-      bestPractices: ['pod-design', 'resource-limits', 'health-checks']
-    },
-    { domain: 'devops', team: 'devops-team', contributor: 'grace' },
-    0.93
-  );
-  
-  await manager.learnWithTeamContext(
-    'ci-cd-pipelines',
-    { 
-      type: 'automation-pattern', 
-      features: ['jenkins', 'gitlab-ci', 'github-actions'],
-      complexity: 'intermediate',
-      bestPractices: ['pipeline-as-code', 'environment-promotion', 'rollback-strategy']
-    },
-    { domain: 'devops', team: 'devops-team', contributor: 'henry' },
-    0.89
-  );
-  
-  await manager.learnWithTeamContext(
-    'monitoring-observability',
-    { 
-      type: 'observability-pattern', 
-      features: ['metrics', 'logging', 'tracing'],
-      complexity: 'intermediate',
-      bestPractices: ['three-pillars', 'distributed-tracing', 'alerting']
-    },
-    { domain: 'devops', team: 'devops-team', contributor: 'ivy' },
-    0.86
-  );
-  
-  console.warn('\n📊 Phase 4: Team Learning Progress');
-  console.warn('----------------------------------');
-  
-  // Get learning progress for each team
-  const frontendProgress = await manager.getTeamLearningProgress('frontend-team');
-  const backendProgress = await manager.getTeamLearningProgress('backend-team');
-  const devopsProgress = await manager.getTeamLearningProgress('devops-team');
-  
-  console.warn(`\n🎨 Frontend Team Progress: ${frontendProgress.length} domains`);
-  frontendProgress.forEach(progress => {
-    console.warn(`  • ${progress.domain}: ${progress.learnedConcepts}/${progress.totalConcepts} concepts (${progress.masteryLevel.toFixed(2)} mastery)`);
-  });
-  
-  console.warn(`\n⚙️ Backend Team Progress: ${backendProgress.length} domains`);
-  backendProgress.forEach(progress => {
-    console.warn(`  • ${progress.domain}: ${progress.learnedConcepts}/${progress.totalConcepts} concepts (${progress.masteryLevel.toFixed(2)} mastery)`);
-  });
-  
-  console.warn(`\n🔧 DevOps Team Progress: ${devopsProgress.length} domains`);
-  devopsProgress.forEach(progress => {
-    console.warn(`  • ${progress.domain}: ${progress.learnedConcepts}/${progress.totalConcepts} concepts (${progress.masteryLevel.toFixed(2)} mastery)`);
-  });
-  
-  console.warn('\n🤝 Phase 5: Cross-Team Knowledge Sharing');
-  console.warn('----------------------------------------');
-  
-  // Share knowledge between teams
-  console.warn('\n📤 Sharing Frontend → Backend Knowledge:');
-  await manager.shareKnowledge('frontend-team', 'backend-team', ['react-hooks', 'component-architecture']);
-  
-  console.warn('\n📤 Sharing Backend → DevOps Knowledge:');
-  await manager.shareKnowledge('backend-team', 'devops-team', ['api-design-patterns', 'microservices-architecture']);
-  
-  console.warn('\n📤 Sharing DevOps → Frontend Knowledge:');
-  await manager.shareKnowledge('devops-team', 'frontend-team', ['monitoring-observability', 'ci-cd-pipelines']);
-  
-  console.warn('\n🔄 Phase 6: Team Memory Synchronization');
-  console.warn('---------------------------------------');
-  
-  // Sync memories for each team
-  await manager.syncTeamMemories('frontend-team');
-  await manager.syncTeamMemories('backend-team');
-  await manager.syncTeamMemories('devops-team');
-  
-  console.warn('\n📈 Phase 7: Collaborative Learning Insights');
-  console.warn('--------------------------------------------');
-  
-  // Get shared memories from cross-team learning
-  const frontendMemories = await manager.getTeamMemories('frontend-team');
-  const backendMemories = await manager.getTeamMemories('backend-team');
-  const devopsMemories = await manager.getTeamMemories('devops-team');
-  
-  console.warn(`\n📊 Team Memory Summary:`);
-  console.warn(`  • Frontend Team: ${frontendMemories.length} memories`);
-  console.warn(`  • Backend Team: ${backendMemories.length} memories`);
-  console.warn(`  • DevOps Team: ${devopsMemories.length} memories`);
-  
-  // Show cross-team learning
-  const sharedMemories = frontendMemories.filter(m => m.context?.sharedFrom);
-  console.warn(`\n🤝 Cross-Team Learning: ${sharedMemories.length} shared memories`);
-  
-  sharedMemories.forEach(memory => {
-    console.warn(`  • ${memory.concept} (shared from ${memory.context.sharedFrom} to ${memory.context.sharedTo})`);
-  });
-  
-  console.warn('\n🎉 Team Collaboration Demo Complete!');
-  console.warn('=====================================');
-  console.warn('✅ Team creation and member management');
-  console.warn('✅ Team-based learning sessions');
-  console.warn('✅ Cross-team knowledge sharing');
-  console.warn('✅ Collaborative memory synchronization');
-  console.warn('✅ Learning progress tracking');
-  console.warn('\n🚀 Phase 3: Collaborative & Team-Wide Learning is working!');
+export interface TeamCollaborationDemoResult {
+  teamsCreated: number;
+  standardsDefined: number;
+  knowledgeShared: number;
+  workflowsExecuted: number;
+  learningProgress: number;
+  collaborationSuccess: boolean;
 }
 
-// Run the demo only if this file is executed directly
+export class TeamCollaborationDemo {
+  private sharedDB: SharedLearningDatabase;
+  private codingEngine: CodingStandardEngine;
+  private h2gnn: any;
+  private teamLearningWorkflow: TeamLearningWorkflow;
+  private knowledgeSharingWorkflow: KnowledgeSharingWorkflow;
+  private teamStandardsWorkflow: TeamStandardsWorkflow;
+
+  constructor() {
+    this.sharedDB = new SharedLearningDatabase();
+    this.codingEngine = new CodingStandardEngine();
+    this.h2gnn = getSharedH2GNN();
+    this.teamLearningWorkflow = new TeamLearningWorkflow();
+    this.knowledgeSharingWorkflow = new KnowledgeSharingWorkflow();
+    this.teamStandardsWorkflow = new TeamStandardsWorkflow();
+  }
+
+  /**
+   * Run the complete team collaboration demo
+   */
+  async runDemo(): Promise<TeamCollaborationDemoResult> {
+    console.warn('🚀 Starting Team Collaboration Demo');
+    console.warn('=====================================');
+
+    try {
+      // Initialize shared learning database
+      await this.sharedDB.connect();
+
+      // Create teams
+      const teamsCreated = await this.createTeams();
+
+      // Define coding standards
+      const standardsDefined = await this.defineCodingStandards();
+
+      // Execute team learning workflows
+      const workflowsExecuted = await this.executeTeamWorkflows();
+
+      // Share knowledge between teams
+      const knowledgeShared = await this.shareKnowledgeBetweenTeams();
+
+      // Get learning progress
+      const learningProgress = await this.analyzeLearningProgress();
+
+      console.warn('\n🎉 Team Collaboration Demo Complete!');
+      console.warn('=====================================');
+      console.warn(`✅ Teams created: ${teamsCreated}`);
+      console.warn(`✅ Standards defined: ${standardsDefined}`);
+      console.warn(`✅ Workflows executed: ${workflowsExecuted}`);
+      console.warn(`✅ Knowledge shared: ${knowledgeShared}`);
+      console.warn(`✅ Learning progress: ${learningProgress}%`);
+
+      return {
+        teamsCreated,
+        standardsDefined,
+        knowledgeShared,
+        workflowsExecuted,
+        learningProgress,
+        collaborationSuccess: true
+      };
+
+    } catch (error) {
+      console.error('❌ Team Collaboration Demo failed:', error);
+      return {
+        teamsCreated: 0,
+        standardsDefined: 0,
+        knowledgeShared: 0,
+        workflowsExecuted: 0,
+        learningProgress: 0,
+        collaborationSuccess: false
+      };
+    } finally {
+      await this.sharedDB.disconnect();
+    }
+  }
+
+  /**
+   * Create teams for collaboration
+   */
+  private async createTeams(): Promise<number> {
+    console.warn('\n🤝 Creating Teams');
+    console.warn('=================');
+
+    const teams: TeamConfig[] = [
+      {
+        teamId: 'frontend-team',
+        name: 'Frontend Development Team',
+        description: 'React and TypeScript frontend development',
+        members: ['alice', 'bob', 'charlie'],
+        learningDomains: ['react', 'typescript', 'ui-ux', 'frontend-architecture'],
+        sharedConcepts: ['component-design', 'state-management', 'performance-optimization'],
+        privacyLevel: 'private',
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      },
+      {
+        teamId: 'backend-team',
+        name: 'Backend Development Team',
+        description: 'Node.js and database backend development',
+        members: ['diana', 'eve', 'frank'],
+        learningDomains: ['nodejs', 'databases', 'apis', 'backend-architecture'],
+        sharedConcepts: ['api-design', 'database-optimization', 'security-patterns'],
+        privacyLevel: 'private',
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      },
+      {
+        teamId: 'devops-team',
+        name: 'DevOps and Infrastructure Team',
+        description: 'Infrastructure and deployment automation',
+        members: ['grace', 'henry', 'iris'],
+        learningDomains: ['kubernetes', 'docker', 'ci-cd', 'monitoring'],
+        sharedConcepts: ['infrastructure-as-code', 'deployment-strategies', 'observability'],
+        privacyLevel: 'private',
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      }
+    ];
+
+    for (const team of teams) {
+      await this.sharedDB.createTeam(team.teamId, team);
+      console.warn(`✅ Created team: ${team.name} (${team.teamId})`);
+    }
+
+    return teams.length;
+  }
+
+  /**
+   * Define coding standards for teams
+   */
+  private async defineCodingStandards(): Promise<number> {
+    console.warn('\n📋 Defining Coding Standards');
+    console.warn('============================');
+
+    const standards: CodingStandardRule[] = [
+      {
+        id: 'typescript-best-practices',
+        name: 'TypeScript Best Practices',
+        description: 'Enforce TypeScript best practices across all teams',
+        teamId: 'all-teams',
+        severity: 'high',
+        patterns: [
+          'Use explicit types',
+          'Avoid any type',
+          'Use interfaces for object shapes',
+          'Use enums for constants',
+          'Prefer const assertions'
+        ],
+        exceptions: [],
+        examples: [
+          'interface User { id: number; name: string; }',
+          'enum Status { ACTIVE, INACTIVE }',
+          'const user: User = { id: 1, name: "John" };'
+        ],
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      },
+      {
+        id: 'error-handling-standards',
+        name: 'Error Handling Standards',
+        description: 'Consistent error handling patterns',
+        teamId: 'all-teams',
+        severity: 'critical',
+        patterns: [
+          'Use try-catch blocks for async operations',
+          'Log errors with context',
+          'Provide user-friendly error messages',
+          'Handle promise rejections'
+        ],
+        exceptions: [],
+        examples: [
+          'try { const result = await apiCall(); } catch (error) { logger.error("API call failed:", error); }'
+        ],
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      },
+      {
+        id: 'frontend-performance',
+        name: 'Frontend Performance Standards',
+        description: 'Performance optimization for frontend code',
+        teamId: 'frontend-team',
+        severity: 'high',
+        patterns: [
+          'Use React.memo for expensive components',
+          'Implement code splitting',
+          'Optimize bundle size',
+          'Use lazy loading for images'
+        ],
+        exceptions: [],
+        examples: [
+          'const ExpensiveComponent = React.memo(({ data }) => { ... });',
+          'const LazyComponent = React.lazy(() => import("./LazyComponent"));'
+        ],
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      },
+      {
+        id: 'backend-security',
+        name: 'Backend Security Standards',
+        description: 'Security best practices for backend code',
+        teamId: 'backend-team',
+        severity: 'critical',
+        patterns: [
+          'Validate all inputs',
+          'Use parameterized queries',
+          'Implement rate limiting',
+          'Sanitize user data'
+        ],
+        exceptions: [],
+        examples: [
+          'const user = await validateInput(req.body);',
+          'const result = await db.query("SELECT * FROM users WHERE id = ?", [userId]);'
+        ],
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      }
+    ];
+
+    for (const standard of standards) {
+      await this.codingEngine.defineRule(standard);
+      console.warn(`✅ Defined standard: ${standard.name} (${standard.severity})`);
+    }
+
+    return standards.length;
+  }
+
+  /**
+   * Execute team learning workflows
+   */
+  private async executeTeamWorkflows(): Promise<number> {
+    console.warn('\n🔄 Executing Team Workflows');
+    console.warn('============================');
+
+    const sampleCode = `
+// Sample TypeScript code for analysis
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+class UserService {
+  private users: User[] = [];
+
+  async createUser(userData: Partial<User>): Promise<User> {
+    try {
+      const user: User = {
+        id: Date.now(),
+        name: userData.name || '',
+        email: userData.email || ''
+      };
+      
+      this.users.push(user);
+      return user;
+    } catch (error) {
+      console.error('Failed to create user:', error);
+      throw new Error('User creation failed');
+    }
+  }
+
+  async getUserById(id: number): Promise<User | null> {
+    return this.users.find(user => user.id === id) || null;
+  }
+}
+    `;
+
+    let workflowsExecuted = 0;
+
+    // Team Learning Workflow
+    console.warn('📚 Executing Team Learning Workflow...');
+    const teamLearningResult = await this.teamLearningWorkflow.executeTeamLearning(
+      'frontend-team',
+      sampleCode,
+      'typescript'
+    );
+    console.warn(`✅ Team learning complete: ${teamLearningResult.insights.length} insights generated`);
+
+    // Team Standards Workflow
+    console.warn('📋 Executing Team Standards Workflow...');
+    const teamStandardsResult = await this.teamStandardsWorkflow.executeTeamStandards(
+      'backend-team',
+      sampleCode,
+      'typescript'
+    );
+    console.warn(`✅ Team standards complete: ${teamStandardsResult.compliance}% compliance`);
+
+    workflowsExecuted = 2;
+
+    return workflowsExecuted;
+  }
+
+  /**
+   * Share knowledge between teams
+   */
+  private async shareKnowledgeBetweenTeams(): Promise<number> {
+    console.warn('\n🤝 Sharing Knowledge Between Teams');
+    console.warn('===================================');
+
+    // Share frontend knowledge with backend team
+    console.warn('📤 Sharing frontend knowledge with backend team...');
+    const frontendToBackendResult = await this.knowledgeSharingWorkflow.executeKnowledgeSharing(
+      'frontend-team',
+      'backend-team',
+      ['component-design', 'state-management']
+    );
+    console.warn(`✅ Frontend → Backend: ${frontendToBackendResult.sharedKnowledge.length} knowledge items shared`);
+
+    // Share backend knowledge with devops team
+    console.warn('📤 Sharing backend knowledge with devops team...');
+    const backendToDevopsResult = await this.knowledgeSharingWorkflow.executeKnowledgeSharing(
+      'backend-team',
+      'devops-team',
+      ['api-design', 'database-optimization']
+    );
+    console.warn(`✅ Backend → DevOps: ${backendToDevopsResult.sharedKnowledge.length} knowledge items shared`);
+
+    // Share devops knowledge with frontend team
+    console.warn('📤 Sharing devops knowledge with frontend team...');
+    const devopsToFrontendResult = await this.knowledgeSharingWorkflow.executeKnowledgeSharing(
+      'devops-team',
+      'frontend-team',
+      ['deployment-strategies', 'monitoring']
+    );
+    console.warn(`✅ DevOps → Frontend: ${devopsToFrontendResult.sharedKnowledge.length} knowledge items shared`);
+
+    return 3; // Three knowledge sharing operations
+  }
+
+  /**
+   * Analyze learning progress across teams
+   */
+  private async analyzeLearningProgress(): Promise<number> {
+    console.warn('\n📊 Analyzing Learning Progress');
+    console.warn('==============================');
+
+    const teams = ['frontend-team', 'backend-team', 'devops-team'];
+    let totalProgress = 0;
+
+    for (const teamId of teams) {
+      const progress = await this.sharedDB.getTeamLearningProgress(teamId);
+      const teamProgress = progress.reduce((sum, p) => sum + p.masteryLevel, 0) / progress.length || 0;
+      totalProgress += teamProgress;
+      
+      console.warn(`📈 ${teamId}: ${progress.length} domains, ${Math.round(teamProgress * 100)}% mastery`);
+    }
+
+    const averageProgress = Math.round((totalProgress / teams.length) * 100);
+    console.warn(`📊 Average team learning progress: ${averageProgress}%`);
+
+    return averageProgress;
+  }
+
+  /**
+   * Demonstrate team collaboration features
+   */
+  async demonstrateTeamCollaboration(): Promise<void> {
+    console.warn('\n🎯 Team Collaboration Features Demo');
+    console.warn('===================================');
+
+    // Create a sample team
+    const teamConfig: TeamConfig = {
+      teamId: 'demo-team',
+      name: 'Demo Team',
+      description: 'Demonstration team for collaboration features',
+      members: ['demo-user-1', 'demo-user-2'],
+      learningDomains: ['collaboration', 'learning', 'standards'],
+      sharedConcepts: ['team-work', 'knowledge-sharing'],
+      privacyLevel: 'public',
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+
+    await this.sharedDB.createTeam('demo-team', teamConfig);
+    console.warn('✅ Demo team created');
+
+    // Add team members
+    await this.sharedDB.addTeamMember('demo-team', 'demo-user-1', 'admin');
+    await this.sharedDB.addTeamMember('demo-team', 'demo-user-2', 'member');
+    console.warn('✅ Team members added');
+
+    // Define team-specific coding standards
+    const teamStandard: CodingStandardRule = {
+      id: 'demo-team-standards',
+      name: 'Demo Team Standards',
+      description: 'Standards for demo team collaboration',
+      teamId: 'demo-team',
+      severity: 'medium',
+      patterns: [
+        'Use descriptive variable names',
+        'Add comments for complex logic',
+        'Follow team naming conventions'
+      ],
+      exceptions: [],
+      examples: [
+        'const userAccountBalance = calculateBalance(account);',
+        '// Calculate balance for user account'
+      ],
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+
+    await this.codingEngine.defineRule(teamStandard);
+    console.warn('✅ Team standards defined');
+
+    // Learn from team standards
+    await this.codingEngine.learnFromTeamStandards('demo-team');
+    console.warn('✅ Learned from team standards');
+
+    // Get team learning progress
+    const progress = await this.sharedDB.getTeamLearningProgress('demo-team');
+    console.warn(`📊 Demo team learning progress: ${progress.length} domains`);
+
+    console.warn('\n🎉 Team collaboration features demonstrated successfully!');
+  }
+}
+
+// Demo execution function
+async function runTeamCollaborationDemo(): Promise<void> {
+  console.warn('🚀 H²GNN Phase 3: Team Collaboration Demo');
+  console.warn('==========================================');
+  console.warn('This demo showcases collaborative learning features:');
+  console.warn('- Team creation and management');
+  console.warn('- Shared learning database');
+  console.warn('- Coding standards enforcement');
+  console.warn('- Cross-team knowledge sharing');
+  console.warn('- Team learning workflows');
+  console.warn('');
+
+  const demo = new TeamCollaborationDemo();
+  
+  try {
+    // Run the main demo
+    const result = await demo.runDemo();
+    
+    if (result.collaborationSuccess) {
+      console.warn('\n🎉 Phase 3 Team Collaboration Demo SUCCESS!');
+      console.warn('===========================================');
+      console.warn(`✅ Teams created: ${result.teamsCreated}`);
+      console.warn(`✅ Standards defined: ${result.standardsDefined}`);
+      console.warn(`✅ Workflows executed: ${result.workflowsExecuted}`);
+      console.warn(`✅ Knowledge shared: ${result.knowledgeShared}`);
+      console.warn(`✅ Learning progress: ${result.learningProgress}%`);
+      console.warn('');
+      console.warn('🚀 Phase 3: Collaborative & Team-Wide Learning is READY!');
+    } else {
+      console.warn('\n❌ Phase 3 Team Collaboration Demo FAILED');
+      console.warn('Please check the implementation and try again.');
+    }
+
+    // Demonstrate additional features
+    console.warn('\n🎯 Additional Team Collaboration Features');
+    console.warn('==========================================');
+    await demo.demonstrateTeamCollaboration();
+
+  } catch (error) {
+    console.error('\n❌ Demo execution failed:', error);
+    console.warn('Please check the implementation and dependencies.');
+  }
+}
+
+// Export for use in other modules
+export { TeamCollaborationDemo, runTeamCollaborationDemo };
+
+// Run the demo if this file is executed directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  demonstrateTeamCollaboration().catch(console.error);
+  runTeamCollaborationDemo().catch(console.error);
 }
-

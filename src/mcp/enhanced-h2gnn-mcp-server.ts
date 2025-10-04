@@ -392,6 +392,144 @@ class EnhancedH2GNNMCPServerHD {
               type: "object",
               properties: {}
             }
+          },
+          {
+            name: "define_coding_standard",
+            description: "Define a new coding standard rule for team collaboration",
+            inputSchema: {
+              type: "object",
+              properties: {
+                rule: {
+                  type: "object",
+                  description: "Coding standard rule definition",
+                  properties: {
+                    id: { type: "string" },
+                    name: { type: "string" },
+                    description: { type: "string" },
+                    teamId: { type: "string" },
+                    severity: { 
+                      type: "string", 
+                      enum: ["low", "medium", "high", "critical"] 
+                    },
+                    patterns: { 
+                      type: "array", 
+                      items: { type: "string" } 
+                    },
+                    exceptions: { 
+                      type: "array", 
+                      items: { type: "string" } 
+                    },
+                    examples: { 
+                      type: "array", 
+                      items: { type: "string" } 
+                    }
+                  },
+                  required: ["id", "name", "description", "teamId", "severity"]
+                }
+              },
+              required: ["rule"]
+            }
+          },
+          {
+            name: "enforce_coding_standard",
+            description: "Enforce coding standards on code for a team",
+            inputSchema: {
+              type: "object",
+              properties: {
+                code: {
+                  type: "string",
+                  description: "Code to analyze for standards compliance"
+                },
+                teamId: {
+                  type: "string",
+                  description: "Team ID to enforce standards for"
+                }
+              },
+              required: ["code", "teamId"]
+            }
+          },
+          {
+            name: "learn_from_team_standards",
+            description: "Learn from team coding standards and patterns",
+            inputSchema: {
+              type: "object",
+              properties: {
+                teamId: {
+                  type: "string",
+                  description: "Team ID to learn standards from"
+                }
+              },
+              required: ["teamId"]
+            }
+          },
+          {
+            name: "create_team",
+            description: "Create a new team for collaborative learning",
+            inputSchema: {
+              type: "object",
+              properties: {
+                teamId: {
+                  type: "string",
+                  description: "Unique team identifier"
+                },
+                name: {
+                  type: "string",
+                  description: "Team name"
+                },
+                description: {
+                  type: "string",
+                  description: "Team description"
+                },
+                learningDomains: {
+                  type: "array",
+                  items: { type: "string" },
+                  description: "Learning domains for the team"
+                },
+                privacyLevel: {
+                  type: "string",
+                  enum: ["public", "private", "restricted"],
+                  description: "Privacy level for team data"
+                }
+              },
+              required: ["teamId", "name", "description"]
+            }
+          },
+          {
+            name: "share_team_knowledge",
+            description: "Share knowledge between teams",
+            inputSchema: {
+              type: "object",
+              properties: {
+                sourceTeamId: {
+                  type: "string",
+                  description: "Source team ID"
+                },
+                targetTeamId: {
+                  type: "string",
+                  description: "Target team ID"
+                },
+                concepts: {
+                  type: "array",
+                  items: { type: "string" },
+                  description: "Concepts to share"
+                }
+              },
+              required: ["sourceTeamId", "targetTeamId", "concepts"]
+            }
+          },
+          {
+            name: "get_team_learning_progress",
+            description: "Get learning progress for a team",
+            inputSchema: {
+              type: "object",
+              properties: {
+                teamId: {
+                  type: "string",
+                  description: "Team ID to get progress for"
+                }
+              },
+              required: ["teamId"]
+            }
           }
         ]
       };
@@ -444,6 +582,24 @@ class EnhancedH2GNNMCPServerHD {
           
           case "get_mcp_integration_status":
             return await this.getMCPIntegrationStatus(args);
+          
+          case "define_coding_standard":
+            return await this.defineCodingStandard(args);
+          
+          case "enforce_coding_standard":
+            return await this.enforceCodingStandard(args);
+          
+          case "learn_from_team_standards":
+            return await this.learnFromTeamStandards(args);
+          
+          case "create_team":
+            return await this.createTeam(args);
+          
+          case "share_team_knowledge":
+            return await this.shareTeamKnowledge(args);
+          
+          case "get_team_learning_progress":
+            return await this.getTeamLearningProgress(args);
           
           default:
             throw new McpError(
@@ -1390,6 +1546,182 @@ RPC Endpoint: ${this.h2gnnAddress ? hdAddressing?.getRPCEndpoint(this.h2gnnAddre
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
     // Enhanced H²GNN MCP Server HD running on stdio
+  }
+
+  /**
+   * Define a coding standard rule for team collaboration
+   */
+  private async defineCodingStandard(args: any): Promise<any> {
+    try {
+      const { CodingStandardEngine } = await import('../rules/coding-standard-engine.js');
+      const codingEngine = new CodingStandardEngine();
+      
+      await codingEngine.defineRule(args.rule);
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: `✅ Coding standard rule defined: ${args.rule.name}\n` +
+                  `Team: ${args.rule.teamId}\n` +
+                  `Severity: ${args.rule.severity}\n` +
+                  `Patterns: ${args.rule.patterns.length} patterns defined`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Failed to define coding standard: ${error}`);
+    }
+  }
+
+  /**
+   * Enforce coding standards on code for a team
+   */
+  private async enforceCodingStandard(args: any): Promise<any> {
+    try {
+      const { CodingStandardEngine } = await import('../rules/coding-standard-engine.js');
+      const codingEngine = new CodingStandardEngine();
+      
+      const violations = await codingEngine.enforceRules(args.code, args.teamId);
+      const suggestions = await codingEngine.suggestFixes(violations);
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: `🔍 Coding standards enforcement results:\n` +
+                  `Team: ${args.teamId}\n` +
+                  `Violations found: ${violations.length}\n` +
+                  `Suggestions generated: ${suggestions.length}\n` +
+                  `Critical violations: ${violations.filter(v => v.severity === 'critical').length}\n` +
+                  `High violations: ${violations.filter(v => v.severity === 'high').length}`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Failed to enforce coding standards: ${error}`);
+    }
+  }
+
+  /**
+   * Learn from team coding standards and patterns
+   */
+  private async learnFromTeamStandards(args: any): Promise<any> {
+    try {
+      const { CodingStandardEngine } = await import('../rules/coding-standard-engine.js');
+      const codingEngine = new CodingStandardEngine();
+      
+      await codingEngine.learnFromTeamStandards(args.teamId);
+      await codingEngine.adaptRulesToTeam(args.teamId);
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: `🧠 Learned from team standards: ${args.teamId}\n` +
+                  `✅ Team standards analysis complete\n` +
+                  `✅ Rules adapted to team patterns\n` +
+                  `✅ Learning integrated with H²GNN system`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Failed to learn from team standards: ${error}`);
+    }
+  }
+
+  /**
+   * Create a new team for collaborative learning
+   */
+  private async createTeam(args: any): Promise<any> {
+    try {
+      const { SharedLearningDatabase } = await import('../core/shared-learning-database.js');
+      const sharedDB = new SharedLearningDatabase();
+      
+      const teamConfig = {
+        teamId: args.teamId,
+        name: args.name,
+        description: args.description,
+        members: [],
+        learningDomains: args.learningDomains || [],
+        sharedConcepts: [],
+        privacyLevel: args.privacyLevel || 'private',
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      };
+      
+      await sharedDB.createTeam(args.teamId, teamConfig);
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: `🤝 Team created successfully: ${args.name}\n` +
+                  `Team ID: ${args.teamId}\n` +
+                  `Learning domains: ${args.learningDomains?.join(', ') || 'None'}\n` +
+                  `Privacy level: ${args.privacyLevel || 'private'}\n` +
+                  `✅ Team ready for collaborative learning`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Failed to create team: ${error}`);
+    }
+  }
+
+  /**
+   * Share knowledge between teams
+   */
+  private async shareTeamKnowledge(args: any): Promise<any> {
+    try {
+      const { SharedLearningDatabase } = await import('../core/shared-learning-database.js');
+      const sharedDB = new SharedLearningDatabase();
+      
+      await sharedDB.shareKnowledge(args.sourceTeamId, args.targetTeamId, args.concepts);
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: `🤝 Knowledge sharing completed:\n` +
+                  `From: ${args.sourceTeamId}\n` +
+                  `To: ${args.targetTeamId}\n` +
+                  `Concepts shared: ${args.concepts.join(', ')}\n` +
+                  `✅ Cross-team knowledge transfer successful`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Failed to share team knowledge: ${error}`);
+    }
+  }
+
+  /**
+   * Get learning progress for a team
+   */
+  private async getTeamLearningProgress(args: any): Promise<any> {
+    try {
+      const { SharedLearningDatabase } = await import('../core/shared-learning-database.js');
+      const sharedDB = new SharedLearningDatabase();
+      
+      const progress = await sharedDB.getTeamLearningProgress(args.teamId);
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: `📊 Team learning progress: ${args.teamId}\n` +
+                  `Domains: ${progress.length}\n` +
+                  `Total concepts: ${progress.reduce((sum, p) => sum + p.totalConcepts, 0)}\n` +
+                  `Learned concepts: ${progress.reduce((sum, p) => sum + p.learnedConcepts, 0)}\n` +
+                  `Average mastery: ${progress.reduce((sum, p) => sum + p.masteryLevel, 0) / progress.length || 0}\n` +
+                  `✅ Team learning analytics complete`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Failed to get team learning progress: ${error}`);
+    }
   }
 }
 
