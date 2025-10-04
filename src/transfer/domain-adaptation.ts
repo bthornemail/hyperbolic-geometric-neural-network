@@ -71,7 +71,7 @@ export class DomainAdaptationSystem {
   private similarityCache: Map<string, Map<string, number>> = new Map();
 
   constructor() {
-    console.log('🔄 Domain Adaptation System initialized');
+    console.warn('🔄 Domain Adaptation System initialized');
   }
 
   /**
@@ -79,7 +79,7 @@ export class DomainAdaptationSystem {
    */
   registerDomain(domain: Domain): void {
     this.domains.set(domain.id, domain);
-    console.log(`📚 Registered domain: ${domain.name} (${domain.concepts.length} concepts)`);
+    console.warn(`📚 Registered domain: ${domain.name} (${domain.concepts.length} concepts)`);
   }
 
   /**
@@ -157,7 +157,7 @@ export class DomainAdaptationSystem {
     
     this.mappings.set(`${sourceDomainId}-${targetDomainId}`, mapping);
     
-    console.log(`🔗 Mapped ${conceptMappings.length} concepts between ${sourceDomain.name} and ${targetDomain.name}`);
+    console.warn(`🔗 Mapped ${conceptMappings.length} concepts between ${sourceDomain.name} and ${targetDomain.name}`);
     return mapping;
   }
 
@@ -298,7 +298,7 @@ export class DomainAdaptationSystem {
     
     this.adaptationHistory.push(result);
     
-    console.log(`✅ Knowledge transfer completed: ${adaptedConcepts.length} concepts adapted, ${failedConcepts.length} failed`);
+    console.warn(`✅ Knowledge transfer completed: ${adaptedConcepts.length} concepts adapted, ${failedConcepts.length} failed`);
     return result;
   }
 
@@ -596,6 +596,6 @@ export class DomainAdaptationSystem {
    */
   clearCache(): void {
     this.similarityCache.clear();
-    console.log('🧹 Domain adaptation cache cleared');
+    console.warn('🧹 Domain adaptation cache cleared');
   }
 }

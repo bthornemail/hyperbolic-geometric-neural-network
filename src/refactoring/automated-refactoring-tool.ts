@@ -82,7 +82,7 @@ export class AutomatedRefactoringTool {
     filePath?: string,
     autoApply: boolean = false
   ): Promise<{ opportunities: RefactoringOpportunity[], applied: RefactoringResult[] }> {
-    console.log(`🔧 Proposing refactoring for ${language} code`);
+    console.warn(`🔧 Proposing refactoring for ${language} code`);
     
     // Step 1: Analyze code for refactoring opportunities
     const opportunities = await this.detectRefactoringOpportunities(code, language, filePath);
@@ -459,7 +459,7 @@ export class AutomatedRefactoringTool {
     
     for (const opportunity of opportunities) {
       try {
-        console.log(`🔧 Applying refactoring: ${opportunity.type}`);
+        console.warn(`🔧 Applying refactoring: ${opportunity.type}`);
         
         // Apply the refactoring
         const modifiedCode = this.applyRefactoringToCode(originalCode, opportunity);
@@ -722,8 +722,8 @@ interface IUserService {
 
 // Demo function
 async function demonstrateAutomatedRefactoring(): Promise<void> {
-  console.log('🔧 Automated Refactoring Demo');
-  console.log('=============================');
+  console.warn('🔧 Automated Refactoring Demo');
+  console.warn('=============================');
   
   const refactoringTool = new AutomatedRefactoringTool();
   
@@ -795,7 +795,7 @@ class UserService {
 }
   `;
   
-  console.log('\n📊 Analyzing code for refactoring opportunities...');
+  console.warn('\n📊 Analyzing code for refactoring opportunities...');
   const result = await refactoringTool.proposeAndApplyRefactoring(
     sampleCode,
     'typescript',
@@ -803,28 +803,28 @@ class UserService {
     false // Don't auto-apply
   );
   
-  console.log('\n🔍 Refactoring Opportunities Found:');
+  console.warn('\n🔍 Refactoring Opportunities Found:');
   result.opportunities.forEach((opportunity, index) => {
-    console.log(`\n${index + 1}. ${opportunity.type.toUpperCase()} (${opportunity.severity})`);
-    console.log(`   Description: ${opportunity.description}`);
-    console.log(`   Confidence: ${opportunity.confidence.toFixed(3)}`);
-    console.log(`   Benefits: ${opportunity.benefits.join(', ')}`);
-    console.log(`   Risks: ${opportunity.risks.join(', ')}`);
-    console.log(`   Estimated Effort: ${opportunity.estimatedEffort} minutes`);
-    console.log(`   Location: Line ${opportunity.location.startLine}-${opportunity.location.endLine}`);
+    console.warn(`\n${index + 1}. ${opportunity.type.toUpperCase()} (${opportunity.severity})`);
+    console.warn(`   Description: ${opportunity.description}`);
+    console.warn(`   Confidence: ${opportunity.confidence.toFixed(3)}`);
+    console.warn(`   Benefits: ${opportunity.benefits.join(', ')}`);
+    console.warn(`   Risks: ${opportunity.risks.join(', ')}`);
+    console.warn(`   Estimated Effort: ${opportunity.estimatedEffort} minutes`);
+    console.warn(`   Location: Line ${opportunity.location.startLine}-${opportunity.location.endLine}`);
   });
   
-  console.log('\n📈 Summary:');
-  console.log(`- Total Opportunities: ${result.opportunities.length}`);
-  console.log(`- High Severity: ${result.opportunities.filter(o => o.severity === 'high').length}`);
-  console.log(`- Medium Severity: ${result.opportunities.filter(o => o.severity === 'medium').length}`);
-  console.log(`- Low Severity: ${result.opportunities.filter(o => o.severity === 'low').length}`);
+  console.warn('\n📈 Summary:');
+  console.warn(`- Total Opportunities: ${result.opportunities.length}`);
+  console.warn(`- High Severity: ${result.opportunities.filter(o => o.severity === 'high').length}`);
+  console.warn(`- Medium Severity: ${result.opportunities.filter(o => o.severity === 'medium').length}`);
+  console.warn(`- Low Severity: ${result.opportunities.filter(o => o.severity === 'low').length}`);
   
   const totalEffort = result.opportunities.reduce((sum, o) => sum + o.estimatedEffort, 0);
-  console.log(`- Total Estimated Effort: ${totalEffort} minutes`);
+  console.warn(`- Total Estimated Effort: ${totalEffort} minutes`);
   
-  console.log('\n🎉 Automated Refactoring Demo Complete!');
-  console.log('✅ Sophisticated refactoring detection with H²GNN integration!');
+  console.warn('\n🎉 Automated Refactoring Demo Complete!');
+  console.warn('✅ Sophisticated refactoring detection with H²GNN integration!');
 }
 
 // Run the demo

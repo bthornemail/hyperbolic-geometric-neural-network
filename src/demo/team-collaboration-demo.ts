@@ -14,14 +14,14 @@ import { CentralizedH2GNNManager } from '../core/centralized-h2gnn-config';
 import { TeamConfig } from '../core/shared-learning-database';
 
 async function demonstrateTeamCollaboration(): Promise<void> {
-  console.log('🤝 Team Collaboration Demo');
-  console.log('==========================');
+  console.warn('🤝 Team Collaboration Demo');
+  console.warn('==========================');
   
   // Initialize the centralized manager
   const manager = CentralizedH2GNNManager.getInstance();
   
-  console.log('\n📊 Phase 1: Creating Teams');
-  console.log('----------------------------');
+  console.warn('\n📊 Phase 1: Creating Teams');
+  console.warn('----------------------------');
   
   // Create frontend team
   const frontendTeam: TeamConfig = {
@@ -66,8 +66,8 @@ async function demonstrateTeamCollaboration(): Promise<void> {
   await manager.createTeam('backend-team', backendTeam);
   await manager.createTeam('devops-team', devopsTeam);
   
-  console.log('\n👥 Phase 2: Adding Team Members');
-  console.log('---------------------------------');
+  console.warn('\n👥 Phase 2: Adding Team Members');
+  console.warn('---------------------------------');
   
   // Add frontend team members
   await manager.addTeamMember('frontend-team', 'alice', 'admin');
@@ -84,13 +84,13 @@ async function demonstrateTeamCollaboration(): Promise<void> {
   await manager.addTeamMember('devops-team', 'henry', 'member');
   await manager.addTeamMember('devops-team', 'ivy', 'member');
   
-  console.log('\n🧠 Phase 3: Team Learning Sessions');
-  console.log('-----------------------------------');
+  console.warn('\n🧠 Phase 3: Team Learning Sessions');
+  console.warn('-----------------------------------');
   
   // Frontend team learning
   manager.setCurrentTeam('frontend-team');
   
-  console.log('\n🎨 Frontend Team Learning:');
+  console.warn('\n🎨 Frontend Team Learning:');
   await manager.learnWithTeamContext(
     'react-hooks',
     { 
@@ -130,7 +130,7 @@ async function demonstrateTeamCollaboration(): Promise<void> {
   // Backend team learning
   manager.setCurrentTeam('backend-team');
   
-  console.log('\n⚙️ Backend Team Learning:');
+  console.warn('\n⚙️ Backend Team Learning:');
   await manager.learnWithTeamContext(
     'api-design-patterns',
     { 
@@ -170,7 +170,7 @@ async function demonstrateTeamCollaboration(): Promise<void> {
   // DevOps team learning
   manager.setCurrentTeam('devops-team');
   
-  console.log('\n🔧 DevOps Team Learning:');
+  console.warn('\n🔧 DevOps Team Learning:');
   await manager.learnWithTeamContext(
     'container-orchestration',
     { 
@@ -207,81 +207,83 @@ async function demonstrateTeamCollaboration(): Promise<void> {
     0.86
   );
   
-  console.log('\n📊 Phase 4: Team Learning Progress');
-  console.log('----------------------------------');
+  console.warn('\n📊 Phase 4: Team Learning Progress');
+  console.warn('----------------------------------');
   
   // Get learning progress for each team
   const frontendProgress = await manager.getTeamLearningProgress('frontend-team');
   const backendProgress = await manager.getTeamLearningProgress('backend-team');
   const devopsProgress = await manager.getTeamLearningProgress('devops-team');
   
-  console.log(`\n🎨 Frontend Team Progress: ${frontendProgress.length} domains`);
+  console.warn(`\n🎨 Frontend Team Progress: ${frontendProgress.length} domains`);
   frontendProgress.forEach(progress => {
-    console.log(`  • ${progress.domain}: ${progress.learnedConcepts}/${progress.totalConcepts} concepts (${progress.masteryLevel.toFixed(2)} mastery)`);
+    console.warn(`  • ${progress.domain}: ${progress.learnedConcepts}/${progress.totalConcepts} concepts (${progress.masteryLevel.toFixed(2)} mastery)`);
   });
   
-  console.log(`\n⚙️ Backend Team Progress: ${backendProgress.length} domains`);
+  console.warn(`\n⚙️ Backend Team Progress: ${backendProgress.length} domains`);
   backendProgress.forEach(progress => {
-    console.log(`  • ${progress.domain}: ${progress.learnedConcepts}/${progress.totalConcepts} concepts (${progress.masteryLevel.toFixed(2)} mastery)`);
+    console.warn(`  • ${progress.domain}: ${progress.learnedConcepts}/${progress.totalConcepts} concepts (${progress.masteryLevel.toFixed(2)} mastery)`);
   });
   
-  console.log(`\n🔧 DevOps Team Progress: ${devopsProgress.length} domains`);
+  console.warn(`\n🔧 DevOps Team Progress: ${devopsProgress.length} domains`);
   devopsProgress.forEach(progress => {
-    console.log(`  • ${progress.domain}: ${progress.learnedConcepts}/${progress.totalConcepts} concepts (${progress.masteryLevel.toFixed(2)} mastery)`);
+    console.warn(`  • ${progress.domain}: ${progress.learnedConcepts}/${progress.totalConcepts} concepts (${progress.masteryLevel.toFixed(2)} mastery)`);
   });
   
-  console.log('\n🤝 Phase 5: Cross-Team Knowledge Sharing');
-  console.log('----------------------------------------');
+  console.warn('\n🤝 Phase 5: Cross-Team Knowledge Sharing');
+  console.warn('----------------------------------------');
   
   // Share knowledge between teams
-  console.log('\n📤 Sharing Frontend → Backend Knowledge:');
+  console.warn('\n📤 Sharing Frontend → Backend Knowledge:');
   await manager.shareKnowledge('frontend-team', 'backend-team', ['react-hooks', 'component-architecture']);
   
-  console.log('\n📤 Sharing Backend → DevOps Knowledge:');
+  console.warn('\n📤 Sharing Backend → DevOps Knowledge:');
   await manager.shareKnowledge('backend-team', 'devops-team', ['api-design-patterns', 'microservices-architecture']);
   
-  console.log('\n📤 Sharing DevOps → Frontend Knowledge:');
+  console.warn('\n📤 Sharing DevOps → Frontend Knowledge:');
   await manager.shareKnowledge('devops-team', 'frontend-team', ['monitoring-observability', 'ci-cd-pipelines']);
   
-  console.log('\n🔄 Phase 6: Team Memory Synchronization');
-  console.log('---------------------------------------');
+  console.warn('\n🔄 Phase 6: Team Memory Synchronization');
+  console.warn('---------------------------------------');
   
   // Sync memories for each team
   await manager.syncTeamMemories('frontend-team');
   await manager.syncTeamMemories('backend-team');
   await manager.syncTeamMemories('devops-team');
   
-  console.log('\n📈 Phase 7: Collaborative Learning Insights');
-  console.log('--------------------------------------------');
+  console.warn('\n📈 Phase 7: Collaborative Learning Insights');
+  console.warn('--------------------------------------------');
   
   // Get shared memories from cross-team learning
   const frontendMemories = await manager.getTeamMemories('frontend-team');
   const backendMemories = await manager.getTeamMemories('backend-team');
   const devopsMemories = await manager.getTeamMemories('devops-team');
   
-  console.log(`\n📊 Team Memory Summary:`);
-  console.log(`  • Frontend Team: ${frontendMemories.length} memories`);
-  console.log(`  • Backend Team: ${backendMemories.length} memories`);
-  console.log(`  • DevOps Team: ${devopsMemories.length} memories`);
+  console.warn(`\n📊 Team Memory Summary:`);
+  console.warn(`  • Frontend Team: ${frontendMemories.length} memories`);
+  console.warn(`  • Backend Team: ${backendMemories.length} memories`);
+  console.warn(`  • DevOps Team: ${devopsMemories.length} memories`);
   
   // Show cross-team learning
   const sharedMemories = frontendMemories.filter(m => m.context?.sharedFrom);
-  console.log(`\n🤝 Cross-Team Learning: ${sharedMemories.length} shared memories`);
+  console.warn(`\n🤝 Cross-Team Learning: ${sharedMemories.length} shared memories`);
   
   sharedMemories.forEach(memory => {
-    console.log(`  • ${memory.concept} (shared from ${memory.context.sharedFrom} to ${memory.context.sharedTo})`);
+    console.warn(`  • ${memory.concept} (shared from ${memory.context.sharedFrom} to ${memory.context.sharedTo})`);
   });
   
-  console.log('\n🎉 Team Collaboration Demo Complete!');
-  console.log('=====================================');
-  console.log('✅ Team creation and member management');
-  console.log('✅ Team-based learning sessions');
-  console.log('✅ Cross-team knowledge sharing');
-  console.log('✅ Collaborative memory synchronization');
-  console.log('✅ Learning progress tracking');
-  console.log('\n🚀 Phase 3: Collaborative & Team-Wide Learning is working!');
+  console.warn('\n🎉 Team Collaboration Demo Complete!');
+  console.warn('=====================================');
+  console.warn('✅ Team creation and member management');
+  console.warn('✅ Team-based learning sessions');
+  console.warn('✅ Cross-team knowledge sharing');
+  console.warn('✅ Collaborative memory synchronization');
+  console.warn('✅ Learning progress tracking');
+  console.warn('\n🚀 Phase 3: Collaborative & Team-Wide Learning is working!');
 }
 
-// Run the demo
-demonstrateTeamCollaboration().catch(console.error);
+// Run the demo only if this file is executed directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  demonstrateTeamCollaboration().catch(console.error);
+}
 

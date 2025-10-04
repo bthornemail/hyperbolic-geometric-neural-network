@@ -106,7 +106,7 @@ export class AIHumanCollaborationInterface {
       await this.client.connect(transport);
       this.isConnected = true;
 
-      console.log('✅ AI-Human Collaboration Interface initialized');
+      console.warn('✅ AI-Human Collaboration Interface initialized');
       
       // Initialize WordNet
       await this.initializeWordNet();
@@ -147,9 +147,9 @@ export class AIHumanCollaborationInterface {
       timestamp: new Date()
     });
 
-    console.log(`🚀 Created collaboration session: ${sessionId}`);
-    console.log(`👥 Participants: ${config.participants.map(p => `${p.name} (${p.type})`).join(', ')}`);
-    console.log(`🎯 Goals: ${config.goals.join(', ')}`);
+    console.warn(`🚀 Created collaboration session: ${sessionId}`);
+    console.warn(`👥 Participants: ${config.participants.map(p => `${p.name} (${p.type})`).join(', ')}`);
+    console.warn(`🎯 Goals: ${config.goals.join(', ')}`);
 
     return sessionId;
   }
@@ -419,14 +419,14 @@ export class AIHumanCollaborationInterface {
     // Generate final insights
     const insights = await this.getSessionInsights(sessionId);
     
-    console.log(`📊 Session ${sessionId} Summary:`);
-    console.log(`   • Total actions: ${insights.collaborationMetrics.totalActions}`);
-    console.log(`   • Concepts explored: ${insights.collaborationMetrics.conceptsCovered}`);
-    console.log(`   • Reasoning chains: ${insights.collaborationMetrics.reasoningChains}`);
-    console.log(`   • Key findings: ${insights.keyFindings.length}`);
+    console.warn(`📊 Session ${sessionId} Summary:`);
+    console.warn(`   • Total actions: ${insights.collaborationMetrics.totalActions}`);
+    console.warn(`   • Concepts explored: ${insights.collaborationMetrics.conceptsCovered}`);
+    console.warn(`   • Reasoning chains: ${insights.collaborationMetrics.reasoningChains}`);
+    console.warn(`   • Key findings: ${insights.keyFindings.length}`);
 
     this.sessions.delete(sessionId);
-    console.log(`✅ Session ${sessionId} closed`);
+    console.warn(`✅ Session ${sessionId} closed`);
   }
 
   /**
@@ -442,7 +442,7 @@ export class AIHumanCollaborationInterface {
       this.serverProcess.kill();
     }
     
-    console.log('🧹 Collaboration interface cleaned up');
+    console.warn('🧹 Collaboration interface cleaned up');
   }
 
   // Private helper methods
@@ -455,7 +455,7 @@ export class AIHumanCollaborationInterface {
           arguments: { maxSynsets: 1000, embeddingDim: 128 }
         }
       );
-      console.log('📚 WordNet initialized for collaboration');
+      console.warn('📚 WordNet initialized for collaboration');
     } catch (error) {
       console.error('❌ Failed to initialize WordNet:', error);
     }

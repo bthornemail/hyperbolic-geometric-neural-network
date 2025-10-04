@@ -1,10 +1,10 @@
 #!/usr/bin/env tsx
 
 /**
- * LSP + AST + MCP Server
+ * LSP + AST + MCP Server with HD Addressing Integration
  * 
  * A complete MCP server that provides LSP and AST analysis capabilities
- * with proper tool, resource, and prompt broadcasting.
+ * with BIP32 HD addressing for deterministic service routing.
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -20,10 +20,12 @@ import {
   GetPromptRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
-import EnhancedH2GNN from '../core/enhanced-h2gnn';
-import { AdvancedASTAnalyzer } from '../analysis/advanced-ast-analyzer';
-import { AutomatedRefactoringTool } from '../refactoring/automated-refactoring-tool';
-import { CentralizedH2GNNManager, CentralizedH2GNNConfig } from '../core/centralized-h2gnn-config';
+import EnhancedH2GNN from '../core/enhanced-h2gnn.js';
+import { AdvancedASTAnalyzer } from '../analysis/advanced-ast-analyzer.js';
+import { AutomatedRefactoringTool } from '../refactoring/automated-refactoring-tool.js';
+import { CentralizedH2GNNManager, CentralizedH2GNNConfig } from '../core/centralized-h2gnn-config.js';
+import { BIP32HDAddressing, H2GNNAddress } from '../core/native-protocol.js';
+import { H2GNNMCPIntegration, MCPIntegrationConfig } from '../core/mcp-hd-integration.js';
 import * as ts from 'typescript';
 import { parse } from '@babel/parser';
 
@@ -45,18 +47,58 @@ interface ASTAnalysis {
   quality: number;
 }
 
-class LSPASTMCPServer {
+/**
+ * Network configuration interface
+ */
+interface MCPNetworkConfig {
+  mode: 'private' | 'protected' | 'public';
+  hdAddressing: {
+    enabled: boolean;
+    seed?: string;
+    network: 'mainnet' | 'testnet' | 'regtest';
+    deterministicRouting: boolean;
+  };
+  security: {
+    encryption: boolean;
+    authentication: boolean;
+    accessControl: boolean;
+  };
+}
+
+/**
+ * Consolidated LSP/AST MCP Server with HD Addressing Integration
+ */
+class LSPASTMCPServerHD {
   private server: Server;
   private h2gnn!: EnhancedH2GNN;
   private astAnalyzer: AdvancedASTAnalyzer;
   private refactoringTool: AutomatedRefactoringTool;
   private capabilities: LSPCapabilities;
+  private hdAddressing: BIP32HDAddressing | null = null;
+  private mcpIntegration: H2GNNMCPIntegration | null = null;
+  private h2gnnAddress: H2GNNAddress | null = null;
+  private networkConfig: MCPNetworkConfig;
 
-  constructor() {
+  constructor(networkConfig?: Partial<MCPNetworkConfig>) {
+    this.networkConfig = {
+      mode: 'protected',
+      hdAddressing: {
+        enabled: true,
+        seed: 'lsp-ast-mcp-server-seed',
+        network: 'testnet',
+        deterministicRouting: true
+      },
+      security: {
+        encryption: true,
+        authentication: true,
+        accessControl: true
+      },
+      ...networkConfig
+    };
     this.server = new Server(
       {
-        name: "lsp-ast-mcp-server",
-        version: "1.0.0",
+        name: "lsp-ast-mcp-server-hd",
+        version: "1.1.0",
       },
       {
         capabilities: {
@@ -78,6 +120,7 @@ class LSPASTMCPServer {
     };
 
     this.initializeH2GNN();
+    this.initializeHDAddressing();
     // Initialize analyzers after H²GNN is set up
     this.astAnalyzer = new AdvancedASTAnalyzer();
     this.refactoringTool = new AutomatedRefactoringTool();
@@ -104,14 +147,64 @@ class LSPASTMCPServer {
     this.h2gnn = manager.getH2GNN();
   }
 
+  private async initializeHDAddressing(): Promise<void> {
+    if (this.hdAddressing && this.mcpIntegration) {
+      return; // Already initialized
+    }
+
+    // Initialize BIP32 HD addressing
+    const seed = Buffer.from('lsp-ast-mcp-server-seed', 'utf8');
+    this.hdAddressing = new BIP32HDAddressing(seed, 'testnet');
+    
+    // Create H²GNN address for this service
+    this.h2gnnAddress = this.hdAddressing.createAddress(
+      'lsp-ast',
+      0,
+      'external',
+      'tcp',
+      'localhost',
+      3002
+    );
+
+    // Configure MCP integration
+    const config: MCPIntegrationConfig = {
+      servicePrefix: 'lsp-ast-mcp',
+      defaultTimeout: 30000,
+      maxRetries: 3,
+      healthCheckInterval: 60000,
+      discoveryInterval: 300000
+    };
+
+    this.mcpIntegration = new H2GNNMCPIntegration(this.hdAddressing, config);
+
+    // Register this service
+    await this.mcpIntegration.registerService(
+      'lsp-ast-mcp-server-hd',
+      '1.1.0',
+      'LSP AST MCP Server with HD addressing for code analysis and assistance',
+      ['tools', 'resources', 'prompts'],
+      'tcp',
+      'localhost',
+      3002
+    );
+
+    // LSP AST MCP Server HD initialized with address: ${this.h2gnnAddress.path}
+  }
+
   private setupHandlers(): void {
-    // List tools
+    this.setupToolHandlers();
+    this.setupResourceHandlers();
+    this.setupPromptHandlers();
+  }
+
+  private setupToolHandlers(): void {
+    // List available tools
     this.server.setRequestHandler(ListToolsRequestSchema, async () => {
       return {
         tools: [
           {
-            name: "analyze_code_ast",
-            description: "Analyze code using Abstract Syntax Tree (AST) to extract structure, patterns, and relationships",
+            name: "analyze_code_ast_hd",
+            description: "Analyze code using Abstract Syntax Tree with HD addressing",
             inputSchema: {
               type: "object",
               properties: {
@@ -130,11 +223,26 @@ class LSPASTMCPServer {
                 }
               },
               required: ["code"]
+            },
+            metadata: {
+              priority: 7,
+              category: "code_analysis",
+              useCases: [
+                "Deep code understanding",
+                "Syntax analysis and parsing",
+                "Code structure examination"
+              ],
+              commonMistakes: [
+                "Not analyzing code syntax",
+                "Skipping AST analysis",
+                "Not understanding code structure"
+              ],
+              context: "Essential for deep code comprehension"
             }
           },
           {
-            name: "lsp_completion",
-            description: "Provide intelligent code completion suggestions using LSP",
+            name: "provide_completion_hd",
+            description: "Provide intelligent code completion suggestions using LSP with HD addressing",
             inputSchema: {
               type: "object",
               properties: {
@@ -160,8 +268,8 @@ class LSPASTMCPServer {
             }
           },
           {
-            name: "lsp_hover",
-            description: "Provide hover information for symbols at a specific position",
+            name: "provide_hover_hd",
+            description: "Provide hover information for symbols at a specific position with HD addressing",
             inputSchema: {
               type: "object",
               properties: {
@@ -187,8 +295,8 @@ class LSPASTMCPServer {
             }
           },
           {
-            name: "lsp_diagnostics",
-            description: "Analyze code and provide diagnostic information (errors, warnings, hints)",
+            name: "provide_diagnostics_hd",
+            description: "Analyze code and provide diagnostic information with HD addressing",
             inputSchema: {
               type: "object",
               properties: {
@@ -210,8 +318,8 @@ class LSPASTMCPServer {
             }
           },
           {
-            name: "lsp_code_actions",
-            description: "Provide code actions (quick fixes, refactorings) for a given range",
+            name: "provide_code_actions_hd",
+            description: "Provide code actions (quick fixes, refactorings) for a given range with HD addressing",
             inputSchema: {
               type: "object",
               properties: {
@@ -249,8 +357,8 @@ class LSPASTMCPServer {
             }
           },
           {
-            name: "advanced_code_analysis",
-            description: "Perform advanced code analysis with cognitive complexity, code smells, and anti-patterns",
+            name: "advanced_code_analysis_hd",
+            description: "Perform advanced code analysis with cognitive complexity, code smells, and anti-patterns using HD addressing",
             inputSchema: {
               type: "object",
               properties: {
@@ -272,8 +380,8 @@ class LSPASTMCPServer {
             }
           },
           {
-            name: "propose_and_apply_refactoring",
-            description: "Propose and optionally apply automated refactoring suggestions",
+            name: "propose_and_apply_refactoring_hd",
+            description: "Propose and optionally apply automated refactoring suggestions with HD addressing",
             inputSchema: {
               type: "object",
               properties: {
@@ -298,96 +406,500 @@ class LSPASTMCPServer {
               },
               required: ["code"]
             }
+          },
+          {
+            name: "get_hd_address_info",
+            description: "Get HD addressing information for this service",
+            inputSchema: {
+              type: "object",
+              properties: {}
+            }
+          },
+          {
+            name: "get_mcp_integration_status",
+            description: "Get MCP integration status and health",
+            inputSchema: {
+              type: "object",
+              properties: {}
+            }
           }
         ]
       };
     });
 
-    // List resources
+    // Handle tool calls
+    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+      const { name, arguments: args } = request.params;
+
+      if (!args) {
+        throw new McpError(ErrorCode.InvalidRequest, "Arguments are required for tool call");
+      }
+
+      try {
+        // Initialize HD addressing if not already done
+        await this.initializeHDAddressing();
+
+        switch (name) {
+          case "analyze_code_ast_hd":
+            return await this.analyzeCodeASTHD(args);
+          
+          case "provide_completion_hd":
+            return await this.provideCompletionHD(args);
+          
+          case "provide_hover_hd":
+            return await this.provideHoverHD(args);
+          
+          case "provide_diagnostics_hd":
+            return await this.provideDiagnosticsHD(args);
+          
+          case "provide_code_actions_hd":
+            return await this.provideCodeActionsHD(args);
+          
+          case "advanced_code_analysis_hd":
+            return await this.advancedCodeAnalysisHD(args);
+          
+          case "propose_and_apply_refactoring_hd":
+            return await this.proposeAndApplyRefactoringHD(args);
+          
+          case "get_hd_address_info":
+            return await this.getHDAddressInfo(args);
+          
+          case "get_mcp_integration_status":
+            return await this.getMCPIntegrationStatus(args);
+          
+          default:
+            throw new McpError(
+              ErrorCode.MethodNotFound,
+              `Unknown tool: ${name}`
+            );
+        }
+      } catch (error) {
+        throw new McpError(
+          ErrorCode.InternalError,
+          `Tool execution failed: ${error instanceof Error ? error.message : String(error)}`
+        );
+      }
+    });
+  }
+
+  private async analyzeCodeASTHD(args: any): Promise<any> {
+    const { code, language = 'typescript', filePath } = args;
+    
+    try {
+      const analysis = await this.astAnalyzer.analyzeCode(code, language, filePath);
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Code AST Analysis with HD addressing:
+- Language: ${language}
+- File Path: ${filePath || 'N/A'}
+- Total Nodes: ${analysis.nodes.length}
+- Patterns Found: ${analysis.patterns.length}
+- Violations: ${analysis.violations.length}
+- Suggestions: ${analysis.suggestions.length}
+- Quality Score: ${analysis.quality.toFixed(2)}/10
+
+Patterns:
+${analysis.patterns.map(p => `- ${p}`).join('\n')}
+
+Violations:
+${analysis.violations.map(v => `- ${v}`).join('\n')}
+
+Suggestions:
+${analysis.suggestions.map(s => `- ${s}`).join('\n')}
+
+- H²GNN Address: ${this.h2gnnAddress?.path}
+- RPC Endpoint: ${this.h2gnnAddress ? this.hdAddressing?.getRPCEndpoint(this.h2gnnAddress) : 'N/A'}`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `AST analysis failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  private async provideCompletionHD(args: any): Promise<any> {
+    const { code, position, language = 'typescript' } = args;
+    
+    try {
+      const completions = await this.astAnalyzer.provideCompletion(code, position, language);
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Code Completion with HD addressing:
+- Language: ${language}
+- Position: Line ${position.line}, Character ${position.character}
+- Completions: ${completions.length}
+
+Suggestions:
+${completions.map((c, i) => `${i + 1}. ${c.label} - ${c.detail || 'No description'}`).join('\n')}
+
+- H²GNN Address: ${this.h2gnnAddress?.path}
+- RPC Endpoint: ${this.h2gnnAddress ? this.hdAddressing?.getRPCEndpoint(this.h2gnnAddress) : 'N/A'}`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Completion failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  private async provideHoverHD(args: any): Promise<any> {
+    const { code, position, language = 'typescript' } = args;
+    
+    try {
+      const hover = await this.astAnalyzer.provideHover(code, position, language);
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Hover Information with HD addressing:
+- Language: ${language}
+- Position: Line ${position.line}, Character ${position.character}
+- Symbol: ${hover.symbol || 'Unknown'}
+- Type: ${hover.type || 'Unknown'}
+- Description: ${hover.description || 'No description available'}
+
+- H²GNN Address: ${this.h2gnnAddress?.path}
+- RPC Endpoint: ${this.h2gnnAddress ? this.hdAddressing?.getRPCEndpoint(this.h2gnnAddress) : 'N/A'}`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Hover failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  private async provideDiagnosticsHD(args: any): Promise<any> {
+    const { code, language = 'typescript', filePath } = args;
+    
+    try {
+      const diagnostics = await this.astAnalyzer.provideDiagnostics(code, language, filePath);
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Code Diagnostics with HD addressing:
+- Language: ${language}
+- File Path: ${filePath || 'N/A'}
+- Total Issues: ${diagnostics.length}
+
+Issues:
+${diagnostics.map((d, i) => `${i + 1}. [${d.severity}] ${d.message} (Line ${d.range.start.line}:${d.range.start.character})`).join('\n')}
+
+- H²GNN Address: ${this.h2gnnAddress?.path}
+- RPC Endpoint: ${this.h2gnnAddress ? this.hdAddressing?.getRPCEndpoint(this.h2gnnAddress) : 'N/A'}`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Diagnostics failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  private async provideCodeActionsHD(args: any): Promise<any> {
+    const { code, range, language = 'typescript' } = args;
+    
+    try {
+      const actions = await this.astAnalyzer.provideCodeActions(code, range, language);
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Code Actions with HD addressing:
+- Language: ${language}
+- Range: Line ${range.start.line}:${range.start.character} to ${range.end.line}:${range.end.character}
+- Actions: ${actions.length}
+
+Available Actions:
+${actions.map((a, i) => `${i + 1}. ${a.title} - ${a.description || 'No description'}`).join('\n')}
+
+- H²GNN Address: ${this.h2gnnAddress?.path}
+- RPC Endpoint: ${this.h2gnnAddress ? this.hdAddressing?.getRPCEndpoint(this.h2gnnAddress) : 'N/A'}`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Code actions failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  private async advancedCodeAnalysisHD(args: any): Promise<any> {
+    const { code, language = 'typescript', filePath } = args;
+    
+    try {
+      const analysis = await this.astAnalyzer.advancedCodeAnalysis(code, language, filePath);
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Advanced Code Analysis with HD addressing:
+- Language: ${language}
+- File Path: ${filePath || 'N/A'}
+- Cognitive Complexity: ${analysis.cognitiveComplexity}
+- Code Smells: ${analysis.codeSmells.length}
+- Anti-patterns: ${analysis.antiPatterns.length}
+- Maintainability Index: ${analysis.maintainabilityIndex.toFixed(2)}
+
+Code Smells:
+${analysis.codeSmells.map(s => `- ${s.type}: ${s.description}`).join('\n')}
+
+Anti-patterns:
+${analysis.antiPatterns.map(a => `- ${a.type}: ${a.description}`).join('\n')}
+
+- H²GNN Address: ${this.h2gnnAddress?.path}
+- RPC Endpoint: ${this.h2gnnAddress ? this.hdAddressing?.getRPCEndpoint(this.h2gnnAddress) : 'N/A'}`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Advanced analysis failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  private async proposeAndApplyRefactoringHD(args: any): Promise<any> {
+    const { code, language = 'typescript', filePath, autoApply = false } = args;
+    
+    try {
+      const refactoring = await this.refactoringTool.proposeAndApplyRefactoring(code, language, filePath, autoApply);
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Refactoring with HD addressing:
+- Language: ${language}
+- File Path: ${filePath || 'N/A'}
+- Auto Apply: ${autoApply}
+- Suggestions: ${refactoring.suggestions.length}
+- Applied: ${refactoring.applied ? 'Yes' : 'No'}
+
+Refactoring Suggestions:
+${refactoring.suggestions.map((s, i) => `${i + 1}. ${s.type}: ${s.description}`).join('\n')}
+
+${refactoring.applied ? `Applied Changes:
+${refactoring.changes.map(c => `- ${c.description}`).join('\n')}` : ''}
+
+- H²GNN Address: ${this.h2gnnAddress?.path}
+- RPC Endpoint: ${this.h2gnnAddress ? this.hdAddressing?.getRPCEndpoint(this.h2gnnAddress) : 'N/A'}`
+          }
+        ]
+      };
+    } catch (error) {
+      throw new McpError(ErrorCode.InternalError, `Refactoring failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  private async getHDAddressInfo(args: any): Promise<any> {
+    if (!this.h2gnnAddress || !this.hdAddressing) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "HD addressing not initialized"
+          }
+        ]
+      };
+    }
+
+    return {
+      content: [
+        {
+          type: "text",
+          text: `HD Address Information:
+- H²GNN Address: ${this.h2gnnAddress.path}
+- RPC Endpoint: ${this.hdAddressing.getRPCEndpoint(this.h2gnnAddress)}
+- Hyperbolic Coordinates: [${this.h2gnnAddress.hyperbolic.coordinates[0].toFixed(4)}, ${this.h2gnnAddress.hyperbolic.coordinates[1].toFixed(4)}]
+- Curvature: ${this.h2gnnAddress.hyperbolic.curvature}
+- Transport: ${this.h2gnnAddress.transport}
+- Host: ${this.h2gnnAddress.host}
+- Port: ${this.h2gnnAddress.port}`
+        }
+      ]
+    };
+  }
+
+  private async getMCPIntegrationStatus(args: any): Promise<any> {
+    if (!this.mcpIntegration) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "MCP integration not initialized"
+          }
+        ]
+      };
+    }
+
+    const services = this.mcpIntegration.getAllServices();
+    const tools = this.mcpIntegration.getAllTools();
+    const resources = this.mcpIntegration.getAllResources();
+    const prompts = this.mcpIntegration.getAllPrompts();
+    const health = this.mcpIntegration.getAllServiceHealth();
+
+    return {
+      content: [
+        {
+          type: "text",
+          text: `MCP Integration Status:
+- Total Services: ${services.length}
+- Total Tools: ${tools.length}
+- Total Resources: ${resources.length}
+- Total Prompts: ${prompts.length}
+
+Service Health:
+${health.map(({ service, health }) => 
+  `- ${service}: ${health.healthy ? 'HEALTHY' : 'UNHEALTHY'} - ${health.message}`
+).join('\n')}
+
+H²GNN Address: ${this.h2gnnAddress?.path}
+RPC Endpoint: ${this.h2gnnAddress ? this.hdAddressing?.getRPCEndpoint(this.h2gnnAddress) : 'N/A'}`
+        }
+      ]
+    };
+  }
+
+  private setupResourceHandlers(): void {
     this.server.setRequestHandler(ListResourcesRequestSchema, async () => {
       return {
         resources: [
           {
-            uri: "lsp://capabilities",
-            name: "LSP Capabilities",
-            description: "Available Language Server Protocol capabilities",
-            mimeType: "application/json"
+            uri: "lsp-ast-hd://analysis/results",
+            mimeType: "application/json",
+            name: "LSP AST Analysis Results (HD)",
+            description: "Latest LSP and AST analysis results using HD addressing"
           },
           {
-            uri: "ast://analysis-results",
-            name: "AST Analysis Results",
-            description: "Current AST analysis results and patterns",
-            mimeType: "application/json"
+            uri: "lsp-ast-hd://diagnostics/all",
+            mimeType: "application/json",
+            name: "All Diagnostics (HD)",
+            description: "All diagnostic information using HD addressing"
           },
           {
-            uri: "h2gnn://learning-progress",
-            name: "H²GNN Learning Progress",
-            description: "Current learning progress and understanding snapshots",
-            mimeType: "application/json"
+            uri: "lsp-ast-hd://refactoring/suggestions",
+            mimeType: "application/json",
+            name: "Refactoring Suggestions (HD)",
+            description: "Available refactoring suggestions using HD addressing"
           },
           {
-            uri: "refactoring://opportunities",
-            name: "Refactoring Opportunities",
-            description: "Current refactoring opportunities and suggestions",
-            mimeType: "application/json"
+            uri: "lsp-ast-hd://address/info",
+            mimeType: "application/json",
+            name: "HD Address Information",
+            description: "HD addressing information for this service"
+          },
+          {
+            uri: "lsp-ast-hd://integration/mcp",
+            mimeType: "application/json",
+            name: "MCP Integration Status",
+            description: "MCP integration status and health information"
           }
         ]
       };
     });
 
-    // Read resource
     this.server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
       const { uri } = request.params;
 
       switch (uri) {
-        case "lsp://capabilities":
-          return {
-            contents: [
-              {
-                uri,
-                mimeType: "application/json",
-                text: JSON.stringify(this.capabilities, null, 2)
-              }
-            ]
-          };
-
-        case "ast://analysis-results":
+        case "lsp-ast-hd://analysis/results":
           return {
             contents: [
               {
                 uri,
                 mimeType: "application/json",
                 text: JSON.stringify({
-                  lastAnalysis: "No analysis performed yet",
-                  patterns: [],
-                  violations: [],
-                  quality: 0
+                  h2gnnAddress: this.h2gnnAddress?.path,
+                  rpcEndpoint: this.h2gnnAddress ? this.hdAddressing?.getRPCEndpoint(this.h2gnnAddress) : 'N/A',
+                  capabilities: this.capabilities,
+                  timestamp: new Date().toISOString()
                 }, null, 2)
               }
             ]
           };
 
-        case "h2gnn://learning-progress":
-          const progress = await this.h2gnn.getLearningProgress();
-          return {
-            contents: [
-              {
-                uri,
-                mimeType: "application/json",
-                text: JSON.stringify(progress, null, 2)
-              }
-            ]
-          };
-
-        case "refactoring://opportunities":
+        case "lsp-ast-hd://diagnostics/all":
           return {
             contents: [
               {
                 uri,
                 mimeType: "application/json",
                 text: JSON.stringify({
-                  opportunities: [],
-                  lastScan: "No refactoring scan performed yet"
+                  h2gnnAddress: this.h2gnnAddress?.path,
+                  rpcEndpoint: this.h2gnnAddress ? this.hdAddressing?.getRPCEndpoint(this.h2gnnAddress) : 'N/A',
+                  diagnostics: [],
+                  timestamp: new Date().toISOString()
+                }, null, 2)
+              }
+            ]
+          };
+
+        case "lsp-ast-hd://refactoring/suggestions":
+          return {
+            contents: [
+              {
+                uri,
+                mimeType: "application/json",
+                text: JSON.stringify({
+                  h2gnnAddress: this.h2gnnAddress?.path,
+                  rpcEndpoint: this.h2gnnAddress ? this.hdAddressing?.getRPCEndpoint(this.h2gnnAddress) : 'N/A',
+                  suggestions: [],
+                  timestamp: new Date().toISOString()
+                }, null, 2)
+              }
+            ]
+          };
+
+        case "lsp-ast-hd://address/info":
+          return {
+            contents: [
+              {
+                uri,
+                mimeType: "application/json",
+                text: JSON.stringify({
+                  h2gnnAddress: this.h2gnnAddress?.path,
+                  rpcEndpoint: this.h2gnnAddress ? this.hdAddressing?.getRPCEndpoint(this.h2gnnAddress) : 'N/A',
+                  hyperbolicCoordinates: this.h2gnnAddress?.hyperbolic.coordinates,
+                  curvature: this.h2gnnAddress?.hyperbolic.curvature,
+                  transport: this.h2gnnAddress?.transport,
+                  host: this.h2gnnAddress?.host,
+                  port: this.h2gnnAddress?.port
+                }, null, 2)
+              }
+            ]
+          };
+
+        case "lsp-ast-hd://integration/mcp":
+          if (!this.mcpIntegration) {
+            throw new McpError(ErrorCode.InvalidRequest, "MCP integration not initialized");
+          }
+          
+          const services = this.mcpIntegration.getAllServices();
+          const tools = this.mcpIntegration.getAllTools();
+          const resources = this.mcpIntegration.getAllResources();
+          const prompts = this.mcpIntegration.getAllPrompts();
+          const health = this.mcpIntegration.getAllServiceHealth();
+
+          return {
+            contents: [
+              {
+                uri,
+                mimeType: "application/json",
+                text: JSON.stringify({
+                  h2gnnAddress: this.h2gnnAddress?.path,
+                  rpcEndpoint: this.h2gnnAddress ? this.hdAddressing?.getRPCEndpoint(this.h2gnnAddress) : 'N/A',
+                  services,
+                  tools,
+                  resources,
+                  prompts,
+                  health
                 }, null, 2)
               }
             ]
@@ -397,81 +909,94 @@ class LSPASTMCPServer {
           throw new McpError(ErrorCode.InvalidRequest, `Unknown resource: ${uri}`);
       }
     });
+  }
 
-    // List prompts
+  private setupPromptHandlers(): void {
     this.server.setRequestHandler(ListPromptsRequestSchema, async () => {
       return {
         prompts: [
           {
-            name: "code_review_prompt",
-            description: "Generate a comprehensive code review with suggestions for improvement",
+            name: "code_review_prompt_hd",
+            description: "Generate code review suggestions with HD addressing",
             arguments: [
               {
                 name: "code",
+                type: "string",
                 description: "Code to review",
                 required: true
               },
               {
                 name: "language",
+                type: "string",
                 description: "Programming language",
                 required: false
               }
             ]
           },
           {
-            name: "refactoring_suggestions_prompt",
-            description: "Generate specific refactoring suggestions for code improvement",
+            name: "refactoring_suggestions_prompt_hd",
+            description: "Generate refactoring suggestions with HD addressing",
             arguments: [
               {
                 name: "code",
+                type: "string",
                 description: "Code to refactor",
                 required: true
               },
               {
-                name: "focus_areas",
-                description: "Specific areas to focus on (performance, readability, maintainability)",
+                name: "language",
+                type: "string",
+                description: "Programming language",
                 required: false
               }
             ]
           },
           {
-            name: "architecture_analysis_prompt",
-            description: "Analyze code architecture and suggest improvements",
+            name: "architecture_analysis_prompt_hd",
+            description: "Analyze code architecture with HD addressing",
             arguments: [
               {
-                name: "codebase_path",
-                description: "Path to codebase to analyze",
+                name: "code",
+                type: "string",
+                description: "Code to analyze",
                 required: true
               },
               {
-                name: "analysis_depth",
-                description: "Depth of analysis (shallow, medium, deep)",
+                name: "language",
+                type: "string",
+                description: "Programming language",
                 required: false
               }
             ]
+          },
+          {
+            name: "hd_address_help",
+            description: "Get help with HD addressing and deterministic routing",
+            arguments: []
           }
         ]
       };
     });
 
-    // Get prompt
     this.server.setRequestHandler(GetPromptRequestSchema, async (request) => {
       const { name, arguments: args } = request.params;
 
+      if (!args) {
+        throw new McpError(ErrorCode.InvalidRequest, "Arguments are required for prompt");
+      }
+
       switch (name) {
-        case "code_review_prompt":
-          if (!args) {
-            throw new Error('Arguments are required');
-          }
+        case "code_review_prompt_hd":
           return {
-            description: "Generate a comprehensive code review with suggestions for improvement",
+            description: `Code review for ${args.language || 'TypeScript'} code with HD addressing`,
             messages: [
               {
                 role: "user",
                 content: {
                   type: "text",
-                  text: `Please review the following ${args.language || 'code'} and provide a comprehensive analysis:
+                  text: `Please review this ${args.language || 'TypeScript'} code and provide suggestions for improvement. The system uses HD addressing for deterministic service routing.
 
+Code:
 \`\`\`${args.language || 'typescript'}
 ${args.code}
 \`\`\`
@@ -479,75 +1004,76 @@ ${args.code}
 Please provide:
 1. Code quality assessment
 2. Potential issues and bugs
-3. Performance considerations
-4. Readability and maintainability
-5. Specific improvement suggestions
-6. Best practices recommendations
-
-Focus on actionable feedback that will help improve the code.`
+3. Performance improvements
+4. Best practices recommendations
+5. Security considerations`
                 }
               }
             ]
           };
 
-        case "refactoring_suggestions_prompt":
-          if (!args) {
-            throw new Error('Arguments are required');
-          }
+        case "refactoring_suggestions_prompt_hd":
           return {
-            description: "Generate specific refactoring suggestions for code improvement",
+            description: `Refactoring suggestions for ${args.language || 'TypeScript'} code with HD addressing`,
             messages: [
               {
                 role: "user",
                 content: {
                   type: "text",
-                  text: `Please analyze the following code and provide specific refactoring suggestions:
+                  text: `Please analyze this ${args.language || 'TypeScript'} code and provide refactoring suggestions. The system uses HD addressing for deterministic service routing.
 
-\`\`\`typescript
+Code:
+\`\`\`${args.language || 'typescript'}
 ${args.code}
 \`\`\`
 
-Focus areas: ${args.focus_areas || 'performance, readability, maintainability'}
-
 Please provide:
-1. Specific refactoring opportunities
-2. Before/after code examples
-3. Benefits of each refactoring
-4. Implementation steps
-5. Potential risks or considerations
-
-Make the suggestions practical and actionable.`
+1. Code structure improvements
+2. Performance optimizations
+3. Readability enhancements
+4. Maintainability improvements
+5. Specific refactoring techniques to apply`
                 }
               }
             ]
           };
 
-        case "architecture_analysis_prompt":
-          if (!args) {
-            throw new Error('Arguments are required');
-          }
+        case "architecture_analysis_prompt_hd":
           return {
-            description: "Analyze code architecture and suggest improvements",
+            description: `Architecture analysis for ${args.language || 'TypeScript'} code with HD addressing`,
             messages: [
               {
                 role: "user",
                 content: {
                   type: "text",
-                  text: `Please analyze the architecture of the codebase at: ${args!.codebase_path}
+                  text: `Please analyze the architecture of this ${args.language || 'TypeScript'} code. The system uses HD addressing for deterministic service routing.
 
-Analysis depth: ${args!.analysis_depth || 'medium'}
+Code:
+\`\`\`${args.language || 'typescript'}
+${args.code}
+\`\`\`
 
 Please provide:
-1. Overall architecture assessment
-2. Design patterns identification
+1. Architectural patterns identified
+2. Design principles adherence
 3. Coupling and cohesion analysis
 4. Scalability considerations
-5. Security implications
-6. Performance bottlenecks
-7. Specific architectural improvements
-8. Technology stack recommendations
+5. Integration points and dependencies
+6. Recommendations for improvement`
+                }
+              }
+            ]
+          };
 
-Provide actionable insights for improving the overall system architecture.`
+        case "hd_address_help":
+          return {
+            description: "Help with HD addressing and deterministic routing",
+            messages: [
+              {
+                role: "user",
+                content: {
+                  type: "text",
+                  text: `I need help understanding HD addressing in the LSP AST MCP system. Can you explain how BIP32 HD addressing works for deterministic service routing and how it integrates with code analysis and LSP capabilities?`
                 }
               }
             ]
@@ -557,562 +1083,20 @@ Provide actionable insights for improving the overall system architecture.`
           throw new McpError(ErrorCode.InvalidRequest, `Unknown prompt: ${name}`);
       }
     });
-
-    // Call tool
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
-      const { name, arguments: args } = request.params;
-
-      switch (name) {
-        case "analyze_code_ast":
-          return await this.analyzeCodeAST(args);
-        case "lsp_completion":
-          return await this.provideCompletion(args);
-        case "lsp_hover":
-          return await this.provideHover(args);
-        case "lsp_diagnostics":
-          return await this.provideDiagnostics(args);
-        case "lsp_code_actions":
-          return await this.provideCodeActions(args);
-        case "advanced_code_analysis":
-          return await this.provideAdvancedCodeAnalysis(args);
-        case "propose_and_apply_refactoring":
-          return await this.provideRefactoring(args);
-        default:
-          throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
-      }
-    });
   }
 
-  // Tool implementations
-  private async analyzeCodeAST(args: any): Promise<any> {
-    if (!args) {
-      throw new Error('Arguments are required');
-    }
-    const { code, language = 'typescript', filePath } = args;
-    
-    console.log(`🔍 Analyzing ${language} code AST`);
-    
-    try {
-      let ast: any;
-      
-      if (language === 'typescript' || language === 'javascript') {
-        ast = ts.createSourceFile(
-          filePath || 'temp.ts',
-          code,
-          ts.ScriptTarget.Latest,
-          true
-        );
-      } else if (language === 'python') {
-        ast = parse(code, {
-          sourceType: 'module',
-          plugins: ['typescript', 'jsx']
-        });
-      } else {
-        throw new Error(`Unsupported language: ${language}`);
-      }
-
-      const analysis = this.extractASTInsights(ast, language);
-      
-      return {
-        content: [
-          {
-            type: "text",
-            text: `AST Analysis Results:
-- Language: ${language}
-- File: ${filePath || 'N/A'}
-- Nodes found: ${analysis.nodes.length}
-- Patterns detected: ${analysis.patterns.length}
-- Violations: ${analysis.violations.length}
-- Quality score: ${analysis.quality}/100
-
-🔍 Detected Patterns:
-${analysis.patterns.map((p, i) => `${i + 1}. ${p}`).join('\n')}
-
-⚠️ Violations Found:
-${analysis.violations.map((v, i) => `${i + 1}. ${v}`).join('\n')}
-
-💡 Suggestions:
-${analysis.suggestions.map((s, i) => `${i + 1}. ${s}`).join('\n')}`
-          }
-        ]
-      };
-    } catch (error) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: `AST analysis failed: ${error instanceof Error ? error.message : String(error)}`
-          }
-        ]
-      };
-    }
-  }
-
-  private async provideCompletion(args: any): Promise<any> {
-    if (!args) {
-      throw new Error('Arguments are required');
-    }
-    const { code, position, language = 'typescript' } = args;
-    
-    console.log(`💡 Providing LSP completion at line ${position.line}, character ${position.character}`);
-    
-    // Simulate intelligent completion
-    const completions = [
-      'console.log',
-      'function',
-      'const',
-      'let',
-      'var',
-      'if',
-      'for',
-      'while',
-      'try',
-      'catch',
-      'async',
-      'await',
-      'return',
-      'import',
-      'export',
-      'class',
-      'interface',
-      'type',
-      'enum'
-    ];
-
-    const filteredCompletions = completions.filter(comp => 
-      comp.toLowerCase().includes(code.toLowerCase()) || 
-      code.toLowerCase().includes(comp.toLowerCase())
-    );
-
-    return {
-      content: [
-        {
-          type: "text",
-          text: `LSP Completion Suggestions:
-- Language: ${language}
-- Position: Line ${position.line}, Character ${position.character}
-- Context: ${code.substring(Math.max(0, position.character - 20), position.character + 20)}
-
-💡 Suggestions:
-${filteredCompletions.slice(0, 10).map((comp, i) => `${i + 1}. ${comp}`).join('\n')}
-
-🎯 Best matches:
-${filteredCompletions.slice(0, 3).map(comp => `• ${comp}`).join('\n')}`
-        }
-      ]
-    };
-  }
-
-  private async provideHover(args: any): Promise<any> {
-    if (!args) {
-      throw new Error('Arguments are required');
-    }
-    const { code, position, language = 'typescript' } = args;
-    
-    console.log(`🔍 Providing LSP hover at line ${position.line}, character ${position.character}`);
-    
-    const lines = code.split('\n');
-    const line = lines[position.line] || '';
-    const word = this.extractWordAtPosition(line, position.character);
-    
-    return {
-      content: [
-        {
-          type: "text",
-          text: `LSP Hover Information:
-- Language: ${language}
-- Position: Line ${position.line}, Character ${position.character}
-- Symbol: "${word}"
-- Line: "${line.trim()}"
-
-📖 Symbol Information:
-- Type: ${this.getSymbolType(word)}
-- Description: ${this.getSymbolDescription(word)}
-- Usage: ${this.getSymbolUsage(word)}
-
-🔗 Related:
-- Definition: Available
-- References: Available
-- Documentation: Available`
-        }
-      ]
-    };
-  }
-
-  private async provideDiagnostics(args: any): Promise<any> {
-    if (!args) {
-      throw new Error('Arguments are required');
-    }
-    const { code, language = 'typescript', filePath } = args;
-    
-    console.log(`⚠️ Providing LSP diagnostics for ${language} code`);
-    
-    const diagnostics = this.analyzeCodeForIssues(code, language);
-    
-    return {
-      content: [
-        {
-          type: "text",
-          text: `LSP Diagnostics Results:
-- Language: ${language}
-- File: ${filePath || 'N/A'}
-- Total issues: ${diagnostics.length}
-
-⚠️ Issues Found:
-${diagnostics.map((diag, i) => 
-  `${i + 1}. [${diag.severity.toUpperCase()}] ${diag.message}
-     Line ${diag.line}: ${diag.code}
-     ${diag.suggestion ? `💡 Suggestion: ${diag.suggestion}` : ''}`
-).join('\n\n')}
-
-📊 Summary:
-- Errors: ${diagnostics.filter(d => d.severity === 'error').length}
-- Warnings: ${diagnostics.filter(d => d.severity === 'warning').length}
-- Hints: ${diagnostics.filter(d => d.severity === 'hint').length}`
-        }
-      ]
-    };
-  }
-
-  private async provideCodeActions(args: any): Promise<any> {
-    if (!args) {
-      throw new Error('Arguments are required');
-    }
-    const { code, range, language = 'typescript' } = args;
-    
-    console.log(`🔧 Providing LSP code actions for range ${range.start.line}-${range.end.line}`);
-    
-    const actions = this.generateCodeActions(code, range, language);
-    
-    return {
-      content: [
-        {
-          type: "text",
-          text: `LSP Code Actions:
-- Language: ${language}
-- Range: Line ${range.start.line}-${range.end.line}
-- Actions available: ${actions.length}
-
-🔧 Available Actions:
-${actions.map((action, i) => 
-  `${i + 1}. ${action.title}
-     Kind: ${action.kind}
-     Description: ${action.description}
-     ${action.command ? `Command: ${action.command}` : ''}`
-).join('\n\n')}
-
-💡 Quick Fixes:
-${actions.filter(a => a.kind === 'quickfix').map(a => `• ${a.title}`).join('\n')}
-
-🔄 Refactorings:
-${actions.filter(a => a.kind === 'refactor').map(a => `• ${a.title}`).join('\n')}`
-        }
-      ]
-    };
-  }
-
-  private async provideAdvancedCodeAnalysis(args: any): Promise<any> {
-    const { code, language = 'typescript', filePath } = args;
-    
-    console.log(`🔍 Performing advanced code analysis on ${language} code`);
-    
-    try {
-      const analysis = await this.astAnalyzer.analyzeCode(code, language, filePath);
-      
-      const metrics = analysis.metrics;
-      const codeSmells = analysis.codeSmells;
-      const antiPatterns = analysis.antiPatterns;
-      const recommendations = analysis.recommendations;
-      const h2gnnInsights = analysis.h2gnnInsights;
-      
-      const result = `Advanced Code Analysis Results:
-- Language: ${language}
-- File: ${filePath || 'N/A'}
-
-📊 Code Metrics:
-- Cognitive Complexity: ${metrics.cognitiveComplexity}
-- Cyclomatic Complexity: ${metrics.cyclomaticComplexity}
-- Maintainability Index: ${metrics.maintainabilityIndex.toFixed(2)}
-- Lines of Code: ${metrics.linesOfCode}
-- Comment Density: ${metrics.commentDensity.toFixed(3)}
-
-⚠️ Code Smells Found: ${codeSmells.length}
-${codeSmells.map((smell, index) => 
-  `${index + 1}. ${smell.type} (${smell.severity}): ${smell.description}`
-).join('\n')}
-
-🚫 Anti-Patterns Found: ${antiPatterns.length}
-${antiPatterns.map((pattern, index) => 
-  `${index + 1}. ${pattern.type} (${pattern.severity}): ${pattern.description}`
-).join('\n')}
-
-📊 Quality Score: ${analysis.qualityScore.toFixed(1)}/100
-
-💡 Recommendations:
-${recommendations.map((rec, index) => `${index + 1}. ${rec}`).join('\n')}
-
-🧠 H²GNN Insights: ${h2gnnInsights.length}
-${h2gnnInsights.map((insight, index) => 
-  `${index + 1}. ${insight.concept} (confidence: ${insight.confidence.toFixed(3)})`
-).join('\n')}`;
-      
-      return {
-        content: [
-          {
-            type: "text",
-            text: result
-          }
-        ]
-      };
-    } catch (error) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: `Advanced code analysis failed: ${error instanceof Error ? error.message : String(error)}`
-          }
-        ]
-      };
-    }
-  }
-
-  private async provideRefactoring(args: any): Promise<any> {
-    const { code, language = 'typescript', filePath, autoApply = false } = args;
-    
-    console.log(`🔧 Proposing refactoring for ${language} code`);
-    
-    try {
-      const result = await this.refactoringTool.proposeAndApplyRefactoring(
-        code,
-        language,
-        filePath,
-        autoApply
-      );
-      
-      const { opportunities, applied } = result;
-      
-      const opportunitiesText = opportunities.map((opp, index) => 
-        `${index + 1}. ${opp.type.toUpperCase()} (${opp.severity})
-   Description: ${opp.description}
-   Confidence: ${opp.confidence.toFixed(3)}
-   Benefits: ${opp.benefits.join(', ')}
-   Risks: ${opp.risks.join(', ')}
-   Estimated Effort: ${opp.estimatedEffort} minutes
-   Location: Line ${opp.location.startLine}-${opp.location.endLine}`
-      ).join('\n\n');
-      
-      const appliedText = applied.length > 0 ? applied.map((result, index) => 
-        `${index + 1}. ${result.opportunity.type.toUpperCase()} - ${result.success ? 'SUCCESS' : 'FAILED'}
-   Changes: +${result.changes.linesAdded} -${result.changes.linesRemoved} ~${result.changes.linesModified} lines
-   ${result.errors ? `Errors: ${result.errors.join(', ')}` : ''}
-   ${result.warnings ? `Warnings: ${result.warnings.join(', ')}` : ''}`
-      ).join('\n\n') : 'No refactoring applied';
-      
-      const resultText = `Refactoring Analysis Results:
-- Language: ${language}
-- File: ${filePath || 'N/A'}
-- Auto-Apply: ${autoApply}
-
-🔍 Refactoring Opportunities Found: ${opportunities.length}
-${opportunitiesText}
-
-${applied.length > 0 ? `\n🔧 Applied Refactoring: ${applied.length}\n${appliedText}` : ''}
-
-📈 Summary:
-- Total Opportunities: ${opportunities.length}
-- High Severity: ${opportunities.filter(o => o.severity === 'high').length}
-- Medium Severity: ${opportunities.filter(o => o.severity === 'medium').length}
-- Low Severity: ${opportunities.filter(o => o.severity === 'low').length}
-- Total Estimated Effort: ${opportunities.reduce((sum, o) => sum + o.estimatedEffort, 0)} minutes
-- Applied: ${applied.length}
-- Successful: ${applied.filter(r => r.success).length}`;
-      
-      return {
-        content: [
-          {
-            type: "text",
-            text: resultText
-          }
-        ]
-      };
-    } catch (error) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: `Refactoring analysis failed: ${error instanceof Error ? error.message : String(error)}`
-          }
-        ]
-      };
-    }
-  }
-
-  // Helper methods
-  private extractASTInsights(_ast: any, language: string): ASTAnalysis {
-    // Simplified AST analysis
-    const nodes: any[] = [];
-    const patterns: string[] = [];
-    const violations: string[] = [];
-    const suggestions: string[] = [];
-    
-    // Basic pattern detection
-    if (language === 'typescript' || language === 'javascript') {
-      patterns.push('ES6+ syntax detected');
-      patterns.push('Type annotations found');
-      patterns.push('Module imports detected');
-    }
-    
-    // Basic violation detection
-    violations.push('Consider adding JSDoc comments');
-    violations.push('Long functions detected - consider breaking down');
-    
-    // Basic suggestions
-    suggestions.push('Add error handling');
-    suggestions.push('Consider using const instead of let');
-    suggestions.push('Add type annotations');
-    
-    return {
-      nodes,
-      patterns,
-      violations,
-      suggestions,
-      quality: 75
-    };
-  }
-
-  private extractWordAtPosition(line: string, character: number): string {
-    const before = line.substring(0, character);
-    const after = line.substring(character);
-    
-    const beforeMatch = before.match(/\w+$/);
-    const afterMatch = after.match(/^\w+/);
-    
-    return (beforeMatch?.[0] || '') + (afterMatch?.[0] || '');
-  }
-
-  private getSymbolType(symbol: string): string {
-    const typeMap: { [key: string]: string } = {
-      'function': 'Function',
-      'const': 'Variable',
-      'let': 'Variable',
-      'var': 'Variable',
-      'class': 'Class',
-      'interface': 'Interface',
-      'type': 'Type',
-      'enum': 'Enum'
-    };
-    
-    return typeMap[symbol] || 'Unknown';
-  }
-
-  private getSymbolDescription(symbol: string): string {
-    const descriptions: { [key: string]: string } = {
-      'function': 'A function declaration',
-      'const': 'A constant variable',
-      'let': 'A block-scoped variable',
-      'var': 'A function-scoped variable',
-      'class': 'A class definition',
-      'interface': 'A TypeScript interface',
-      'type': 'A TypeScript type alias',
-      'enum': 'An enumeration'
-    };
-    
-    return descriptions[symbol] || 'A code symbol';
-  }
-
-  private getSymbolUsage(_symbol: string): string {
-    return `Used in ${Math.floor(Math.random() * 10) + 1} places`;
-  }
-
-  private analyzeCodeForIssues(code: string, language: string): any[] {
-    const issues: any[] = [];
-    const lines = code.split('\n');
-    
-    lines.forEach((line, index) => {
-      // Check for common issues
-      if (line.includes('console.log') && !line.includes('//')) {
-        issues.push({
-          severity: 'warning',
-          message: 'Consider removing console.log statements',
-          line: index + 1,
-          code: line.trim(),
-          suggestion: 'Use proper logging framework'
-        });
-      }
-      
-      if (line.includes('var ') && language === 'typescript') {
-        issues.push({
-          severity: 'hint',
-          message: 'Consider using let or const instead of var',
-          line: index + 1,
-          code: line.trim(),
-          suggestion: 'Replace var with const or let'
-        });
-      }
-      
-      if (line.length > 120) {
-        issues.push({
-          severity: 'warning',
-          message: 'Line is too long',
-          line: index + 1,
-          code: line.trim(),
-          suggestion: 'Break into multiple lines'
-        });
-      }
-    });
-    
-    return issues;
-  }
-
-  private generateCodeActions(_code: string, _range: any, _language: string): any[] {
-    const actions: any[] = [];
-    
-    actions.push({
-      title: 'Extract Method',
-      kind: 'refactor',
-      description: 'Extract selected code into a new method',
-      command: 'extractMethod'
-    });
-    
-    actions.push({
-      title: 'Add Error Handling',
-      kind: 'quickfix',
-      description: 'Add try-catch block around selected code',
-      command: 'addErrorHandling'
-    });
-    
-    actions.push({
-      title: 'Add JSDoc Comment',
-      kind: 'quickfix',
-      description: 'Add JSDoc documentation',
-      command: 'addJSDoc'
-    });
-    
-    actions.push({
-      title: 'Optimize Imports',
-      kind: 'source.organizeImports',
-      description: 'Remove unused imports and organize',
-      command: 'organizeImports'
-    });
-    
-    return actions;
-  }
-
-  async run(): Promise<void> {
+  /**
+   * Start the server
+   */
+  async start(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.log("🔧 LSP + AST + MCP Server running on stdio");
+    // LSP AST MCP Server HD running on stdio
   }
 }
 
-// Main execution
-async function main(): Promise<void> {
-  const server = new LSPASTMCPServer();
-  await server.run();
-}
+// Start the server
+const server = new LSPASTMCPServerHD();
+server.start().catch(console.error);
 
-// Run the server
-main().catch(console.error);
-
-export { LSPASTMCPServer };
-
+export default LSPASTMCPServerHD;

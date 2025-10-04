@@ -112,7 +112,7 @@ export class Hyperbolic3DRenderer {
     this.setupBuffers();
     this.setupRendering();
     
-    console.log('🎨 3D Hyperbolic Renderer initialized');
+    console.warn('🎨 3D Hyperbolic Renderer initialized');
   }
 
   /**
@@ -441,7 +441,7 @@ export class Hyperbolic3DRenderer {
   private animateCameraTo(target: HyperbolicPoint): void {
     // Simple animation - in reality, you'd use a proper animation system
     this.config.camera.target = target;
-    console.log(`🎥 Camera animating to: (${target.x}, ${target.y}, ${target.z})`);
+    console.warn(`🎥 Camera animating to: (${target.x}, ${target.y}, ${target.z})`);
   }
 
   /**
@@ -495,7 +495,7 @@ export class Hyperbolic3DRenderer {
    */
   private rotateCamera(deltaX: number, deltaY: number): void {
     // Simple rotation - in reality, you'd use proper 3D math
-    console.log(`🔄 Rotating camera: deltaX=${deltaX}, deltaY=${deltaY}`);
+    console.warn(`🔄 Rotating camera: deltaX=${deltaX}, deltaY=${deltaY}`);
   }
 
   /**
@@ -503,7 +503,7 @@ export class Hyperbolic3DRenderer {
    */
   private zoomCamera(factor: number): void {
     // Simple zoom - in reality, you'd use proper 3D math
-    console.log(`🔍 Zooming camera: factor=${factor}`);
+    console.warn(`🔍 Zooming camera: factor=${factor}`);
   }
 
   /**
@@ -525,7 +525,7 @@ export class Hyperbolic3DRenderer {
    */
   private selectConcept(conceptId: string): void {
     this.interactionState.selectedConcepts = [conceptId];
-    console.log(`🎯 Selected concept: ${conceptId}`);
+    console.warn(`🎯 Selected concept: ${conceptId}`);
   }
 
   /**

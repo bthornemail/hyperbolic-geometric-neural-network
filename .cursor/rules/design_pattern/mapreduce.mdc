@@ -9,7 +9,7 @@ MapReduce is a design pattern suitable when you have either:
 - Large input data (e.g., multiple files to process), or
 - Large output data (e.g., multiple forms to fill)
 
-and there is a logical way to break the task into smaller, ideally independent parts. 
+and there is a logical way to break the task into smaller, ideally independent parts. When enhanced with H²GNN, MapReduce operations gain hierarchical organization through hyperbolic clustering. 
 
 
 

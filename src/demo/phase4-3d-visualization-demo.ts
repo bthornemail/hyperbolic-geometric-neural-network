@@ -16,8 +16,8 @@ import { ConceptNavigator } from '../visualization/concept-navigator.js';
 import { CollaborativeVisualization } from '../visualization/collaborative-viz.js';
 
 async function demonstrate3DVisualization(): Promise<void> {
-  console.log('🎨 Phase 4: 3D Hyperbolic Visualization Demo');
-  console.log('==============================================');
+  console.warn('🎨 Phase 4: 3D Hyperbolic Visualization Demo');
+  console.warn('==============================================');
   
   // Create mock canvas for demo (in real implementation, this would be a DOM canvas)
   const mockCanvas = {
@@ -28,8 +28,8 @@ async function demonstrate3DVisualization(): Promise<void> {
   } as HTMLCanvasElement;
   
   // Initialize visualization configuration
-  console.log('\n📊 Phase 1: Setting up 3D Visualization');
-  console.log('----------------------------------------');
+  console.warn('\n📊 Phase 1: Setting up 3D Visualization');
+  console.warn('----------------------------------------');
   
   const config: VisualizationConfig = {
     canvas: mockCanvas,
@@ -57,15 +57,15 @@ async function demonstrate3DVisualization(): Promise<void> {
     }
   };
   
-  console.log('✅ 3D visualization configuration created');
+  console.warn('✅ 3D visualization configuration created');
   
   // Initialize 3D renderer
-  console.log('\n📊 Phase 2: Initializing 3D Renderer');
-  console.log('-------------------------------------');
+  console.warn('\n📊 Phase 2: Initializing 3D Renderer');
+  console.warn('-------------------------------------');
   
   try {
     const renderer = new Hyperbolic3DRenderer(config);
-    console.log('✅ 3D renderer initialized');
+    console.warn('✅ 3D renderer initialized');
     
     // Create sample hyperbolic embeddings
     const sampleEmbeddings: HyperbolicEmbedding[] = [
@@ -123,33 +123,33 @@ async function demonstrate3DVisualization(): Promise<void> {
     
     // Render embeddings
     renderer.renderEmbeddings(sampleEmbeddings);
-    console.log('✅ Sample embeddings rendered');
+    console.warn('✅ Sample embeddings rendered');
     
     // Test navigation
-    console.log('\n📊 Phase 3: Testing Concept Navigation');
-    console.log('----------------------------------------');
+    console.warn('\n📊 Phase 3: Testing Concept Navigation');
+    console.warn('----------------------------------------');
     
     renderer.navigateToConcept('ai');
-    console.log('🎯 Navigated to AI concept');
+    console.warn('🎯 Navigated to AI concept');
     
     renderer.highlightCluster('technology-cluster');
-    console.log('🔍 Highlighted technology cluster');
+    console.warn('🔍 Highlighted technology cluster');
     
     // Test interaction
     const interactionState = renderer.getInteractionState();
-    console.log('🖱️ Interaction state:', {
+    console.warn('🖱️ Interaction state:', {
       selectedConcepts: interactionState.selectedConcepts,
       hoveredConcept: interactionState.hoveredConcept
     });
     
   } catch (error) {
-    console.log('⚠️ 3D renderer not available (WebGL not supported)');
-    console.log('📝 Mock 3D visualization: Rendering hyperbolic embeddings in 3D space...');
+    console.warn('⚠️ 3D renderer not available (WebGL not supported)');
+    console.warn('📝 Mock 3D visualization: Rendering hyperbolic embeddings in 3D space...');
   }
   
   // Initialize concept navigator
-  console.log('\n📊 Phase 4: Testing Concept Navigator');
-  console.log('-------------------------------------');
+  console.warn('\n📊 Phase 4: Testing Concept Navigator');
+  console.warn('-------------------------------------');
   
   const navigator = new ConceptNavigator();
   
@@ -208,44 +208,44 @@ async function demonstrate3DVisualization(): Promise<void> {
   ];
   
   navigator.addEmbeddings(navigatorEmbeddings);
-  console.log('✅ Embeddings added to navigator');
+  console.warn('✅ Embeddings added to navigator');
   
   // Test search functionality
-  console.log('\n🔍 Testing concept search...');
+  console.warn('\n🔍 Testing concept search...');
   const searchResults = navigator.searchConcepts('science', 5);
-  console.log('Search results for "science":');
+  console.warn('Search results for "science":');
   for (const result of searchResults) {
-    console.log(`  - ${result.concept} (${result.type}, score: ${result.score.toFixed(2)})`);
+    console.warn(`  - ${result.concept} (${result.type}, score: ${result.score.toFixed(2)})`);
   }
   
   // Test navigation
   navigator.navigateToConcept('math');
-  console.log('🎯 Navigated to Mathematics concept');
+  console.warn('🎯 Navigated to Mathematics concept');
   
   const similarConcepts = navigator.navigateToSimilarConcepts('math', 3);
-  console.log('🔗 Similar concepts to Mathematics:', similarConcepts);
+  console.warn('🔗 Similar concepts to Mathematics:', similarConcepts);
   
   // Test clustering
   const clusters = navigator.getClusters();
-  console.log(`📊 Found ${clusters.length} concept clusters`);
+  console.warn(`📊 Found ${clusters.length} concept clusters`);
   for (const cluster of clusters) {
-    console.log(`  - ${cluster.name}: ${cluster.concepts.length} concepts`);
+    console.warn(`  - ${cluster.name}: ${cluster.concepts.length} concepts`);
   }
   
   // Test relationships
   const relationships = navigator.getRelationships();
-  console.log(`🔗 Found ${relationships.length} concept relationships`);
+  console.warn(`🔗 Found ${relationships.length} concept relationships`);
   
   // Test filtering
   const filteredConcepts = navigator.filterConcepts({
     domain: 'science',
     minSimilarity: 0.3
   });
-  console.log(`🔍 Filtered concepts: ${filteredConcepts.length} science-related concepts`);
+  console.warn(`🔍 Filtered concepts: ${filteredConcepts.length} science-related concepts`);
   
   // Initialize collaborative visualization
-  console.log('\n📊 Phase 5: Testing Collaborative Visualization');
-  console.log('-----------------------------------------------');
+  console.warn('\n📊 Phase 5: Testing Collaborative Visualization');
+  console.warn('-----------------------------------------------');
   
   const collaborativeViz = new CollaborativeVisualization(navigator);
   
@@ -255,20 +255,20 @@ async function demonstrate3DVisualization(): Promise<void> {
     'user1',
     'Alice'
   );
-  console.log(`🤝 Created collaboration session: ${session.name} (${session.id})`);
+  console.warn(`🤝 Created collaboration session: ${session.name} (${session.id})`);
   
   // Join session
   collaborativeViz.joinSession(session.id, 'user2', 'Bob', 'presenter');
   collaborativeViz.joinSession(session.id, 'user3', 'Charlie', 'viewer');
-  console.log('👋 Bob and Charlie joined the session');
+  console.warn('👋 Bob and Charlie joined the session');
   
   // Test cursor movement
   collaborativeViz.updateCursor(session.id, 'user2', { x: 1, y: 1, z: 1, w: 1 });
-  console.log('🖱️ Bob moved cursor');
+  console.warn('🖱️ Bob moved cursor');
   
   // Test selection
   collaborativeViz.updateSelection(session.id, 'user2', ['math', 'physics']);
-  console.log('🎯 Bob selected Mathematics and Physics');
+  console.warn('🎯 Bob selected Mathematics and Physics');
   
   // Test annotations
   const annotationId = collaborativeViz.addAnnotation(
@@ -279,12 +279,12 @@ async function demonstrate3DVisualization(): Promise<void> {
     'insight',
     [1, 1, 0, 0.8]
   );
-  console.log(`📝 Bob added annotation: ${annotationId}`);
+  console.warn(`📝 Bob added annotation: ${annotationId}`);
   
   // Test chat
   collaborativeViz.sendChatMessage(session.id, 'user2', 'Hey everyone! Check out this interesting connection between math and physics.');
   collaborativeViz.sendChatMessage(session.id, 'user3', 'Wow, that\'s fascinating! I can see the relationship now.');
-  console.log('💬 Chat messages sent');
+  console.warn('💬 Chat messages sent');
   
   // Test viewport control
   collaborativeViz.updateViewport(session.id, 'user2', {
@@ -292,67 +292,67 @@ async function demonstrate3DVisualization(): Promise<void> {
     zoom: 1.5,
     viewMode: 'detail'
   });
-  console.log('🎥 Viewport updated by Bob');
+  console.warn('🎥 Viewport updated by Bob');
   
   // Test viewport locking
   collaborativeViz.lockViewport(session.id, 'user2');
-  console.log('🔒 Viewport locked by Bob');
+  console.warn('🔒 Viewport locked by Bob');
   
   // Get session information
   const sessionInfo = collaborativeViz.getSession(session.id);
   if (sessionInfo) {
-    console.log(`📊 Session info: ${sessionInfo.participants.length} participants, ${sessionInfo.annotations.length} annotations, ${sessionInfo.chat.length} messages`);
+    console.warn(`📊 Session info: ${sessionInfo.participants.length} participants, ${sessionInfo.annotations.length} annotations, ${sessionInfo.chat.length} messages`);
   }
   
   // Test export functionality
-  console.log('\n📊 Phase 6: Testing Export Functionality');
-  console.log('----------------------------------------');
+  console.warn('\n📊 Phase 6: Testing Export Functionality');
+  console.warn('----------------------------------------');
   
   try {
     // In a real implementation, this would export the actual visualization
-    console.log('📸 Exporting visualization as image...');
-    console.log('🎬 Exporting visualization as video...');
-    console.log('🥽 Exporting visualization for VR...');
-    console.log('✅ Export functionality tested');
+    console.warn('📸 Exporting visualization as image...');
+    console.warn('🎬 Exporting visualization as video...');
+    console.warn('🥽 Exporting visualization for VR...');
+    console.warn('✅ Export functionality tested');
   } catch (error) {
-    console.log('⚠️ Export functionality not available in demo mode');
+    console.warn('⚠️ Export functionality not available in demo mode');
   }
   
   // Test advanced features
-  console.log('\n📊 Phase 7: Testing Advanced Features');
-  console.log('--------------------------------------');
+  console.warn('\n📊 Phase 7: Testing Advanced Features');
+  console.warn('--------------------------------------');
   
   // Test concept relationships
   const mathRelationships = navigator.getConceptRelationships('math');
-  console.log(`🔗 Mathematics has ${mathRelationships.length} relationships`);
+  console.warn(`🔗 Mathematics has ${mathRelationships.length} relationships`);
   
   // Test view mode changes
   navigator.updateViewMode('cluster');
-  console.log('👁️ Switched to cluster view mode');
+  console.warn('👁️ Switched to cluster view mode');
   
   navigator.updateViewMode('relationship');
-  console.log('👁️ Switched to relationship view mode');
+  console.warn('👁️ Switched to relationship view mode');
   
   // Test navigation state
   const navState = navigator.getNavigationState();
-  console.log('🧭 Navigation state:', {
+  console.warn('🧭 Navigation state:', {
     currentConcept: navState.currentConcept,
     viewMode: navState.viewMode,
     zoomLevel: navState.zoomLevel
   });
   
   // Cleanup
-  console.log('\n🧹 Cleaning up...');
+  console.warn('\n🧹 Cleaning up...');
   collaborativeViz.shutdown();
   
-  console.log('\n🎉 Phase 4 3D Visualization Demo completed!');
-  console.log('\n📋 Summary:');
-  console.log('✅ 3D hyperbolic renderer initialized');
-  console.log('✅ Concept navigator with search and filtering');
-  console.log('✅ Collaborative visualization sessions');
-  console.log('✅ Real-time concept exploration');
-  console.log('✅ Advanced visualization features');
-  console.log('\n🚀 Ready for Phase 4: Knowledge Transfer Learning!');
+  console.warn('\n🎉 Phase 4 3D Visualization Demo completed!');
+  console.warn('\n📋 Summary:');
+  console.warn('✅ 3D hyperbolic renderer initialized');
+  console.warn('✅ Concept navigator with search and filtering');
+  console.warn('✅ Collaborative visualization sessions');
+  console.warn('✅ Real-time concept exploration');
+  console.warn('✅ Advanced visualization features');
+  console.warn('\n🚀 Ready for Phase 4: Knowledge Transfer Learning!');
 }
 
 // Run the demo

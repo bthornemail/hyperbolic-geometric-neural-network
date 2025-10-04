@@ -50,43 +50,43 @@ const DEMO_CONFIG = {
  * Run the unified system demo
  */
 async function runUnifiedSystemDemo(): Promise<void> {
-  console.log('🚀 Starting Unified System Integration Demo...\n');
+  console.warn('🚀 Starting Unified System Integration Demo...\n');
 
   try {
     // Initialize the unified system
-    console.log('📡 Initializing Unified System...');
+    console.warn('📡 Initializing Unified System...');
     const system = await initializeUnifiedSystem(DEMO_CONFIG);
-    console.log('✅ Unified System initialized successfully!\n');
+    console.warn('✅ Unified System initialized successfully!\n');
 
     // Display system status
-    console.log('📊 System Status:');
+    console.warn('📊 System Status:');
     const status = system.getSystemStatus();
     Object.entries(status).forEach(([component, state]) => {
       const emoji = state === 'running' ? '✅' : state === 'error' ? '❌' : '⏳';
-      console.log(`   ${emoji} ${component}: ${state}`);
+      console.warn(`   ${emoji} ${component}: ${state}`);
     });
-    console.log('');
+    console.warn('');
 
     // Display HD addressing information
-    console.log('🔗 HD Addressing Information:');
+    console.warn('🔗 HD Addressing Information:');
     const hdInfo = system.getHDAddressInfo();
-    console.log(`   📍 System Address: ${hdInfo.path}`);
-    console.log(`   🌐 RPC Endpoint: ${hdInfo.rpcEndpoint}`);
-    console.log(`   🔑 Address Type: ${hdInfo.addressType}`);
-    console.log(`   📡 Transport: ${hdInfo.transport}`);
-    console.log('');
+    console.warn(`   📍 System Address: ${hdInfo.path}`);
+    console.warn(`   🌐 RPC Endpoint: ${hdInfo.rpcEndpoint}`);
+    console.warn(`   🔑 Address Type: ${hdInfo.addressType}`);
+    console.warn(`   📡 Transport: ${hdInfo.transport}`);
+    console.warn('');
 
     // Display MCP integration status
-    console.log('🔌 MCP Integration Status:');
+    console.warn('🔌 MCP Integration Status:');
     const mcpStatus = await system.getMCPIntegrationStatus();
-    console.log(`   📊 Services: ${mcpStatus.services?.length || 0}`);
-    console.log(`   🛠️  Tools: ${mcpStatus.tools?.length || 0}`);
-    console.log(`   📚 Resources: ${mcpStatus.resources?.length || 0}`);
-    console.log(`   💬 Prompts: ${mcpStatus.prompts?.length || 0}`);
-    console.log('');
+    console.warn(`   📊 Services: ${mcpStatus.services?.length || 0}`);
+    console.warn(`   🛠️  Tools: ${mcpStatus.tools?.length || 0}`);
+    console.warn(`   📚 Resources: ${mcpStatus.resources?.length || 0}`);
+    console.warn(`   💬 Prompts: ${mcpStatus.prompts?.length || 0}`);
+    console.warn('');
 
     // Demo 1: Basic Collaboration Session
-    console.log('🤝 Demo 1: Basic Collaboration Session');
+    console.warn('🤝 Demo 1: Basic Collaboration Session');
     try {
       const basicSessionId = await system.createBasicCollaborationSession({
         domain: 'Machine Learning',
@@ -97,14 +97,14 @@ async function runUnifiedSystemDemo(): Promise<void> {
         goals: ['Understand hyperbolic geometry in ML', 'Explore concept relationships'],
         initialConcepts: ['hyperbolic space', 'neural networks', 'embedding']
       });
-      console.log(`   ✅ Basic collaboration session created: ${basicSessionId}`);
+      console.warn(`   ✅ Basic collaboration session created: ${basicSessionId}`);
     } catch (error) {
-      console.log(`   ⚠️  Basic collaboration demo skipped: ${error}`);
+      console.warn(`   ⚠️  Basic collaboration demo skipped: ${error}`);
     }
-    console.log('');
+    console.warn('');
 
     // Demo 2: Enhanced Collaboration Session with Code Analysis
-    console.log('🔬 Demo 2: Enhanced Collaboration Session with Code Analysis');
+    console.warn('🔬 Demo 2: Enhanced Collaboration Session with Code Analysis');
     try {
       const enhancedSessionId = await system.createEnhancedCollaborationSession({
         domain: 'Software Development',
@@ -119,14 +119,14 @@ async function runUnifiedSystemDemo(): Promise<void> {
           { type: 'ai', name: 'LSP-AST Assistant', capabilities: ['code analysis', 'refactoring', 'intelligent completion'] }
         ]
       });
-      console.log(`   ✅ Enhanced collaboration session created: ${enhancedSessionId}`);
+      console.warn(`   ✅ Enhanced collaboration session created: ${enhancedSessionId}`);
     } catch (error) {
-      console.log(`   ⚠️  Enhanced collaboration demo skipped: ${error}`);
+      console.warn(`   ⚠️  Enhanced collaboration demo skipped: ${error}`);
     }
-    console.log('');
+    console.warn('');
 
     // Demo 3: Code Analysis with LSP-AST Integration
-    console.log('🔍 Demo 3: Code Analysis with LSP-AST Integration');
+    console.warn('🔍 Demo 3: Code Analysis with LSP-AST Integration');
     try {
       const sampleCode = `
 interface User {
@@ -148,31 +148,31 @@ class UserService {
 }`;
 
       const analysisResult = await system.analyzeCode(sampleCode, 'typescript');
-      console.log(`   ✅ Code analysis completed`);
-      console.log(`   📊 Quality Score: ${analysisResult.astAnalysis?.quality || 'N/A'}`);
-      console.log(`   🔍 Patterns Found: ${analysisResult.astAnalysis?.patterns?.length || 0}`);
-      console.log(`   ⚠️  Violations: ${analysisResult.astAnalysis?.violations?.length || 0}`);
+      console.warn(`   ✅ Code analysis completed`);
+      console.warn(`   📊 Quality Score: ${analysisResult.astAnalysis?.quality || 'N/A'}`);
+      console.warn(`   🔍 Patterns Found: ${analysisResult.astAnalysis?.patterns?.length || 0}`);
+      console.warn(`   ⚠️  Violations: ${analysisResult.astAnalysis?.violations?.length || 0}`);
     } catch (error) {
-      console.log(`   ⚠️  Code analysis demo skipped: ${error}`);
+      console.warn(`   ⚠️  Code analysis demo skipped: ${error}`);
     }
-    console.log('');
+    console.warn('');
 
     // Demo 4: Code Suggestions
-    console.log('💡 Demo 4: Intelligent Code Suggestions');
+    console.warn('💡 Demo 4: Intelligent Code Suggestions');
     try {
       const context = 'Create a function that validates email addresses';
       const suggestions = await system.generateCodeSuggestions(context, 'typescript');
-      console.log(`   ✅ Generated ${suggestions?.length || 0} intelligent suggestions`);
+      console.warn(`   ✅ Generated ${suggestions?.length || 0} intelligent suggestions`);
       if (suggestions && suggestions.length > 0) {
-        console.log(`   💡 Sample suggestion: ${suggestions[0]?.label || 'N/A'}`);
+        console.warn(`   💡 Sample suggestion: ${suggestions[0]?.label || 'N/A'}`);
       }
     } catch (error) {
-      console.log(`   ⚠️  Code suggestions demo skipped: ${error}`);
+      console.warn(`   ⚠️  Code suggestions demo skipped: ${error}`);
     }
-    console.log('');
+    console.warn('');
 
     // Demo 5: Hyperbolic Embeddings Processing
-    console.log('🧮 Demo 5: Hyperbolic Embeddings Processing');
+    console.warn('🧮 Demo 5: Hyperbolic Embeddings Processing');
     try {
       const embeddings = [
         { id: 'concept1', embedding: [0.1, 0.2, 0.3], metadata: { concept: 'machine learning' } },
@@ -181,15 +181,15 @@ class UserService {
       ];
 
       const processedEmbeddings = await system.processEmbeddings(embeddings);
-      console.log(`   ✅ Processed ${embeddings.length} hyperbolic embeddings`);
-      console.log(`   📊 Processing result: ${processedEmbeddings ? 'Success' : 'Failed'}`);
+      console.warn(`   ✅ Processed ${embeddings.length} hyperbolic embeddings`);
+      console.warn(`   📊 Processing result: ${processedEmbeddings ? 'Success' : 'Failed'}`);
     } catch (error) {
-      console.log(`   ⚠️  Embeddings processing demo skipped: ${error}`);
+      console.warn(`   ⚠️  Embeddings processing demo skipped: ${error}`);
     }
-    console.log('');
+    console.warn('');
 
     // Demo 6: Visualization Update
-    console.log('📊 Demo 6: Visualization Update');
+    console.warn('📊 Demo 6: Visualization Update');
     try {
       const visualizationData = {
         nodes: [
@@ -204,14 +204,14 @@ class UserService {
       };
 
       await system.updateVisualization(visualizationData);
-      console.log(`   ✅ Visualization updated with ${visualizationData.nodes.length} nodes and ${visualizationData.edges.length} edges`);
+      console.warn(`   ✅ Visualization updated with ${visualizationData.nodes.length} nodes and ${visualizationData.edges.length} edges`);
     } catch (error) {
-      console.log(`   ⚠️  Visualization demo skipped: ${error}`);
+      console.warn(`   ⚠️  Visualization demo skipped: ${error}`);
     }
-    console.log('');
+    console.warn('');
 
     // Demo 7: Real-time Collaboration Session
-    console.log('👥 Demo 7: Real-time Collaboration Session');
+    console.warn('👥 Demo 7: Real-time Collaboration Session');
     try {
       const collaborationSessionId = await system.startCollaborationSession(
         'Demo Collaboration',
@@ -220,32 +220,32 @@ class UserService {
           { id: 'user2', name: 'Bob', role: 'developer' }
         ]
       );
-      console.log(`   ✅ Real-time collaboration session started: ${collaborationSessionId}`);
+      console.warn(`   ✅ Real-time collaboration session started: ${collaborationSessionId}`);
       
       // Simulate some collaboration activity
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       await system.stopCollaborationSession(collaborationSessionId);
-      console.log(`   ✅ Real-time collaboration session stopped`);
+      console.warn(`   ✅ Real-time collaboration session stopped`);
     } catch (error) {
-      console.log(`   ⚠️  Real-time collaboration demo skipped: ${error}`);
+      console.warn(`   ⚠️  Real-time collaboration demo skipped: ${error}`);
     }
-    console.log('');
+    console.warn('');
 
     // Display final metrics
-    console.log('📈 Final System Metrics:');
+    console.warn('📈 Final System Metrics:');
     const metrics = system.getSystemMetrics();
-    console.log(`   ⚡ Performance: ${metrics.performance.averageResponseTime}ms avg response time`);
-    console.log(`   👥 Collaboration: ${metrics.collaboration.activeUsers} active users`);
-    console.log(`   📊 Visualization: ${metrics.visualization.renderedNodes} nodes rendered`);
-    console.log(`   🔍 LSP-AST: ${metrics.lspAst.analyzedFiles} files analyzed`);
-    console.log(`   🔗 HD Addressing: ${metrics.hdAddressing.addressesGenerated} addresses generated`);
-    console.log('');
+    console.warn(`   ⚡ Performance: ${metrics.performance.averageResponseTime}ms avg response time`);
+    console.warn(`   👥 Collaboration: ${metrics.collaboration.activeUsers} active users`);
+    console.warn(`   📊 Visualization: ${metrics.visualization.renderedNodes} nodes rendered`);
+    console.warn(`   🔍 LSP-AST: ${metrics.lspAst.analyzedFiles} files analyzed`);
+    console.warn(`   🔗 HD Addressing: ${metrics.hdAddressing.addressesGenerated} addresses generated`);
+    console.warn('');
 
     // Shutdown the system
-    console.log('🛑 Shutting down Unified System...');
+    console.warn('🛑 Shutting down Unified System...');
     await system.shutdown();
-    console.log('✅ Unified System shutdown complete!');
+    console.warn('✅ Unified System shutdown complete!');
 
   } catch (error) {
     console.error('❌ Demo failed:', error);

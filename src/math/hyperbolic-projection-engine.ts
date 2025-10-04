@@ -492,9 +492,3 @@ export interface HyperbolicNeighbors {
   confidence: number;
 }
 
-// Export for immediate use
-export {
-  HyperbolicProjectionEngine,
-  H2GNNBinarySchema,
-  OptimizedH2GNNProvider
-};

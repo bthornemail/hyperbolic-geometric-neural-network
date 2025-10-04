@@ -79,7 +79,7 @@ function App() {
         createHierarchicalDataset(15, 3)
       );
       
-      console.log('🚀 Starting H²GNN training...');
+      console.warn('🚀 Starting H²GNN training...');
       
       // Train the network
       await h2gnn.train(trainingDatasets);
@@ -100,7 +100,7 @@ function App() {
         }
       }
       
-      console.log('✅ Training completed!');
+      console.warn('✅ Training completed!');
       
     } catch (error) {
       console.error('❌ Training failed:', error);

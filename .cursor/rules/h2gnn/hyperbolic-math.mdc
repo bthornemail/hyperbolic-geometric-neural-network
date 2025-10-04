@@ -1,0 +1,318 @@
+---
+description: Guidelines for Hyperbolic Mathematical Operations in H²GNN
+globs: 
+alwaysApply: false
+---
+
+# Hyperbolic Mathematical Operations
+
+This guide covers the mathematical foundations and operations for hyperbolic geometry in H²GNN.
+
+## Mathematical Foundations
+
+### Poincaré Ball Model
+The Poincaré ball model represents hyperbolic space as the interior of a unit ball:
+- **Space**: `Bⁿ = {x ∈ ℝⁿ : ||x|| < 1}`
+- **Boundary**: Unit sphere `Sⁿ⁻¹ = {x ∈ ℝⁿ : ||x|| = 1}`
+- **Curvature**: Constant negative curvature `K = -1`
+
+### Möbius Gyrovector Space
+Hyperbolic space forms a gyrovector space with Möbius operations:
+
+#### Möbius Addition: `u ⊕ v`
+```
+u ⊕ v = (1 + 2⟨u,v⟩ + ||v||²)u + (1 - ||u||²)v
+        ──────────────────────────────────────
+        1 + 2⟨u,v⟩ + ||u||²||v||²
+```
+
+**Properties:**
+- Non-commutative: `u ⊕ v ≠ v ⊕ u`
+- Non-associative: `(u ⊕ v) ⊕ w ≠ u ⊕ (v ⊕ w)`
+- Identity: `0 ⊕ v = v`
+- Inverse: `⊖v = -v`
+
+#### Möbius Scalar Multiplication: `r ⊗ v`
+```
+r ⊗ v = tanh(r · artanh(||v||)) · v/||v||
+```
+
+**Properties:**
+- `1 ⊗ v = v`
+- `0 ⊗ v = 0`
+- `r ⊗ (s ⊗ v) = (r + s) ⊗ v`
+
+### Hyperbolic Distance
+```
+d(u,v) = arcosh(1 + 2||u-v||²/((1-||u||²)(1-||v||²)))
+```
+
+**Properties:**
+- `d(u,v) ≥ 0` with equality iff `u = v`
+- `d(u,v) = d(v,u)`
+- Triangle inequality: `d(u,w) ≤ d(u,v) + d(v,w)`
+
+## Implementation Guidelines
+
+### 1. Vector Operations
+
+#### Creating Vectors
+```typescript
+// Always use createVector for proper initialization
+const vector = HyperbolicArithmetic.createVector([0.1, 0.2, 0.3]);
+
+// Validate hyperbolic constraints
+if (!HyperbolicArithmetic.validateHyperbolic(vector)) {
+  throw new Error('Vector violates hyperbolic constraints');
+}
+```
+
+#### Projection to Poincaré Ball
+```typescript
+// Ensure vectors stay within the unit ball
+const safeVector = HyperbolicArithmetic.projectToPoincareBall(vector);
+```
+
+### 2. Möbius Operations
+
+#### Addition
+```typescript
+// Combine vectors in hyperbolic space
+const result = HyperbolicArithmetic.mobiusAdd(u, v);
+
+// Batch operations for efficiency
+const batchResult = HyperbolicArithmetic.batchMobiusAdd(vectors);
+```
+
+#### Scalar Multiplication
+```typescript
+// Scale vectors while maintaining hyperbolic properties
+const scaled = HyperbolicArithmetic.mobiusScalarMult(scale, vector);
+```
+
+### 3. Distance and Similarity
+
+#### Hyperbolic Distance
+```typescript
+// Calculate distance between points
+const distance = HyperbolicArithmetic.distance(u, v);
+
+// Use for similarity search
+const similarities = embeddings.map(emb => ({
+  embedding: emb,
+  distance: HyperbolicArithmetic.distance(query, emb)
+}));
+```
+
+#### Attention Mechanisms
+```typescript
+// Hyperbolic attention weights
+const attentionWeights = keys.map(key => 
+  HyperbolicArithmetic.hyperbolicAttention(query, key)
+);
+```
+
+### 4. Exponential and Logarithmic Maps
+
+#### Tangent Space Operations
+```typescript
+// Map from tangent space to hyperbolic space
+const hyperbolicPoint = HyperbolicArithmetic.expMap(tangentVector, basePoint);
+
+// Map from hyperbolic space to tangent space
+const tangentVector = HyperbolicArithmetic.logMap(hyperbolicPoint, basePoint);
+```
+
+#### Parallel Transport
+```typescript
+// Transport vectors along geodesics
+const transported = HyperbolicArithmetic.parallelTransport(
+  vector, fromPoint, toPoint
+);
+```
+
+## Advanced Operations
+
+### 1. Fréchet Mean (Hyperbolic Centroid)
+```typescript
+// Compute hyperbolic centroid
+async computeFrechetMean(points: Vector[]): Promise<Vector> {
+  let centroid = points[0];
+  
+  for (let i = 0; i < 10; i++) { // Iterative refinement
+    const tangentSum = points.map(p => 
+      HyperbolicArithmetic.logMap(p, centroid)
+    ).reduce((sum, log) => 
+      HyperbolicArithmetic.mobiusAdd(sum, log), 
+      HyperbolicArithmetic.createVector(new Array(centroid.dim).fill(0))
+    );
+    
+    const avgTangent = HyperbolicArithmetic.mobiusScalarMult(
+      1.0 / points.length, tangentSum
+    );
+    
+    centroid = HyperbolicArithmetic.expMap(avgTangent, centroid);
+  }
+  
+  return centroid;
+}
+```
+
+### 2. Hyperbolic Clustering
+```typescript
+// K-means clustering in hyperbolic space
+async hyperbolicKMeans(points: Vector[], k: number): Promise<Vector[][]> {
+  // Initialize centroids randomly
+  const centroids = Array.from({length: k}, () => 
+    HyperbolicArithmetic.randomHyperbolicPoint(points[0].dim, 0.5)
+  );
+  
+  let clusters: Vector[][];
+  let changed = true;
+  
+  while (changed) {
+    // Assign points to nearest centroid
+    clusters = Array.from({length: k}, () => []);
+    
+    for (const point of points) {
+      const distances = centroids.map(centroid => 
+        HyperbolicArithmetic.distance(point, centroid)
+      );
+      const nearestIndex = distances.indexOf(Math.min(...distances));
+      clusters[nearestIndex].push(point);
+    }
+    
+    // Update centroids using Fréchet mean
+    const newCentroids = await Promise.all(
+      clusters.map(cluster => this.computeFrechetMean(cluster))
+    );
+    
+    // Check for convergence
+    changed = newCentroids.some((newCentroid, i) => 
+      HyperbolicArithmetic.distance(newCentroid, centroids[i]) > 1e-6
+    );
+    
+    centroids.splice(0, centroids.length, ...newCentroids);
+  }
+  
+  return clusters;
+}
+```
+
+### 3. Lorentz Model Operations
+```typescript
+// Convert between Poincaré and Lorentz models
+const lorentzVector = HyperbolicArithmetic.toLorentz(poincareVector);
+const poincareVector = HyperbolicArithmetic.fromLorentz(lorentzVector);
+```
+
+## Numerical Stability
+
+### Boundary Handling
+```typescript
+// Always check and handle boundary conditions
+const norm = HyperbolicArithmetic.norm(vector);
+if (norm >= 1.0 - this.BOUNDARY_EPS) {
+  // Project to safe region
+  const scale = (1.0 - this.BOUNDARY_EPS) / norm;
+  return HyperbolicArithmetic.mobiusScalarMult(scale, vector);
+}
+```
+
+### Epsilon Constants
+```typescript
+// Use appropriate epsilon values
+private static readonly EPS = 1e-10;           // General numerical precision
+private static readonly BOUNDARY_EPS = 1e-6;   // Boundary safety margin
+private static readonly CONVERGENCE_EPS = 1e-6; // Iterative convergence
+```
+
+### Gradient Clipping
+```typescript
+// Clip gradients to prevent numerical instability
+const clippedGradient = HyperbolicArithmetic.mobiusScalarMult(
+  Math.min(1.0, maxGradientNorm / currentGradientNorm),
+  gradient
+);
+```
+
+## Performance Optimization
+
+### Batch Operations
+```typescript
+// Use batch operations for multiple vectors
+const batchResult = HyperbolicArithmetic.batchMobiusAdd(vectors);
+```
+
+### Caching
+```typescript
+// Cache expensive computations
+private embeddingCache = new Map<string, Vector>();
+
+async getCachedEmbedding(key: string): Promise<Vector> {
+  if (this.embeddingCache.has(key)) {
+    return this.embeddingCache.get(key)!;
+  }
+  
+  const embedding = await this.computeEmbedding(key);
+  this.embeddingCache.set(key, embedding);
+  return embedding;
+}
+```
+
+### Lazy Evaluation
+```typescript
+// Compute embeddings only when needed
+async lazyEmbedding(text: string): Promise<Vector> {
+  if (!this.embeddings.has(text)) {
+    const embedding = await this.generateEmbedding(text);
+    this.embeddings.set(text, embedding);
+  }
+  return this.embeddings.get(text)!;
+}
+```
+
+## Common Pitfalls
+
+### 1. Boundary Violations
+```typescript
+// ❌ Bad: No boundary checking
+const result = HyperbolicArithmetic.mobiusAdd(u, v);
+
+// ✅ Good: Always validate boundaries
+const safeU = HyperbolicArithmetic.projectToPoincareBall(u);
+const safeV = HyperbolicArithmetic.projectToPoincareBall(v);
+const result = HyperbolicArithmetic.mobiusAdd(safeU, safeV);
+```
+
+### 2. Dimension Mismatches
+```typescript
+// ❌ Bad: No dimension validation
+const result = HyperbolicArithmetic.mobiusAdd(u, v);
+
+// ✅ Good: Validate dimensions
+if (u.dim !== v.dim) {
+  throw new Error(`Dimension mismatch: ${u.dim} vs ${v.dim}`);
+}
+const result = HyperbolicArithmetic.mobiusAdd(u, v);
+```
+
+### 3. Numerical Instability
+```typescript
+// ❌ Bad: No numerical stability checks
+const result = HyperbolicArithmetic.mobiusScalarMult(1e10, vector);
+
+// ✅ Good: Check for numerical stability
+const maxScale = 1.0 / (1.0 - this.BOUNDARY_EPS);
+const safeScale = Math.min(scale, maxScale);
+const result = HyperbolicArithmetic.mobiusScalarMult(safeScale, vector);
+```
+
+## Integration with H²GNN
+
+These mathematical operations form the foundation for:
+- **Message Passing**: Möbius addition for combining node features
+- **Attention Mechanisms**: Hyperbolic attention weights
+- **Clustering**: Fréchet mean for hierarchical organization
+- **Memory Consolidation**: Geometric memory organization
+- **Geographic Projection**: Hyperbolic-to-geographic coordinate conversion

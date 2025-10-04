@@ -29,8 +29,8 @@ describe('WordNet Training Pipeline', () => {
       expect(firstSynset).toHaveProperty('definition');
       expect(firstSynset).toHaveProperty('pos');
       
-      console.log(`✅ Loaded ${synsets.size} synsets`);
-      console.log(`Sample synset: ${firstSynset.words.join(', ')} - ${firstSynset.definition}`);
+      console.warn(`✅ Loaded ${synsets.size} synsets`);
+      console.warn(`Sample synset: ${firstSynset.words.join(', ')} - ${firstSynset.definition}`);
     });
 
     it('should build hierarchical relationships', async () => {
@@ -42,14 +42,14 @@ describe('WordNet Training Pipeline', () => {
       expect(hierarchy.edges).toBeInstanceOf(Array);
       expect(hierarchy.nodes.length).toBeGreaterThan(0);
       
-      console.log(`✅ Built hierarchy with ${hierarchy.nodes.length} nodes and ${hierarchy.edges.length} edges`);
+      console.warn(`✅ Built hierarchy with ${hierarchy.nodes.length} nodes and ${hierarchy.edges.length} edges`);
       
       // Check for root nodes (concepts with no parents)
       const rootNodes = hierarchy.nodes.filter(node => 
         !hierarchy.edges.some(edge => edge.to === node.id && edge.type === 'hypernym')
       );
       expect(rootNodes.length).toBeGreaterThan(0);
-      console.log(`Found ${rootNodes.length} root concepts`);
+      console.warn(`Found ${rootNodes.length} root concepts`);
     });
 
     it('should generate hyperbolic embeddings for concepts', async () => {
@@ -72,8 +72,8 @@ describe('WordNet Training Pipeline', () => {
       const norm = Math.sqrt(firstEmbedding.data.reduce((sum, val) => sum + val * val, 0));
       expect(norm).toBeLessThan(1);
       
-      console.log(`✅ Generated embeddings for ${nodesWithEmbeddings.length} concepts`);
-      console.log(`Sample embedding norm: ${norm.toFixed(4)}`);
+      console.warn(`✅ Generated embeddings for ${nodesWithEmbeddings.length} concepts`);
+      console.warn(`Sample embedding norm: ${norm.toFixed(4)}`);
     });
   });
 
@@ -85,7 +85,7 @@ describe('WordNet Training Pipeline', () => {
       expect(result).toBeDefined();
       expect(result.overallScore).toBeGreaterThan(0);
       
-      console.log('✅ Training pipeline completed successfully');
+      console.warn('✅ Training pipeline completed successfully');
     });
 
     it('should run concept learning workflow', async () => {
@@ -99,8 +99,8 @@ describe('WordNet Training Pipeline', () => {
       expect(result.concepts).toBeDefined();
       expect(result.hierarchicalStructure).toBeDefined();
       
-      console.log('✅ Concept learning workflow completed');
-      console.log(`Learned domain: ${result.domain}`);
+      console.warn('✅ Concept learning workflow completed');
+      console.warn(`Learned domain: ${result.domain}`);
     });
 
     it('should run hierarchical QA workflow', async () => {
@@ -113,9 +113,9 @@ describe('WordNet Training Pipeline', () => {
       expect(result.answer).toBeDefined();
       expect(result.reasoning).toBeDefined();
       
-      console.log('✅ Hierarchical QA workflow completed');
-      console.log(`Question: What is the relationship between a dog and an animal?`);
-      console.log(`Answer: ${result.answer}`);
+      console.warn('✅ Hierarchical QA workflow completed');
+      console.warn(`Question: What is the relationship between a dog and an animal?`);
+      console.warn(`Answer: ${result.answer}`);
     });
   });
 
@@ -132,7 +132,7 @@ describe('WordNet Training Pipeline', () => {
         expect(norm).toBeLessThan(1);
       }
       
-      console.log('✅ All embeddings satisfy hyperbolic constraints');
+      console.warn('✅ All embeddings satisfy hyperbolic constraints');
     });
 
     it('should compute hyperbolic distances correctly', async () => {
@@ -152,7 +152,7 @@ describe('WordNet Training Pipeline', () => {
         expect(distance).toBeGreaterThan(0);
         expect(distance).toBeLessThan(Infinity);
         
-        console.log(`✅ Hyperbolic distance between "${nodesWithEmbeddings[0].id}" and "${nodesWithEmbeddings[1].id}": ${distance.toFixed(4)}`);
+        console.warn(`✅ Hyperbolic distance between "${nodesWithEmbeddings[0].id}" and "${nodesWithEmbeddings[1].id}": ${distance.toFixed(4)}`);
       }
     });
 
@@ -176,7 +176,7 @@ describe('WordNet Training Pipeline', () => {
           // In hyperbolic space, hierarchical relationships should be reflected in distances
           expect(distance).toBeGreaterThan(0);
           
-          console.log(`✅ Hierarchical relationship preserved: ${rel.from} -> ${rel.to} (distance: ${distance.toFixed(4)})`);
+          console.warn(`✅ Hierarchical relationship preserved: ${rel.from} -> ${rel.to} (distance: ${distance.toFixed(4)})`);
         }
       }
     });
@@ -195,8 +195,8 @@ describe('WordNet Training Pipeline', () => {
       expect(duration).toBeLessThan(10000); // Should complete within 10 seconds
       
       const synsets = wordnetProcessor.getSynsets();
-      console.log(`✅ Training completed in ${duration}ms`);
-      console.log(`Performance: ${(synsets.size / (duration / 1000)).toFixed(2)} synsets/second`);
+      console.warn(`✅ Training completed in ${duration}ms`);
+      console.warn(`Performance: ${(synsets.size / (duration / 1000)).toFixed(2)} synsets/second`);
     });
 
     it('should validate embedding quality metrics', async () => {
@@ -218,10 +218,10 @@ describe('WordNet Training Pipeline', () => {
       expect(maxNorm).toBeLessThan(1);
       expect(minNorm).toBeGreaterThan(0);
       
-      console.log(`✅ Embedding quality metrics:`);
-      console.log(`  Average norm: ${avgNorm.toFixed(4)}`);
-      console.log(`  Max norm: ${maxNorm.toFixed(4)}`);
-      console.log(`  Min norm: ${minNorm.toFixed(4)}`);
+      console.warn(`✅ Embedding quality metrics:`);
+      console.warn(`  Average norm: ${avgNorm.toFixed(4)}`);
+      console.warn(`  Max norm: ${maxNorm.toFixed(4)}`);
+      console.warn(`  Min norm: ${minNorm.toFixed(4)}`);
     });
   });
 });

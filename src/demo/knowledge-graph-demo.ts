@@ -9,13 +9,13 @@
 
 import { fileURLToPath } from 'url';
 import * as path from 'path';
-import { KnowledgeGraphMCP } from '../mcp/knowledge-graph-mcp.js';
+import { KnowledgeGraphMCP } from '../mcp.restored.old/knowledge-graph-mcp-server-hd.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function demonstrateKnowledgeGraphGeneration() {
-  console.log('🔍 Knowledge Graph + H²GNN Demo\n');
+  console.warn('🔍 Knowledge Graph + H²GNN Demo\n');
   
   try {
     // Initialize the knowledge graph MCP
@@ -23,7 +23,7 @@ async function demonstrateKnowledgeGraphGeneration() {
     
     // Analyze the project source code
     const projectPath = path.resolve(__dirname, '../');
-    console.log(`📁 Analyzing project path: ${projectPath}\n`);
+    console.warn(`📁 Analyzing project path: ${projectPath}\n`);
     
     const analysisResult = await kgMCP.analyzePathToKnowledgeGraph({
       path: projectPath,
@@ -34,9 +34,9 @@ async function demonstrateKnowledgeGraphGeneration() {
       excludePatterns: ['**/node_modules/**', '**/dist/**', '**/.git/**', '**/test-results/**']
     });
     
-    console.log('✅ Knowledge Graph Analysis Complete!');
-    console.log(analysisResult.content[0].text);
-    console.log('\n' + '='.repeat(60) + '\n');
+    console.warn('✅ Knowledge Graph Analysis Complete!');
+    console.warn(analysisResult.content[0].text);
+    console.warn('\n' + '='.repeat(60) + '\n');
     
     // Query the knowledge graph
     const queryResult = await kgMCP.queryKnowledgeGraph({
@@ -45,9 +45,9 @@ async function demonstrateKnowledgeGraphGeneration() {
       limit: 5
     });
     
-    console.log('🔍 Knowledge Graph Query Results:');
-    console.log(queryResult.content[0].text);
-    console.log('\n' + '='.repeat(60) + '\n');
+    console.warn('🔍 Knowledge Graph Query Results:');
+    console.warn(queryResult.content[0].text);
+    console.warn('\n' + '='.repeat(60) + '\n');
     
     // Generate code based on knowledge graph
     const codeGenResult = await kgMCP.generateCodeFromGraph({
@@ -63,9 +63,9 @@ async function demonstrateKnowledgeGraphGeneration() {
       }
     });
     
-    console.log('🚀 Generated Code:');
-    console.log(codeGenResult.content[0].text);
-    console.log('\n' + '='.repeat(60) + '\n');
+    console.warn('🚀 Generated Code:');
+    console.warn(codeGenResult.content[0].text);
+    console.warn('\n' + '='.repeat(60) + '\n');
     
     // Generate documentation
     const docGenResult = await kgMCP.generateDocumentationFromGraph({
@@ -79,26 +79,26 @@ async function demonstrateKnowledgeGraphGeneration() {
       }
     });
     
-    console.log('📚 Generated Documentation:');
-    console.log(docGenResult.content[0].text);
-    console.log('\n' + '='.repeat(60) + '\n');
+    console.warn('📚 Generated Documentation:');
+    console.warn(docGenResult.content[0].text);
+    console.warn('\n' + '='.repeat(60) + '\n');
     
     // Get visualization data
     const vizResult = await kgMCP.getGraphVisualization({
       layout: 'hierarchical'
     });
     
-    console.log('📊 Visualization Data Generated:');
-    console.log(vizResult.content[0].text.substring(0, 500) + '...');
-    console.log('\n' + '='.repeat(60) + '\n');
+    console.warn('📊 Visualization Data Generated:');
+    console.warn(vizResult.content[0].text.substring(0, 500) + '...');
+    console.warn('\n' + '='.repeat(60) + '\n');
     
-    console.log('🎉 Demo completed successfully!');
-    console.log('The knowledge graph system can:');
-    console.log('  ✓ Analyze codebases and generate hyperbolic embeddings');
-    console.log('  ✓ Query relationships and similarities');
-    console.log('  ✓ Generate code based on graph insights');
-    console.log('  ✓ Create documentation from code structure');
-    console.log('  ✓ Visualize code relationships in hyperbolic space');
+    console.warn('🎉 Demo completed successfully!');
+    console.warn('The knowledge graph system can:');
+    console.warn('  ✓ Analyze codebases and generate hyperbolic embeddings');
+    console.warn('  ✓ Query relationships and similarities');
+    console.warn('  ✓ Generate code based on graph insights');
+    console.warn('  ✓ Create documentation from code structure');
+    console.warn('  ✓ Visualize code relationships in hyperbolic space');
     
   } catch (error) {
     console.error('❌ Demo failed:', error);

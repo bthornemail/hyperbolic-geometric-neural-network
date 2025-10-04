@@ -7,10 +7,10 @@
  * without complex module dependencies.
  */
 
-console.log('🚀 Starting Simple WordNet Training Test\n');
+console.warn('🚀 Starting Simple WordNet Training Test\n');
 
 // Test 1: Basic WordNet Data Structure
-console.log('📚 Test 1: WordNet Data Structure');
+console.warn('📚 Test 1: WordNet Data Structure');
 const sampleSynsets = [
   {
     id: 'dog.n.01',
@@ -41,13 +41,13 @@ const sampleSynsets = [
   }
 ];
 
-console.log(`✅ Created ${sampleSynsets.length} sample synsets`);
+console.warn(`✅ Created ${sampleSynsets.length} sample synsets`);
 sampleSynsets.forEach((synset, i) => {
-  console.log(`  ${i + 1}. ${synset.words.join(', ')} - ${synset.definition.substring(0, 50)}...`);
+  console.warn(`  ${i + 1}. ${synset.words.join(', ')} - ${synset.definition.substring(0, 50)}...`);
 });
 
 // Test 2: Hierarchical Relationships
-console.log('\n🌳 Test 2: Hierarchical Relationships');
+console.warn('\n🌳 Test 2: Hierarchical Relationships');
 const relationships = [];
 for (const synset of sampleSynsets) {
   for (const hypernym of synset.hypernyms) {
@@ -59,13 +59,13 @@ for (const synset of sampleSynsets) {
   }
 }
 
-console.log(`✅ Built ${relationships.length} hierarchical relationships`);
+console.warn(`✅ Built ${relationships.length} hierarchical relationships`);
 relationships.forEach((rel, i) => {
-  console.log(`  ${i + 1}. ${rel.child} --[${rel.type}]--> ${rel.parent}`);
+  console.warn(`  ${i + 1}. ${rel.child} --[${rel.type}]--> ${rel.parent}`);
 });
 
 // Test 3: Hyperbolic Embeddings Simulation
-console.log('\n🎯 Test 3: Hyperbolic Embeddings Simulation');
+console.warn('\n🎯 Test 3: Hyperbolic Embeddings Simulation');
 function generateRandomHyperbolicEmbedding(dim: number = 128): number[] {
   // Generate random vector in Poincaré ball (norm < 1)
   const vector = Array.from({ length: dim }, () => (Math.random() - 0.5) * 2);
@@ -100,7 +100,7 @@ for (const synset of sampleSynsets) {
 }
 
 const embeddingTime = Date.now() - startTime;
-console.log(`✅ Generated embeddings in ${embeddingTime}ms`);
+console.warn(`✅ Generated embeddings in ${embeddingTime}ms`);
 
 // Validate hyperbolic constraints
 let validEmbeddings = 0;
@@ -109,13 +109,13 @@ for (const [id, embedding] of Object.entries(embeddings)) {
   if (norm < 1.0) {
     validEmbeddings++;
   }
-  console.log(`  ${id}: norm = ${norm.toFixed(4)} ${norm < 1.0 ? '✅' : '❌'}`);
+  console.warn(`  ${id}: norm = ${norm.toFixed(4)} ${norm < 1.0 ? '✅' : '❌'}`);
 }
 
-console.log(`✅ ${validEmbeddings}/${Object.keys(embeddings).length} embeddings satisfy hyperbolic constraints`);
+console.warn(`✅ ${validEmbeddings}/${Object.keys(embeddings).length} embeddings satisfy hyperbolic constraints`);
 
 // Test 4: Distance Analysis
-console.log('\n📏 Test 4: Hyperbolic Distance Analysis');
+console.warn('\n📏 Test 4: Hyperbolic Distance Analysis');
 const conceptPairs = [
   ['dog.n.01', 'canine.n.02'],
   ['canine.n.02', 'carnivore.n.01'],
@@ -125,17 +125,17 @@ const conceptPairs = [
 for (const [concept1, concept2] of conceptPairs) {
   if (embeddings[concept1] && embeddings[concept2]) {
     const distance = computeHyperbolicDistance(embeddings[concept1], embeddings[concept2]);
-    console.log(`  📏 Distance ${concept1} ↔ ${concept2}: ${distance.toFixed(4)}`);
+    console.warn(`  📏 Distance ${concept1} ↔ ${concept2}: ${distance.toFixed(4)}`);
   }
 }
 
 // Test 5: PocketFlow Workflow Simulation
-console.log('\n🔄 Test 5: PocketFlow Workflow Simulation');
+console.warn('\n🔄 Test 5: PocketFlow Workflow Simulation');
 
 // Simulate a simple hierarchical QA workflow
 function simulateHierarchicalQA(question: string, concepts: string[]): string {
-  console.log(`  ❓ Question: ${question}`);
-  console.log(`  🧠 Available concepts: ${concepts.join(', ')}`);
+  console.warn(`  ❓ Question: ${question}`);
+  console.warn(`  🧠 Available concepts: ${concepts.join(', ')}`);
   
   // Simple logic: find most relevant concept and provide answer
   const relevantConcept = concepts.find(c => question.toLowerCase().includes(c.split('.')[0]));
@@ -144,13 +144,13 @@ function simulateHierarchicalQA(question: string, concepts: string[]): string {
     const synset = sampleSynsets.find(s => s.id === relevantConcept);
     if (synset) {
       const answer = `A ${synset.words[0]} is ${synset.definition}`;
-      console.log(`  💡 Answer: ${answer}`);
+      console.warn(`  💡 Answer: ${answer}`);
       return answer;
     }
   }
   
   const fallbackAnswer = "I need more context to answer that question.";
-  console.log(`  💡 Answer: ${fallbackAnswer}`);
+  console.warn(`  💡 Answer: ${fallbackAnswer}`);
   return fallbackAnswer;
 }
 
@@ -162,11 +162,11 @@ const questions = [
 
 for (const question of questions) {
   simulateHierarchicalQA(question, Object.keys(embeddings));
-  console.log('');
+  console.warn('');
 }
 
 // Test 6: Performance Metrics
-console.log('📊 Test 6: Performance Metrics');
+console.warn('📊 Test 6: Performance Metrics');
 
 const allNorms = Object.values(embeddings).map(emb => 
   Math.sqrt(emb.reduce((sum, val) => sum + val * val, 0))
@@ -176,19 +176,19 @@ const avgNorm = allNorms.reduce((sum, norm) => sum + norm, 0) / allNorms.length;
 const maxNorm = Math.max(...allNorms);
 const minNorm = Math.min(...allNorms);
 
-console.log(`  📊 Average embedding norm: ${avgNorm.toFixed(4)}`);
-console.log(`  📊 Max embedding norm: ${maxNorm.toFixed(4)}`);
-console.log(`  📊 Min embedding norm: ${minNorm.toFixed(4)}`);
-console.log(`  ✅ All norms < 1.0: ${maxNorm < 1.0 ? 'Yes' : 'No'}`);
+console.warn(`  📊 Average embedding norm: ${avgNorm.toFixed(4)}`);
+console.warn(`  📊 Max embedding norm: ${maxNorm.toFixed(4)}`);
+console.warn(`  📊 Min embedding norm: ${minNorm.toFixed(4)}`);
+console.warn(`  ✅ All norms < 1.0: ${maxNorm < 1.0 ? 'Yes' : 'No'}`);
 
 // Summary
-console.log('\n🎉 Simple WordNet Training Test Completed Successfully!');
-console.log('\n📋 Summary:');
-console.log(`  • Processed ${sampleSynsets.length} WordNet concepts`);
-console.log(`  • Built ${relationships.length} hierarchical relationships`);
-console.log(`  • Generated ${Object.keys(embeddings).length} hyperbolic embeddings`);
-console.log(`  • Validated ${validEmbeddings} valid embeddings`);
-console.log(`  • Tested ${questions.length} QA scenarios`);
-console.log(`  • All core functionality working correctly ✅`);
+console.warn('\n🎉 Simple WordNet Training Test Completed Successfully!');
+console.warn('\n📋 Summary:');
+console.warn(`  • Processed ${sampleSynsets.length} WordNet concepts`);
+console.warn(`  • Built ${relationships.length} hierarchical relationships`);
+console.warn(`  • Generated ${Object.keys(embeddings).length} hyperbolic embeddings`);
+console.warn(`  • Validated ${validEmbeddings} valid embeddings`);
+console.warn(`  • Tested ${questions.length} QA scenarios`);
+console.warn(`  • All core functionality working correctly ✅`);
 
-console.log('\n🚀 Ready for full integration with H²GNN + PocketFlow!');
+console.warn('\n🚀 Ready for full integration with H²GNN + PocketFlow!');

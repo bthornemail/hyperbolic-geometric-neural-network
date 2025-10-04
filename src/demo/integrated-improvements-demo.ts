@@ -12,28 +12,28 @@
  */
 
 import { initializeCentralizedH2GNN, getSharedH2GNN } from '../core/centralized-h2gnn-config';
-import { KnowledgeGraphMCP } from '../mcp/knowledge-graph-mcp';
-import { EnhancedH2GNNMCPServer } from '../mcp/enhanced-h2gnn-mcp-server';
+import { KnowledgeGraphMCP } from '../mcp.restored.old/knowledge-graph-mcp-server-hd';
+import { EnhancedH2GNNMCPServer } from '../mcp.restored.old/enhanced-h2gnn-mcp-server-hd';
 
 async function runIntegratedImprovementsDemo(): Promise<void> {
-  console.log('🚀 Integrated H²GNN Improvements Demo');
-  console.log('=====================================');
+  console.warn('🚀 Integrated H²GNN Improvements Demo');
+  console.warn('=====================================');
   
   // 1. Initialize centralized H²GNN configuration
-  console.log('\n📊 Step 1: Centralized H²GNN Configuration');
-  console.log('------------------------------------------');
+  console.warn('\n📊 Step 1: Centralized H²GNN Configuration');
+  console.warn('------------------------------------------');
   
   const h2gnnManager = initializeCentralizedH2GNN();
   const h2gnn = getSharedH2GNN();
   
-  console.log('✅ Centralized H²GNN initialized successfully');
-  console.log(`- Embedding dimension: ${h2gnnManager.getConfig().embeddingDim}`);
-  console.log(`- Storage path: ${h2gnnManager.getConfig().storagePath}`);
-  console.log(`- Max memories: ${h2gnnManager.getConfig().maxMemories}`);
+  console.warn('✅ Centralized H²GNN initialized successfully');
+  console.warn(`- Embedding dimension: ${h2gnnManager.getConfig().embeddingDim}`);
+  console.warn(`- Storage path: ${h2gnnManager.getConfig().storagePath}`);
+  console.warn(`- Max memories: ${h2gnnManager.getConfig().maxMemories}`);
   
   // 2. Learn some concepts for demonstration
-  console.log('\n🧠 Step 2: Learning Concepts');
-  console.log('-----------------------------');
+  console.warn('\n🧠 Step 2: Learning Concepts');
+  console.warn('-----------------------------');
   
   await h2gnn.learnWithMemory(
     'user_service',
@@ -59,11 +59,11 @@ async function runIntegratedImprovementsDemo(): Promise<void> {
     0.9
   );
   
-  console.log('✅ Learned concepts: user_service, database_connection');
+  console.warn('✅ Learned concepts: user_service, database_connection');
   
   // 3. Create knowledge graph
-  console.log('\n📊 Step 3: Knowledge Graph Creation');
-  console.log('------------------------------------');
+  console.warn('\n📊 Step 3: Knowledge Graph Creation');
+  console.warn('------------------------------------');
   
   const knowledgeGraphMCP = new KnowledgeGraphMCP();
   
@@ -125,11 +125,11 @@ async function runIntegratedImprovementsDemo(): Promise<void> {
     }
   };
   
-  console.log('✅ Knowledge graph created with 2 nodes and 1 edge');
+  console.warn('✅ Knowledge graph created with 2 nodes and 1 edge');
   
   // 4. Demonstrate learn_from_node integration
-  console.log('\n🔗 Step 4: learn_from_node Integration');
-  console.log('--------------------------------------');
+  console.warn('\n🔗 Step 4: learn_from_node Integration');
+  console.warn('--------------------------------------');
   
   // Simulate learning from knowledge graph nodes
   for (const node of mockNodes) {
@@ -162,19 +162,19 @@ async function runIntegratedImprovementsDemo(): Promise<void> {
     );
   }
   
-  console.log('✅ Successfully learned from knowledge graph nodes');
-  console.log('- UserService node learned with semantic understanding');
-  console.log('- Database node learned with contextual features');
+  console.warn('✅ Successfully learned from knowledge graph nodes');
+  console.warn('- UserService node learned with semantic understanding');
+  console.warn('- Database node learned with contextual features');
   
   // 5. Demonstrate enhanced code generation
-  console.log('\n🚀 Step 5: Enhanced Code Generation with H²GNN');
-  console.log('----------------------------------------------');
+  console.warn('\n🚀 Step 5: Enhanced Code Generation with H²GNN');
+  console.warn('----------------------------------------------');
   
   // Query H²GNN for similar concepts
   const similarConcepts = await h2gnn.retrieveMemories('user_service', 3);
-  console.log(`✅ Found ${similarConcepts.length} similar concepts:`);
+  console.warn(`✅ Found ${similarConcepts.length} similar concepts:`);
   for (const concept of similarConcepts) {
-    console.log(`  - ${concept.concept} (confidence: ${concept.confidence.toFixed(3)})`);
+    console.warn(`  - ${concept.concept} (confidence: ${concept.confidence.toFixed(3)})`);
   }
   
   // Generate code with H²GNN understanding
@@ -195,7 +195,7 @@ async function runIntegratedImprovementsDemo(): Promise<void> {
     }
   };
   
-  console.log('\n🔧 Generating code with H²GNN understanding...');
+  console.warn('\n🔧 Generating code with H²GNN understanding...');
   
   // Simulate the enhanced code generation process
   const h2gnnUnderstanding = {
@@ -227,12 +227,12 @@ async function runIntegratedImprovementsDemo(): Promise<void> {
   }
 }`;
   
-  console.log('✅ Code generated with H²GNN understanding:');
-  console.log(generatedCode);
+  console.warn('✅ Code generated with H²GNN understanding:');
+  console.warn(generatedCode);
   
   // 6. Demonstrate learning from code generation
-  console.log('\n📚 Step 6: Learning from Code Generation');
-  console.log('----------------------------------------');
+  console.warn('\n📚 Step 6: Learning from Code Generation');
+  console.warn('----------------------------------------');
   
   await h2gnn.learnWithMemory(
     'class_generation_auth_service',
@@ -252,102 +252,102 @@ async function runIntegratedImprovementsDemo(): Promise<void> {
     h2gnnUnderstanding.confidence
   );
   
-  console.log('✅ Learned from code generation attempt');
-  console.log('- Pattern: class_generation_auth_service');
-  console.log('- Confidence: ' + h2gnnUnderstanding.confidence.toFixed(3));
-  console.log('- Semantic features: ' + h2gnnUnderstanding.semanticFeatures.join(', '));
+  console.warn('✅ Learned from code generation attempt');
+  console.warn('- Pattern: class_generation_auth_service');
+  console.warn('- Confidence: ' + h2gnnUnderstanding.confidence.toFixed(3));
+  console.warn('- Semantic features: ' + h2gnnUnderstanding.semanticFeatures.join(', '));
   
   // 7. Demonstrate system status and progress
-  console.log('\n📈 Step 7: System Status and Progress');
-  console.log('-------------------------------------');
+  console.warn('\n📈 Step 7: System Status and Progress');
+  console.warn('-------------------------------------');
   
   const systemStatus = await h2gnnManager.getSystemStatus();
-  console.log('✅ System Status:');
-  console.log(`- Total memories: ${systemStatus.totalMemories}`);
-  console.log(`- Learning domains: ${systemStatus.totalDomains}`);
-  console.log(`- Average confidence: ${systemStatus.averageConfidence.toFixed(3)}`);
+  console.warn('✅ System Status:');
+  console.warn(`- Total memories: ${systemStatus.totalMemories}`);
+  console.warn(`- Learning domains: ${systemStatus.totalDomains}`);
+  console.warn(`- Average confidence: ${systemStatus.averageConfidence.toFixed(3)}`);
   
   const learningProgress = await h2gnnManager.getLearningProgress();
-  console.log('\n📊 Learning Progress:');
+  console.warn('\n📊 Learning Progress:');
   for (const progress of learningProgress) {
-    console.log(`- ${progress.domain}: ${progress.learnedConcepts}/${progress.totalConcepts} concepts (mastery: ${progress.masteryLevel.toFixed(3)})`);
+    console.warn(`- ${progress.domain}: ${progress.learnedConcepts}/${progress.totalConcepts} concepts (mastery: ${progress.masteryLevel.toFixed(3)})`);
   }
   
   // 8. Demonstrate memory retrieval with context
-  console.log('\n🔍 Step 8: Context-Aware Memory Retrieval');
-  console.log('------------------------------------------');
+  console.warn('\n🔍 Step 8: Context-Aware Memory Retrieval');
+  console.warn('------------------------------------------');
   
   const authMemories = await h2gnn.retrieveMemories('authentication', 5);
-  console.log('✅ Retrieved authentication-related memories:');
+  console.warn('✅ Retrieved authentication-related memories:');
   for (const memory of authMemories) {
-    console.log(`  - ${memory.concept} (confidence: ${memory.confidence.toFixed(3)})`);
+    console.warn(`  - ${memory.concept} (confidence: ${memory.confidence.toFixed(3)})`);
   }
   
   const serviceMemories = await h2gnn.retrieveMemories('service', 5);
-  console.log('\n✅ Retrieved service-related memories:');
+  console.warn('\n✅ Retrieved service-related memories:');
   for (const memory of serviceMemories) {
-    console.log(`  - ${memory.concept} (confidence: ${memory.confidence.toFixed(3)})`);
+    console.warn(`  - ${memory.concept} (confidence: ${memory.confidence.toFixed(3)})`);
   }
   
   // 9. Demonstrate understanding snapshots
-  console.log('\n📸 Step 9: Understanding Snapshots');
-  console.log('----------------------------------');
+  console.warn('\n📸 Step 9: Understanding Snapshots');
+  console.warn('----------------------------------');
   
   const backendSnapshot = await h2gnn.getUnderstandingSnapshot('backend');
   if (backendSnapshot) {
-    console.log('✅ Backend domain understanding:');
-    console.log(`- Snapshot ID: ${backendSnapshot.id}`);
-    console.log(`- Confidence: ${backendSnapshot.confidence.toFixed(3)}`);
-    console.log(`- Concepts: ${backendSnapshot.embeddings.size}`);
-    console.log(`- Relationships: ${backendSnapshot.relationships.length}`);
+    console.warn('✅ Backend domain understanding:');
+    console.warn(`- Snapshot ID: ${backendSnapshot.id}`);
+    console.warn(`- Confidence: ${backendSnapshot.confidence.toFixed(3)}`);
+    console.warn(`- Concepts: ${backendSnapshot.embeddings.size}`);
+    console.warn(`- Relationships: ${backendSnapshot.relationships.length}`);
   }
   
   const codeGenSnapshot = await h2gnn.getUnderstandingSnapshot('code_generation');
   if (codeGenSnapshot) {
-    console.log('\n✅ Code generation domain understanding:');
-    console.log(`- Snapshot ID: ${codeGenSnapshot.id}`);
-    console.log(`- Confidence: ${codeGenSnapshot.confidence.toFixed(3)}`);
-    console.log(`- Concepts: ${codeGenSnapshot.embeddings.size}`);
-    console.log(`- Relationships: ${codeGenSnapshot.relationships.length}`);
+    console.warn('\n✅ Code generation domain understanding:');
+    console.warn(`- Snapshot ID: ${codeGenSnapshot.id}`);
+    console.warn(`- Confidence: ${codeGenSnapshot.confidence.toFixed(3)}`);
+    console.warn(`- Concepts: ${codeGenSnapshot.embeddings.size}`);
+    console.warn(`- Relationships: ${codeGenSnapshot.relationships.length}`);
   }
   
   // 10. Demonstrate adaptive learning
-  console.log('\n🎯 Step 10: Adaptive Learning');
-  console.log('-----------------------------');
+  console.warn('\n🎯 Step 10: Adaptive Learning');
+  console.warn('-----------------------------');
   
   await h2gnnManager.adaptiveLearning('backend', 0.02);
-  console.log('✅ Adaptive learning applied to backend domain');
+  console.warn('✅ Adaptive learning applied to backend domain');
   
   await h2gnnManager.adaptiveLearning('code_generation', 0.01);
-  console.log('✅ Adaptive learning applied to code_generation domain');
+  console.warn('✅ Adaptive learning applied to code_generation domain');
   
   // 11. Final consolidation
-  console.log('\n🔄 Step 11: Memory Consolidation');
-  console.log('--------------------------------');
+  console.warn('\n🔄 Step 11: Memory Consolidation');
+  console.warn('--------------------------------');
   
   await h2gnnManager.consolidateMemories();
-  console.log('✅ Memories consolidated successfully');
+  console.warn('✅ Memories consolidated successfully');
   
   // Final summary
-  console.log('\n🎉 Integrated Improvements Demo Complete!');
-  console.log('========================================');
-  console.log('✅ All improvements successfully demonstrated:');
-  console.log('  📊 Centralized H²GNN configuration');
-  console.log('  🔗 learn_from_node tool integration');
-  console.log('  🚀 Enhanced code generation with H²GNN understanding');
-  console.log('  🧠 Tighter integration between learning and knowledge graph');
-  console.log('  📚 Learning-driven code generation');
-  console.log('  🔍 Context-aware memory retrieval');
-  console.log('  📸 Understanding snapshots');
-  console.log('  🎯 Adaptive learning');
-  console.log('  🔄 Memory consolidation');
-  console.log('\n🚀 The system now provides:');
-  console.log('  - Seamless integration between all components');
-  console.log('  - Learning from code analysis and generation');
-  console.log('  - Context-aware code suggestions');
-  console.log('  - Continuous improvement through feedback loops');
-  console.log('  - Centralized configuration management');
-  console.log('\n🎯 This represents a fundamental transformation in AI-assisted development!');
+  console.warn('\n🎉 Integrated Improvements Demo Complete!');
+  console.warn('========================================');
+  console.warn('✅ All improvements successfully demonstrated:');
+  console.warn('  📊 Centralized H²GNN configuration');
+  console.warn('  🔗 learn_from_node tool integration');
+  console.warn('  🚀 Enhanced code generation with H²GNN understanding');
+  console.warn('  🧠 Tighter integration between learning and knowledge graph');
+  console.warn('  📚 Learning-driven code generation');
+  console.warn('  🔍 Context-aware memory retrieval');
+  console.warn('  📸 Understanding snapshots');
+  console.warn('  🎯 Adaptive learning');
+  console.warn('  🔄 Memory consolidation');
+  console.warn('\n🚀 The system now provides:');
+  console.warn('  - Seamless integration between all components');
+  console.warn('  - Learning from code analysis and generation');
+  console.warn('  - Context-aware code suggestions');
+  console.warn('  - Continuous improvement through feedback loops');
+  console.warn('  - Centralized configuration management');
+  console.warn('\n🎯 This represents a fundamental transformation in AI-assisted development!');
 }
 
 // Run the demo

@@ -178,7 +178,7 @@ export class PersistentKnowledgeGraphBuilder {
 
   // 🏗️ BUILD COMPLETE KNOWLEDGE GRAPH
   async buildKnowledgeGraph(): Promise<PersistentKnowledgeGraph> {
-    console.log('🧠 Building persistent knowledge graph...');
+    console.warn('🧠 Building persistent knowledge graph...');
     
     // 1. Build component nodes
     await this.buildComponentNodes();
@@ -204,12 +204,12 @@ export class PersistentKnowledgeGraphBuilder {
     // 8. Update metadata
     this.updateMetadata();
     
-    console.log('✅ Persistent knowledge graph built successfully');
+    console.warn('✅ Persistent knowledge graph built successfully');
     return this.graph;
   }
 
   private async buildComponentNodes(): Promise<void> {
-    console.log('🔧 Building component nodes...');
+    console.warn('🔧 Building component nodes...');
     
     const components: ComponentNode[] = [
       // Core Architecture Components
@@ -275,7 +275,7 @@ export class PersistentKnowledgeGraphBuilder {
         features: ['Geographic intelligence', 'Semantic search', 'Hyperbolic-geographic bridge'],
         interfaces: ['MCPGeoIntelligenceServer', 'IntegratedGeoIntelligenceSystem'],
         dependencies: ['pubsub-architecture', 'hyperbolic-projection-engine', 'real-time-collaboration'],
-        dependents: ['phase4-integrated-system'],
+        dependents: ['unified-system-integration'],
         lastModified: new Date(),
         description: 'MCP server for geographic-hyperbolic intelligence integration'
       },
@@ -325,7 +325,7 @@ export class PersistentKnowledgeGraphBuilder {
         features: ['D3.js integration', 'Real-time updates', 'Interactive visualizations'],
         interfaces: ['EnhancedD3Wrapper', 'IntegratedD3VisualizationSystem'],
         dependencies: ['pubsub-architecture', 'hyperbolic-projection-engine', 'real-time-collaboration'],
-        dependents: ['phase4-integrated-system'],
+        dependents: ['unified-system-integration'],
         lastModified: new Date(),
         description: 'D3.js wrapper for interactive hyperbolic-geographic visualizations'
       },
@@ -359,16 +359,16 @@ export class PersistentKnowledgeGraphBuilder {
         features: ['Multi-user collaboration', 'Presence awareness', 'Real-time sync'],
         interfaces: ['RealTimeCollaborationEngine', 'CollaborationSession', 'UserPresenceManager'],
         dependencies: ['pubsub-architecture'],
-        dependents: ['mcp-geo-tools', 'd3-visualization-wrapper', 'phase4-integrated-system'],
+        dependents: ['mcp-geo-tools', 'd3-visualization-wrapper', 'unified-system-integration'],
         lastModified: new Date(),
         description: 'Real-time collaboration system with presence awareness'
       },
       {
-        id: 'phase4-integrated-system',
+        id: 'unified-system-integration',
         name: 'Phase 4 Integrated System',
         type: 'integration',
         category: 'architecture',
-        path: 'src/integration/phase4-integrated-system.ts',
+        path: 'src/integration/unified-system-integration.ts',
         size: 618,
         complexity: 'critical',
         status: 'active',
@@ -393,7 +393,7 @@ export class PersistentKnowledgeGraphBuilder {
         features: ['Stereographic projection', 'Lorentz stabilization', 'Geographic conversion'],
         interfaces: ['HyperbolicProjectionEngine', 'H2GNNBinarySchema', 'OptimizedH2GNNProvider'],
         dependencies: [],
-        dependents: ['mcp-geo-tools', 'd3-visualization-wrapper', 'phase4-integrated-system'],
+        dependents: ['mcp-geo-tools', 'd3-visualization-wrapper', 'unified-system-integration'],
         lastModified: new Date(),
         description: 'Advanced hyperbolic-to-geographic projection engine with Lorentz stabilization'
       }
@@ -404,11 +404,11 @@ export class PersistentKnowledgeGraphBuilder {
       this.graph.components.push(component);
     });
     
-    console.log(`🔧 Built ${components.length} component nodes`);
+    console.warn(`🔧 Built ${components.length} component nodes`);
   }
 
   private async buildDependencyEdges(): Promise<void> {
-    console.log('🔗 Building dependency edges...');
+    console.warn('🔗 Building dependency edges...');
     
     const dependencies: DependencyEdge[] = [
       // Core dependencies
@@ -503,7 +503,7 @@ export class PersistentKnowledgeGraphBuilder {
       // Phase 4 system dependencies
       {
         id: 'phase4-to-pubsub',
-        source: 'phase4-integrated-system',
+        source: 'unified-system-integration',
         target: 'pubsub-architecture',
         type: 'import',
         strength: 'critical',
@@ -512,7 +512,7 @@ export class PersistentKnowledgeGraphBuilder {
       },
       {
         id: 'phase4-to-projection',
-        source: 'phase4-integrated-system',
+        source: 'unified-system-integration',
         target: 'hyperbolic-projection-engine',
         type: 'import',
         strength: 'critical',
@@ -521,7 +521,7 @@ export class PersistentKnowledgeGraphBuilder {
       },
       {
         id: 'phase4-to-collaboration',
-        source: 'phase4-integrated-system',
+        source: 'unified-system-integration',
         target: 'real-time-collaboration',
         type: 'import',
         strength: 'critical',
@@ -530,7 +530,7 @@ export class PersistentKnowledgeGraphBuilder {
       },
       {
         id: 'phase4-to-mcp-geo',
-        source: 'phase4-integrated-system',
+        source: 'unified-system-integration',
         target: 'mcp-geo-tools',
         type: 'import',
         strength: 'critical',
@@ -539,7 +539,7 @@ export class PersistentKnowledgeGraphBuilder {
       },
       {
         id: 'phase4-to-d3',
-        source: 'phase4-integrated-system',
+        source: 'unified-system-integration',
         target: 'd3-visualization-wrapper',
         type: 'import',
         strength: 'critical',
@@ -549,11 +549,11 @@ export class PersistentKnowledgeGraphBuilder {
     ];
     
     this.graph.dependencies = dependencies;
-    console.log(`🔗 Built ${dependencies.length} dependency edges`);
+    console.warn(`🔗 Built ${dependencies.length} dependency edges`);
   }
 
   private async buildIntegrationNodes(): Promise<void> {
-    console.log('🔌 Building integration nodes...');
+    console.warn('🔌 Building integration nodes...');
     
     const integrations: IntegrationNode[] = [
       {
@@ -607,11 +607,11 @@ export class PersistentKnowledgeGraphBuilder {
       this.graph.integrations.push(integration);
     });
     
-    console.log(`🔌 Built ${integrations.length} integration nodes`);
+    console.warn(`🔌 Built ${integrations.length} integration nodes`);
   }
 
   private async buildPatternNodes(): Promise<void> {
-    console.log('🎯 Building pattern nodes...');
+    console.warn('🎯 Building pattern nodes...');
     
     const patterns: PatternNode[] = [
       {
@@ -657,11 +657,11 @@ export class PersistentKnowledgeGraphBuilder {
       this.graph.patterns.push(pattern);
     });
     
-    console.log(`🎯 Built ${patterns.length} pattern nodes`);
+    console.warn(`🎯 Built ${patterns.length} pattern nodes`);
   }
 
   private async buildNamingConventionNodes(): Promise<void> {
-    console.log('📝 Building naming convention nodes...');
+    console.warn('📝 Building naming convention nodes...');
     
     const conventions: NamingConventionNode[] = [
       {
@@ -692,18 +692,18 @@ export class PersistentKnowledgeGraphBuilder {
         id: 'mixed-pattern',
         pattern: 'mixed',
         convention: 'mixed',
-        examples: ['phase4-integrated-system.ts', 'mcp-geo-tools.ts', 'hyperbolic-projection-engine.ts'],
+        examples: ['unified-system-integration.ts', 'mcp-geo-tools.ts', 'hyperbolic-projection-engine.ts'],
         usage: ['Specialized components', 'Integration systems', 'Complex names'],
         description: 'Mixed naming pattern for specialized components'
       }
     ];
     
     this.graph.conventions = conventions;
-    console.log(`📝 Built ${conventions.length} naming convention nodes`);
+    console.warn(`📝 Built ${conventions.length} naming convention nodes`);
   }
 
   private async buildSystemClusters(): Promise<void> {
-    console.log('🏗️ Building system clusters...');
+    console.warn('🏗️ Building system clusters...');
     
     const clusters: SystemCluster[] = [
       {
@@ -737,7 +737,7 @@ export class PersistentKnowledgeGraphBuilder {
         id: 'integration-cluster',
         name: 'Integration Cluster',
         type: 'integration',
-        nodes: ['real-time-collaboration', 'phase4-integrated-system'],
+        nodes: ['real-time-collaboration', 'unified-system-integration'],
         description: 'System integration and external connections',
         importance: 'critical',
         dependencies: ['core-architecture-cluster', 'mcp-integration-cluster', 'visualization-cluster']
@@ -754,11 +754,11 @@ export class PersistentKnowledgeGraphBuilder {
     ];
     
     this.graph.clusters = clusters;
-    console.log(`🏗️ Built ${clusters.length} system clusters`);
+    console.warn(`🏗️ Built ${clusters.length} system clusters`);
   }
 
   private async buildRelationshipEdges(): Promise<void> {
-    console.log('🔗 Building relationship edges...');
+    console.warn('🔗 Building relationship edges...');
     
     const relationships: RelationshipEdge[] = [
       // Core relationships
@@ -796,7 +796,7 @@ export class PersistentKnowledgeGraphBuilder {
       },
       {
         id: 'phase4-orchestrates-all',
-        source: 'phase4-integrated-system',
+        source: 'unified-system-integration',
         target: 'pubsub-architecture',
         type: 'orchestrates',
         strength: 1.0,
@@ -805,7 +805,7 @@ export class PersistentKnowledgeGraphBuilder {
     ];
     
     this.graph.relationships = relationships;
-    console.log(`🔗 Built ${relationships.length} relationship edges`);
+    console.warn(`🔗 Built ${relationships.length} relationship edges`);
   }
 
   private updateMetadata(): void {
@@ -817,21 +817,21 @@ export class PersistentKnowledgeGraphBuilder {
 
   // 💾 PERSISTENCE METHODS
   async saveKnowledgeGraph(filePath: string): Promise<void> {
-    console.log(`💾 Saving knowledge graph to ${filePath}...`);
+    console.warn(`💾 Saving knowledge graph to ${filePath}...`);
     
     const jsonData = JSON.stringify(this.graph, null, 2);
     await fs.writeFile(filePath, jsonData, 'utf8');
     
-    console.log('✅ Knowledge graph saved successfully');
+    console.warn('✅ Knowledge graph saved successfully');
   }
 
   async loadKnowledgeGraph(filePath: string): Promise<PersistentKnowledgeGraph> {
-    console.log(`📂 Loading knowledge graph from ${filePath}...`);
+    console.warn(`📂 Loading knowledge graph from ${filePath}...`);
     
     const jsonData = await fs.readFile(filePath, 'utf8');
     this.graph = JSON.parse(jsonData);
     
-    console.log('✅ Knowledge graph loaded successfully');
+    console.warn('✅ Knowledge graph loaded successfully');
     return this.graph;
   }
 
@@ -961,11 +961,11 @@ export async function buildPersistentKnowledgeGraph(): Promise<PersistentKnowled
 if (import.meta.url === `file://${process.argv[1]}`) {
   buildPersistentKnowledgeGraph()
     .then(graph => {
-      console.log('🧠 Persistent Knowledge Graph Built');
-      console.log(`📊 Total Nodes: ${graph.metadata.totalNodes}`);
-      console.log(`🔗 Total Edges: ${graph.metadata.totalEdges}`);
-      console.log(`🏗️ Total Clusters: ${graph.metadata.totalClusters}`);
-      console.log(`📅 Last Updated: ${graph.metadata.lastUpdated}`);
+      console.warn('🧠 Persistent Knowledge Graph Built');
+      console.warn(`📊 Total Nodes: ${graph.metadata.totalNodes}`);
+      console.warn(`🔗 Total Edges: ${graph.metadata.totalEdges}`);
+      console.warn(`🏗️ Total Clusters: ${graph.metadata.totalClusters}`);
+      console.warn(`📅 Last Updated: ${graph.metadata.lastUpdated}`);
     })
     .catch(console.error);
 }

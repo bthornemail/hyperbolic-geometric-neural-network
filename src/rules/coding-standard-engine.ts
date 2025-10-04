@@ -147,7 +147,7 @@ export class CodingStandardEngine {
    * Define a new coding standard rule
    */
   async defineRule(rule: CodingStandardRule): Promise<void> {
-    console.log(`📝 Defining coding standard rule: ${rule.name}`);
+    console.warn(`📝 Defining coding standard rule: ${rule.name}`);
     
     // Store the rule
     this.rules.set(rule.id, rule);
@@ -168,7 +168,7 @@ export class CodingStandardEngine {
     // Learn from the rule definition
     await this.learnFromRuleDefinition(rule);
     
-    console.log(`✅ Rule defined: ${rule.name} (${rule.severity})`);
+    console.warn(`✅ Rule defined: ${rule.name} (${rule.severity})`);
   }
 
   /**
@@ -193,7 +193,7 @@ export class CodingStandardEngine {
       }
     }
     
-    console.log(`📝 Updated rule: ${updatedRule.name}`);
+    console.warn(`📝 Updated rule: ${updatedRule.name}`);
   }
 
   /**
@@ -214,14 +214,14 @@ export class CodingStandardEngine {
       teamStandards.lastUpdated = Date.now();
     }
     
-    console.log(`🗑️ Deleted rule: ${rule.name}`);
+    console.warn(`🗑️ Deleted rule: ${rule.name}`);
   }
 
   /**
    * Enforce rules on code
    */
   async enforceRules(code: string, teamId: string): Promise<RuleViolation[]> {
-    console.log(`🔍 Enforcing rules for team: ${teamId}`);
+    console.warn(`🔍 Enforcing rules for team: ${teamId}`);
     
     const teamStandards = this.teamStandards.get(teamId);
     if (!teamStandards) {
@@ -242,7 +242,7 @@ export class CodingStandardEngine {
     teamStandards.compliance = this.calculateCompliance(violations, teamStandards.rules);
     teamStandards.lastUpdated = Date.now();
 
-    console.log(`📊 Found ${violations.length} violations (${teamStandards.compliance}% compliance)`);
+    console.warn(`📊 Found ${violations.length} violations (${teamStandards.compliance}% compliance)`);
     return violations;
   }
 
@@ -443,7 +443,7 @@ export class CodingStandardEngine {
    * Learn from team standards
    */
   async learnFromTeamStandards(teamId: string): Promise<void> {
-    console.log(`🧠 Learning from team standards: ${teamId}`);
+    console.warn(`🧠 Learning from team standards: ${teamId}`);
     
     const teamStandards = this.teamStandards.get(teamId);
     if (!teamStandards) {
@@ -461,7 +461,7 @@ export class CodingStandardEngine {
       await this.learnFromViolationPattern(violation);
     }
 
-    console.log(`✅ Learned from ${teamStandards.rules.length} rules and ${teamStandards.violations.length} violations`);
+    console.warn(`✅ Learned from ${teamStandards.rules.length} rules and ${teamStandards.violations.length} violations`);
   }
 
   /**
@@ -525,7 +525,7 @@ export class CodingStandardEngine {
    * Adapt rules to team
    */
   async adaptRulesToTeam(teamId: string): Promise<void> {
-    console.log(`🔄 Adapting rules to team: ${teamId}`);
+    console.warn(`🔄 Adapting rules to team: ${teamId}`);
     
     const teamStandards = this.teamStandards.get(teamId);
     if (!teamStandards) {
@@ -541,7 +541,7 @@ export class CodingStandardEngine {
       await this.adaptRuleToTeam(rule, teamPatterns);
     }
 
-    console.log(`✅ Adapted rules for team: ${teamId}`);
+    console.warn(`✅ Adapted rules for team: ${teamId}`);
   }
 
   /**

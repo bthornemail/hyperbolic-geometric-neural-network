@@ -1,0 +1,11 @@
+{
+  "id": "obsidian-h2gnn-client",
+  "name": "H²GNN Client",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Enhanced Obsidian plugin with H²GNN integration for agentic coding, knowledge generation, and intelligent document processing using hyperbolic geometric neural networks.",
+  "author": "H²GNN Development Team",
+  "authorUrl": "https://github.com/hyperbolic-geometric-neural-network",
+  "fundingUrl": "https://github.com/sponsors/h2gnn",
+  "isDesktopOnly": true
+}

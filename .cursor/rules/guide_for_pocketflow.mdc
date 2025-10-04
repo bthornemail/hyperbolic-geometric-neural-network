@@ -3,15 +3,18 @@ description: Guidelines for using PocketFlow, Agentic Coding
 globs: **/*.py
 alwaysApply: true
 ---
-# DOCUMENTATION FIRST POLICY
+# TOOL-FIRST POLICY - MANDATORY H²GNN & MCP USAGE
 
-**CRITICAL INSTRUCTION**: When implementing a Pocket Flow app:
+**CRITICAL INSTRUCTION**: Before ANY analysis, code generation, or task execution:
 
-1. **ALWAYS REQUEST MDC FILES FIRST** - Before writing any code, request and review all relevant MDC documentation files. This doc provides an explaination of the documents.
-2. **UNDERSTAND THE FRAMEWORK** - Gain comprehensive understanding of the Pocket Flow framework from documentation
-3. **AVOID ASSUMPTION-DRIVEN DEVELOPMENT** - Do not base your implementation on assumptions or guesswork. Even if the human didn't explicitly mention pocket flow in their request, if the code you are editing is using pocket flow, you should request relevant docs to help you understand best practice as well before editing.
+1. **ALWAYS INITIALIZE H²GNN SYSTEM FIRST** - Use `mcp_enhanced-h2gnn_initialize_enhanced_h2gnn_hd` before any other operation
+2. **ALWAYS USE PERSISTENCE SYSTEM** - Use `mcp_enhanced-h2gnn_learn_concept_hd` for learning and memory
+3. **ALWAYS USE KNOWLEDGE GRAPH TOOLS** - Use `mcp_knowledge-graph_analyze_path_to_knowledge_graph_hd` for analysis
+4. **ALWAYS USE LSP-AST ANALYSIS** - Use `mcp_lsp-ast_analyze_code_ast_hd` for code understanding
+5. **ALWAYS USE GEOMETRIC TOOLS** - Use `mcp_geometric-tools-mcp-server_*` for geometric analysis
+6. **NEVER MANUAL ANALYSIS** - Never perform manual analysis without using built-in tools first
 
-**VERIFICATION**: Begin each implementation with a brief summary of the documentation you've reviewed to inform your approach.
+**VERIFICATION**: Begin each task with tool initialization and system status check.
 
 # Agentic Coding: Humans Design, Agents code!
 

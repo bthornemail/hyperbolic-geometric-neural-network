@@ -1,0 +1,301 @@
+/* H²GNN Obsidian Plugin Styles */
+
+/* Agentic Coding Interface Styles */
+.agentic-coding-section {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  background-color: var(--background-secondary);
+}
+
+.agentic-coding-section h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--text-accent);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Knowledge Graph Interface Styles */
+.knowledge-graph-section {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  background-color: var(--background-secondary);
+}
+
+.knowledge-graph-section h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--text-accent);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Results Container Styles */
+.results-container {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid var(--background-modifier-border);
+  padding: 10px;
+  border-radius: 4px;
+  background-color: var(--background-secondary);
+  font-family: var(--font-monospace);
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+/* Button Styles */
+.modal-button {
+  background-color: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.modal-button:hover {
+  background-color: var(--interactive-accent-hover);
+}
+
+.modal-button:active {
+  background-color: var(--interactive-accent-active);
+}
+
+.modal-button.cta {
+  background-color: var(--color-accent);
+  color: var(--text-on-accent);
+}
+
+.modal-button.cta:hover {
+  background-color: var(--color-accent-hover);
+}
+
+/* Input Styles */
+.modal-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  background-color: var(--background-primary);
+  color: var(--text-normal);
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.modal-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent-alpha);
+}
+
+.modal-textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  background-color: var(--background-primary);
+  color: var(--text-normal);
+  font-size: 14px;
+  font-family: var(--font-monospace);
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.modal-textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent-alpha);
+}
+
+/* Dropdown Styles */
+.modal-dropdown {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  background-color: var(--background-primary);
+  color: var(--text-normal);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.modal-dropdown:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent-alpha);
+}
+
+/* Toggle Styles */
+.modal-toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  background-color: var(--background-modifier-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.modal-toggle.active {
+  background-color: var(--color-accent);
+}
+
+.modal-toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.modal-toggle.active::after {
+  transform: translateX(20px);
+}
+
+/* Status Indicators */
+.status-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.status-indicator.connected {
+  background-color: var(--color-green);
+}
+
+.status-indicator.disconnected {
+  background-color: var(--color-red);
+}
+
+.status-indicator.connecting {
+  background-color: var(--color-yellow);
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--background-modifier-border);
+  border-top: 2px solid var(--color-accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Progress Bar */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--background-modifier-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--color-accent);
+  transition: width 0.3s ease;
+}
+
+/* Tooltip Styles */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: var(--background-primary);
+  color: var(--text-normal);
+  text-align: center;
+  border-radius: 4px;
+  padding: 8px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -100px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  border: 1px solid var(--background-modifier-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .agentic-coding-section,
+  .knowledge-graph-section {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .results-container {
+    max-height: 300px;
+    font-size: 11px;
+  }
+  
+  .modal-button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* Dark Mode Support */
+.theme-dark {
+  --background-secondary: var(--background-primary-alt);
+  --text-accent: var(--text-accent);
+}
+
+/* Accessibility */
+.modal-button:focus,
+.modal-input:focus,
+.modal-textarea:focus,
+.modal-dropdown:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

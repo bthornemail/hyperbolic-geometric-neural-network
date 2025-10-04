@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # Text Chunking
 
-We recommend some implementations of commonly used text chunking approaches.
+We recommend some implementations of commonly used text chunking approaches. When enhanced with H²GNN, text chunking can leverage hyperbolic embeddings for hierarchical organization.
 
 
 > Text Chunking is more a micro optimization, compared to the Flow Design.

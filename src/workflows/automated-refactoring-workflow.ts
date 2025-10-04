@@ -48,7 +48,7 @@ export class AnalyzeRefactoringOpportunitiesNode extends Node<RefactoringWorkflo
   }
 
   async exec({ code, language, filePath }: { code: string; language: string; filePath?: string }): Promise<RefactoringOpportunity[]> {
-    console.log(`🔍 Analyzing code for refactoring opportunities...`);
+    console.warn(`🔍 Analyzing code for refactoring opportunities...`);
     
     const result = await this.refactoringTool.proposeAndApplyRefactoring(
       code,
@@ -64,7 +64,7 @@ export class AnalyzeRefactoringOpportunitiesNode extends Node<RefactoringWorkflo
     shared.opportunities = opportunities;
     shared.analysisComplete = true;
     
-    console.log(`📊 Found ${opportunities.length} refactoring opportunities`);
+    console.warn(`📊 Found ${opportunities.length} refactoring opportunities`);
     
     return opportunities.length > 0 ? 'propose' : 'complete';
   }
@@ -79,7 +79,7 @@ export class ProposeRefactoringNode extends Node<RefactoringWorkflowState> {
   }
 
   async exec(opportunities: RefactoringOpportunity[]): Promise<{ selected: RefactoringOpportunity[]; autoApply: boolean }> {
-    console.log(`💡 Proposing refactoring suggestions...`);
+    console.warn(`💡 Proposing refactoring suggestions...`);
     
     // Filter opportunities by severity and confidence
     const highPriority = opportunities.filter(opp => 
@@ -95,7 +95,7 @@ export class ProposeRefactoringNode extends Node<RefactoringWorkflowState> {
     // Determine if auto-apply should be used
     const autoApply = shared.autoApply && selected.length > 0;
     
-    console.log(`🎯 Selected ${selected.length} high-priority refactoring opportunities`);
+    console.warn(`🎯 Selected ${selected.length} high-priority refactoring opportunities`);
     
     return { selected, autoApply };
   }
@@ -106,11 +106,11 @@ export class ProposeRefactoringNode extends Node<RefactoringWorkflowState> {
     shared.autoApply = autoApply;
     
     if (selected.length === 0) {
-      console.log(`✅ No high-priority refactoring opportunities found`);
+      console.warn(`✅ No high-priority refactoring opportunities found`);
       return 'complete';
     }
     
-    console.log(`🔧 Ready to ${autoApply ? 'apply' : 'propose'} ${selected.length} refactoring opportunities`);
+    console.warn(`🔧 Ready to ${autoApply ? 'apply' : 'propose'} ${selected.length} refactoring opportunities`);
     return autoApply ? 'apply' : 'propose';
   }
 }
@@ -136,14 +136,14 @@ export class ApplyRefactoringNode extends Node<RefactoringWorkflowState> {
   }
 
   async exec({ code, language, filePath, opportunities }: { code: string; language: string; filePath?: string; opportunities: RefactoringOpportunity[] }): Promise<RefactoringResult[]> {
-    console.log(`🔧 Applying refactoring...`);
+    console.warn(`🔧 Applying refactoring...`);
     
     // Apply refactoring to each opportunity
     const results: RefactoringResult[] = [];
     
     for (const opportunity of opportunities) {
       try {
-        console.log(`🔧 Applying ${opportunity.type} refactoring...`);
+        console.warn(`🔧 Applying ${opportunity.type} refactoring...`);
         
         // Apply the refactoring
         const modifiedCode = this.applyRefactoringToCode(code, opportunity);
@@ -193,7 +193,7 @@ export class ApplyRefactoringNode extends Node<RefactoringWorkflowState> {
     const successful = results.filter(r => r.success).length;
     const failed = results.filter(r => !r.success).length;
     
-    console.log(`✅ Refactoring complete: ${successful} successful, ${failed} failed`);
+    console.warn(`✅ Refactoring complete: ${successful} successful, ${failed} failed`);
     
     return 'verify';
   }
@@ -279,7 +279,7 @@ export class VerifyRefactoringNode extends Node<RefactoringWorkflowState> {
   }
 
   async exec(results: RefactoringResult[]): Promise<{ verified: RefactoringResult[]; qualityImprovement: number }> {
-    console.log(`🔍 Verifying refactoring results...`);
+    console.warn(`🔍 Verifying refactoring results...`);
     
     // Re-analyze the refactored code to verify improvements
     const successfulResults = results.filter(r => r.success);
@@ -304,7 +304,7 @@ export class VerifyRefactoringNode extends Node<RefactoringWorkflowState> {
     const remainingOpportunities = reanalysis.opportunities.length;
     const qualityImprovement = Math.max(0, (originalOpportunities - remainingOpportunities) / originalOpportunities);
     
-    console.log(`📊 Quality improvement: ${(qualityImprovement * 100).toFixed(1)}%`);
+    console.warn(`📊 Quality improvement: ${(qualityImprovement * 100).toFixed(1)}%`);
     
     return { verified: results, qualityImprovement };
   }
@@ -312,7 +312,7 @@ export class VerifyRefactoringNode extends Node<RefactoringWorkflowState> {
   async post(shared: RefactoringWorkflowState, _: any, { verified, qualityImprovement }: { verified: RefactoringResult[]; qualityImprovement: number }): Promise<string> {
     shared.verificationComplete = true;
     
-    console.log(`✅ Verification complete: ${qualityImprovement.toFixed(1)}% quality improvement`);
+    console.warn(`✅ Verification complete: ${qualityImprovement.toFixed(1)}% quality improvement`);
     
     return 'learn';
   }
@@ -338,7 +338,7 @@ export class LearnFromRefactoringNode extends Node<RefactoringWorkflowState> {
   }
 
   async exec({ opportunities, applied, qualityImprovement }: { opportunities: RefactoringOpportunity[]; applied: RefactoringResult[]; qualityImprovement: number }): Promise<void> {
-    console.log(`🧠 Learning from refactoring process...`);
+    console.warn(`🧠 Learning from refactoring process...`);
     
     try {
       // Learn from the refactoring process
@@ -363,7 +363,7 @@ export class LearnFromRefactoringNode extends Node<RefactoringWorkflowState> {
         qualityImprovement
       );
       
-      console.log(`✅ Learned from refactoring workflow`);
+      console.warn(`✅ Learned from refactoring workflow`);
     } catch (error) {
       console.warn('Failed to learn from refactoring workflow:', error);
     }
@@ -372,7 +372,7 @@ export class LearnFromRefactoringNode extends Node<RefactoringWorkflowState> {
   async post(shared: RefactoringWorkflowState, _: any, _result: void): Promise<string> {
     shared.learningComplete = true;
     
-    console.log(`🎉 Refactoring workflow complete!`);
+    console.warn(`🎉 Refactoring workflow complete!`);
     
     return 'complete';
   }
@@ -409,8 +409,8 @@ export function createAutomatedRefactoringWorkflow(): Flow<RefactoringWorkflowSt
  * Demo function
  */
 async function demonstrateAutomatedRefactoringWorkflow(): Promise<void> {
-  console.log('🔄 Automated Refactoring Workflow Demo');
-  console.log('======================================');
+  console.warn('🔄 Automated Refactoring Workflow Demo');
+  console.warn('======================================');
   
   // Create workflow
   const workflow = createAutomatedRefactoringWorkflow();
@@ -497,42 +497,44 @@ class UserService {
     learningComplete: false
   };
   
-  console.log('\n🚀 Starting automated refactoring workflow...');
+  console.warn('\n🚀 Starting automated refactoring workflow...');
   
   // Run workflow
   await workflow.run(workflowState);
   
-  console.log('\n📊 Workflow Results:');
-  console.log(`- Analysis Complete: ${workflowState.analysisComplete}`);
-  console.log(`- Refactoring Complete: ${workflowState.refactoringComplete}`);
-  console.log(`- Verification Complete: ${workflowState.verificationComplete}`);
-  console.log(`- Learning Complete: ${workflowState.learningComplete}`);
-  console.log(`- Opportunities Found: ${workflowState.opportunities.length}`);
-  console.log(`- Refactoring Applied: ${workflowState.applied.length}`);
+  console.warn('\n📊 Workflow Results:');
+  console.warn(`- Analysis Complete: ${workflowState.analysisComplete}`);
+  console.warn(`- Refactoring Complete: ${workflowState.refactoringComplete}`);
+  console.warn(`- Verification Complete: ${workflowState.verificationComplete}`);
+  console.warn(`- Learning Complete: ${workflowState.learningComplete}`);
+  console.warn(`- Opportunities Found: ${workflowState.opportunities.length}`);
+  console.warn(`- Refactoring Applied: ${workflowState.applied.length}`);
   
   if (workflowState.opportunities.length > 0) {
-    console.log('\n🔍 Refactoring Opportunities:');
+    console.warn('\n🔍 Refactoring Opportunities:');
     workflowState.opportunities.forEach((opp, index) => {
-      console.log(`${index + 1}. ${opp.type.toUpperCase()} (${opp.severity})`);
-      console.log(`   Description: ${opp.description}`);
-      console.log(`   Confidence: ${opp.confidence.toFixed(3)}`);
-      console.log(`   Estimated Effort: ${opp.estimatedEffort} minutes`);
+      console.warn(`${index + 1}. ${opp.type.toUpperCase()} (${opp.severity})`);
+      console.warn(`   Description: ${opp.description}`);
+      console.warn(`   Confidence: ${opp.confidence.toFixed(3)}`);
+      console.warn(`   Estimated Effort: ${opp.estimatedEffort} minutes`);
     });
   }
   
   if (workflowState.applied.length > 0) {
-    console.log('\n🔧 Applied Refactoring:');
+    console.warn('\n🔧 Applied Refactoring:');
     workflowState.applied.forEach((result, index) => {
-      console.log(`${index + 1}. ${result.opportunity.type.toUpperCase()} - ${result.success ? 'SUCCESS' : 'FAILED'}`);
-      console.log(`   Changes: +${result.changes.linesAdded} -${result.changes.linesRemoved} ~${result.changes.linesModified} lines`);
+      console.warn(`${index + 1}. ${result.opportunity.type.toUpperCase()} - ${result.success ? 'SUCCESS' : 'FAILED'}`);
+      console.warn(`   Changes: +${result.changes.linesAdded} -${result.changes.linesRemoved} ~${result.changes.linesModified} lines`);
     });
   }
   
-  console.log('\n🎉 Automated Refactoring Workflow Demo Complete!');
-  console.log('✅ PocketFlow workflow for automated refactoring!');
+  console.warn('\n🎉 Automated Refactoring Workflow Demo Complete!');
+  console.warn('✅ PocketFlow workflow for automated refactoring!');
 }
 
-// Run the demo
-demonstrateAutomatedRefactoringWorkflow().catch(console.error);
+// Run the demo only if this file is executed directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  demonstrateAutomatedRefactoringWorkflow().catch(console.error);
+}
 
 // Exports are already defined above in the class and function definitions

@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # Workflow
 
-Many real-world tasks are too complex for one LLM call. The solution is to **Task Decomposition**: decompose them into a [chain](../core_abstraction/flow.md) of multiple Nodes.
+Many real-world tasks are too complex for one LLM call. The solution is to **Task Decomposition**: decompose them into a [chain](../core_abstraction/flow.md) of multiple Nodes. When enhanced with H²GNN, workflows gain hierarchical organization and geometric routing capabilities.
 
 
 

@@ -54,8 +54,8 @@ class H2GNNSelfOptimizer {
   }
 
   async runSelfOptimization(): Promise<void> {
-    console.log('🧠 Starting H²GNN Self-Optimization Analysis');
-    console.log('==========================================');
+    console.warn('🧠 Starting H²GNN Self-Optimization Analysis');
+    console.warn('==========================================');
     
     // Phase 1: Initialize and analyze codebase
     await this.initializeAnalysis();
@@ -75,24 +75,24 @@ class H2GNNSelfOptimizer {
     // Phase 6: Create optimization plan
     await this.createOptimizationPlan(suggestions);
     
-    console.log('\n🎉 H²GNN Self-Optimization Analysis Complete!');
-    console.log('The system has analyzed itself and provided optimization recommendations.');
+    console.warn('\n🎉 H²GNN Self-Optimization Analysis Complete!');
+    console.warn('The system has analyzed itself and provided optimization recommendations.');
   }
 
   private async initializeAnalysis(): Promise<void> {
-    console.log('\n📊 Phase 1: Initializing Codebase Analysis');
+    console.warn('\n📊 Phase 1: Initializing Codebase Analysis');
     
     // Initialize WordNet for semantic analysis
     await this.wordnetProcessor.loadWordNetData();
     await this.wordnetProcessor.buildHierarchy();
     await this.wordnetProcessor.generateHyperbolicEmbeddings();
     
-    console.log('✅ WordNet initialized for semantic code analysis');
+    console.warn('✅ WordNet initialized for semantic code analysis');
     
     // Scan the H²GNN codebase
     await this.scanCodebase();
     
-    console.log(`✅ Analyzed ${this.codeElements.length} code elements`);
+    console.warn(`✅ Analyzed ${this.codeElements.length} code elements`);
   }
 
   private async scanCodebase(): Promise<void> {
@@ -294,7 +294,7 @@ class H2GNNSelfOptimizer {
   }
 
   private async generateEmbeddings(): Promise<void> {
-    console.log('\n🧠 Phase 2: Generating Hyperbolic Embeddings');
+    console.warn('\n🧠 Phase 2: Generating Hyperbolic Embeddings');
     
     for (const element of this.codeElements) {
       const features = this.extractFeatures(element);
@@ -307,7 +307,7 @@ class H2GNNSelfOptimizer {
       element.embedding = embedding;
     }
     
-    console.log(`✅ Generated embeddings for ${this.embeddings.size} code elements`);
+    console.warn(`✅ Generated embeddings for ${this.embeddings.size} code elements`);
   }
 
   private extractFeatures(element: CodeElement): number[] {
@@ -334,28 +334,28 @@ class H2GNNSelfOptimizer {
   }
 
   private async analyzeCodeStructure(): Promise<void> {
-    console.log('\n🔍 Phase 3: Analyzing Code Structure');
+    console.warn('\n🔍 Phase 3: Analyzing Code Structure');
     
     // Analyze complexity distribution
     const complexityStats = this.analyzeComplexity();
-    console.log('📊 Complexity Analysis:');
-    console.log(`  • Average complexity: ${complexityStats.average.toFixed(2)}`);
-    console.log(`  • Max complexity: ${complexityStats.max}`);
-    console.log(`  • High complexity elements: ${complexityStats.highComplexity.length}`);
+    console.warn('📊 Complexity Analysis:');
+    console.warn(`  • Average complexity: ${complexityStats.average.toFixed(2)}`);
+    console.warn(`  • Max complexity: ${complexityStats.max}`);
+    console.warn(`  • High complexity elements: ${complexityStats.highComplexity.length}`);
     
     // Analyze hyperbolic distances
     const distanceAnalysis = this.analyzeHyperbolicDistances();
-    console.log('📏 Hyperbolic Distance Analysis:');
-    console.log(`  • Average distance: ${distanceAnalysis.averageDistance.toFixed(4)}`);
-    console.log(`  • Max distance: ${distanceAnalysis.maxDistance.toFixed(4)}`);
-    console.log(`  • Clustered elements: ${distanceAnalysis.clusteredElements.length}`);
+    console.warn('📏 Hyperbolic Distance Analysis:');
+    console.warn(`  • Average distance: ${distanceAnalysis.averageDistance.toFixed(4)}`);
+    console.warn(`  • Max distance: ${distanceAnalysis.maxDistance.toFixed(4)}`);
+    console.warn(`  • Clustered elements: ${distanceAnalysis.clusteredElements.length}`);
     
     // Identify potential issues
     const issues = this.identifyStructuralIssues();
-    console.log('⚠️  Structural Issues:');
-    console.log(`  • Overly complex elements: ${issues.overlyComplex.length}`);
-    console.log(`  • Isolated elements: ${issues.isolated.length}`);
-    console.log(`  • Tightly coupled elements: ${issues.tightlyCoupled.length}`);
+    console.warn('⚠️  Structural Issues:');
+    console.warn(`  • Overly complex elements: ${issues.overlyComplex.length}`);
+    console.warn(`  • Isolated elements: ${issues.isolated.length}`);
+    console.warn(`  • Tightly coupled elements: ${issues.tightlyCoupled.length}`);
   }
 
   private analyzeComplexity() {
@@ -465,7 +465,7 @@ class H2GNNSelfOptimizer {
   }
 
   private async identifyOptimizations(): Promise<OptimizationSuggestion[]> {
-    console.log('\n🎯 Phase 4: Identifying Semantic-Based Optimization Opportunities');
+    console.warn('\n🎯 Phase 4: Identifying Semantic-Based Optimization Opportunities');
     
     const suggestions: OptimizationSuggestion[] = [];
     
@@ -485,7 +485,7 @@ class H2GNNSelfOptimizer {
     const hierarchySuggestions = await this.analyzeHierarchicalRelationships();
     suggestions.push(...hierarchySuggestions);
     
-    console.log(`✅ Identified ${suggestions.length} semantic-based optimization opportunities`);
+    console.warn(`✅ Identified ${suggestions.length} semantic-based optimization opportunities`);
     
     return suggestions;
   }
@@ -539,7 +539,7 @@ class H2GNNSelfOptimizer {
   private async analyzeSemanticRelationships(): Promise<OptimizationSuggestion[]> {
     const suggestions: OptimizationSuggestion[] = [];
     
-    console.log('🔍 Analyzing semantic relationships using WordNet concepts...');
+    console.warn('🔍 Analyzing semantic relationships using WordNet concepts...');
     
     // Map code elements to semantic concepts
     const semanticMappings = await this.mapCodeToSemanticConcepts();
@@ -650,7 +650,7 @@ class H2GNNSelfOptimizer {
   private async analyzeConceptualClustering(): Promise<OptimizationSuggestion[]> {
     const suggestions: OptimizationSuggestion[] = [];
     
-    console.log('🧠 Analyzing conceptual clustering...');
+    console.warn('🧠 Analyzing conceptual clustering...');
     
     // Find elements that should be conceptually grouped
     const clusters = await this.findConceptualClusters();
@@ -725,7 +725,7 @@ class H2GNNSelfOptimizer {
   private async analyzeSemanticSimilarities(): Promise<OptimizationSuggestion[]> {
     const suggestions: OptimizationSuggestion[] = [];
     
-    console.log('🔍 Analyzing semantic similarities...');
+    console.warn('🔍 Analyzing semantic similarities...');
     
     // Find elements with similar semantic meaning but different implementations
     const similarPairs = await this.findSemanticallySimilarPairs();
@@ -767,7 +767,7 @@ class H2GNNSelfOptimizer {
   private async analyzeHierarchicalRelationships(): Promise<OptimizationSuggestion[]> {
     const suggestions: OptimizationSuggestion[] = [];
     
-    console.log('🌳 Analyzing hierarchical relationships...');
+    console.warn('🌳 Analyzing hierarchical relationships...');
     
     // Find elements that should have hierarchical relationships
     const hierarchyIssues = await this.findHierarchyIssues();
@@ -826,7 +826,7 @@ class H2GNNSelfOptimizer {
   }
 
   private async generateRecommendations(suggestions: OptimizationSuggestion[]): Promise<void> {
-    console.log('\n📋 Phase 5: Generating Optimization Recommendations');
+    console.warn('\n📋 Phase 5: Generating Optimization Recommendations');
     
     // Sort by priority and impact
     const sortedSuggestions = suggestions.sort((a, b) => {
@@ -836,23 +836,23 @@ class H2GNNSelfOptimizer {
       return b.impact - a.impact;
     });
     
-    console.log('\n🎯 Top Optimization Recommendations:');
+    console.warn('\n🎯 Top Optimization Recommendations:');
     
     for (let i = 0; i < Math.min(10, sortedSuggestions.length); i++) {
       const suggestion = sortedSuggestions[i];
       const element = this.codeElements.find(e => e.id === suggestion.target);
       
-      console.log(`\n${i + 1}. ${suggestion.type.toUpperCase()} - ${suggestion.priority.toUpperCase()} Priority`);
-      console.log(`   ${suggestion.description}`);
+      console.warn(`\n${i + 1}. ${suggestion.type.toUpperCase()} - ${suggestion.priority.toUpperCase()} Priority`);
+      console.warn(`   ${suggestion.description}`);
       if (element) {
-        console.log(`   Target: ${element.name} (${element.path})`);
+        console.warn(`   Target: ${element.name} (${element.path})`);
       }
-      console.log(`   Impact: ${(suggestion.impact * 100).toFixed(0)}% | Effort: ${(suggestion.effort * 100).toFixed(0)}%`);
+      console.warn(`   Impact: ${(suggestion.impact * 100).toFixed(0)}% | Effort: ${(suggestion.effort * 100).toFixed(0)}%`);
     }
   }
 
   private async createOptimizationPlan(suggestions: OptimizationSuggestion[]): Promise<void> {
-    console.log('\n📅 Phase 6: Creating Optimization Plan');
+    console.warn('\n📅 Phase 6: Creating Optimization Plan');
     
     const plan = {
       totalSuggestions: suggestions.length,
@@ -863,27 +863,27 @@ class H2GNNSelfOptimizer {
       estimatedEffort: suggestions.reduce((sum, s) => sum + s.effort, 0) / suggestions.length
     };
     
-    console.log('\n📊 Optimization Plan Summary:');
-    console.log(`  • Total suggestions: ${plan.totalSuggestions}`);
-    console.log(`  • High priority: ${plan.highPriority}`);
-    console.log(`  • Medium priority: ${plan.mediumPriority}`);
-    console.log(`  • Low priority: ${plan.lowPriority}`);
-    console.log(`  • Average impact: ${(plan.estimatedImpact * 100).toFixed(1)}%`);
-    console.log(`  • Average effort: ${(plan.estimatedEffort * 100).toFixed(1)}%`);
+    console.warn('\n📊 Optimization Plan Summary:');
+    console.warn(`  • Total suggestions: ${plan.totalSuggestions}`);
+    console.warn(`  • High priority: ${plan.highPriority}`);
+    console.warn(`  • Medium priority: ${plan.mediumPriority}`);
+    console.warn(`  • Low priority: ${plan.lowPriority}`);
+    console.warn(`  • Average impact: ${(plan.estimatedImpact * 100).toFixed(1)}%`);
+    console.warn(`  • Average effort: ${(plan.estimatedEffort * 100).toFixed(1)}%`);
     
-    console.log('\n🚀 Recommended Implementation Order:');
-    console.log('  1. Fix high-priority refactoring issues');
-    console.log('  2. Address performance bottlenecks');
-    console.log('  3. Improve test coverage');
-    console.log('  4. Enhance architectural improvements');
-    console.log('  5. Optimize low-priority items');
+    console.warn('\n🚀 Recommended Implementation Order:');
+    console.warn('  1. Fix high-priority refactoring issues');
+    console.warn('  2. Address performance bottlenecks');
+    console.warn('  3. Improve test coverage');
+    console.warn('  4. Enhance architectural improvements');
+    console.warn('  5. Optimize low-priority items');
     
-    console.log('\n💡 Next Steps:');
-    console.log('  • Review detailed recommendations above');
-    console.log('  • Prioritize based on current development goals');
-    console.log('  • Implement optimizations incrementally');
-    console.log('  • Re-run this analysis after optimizations');
-    console.log('  • Monitor performance improvements');
+    console.warn('\n💡 Next Steps:');
+    console.warn('  • Review detailed recommendations above');
+    console.warn('  • Prioritize based on current development goals');
+    console.warn('  • Implement optimizations incrementally');
+    console.warn('  • Re-run this analysis after optimizations');
+    console.warn('  • Monitor performance improvements');
   }
 }
 
@@ -893,7 +893,9 @@ async function main() {
   await optimizer.runSelfOptimization();
 }
 
-// Run the demo
-main().catch(console.error);
+// Run the demo only if this file is executed directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch(console.error);
+}
 
 export { H2GNNSelfOptimizer };

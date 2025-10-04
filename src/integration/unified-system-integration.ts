@@ -36,11 +36,11 @@ import {
   RealTimeAnimator
 } from './real-time-collaboration.js';
 
-// MCP Geo-Intelligence Tools
-import { 
-  MCPGeoIntelligenceServer,
-  IntegratedGeoIntelligenceSystem 
-} from '../mcp/mcp-geo-tools.js';
+// Consolidated MCP Services
+import { MCPGeoIntelligenceServer } from '../mcp/geometric-tools-mcp-server.js';
+import { H2GNNMCPServer } from '../mcp/h2gnn-mcp-server.js';
+import { KnowledgeGraphMCPServerHD } from '../mcp/knowledge-graph-mcp-server.js';
+import { LSPASTMCPServerHD } from '../mcp/lsp-ast-mcp-server.js';
 
 // D3 Visualization
 import { 
@@ -264,10 +264,10 @@ export class UnifiedSystemIntegration extends EventEmitter {
       this.updateStatus('overall', 'running');
       this.emit('system:initialized');
       
-      console.log('🎉 Unified System Integration initialized successfully!');
-      console.log(`📍 System Address: ${this.systemAddress.path}`);
-      console.log(`🔗 RPC Endpoint: ${this.hdAddressing.getRPCEndpoint(this.systemAddress)}`);
-      console.log(`🤝 Collaboration Interfaces: ${this.config.collaborationInterfaces.enableBasicCollaboration ? 'Basic' : ''}${this.config.collaborationInterfaces.enableEnhancedCollaboration ? ' Enhanced' : ''}${this.config.collaborationInterfaces.enableLSPASTIntegration ? ' LSP-AST' : ''}`);
+      console.warn('🎉 Unified System Integration initialized successfully!');
+      console.warn(`📍 System Address: ${this.systemAddress.path}`);
+      console.warn(`🔗 RPC Endpoint: ${this.hdAddressing.getRPCEndpoint(this.systemAddress)}`);
+      console.warn(`🤝 Collaboration Interfaces: ${this.config.collaborationInterfaces.enableBasicCollaboration ? 'Basic' : ''}${this.config.collaborationInterfaces.enableEnhancedCollaboration ? ' Enhanced' : ''}${this.config.collaborationInterfaces.enableLSPASTIntegration ? ' LSP-AST' : ''}`);
       
     } catch (error) {
       this.updateStatus('overall', 'error');

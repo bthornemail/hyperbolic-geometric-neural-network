@@ -71,7 +71,7 @@ export class ExtractTeamKnowledgeNode extends Node<KnowledgeSharingState> {
   }
 
   async exec([sourceTeamId, concepts]: [string, string[]]): Promise<TeamKnowledgeExtractionResult> {
-    console.log(`📤 Extracting knowledge from team: ${sourceTeamId}`);
+    console.warn(`📤 Extracting knowledge from team: ${sourceTeamId}`);
     
     // Retrieve team memories
     const teamMemories = await this.sharedDB.retrieveMemories(sourceTeamId);
@@ -204,7 +204,7 @@ export class ShareCrossTeamNode extends Node<KnowledgeSharingState> {
   }
 
   async exec([sourceTeamId, targetTeamId, knowledge]: [string, string, SharedKnowledge[]]): Promise<CrossTeamSharingResult> {
-    console.log(`🤝 Sharing knowledge from team ${sourceTeamId} to team ${targetTeamId}`);
+    console.warn(`🤝 Sharing knowledge from team ${sourceTeamId} to team ${targetTeamId}`);
     
     // Prepare knowledge for sharing
     const preparedKnowledge = this.prepareKnowledgeForSharing(knowledge, sourceTeamId, targetTeamId);
@@ -251,7 +251,7 @@ export class ShareCrossTeamNode extends Node<KnowledgeSharingState> {
     const concepts = knowledge.map(k => k.concept);
     await this.sharedDB.shareKnowledge(sourceTeamId, targetTeamId, concepts);
     
-    console.log(`✅ Shared ${knowledge.length} knowledge items from ${sourceTeamId} to ${targetTeamId}`);
+    console.warn(`✅ Shared ${knowledge.length} knowledge items from ${sourceTeamId} to ${targetTeamId}`);
   }
 
   private analyzeSharingSuccess(knowledge: SharedKnowledge[]): any {
@@ -300,7 +300,7 @@ export class IntegrateTeamInsightsNode extends Node<KnowledgeSharingState> {
   }
 
   async exec([targetTeamId, sharedKnowledge]: [string, SharedKnowledge[]]): Promise<TeamInsightIntegrationResult> {
-    console.log(`🔗 Integrating insights for team: ${targetTeamId}`);
+    console.warn(`🔗 Integrating insights for team: ${targetTeamId}`);
     
     // Integrate shared knowledge
     const integratedInsights = await this.integrateSharedKnowledge(targetTeamId, sharedKnowledge);
@@ -443,7 +443,7 @@ export class KnowledgeSharingWorkflow extends Flow<KnowledgeSharingState> {
     targetTeamId: string, 
     concepts: string[]
   ): Promise<KnowledgeSharingResult> {
-    console.log(`🚀 Starting knowledge sharing from ${sourceTeamId} to ${targetTeamId}`);
+    console.warn(`🚀 Starting knowledge sharing from ${sourceTeamId} to ${targetTeamId}`);
     
     const state: KnowledgeSharingState = {
       sourceTeamId,

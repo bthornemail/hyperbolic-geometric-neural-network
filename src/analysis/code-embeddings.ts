@@ -66,11 +66,11 @@ export class CodeEmbeddingGenerator {
    * Analyze the entire project and generate embeddings
    */
   async analyzeProject(): Promise<CodeHierarchy> {
-    console.log('🔍 Starting project code analysis...');
+    console.warn('🔍 Starting project code analysis...');
     
     // Step 1: Discover all TypeScript files
     const files = await this.discoverFiles();
-    console.log(`📁 Found ${files.length} TypeScript files`);
+    console.warn(`📁 Found ${files.length} TypeScript files`);
     
     // Step 2: Parse each file and extract elements
     for (const filePath of files) {
@@ -86,7 +86,7 @@ export class CodeEmbeddingGenerator {
     // Step 5: Calculate metrics
     const metrics = this.calculateMetrics();
     
-    console.log('✅ Code analysis completed');
+    console.warn('✅ Code analysis completed');
     return {
       elements: Array.from(this.codeElements.values()),
       relationships: this.relationships,
@@ -331,7 +331,7 @@ export class CodeEmbeddingGenerator {
    * Build relationships between code elements
    */
   private buildRelationships(): void {
-    console.log('🔗 Building code relationships...');
+    console.warn('🔗 Building code relationships...');
     
     for (const element of this.codeElements.values()) {
       if (element.type === 'file') {
@@ -351,7 +351,7 @@ export class CodeEmbeddingGenerator {
       this.analyzeContentReferences(element);
     }
     
-    console.log(`📊 Built ${this.relationships.length} relationships`);
+    console.warn(`📊 Built ${this.relationships.length} relationships`);
   }
 
   /**
@@ -393,7 +393,7 @@ export class CodeEmbeddingGenerator {
    * Generate hyperbolic embeddings for all code elements
    */
   private async generateEmbeddings(): Promise<void> {
-    console.log('🧠 Generating hyperbolic embeddings...');
+    console.warn('🧠 Generating hyperbolic embeddings...');
     
     // Prepare training data
     const trainingData = this.prepareTrainingData();
@@ -410,7 +410,7 @@ export class CodeEmbeddingGenerator {
       elements[i].embedding = result.embeddings[i];
     }
     
-    console.log('✅ Generated embeddings for all code elements');
+    console.warn('✅ Generated embeddings for all code elements');
   }
 
   /**

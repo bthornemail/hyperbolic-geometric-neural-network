@@ -49,7 +49,7 @@ export class LLMCaller {
 
   async call(prompt: string, systemPrompt?: string): Promise<LLMResponse> {
     // Mock implementation - replace with actual LLM API call
-    console.log(`🤖 LLM Call: ${prompt.substring(0, 100)}...`);
+    console.warn(`🤖 LLM Call: ${prompt.substring(0, 100)}...`);
     
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 100));

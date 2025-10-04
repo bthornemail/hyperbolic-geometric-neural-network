@@ -1,0 +1,489 @@
+---
+description: Guidelines for Hyperbolic Embedding Utilities in H²GNN
+globs: 
+alwaysApply: false
+---
+
+# Hyperbolic Embedding Utilities
+
+Hyperbolic embeddings provide the foundation for hierarchical reasoning in H²GNN systems. This guide covers utility functions for generating, managing, and manipulating hyperbolic embeddings.
+
+## Core Concepts
+
+### Hyperbolic Embeddings
+- **Purpose**: Represent data in hyperbolic space for hierarchical reasoning
+- **Properties**: Maintain `||x|| < 1` constraint (Poincaré ball model)
+- **Benefits**: Exponential capacity, natural hierarchy representation
+- **Operations**: Möbius addition, scalar multiplication, distance calculation
+
+### Embedding Types
+- **Text Embeddings**: Convert text to hyperbolic vectors
+- **Geometric Embeddings**: Represent geometric relationships
+- **Memory Embeddings**: Store and retrieve hierarchical memories
+- **Context Embeddings**: Capture contextual information
+
+## Implementation Patterns
+
+### 1. Text-to-Hyperbolic Conversion
+```typescript
+export class HyperbolicEmbeddingGenerator {
+  private h2gnn: HyperbolicGeometricHGN;
+  private cache: Map<string, Vector> = new Map();
+  
+  constructor(config: H2GNNConfig) {
+    this.h2gnn = new HyperbolicGeometricHGN(config);
+  }
+  
+  /**
+   * Generate hyperbolic embedding for text
+   */
+  async generateTextEmbedding(
+    text: string, 
+    context?: any
+  ): Promise<Vector> {
+    const cacheKey = this.getCacheKey(text, context);
+    
+    if (this.cache.has(cacheKey)) {
+      return this.cache.get(cacheKey)!;
+    }
+    
+    // Convert text to features
+    const features = this.textToFeatures(text);
+    
+    // Generate embedding using H²GNN
+    const embedding = await this.h2gnn.generateEmbedding(features, context);
+    
+    // Validate and cache
+    if (HyperbolicArithmetic.validateHyperbolic(embedding)) {
+      this.cache.set(cacheKey, embedding);
+      return embedding;
+    } else {
+      throw new Error('Generated embedding violates hyperbolic constraints');
+    }
+  }
+  
+  private textToFeatures(text: string): number[] {
+    // Simple text feature extraction
+    const words = text.toLowerCase().split(/\s+/);
+    const features = new Array(this.h2gnn.getConfig().embeddingDim).fill(0);
+    
+    // Simple bag-of-words representation
+    for (const word of words) {
+      const hash = this.hashString(word);
+      const index = hash % features.length;
+      features[index] += 1;
+    }
+    
+    // Normalize features
+    const norm = Math.sqrt(features.reduce((sum, x) => sum + x*x, 0));
+    if (norm > 0) {
+      return features.map(x => x / norm);
+    }
+    
+    return features;
+  }
+  
+  private hashString(str: string): number {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    return Math.abs(hash);
+  }
+}
+```
+
+### 2. Embedding Similarity Search
+```typescript
+export class HyperbolicSimilaritySearch {
+  private embeddings: Map<string, Vector> = new Map();
+  
+  /**
+   * Add embedding to search index
+   */
+  addEmbedding(id: string, embedding: Vector): void {
+    if (!HyperbolicArithmetic.validateHyperbolic(embedding)) {
+      throw new Error('Invalid hyperbolic embedding');
+    }
+    this.embeddings.set(id, embedding);
+  }
+  
+  /**
+   * Find similar embeddings
+   */
+  async findSimilar(
+    query: Vector, 
+    maxResults: number = 10,
+    threshold: number = 0.5
+  ): Promise<SimilarityResult[]> {
+    if (!HyperbolicArithmetic.validateHyperbolic(query)) {
+      throw new Error('Invalid query embedding');
+    }
+    
+    const similarities: SimilarityResult[] = [];
+    
+    for (const [id, embedding] of this.embeddings) {
+      const distance = HyperbolicArithmetic.distance(query, embedding);
+      const similarity = 1 - distance; // Convert distance to similarity
+      
+      if (similarity >= threshold) {
+        similarities.push({
+          id,
+          embedding,
+          distance,
+          similarity,
+          confidence: this.computeConfidence(distance)
+        });
+      }
+    }
+    
+    // Sort by similarity (descending)
+    similarities.sort((a, b) => b.similarity - a.similarity);
+    
+    return similarities.slice(0, maxResults);
+  }
+  
+  /**
+   * Find most similar embedding
+   */
+  async findMostSimilar(query: Vector): Promise<SimilarityResult | null> {
+    const results = await this.findSimilar(query, 1);
+    return results.length > 0 ? results[0] : null;
+  }
+  
+  private computeConfidence(distance: number): number {
+    // Convert distance to confidence score
+    return Math.exp(-distance);
+  }
+}
+```
+
+### 3. Embedding Clustering
+```typescript
+export class HyperbolicEmbeddingClustering {
+  private h2gnn: HyperbolicGeometricHGN;
+  
+  constructor(config: H2GNNConfig) {
+    this.h2gnn = new HyperbolicGeometricHGN(config);
+  }
+  
+  /**
+   * Cluster embeddings using hyperbolic geometry
+   */
+  async clusterEmbeddings(
+    embeddings: Vector[],
+    numClusters?: number
+  ): Promise<EmbeddingCluster[]> {
+    if (embeddings.length === 0) return [];
+    
+    // Use H²GNN for clustering
+    const clusters = await this.h2gnn.clusterEmbeddings(embeddings);
+    
+    // Create cluster objects
+    const embeddingClusters: EmbeddingCluster[] = [];
+    
+    for (let i = 0; i < clusters.length; i++) {
+      const cluster = clusters[i];
+      
+      // Compute cluster centroid
+      const centroid = await this.computeFrechetMean(cluster);
+      
+      // Compute cluster statistics
+      const statistics = this.computeClusterStatistics(cluster);
+      
+      embeddingClusters.push({
+        id: `cluster_${i}`,
+        centroid,
+        embeddings: cluster,
+        statistics,
+        size: cluster.length
+      });
+    }
+    
+    return embeddingClusters;
+  }
+  
+  /**
+   * Compute Fréchet mean for cluster
+   */
+  private async computeFrechetMean(embeddings: Vector[]): Promise<Vector> {
+    if (embeddings.length === 0) {
+      throw new Error('Cannot compute Fréchet mean of empty cluster');
+    }
+    
+    if (embeddings.length === 1) {
+      return embeddings[0];
+    }
+    
+    // Iterative Fréchet mean computation
+    let centroid = embeddings[0];
+    
+    for (let i = 0; i < 10; i++) {
+      const tangentSum = embeddings.map(emb => 
+        HyperbolicArithmetic.logMap(emb, centroid)
+      ).reduce((sum, log) => 
+        HyperbolicArithmetic.mobiusAdd(sum, log), 
+        HyperbolicArithmetic.createVector(new Array(centroid.dim).fill(0))
+      );
+      
+      const avgTangent = HyperbolicArithmetic.mobiusScalarMult(
+        1.0 / embeddings.length, tangentSum
+      );
+      
+      centroid = HyperbolicArithmetic.expMap(avgTangent, centroid);
+    }
+    
+    return centroid;
+  }
+  
+  private computeClusterStatistics(embeddings: Vector[]): ClusterStatistics {
+    const distances = [];
+    
+    for (let i = 0; i < embeddings.length; i++) {
+      for (let j = i + 1; j < embeddings.length; j++) {
+        distances.push(HyperbolicArithmetic.distance(embeddings[i], embeddings[j]));
+      }
+    }
+    
+    return {
+      avgDistance: distances.reduce((sum, d) => sum + d, 0) / distances.length,
+      maxDistance: Math.max(...distances),
+      minDistance: Math.min(...distances),
+      variance: this.computeVariance(distances)
+    };
+  }
+  
+  private computeVariance(values: number[]): number {
+    const mean = values.reduce((sum, v) => sum + v, 0) / values.length;
+    const variance = values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / values.length;
+    return variance;
+  }
+}
+```
+
+### 4. Embedding Manipulation
+```typescript
+export class HyperbolicEmbeddingManipulator {
+  /**
+   * Combine embeddings using Möbius addition
+   */
+  static combineEmbeddings(embeddings: Vector[]): Vector {
+    if (embeddings.length === 0) {
+      throw new Error('Cannot combine empty embedding list');
+    }
+    
+    if (embeddings.length === 1) {
+      return embeddings[0];
+    }
+    
+    // Use Möbius addition to combine embeddings
+    let result = embeddings[0];
+    for (let i = 1; i < embeddings.length; i++) {
+      result = HyperbolicArithmetic.mobiusAdd(result, embeddings[i]);
+    }
+    
+    // Ensure result stays within Poincaré ball
+    return HyperbolicArithmetic.projectToPoincareBall(result);
+  }
+  
+  /**
+   * Scale embedding using Möbius scalar multiplication
+   */
+  static scaleEmbedding(embedding: Vector, scale: number): Vector {
+    return HyperbolicArithmetic.mobiusScalarMult(scale, embedding);
+  }
+  
+  /**
+   * Interpolate between embeddings
+   */
+  static interpolateEmbeddings(
+    embedding1: Vector, 
+    embedding2: Vector, 
+    t: number
+  ): Vector {
+    if (t < 0 || t > 1) {
+      throw new Error('Interpolation parameter t must be between 0 and 1');
+    }
+    
+    // Use Möbius operations for interpolation
+    const diff = HyperbolicArithmetic.logMap(embedding2, embedding1);
+    const scaledDiff = HyperbolicArithmetic.mobiusScalarMult(t, diff);
+    const result = HyperbolicArithmetic.expMap(scaledDiff, embedding1);
+    
+    return HyperbolicArithmetic.projectToPoincareBall(result);
+  }
+  
+  /**
+   * Compute embedding statistics
+   */
+  static computeStatistics(embeddings: Vector[]): EmbeddingStatistics {
+    if (embeddings.length === 0) {
+      return {
+        count: 0,
+        avgNorm: 0,
+        maxNorm: 0,
+        minNorm: 0,
+        variance: 0
+      };
+    }
+    
+    const norms = embeddings.map(emb => HyperbolicArithmetic.norm(emb));
+    const avgNorm = norms.reduce((sum, n) => sum + n, 0) / norms.length;
+    const maxNorm = Math.max(...norms);
+    const minNorm = Math.min(...norms);
+    const variance = norms.reduce((sum, n) => sum + Math.pow(n - avgNorm, 2), 0) / norms.length;
+    
+    return {
+      count: embeddings.length,
+      avgNorm,
+      maxNorm,
+      minNorm,
+      variance
+    };
+  }
+}
+```
+
+### 5. Embedding Validation
+```typescript
+export class HyperbolicEmbeddingValidator {
+  private static readonly EPS = 1e-10;
+  private static readonly BOUNDARY_EPS = 1e-6;
+  
+  /**
+   * Validate hyperbolic embedding
+   */
+  static validateEmbedding(embedding: Vector): ValidationResult {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+    
+    // Check dimension
+    if (embedding.dim <= 0) {
+      errors.push('Embedding dimension must be positive');
+    }
+    
+    // Check data array
+    if (!Array.isArray(embedding.data)) {
+      errors.push('Embedding data must be an array');
+    } else if (embedding.data.length !== embedding.dim) {
+      errors.push('Embedding data length must match dimension');
+    } else {
+      // Check for NaN or Infinity
+      for (let i = 0; i < embedding.data.length; i++) {
+        if (!isFinite(embedding.data[i])) {
+          errors.push(`Embedding data[${i}] is not finite`);
+        }
+      }
+      
+      // Check hyperbolic constraint
+      const norm = HyperbolicArithmetic.norm(embedding);
+      if (norm >= 1.0) {
+        errors.push(`Embedding norm ${norm} violates hyperbolic constraint (must be < 1)`);
+      } else if (norm >= 1.0 - this.BOUNDARY_EPS) {
+        warnings.push(`Embedding norm ${norm} is close to boundary`);
+      }
+    }
+    
+    return {
+      isValid: errors.length === 0,
+      errors,
+      warnings
+    };
+  }
+  
+  /**
+   * Validate embedding batch
+   */
+  static validateEmbeddingBatch(embeddings: Vector[]): BatchValidationResult {
+    const results = embeddings.map((emb, index) => ({
+      index,
+      result: this.validateEmbedding(emb)
+    }));
+    
+    const validCount = results.filter(r => r.result.isValid).length;
+    const totalErrors = results.reduce((sum, r) => sum + r.result.errors.length, 0);
+    const totalWarnings = results.reduce((sum, r) => sum + r.result.warnings.length, 0);
+    
+    return {
+      totalCount: embeddings.length,
+      validCount,
+      invalidCount: embeddings.length - validCount,
+      totalErrors,
+      totalWarnings,
+      results
+    };
+  }
+}
+```
+
+## Best Practices
+
+### 1. Embedding Generation
+- **Always validate inputs** before processing
+- **Use consistent caching** with proper key generation
+- **Handle boundary violations** gracefully
+- **Implement proper error handling** for generation failures
+
+### 2. Similarity Search
+- **Use hyperbolic distance** for similarity calculations
+- **Implement proper indexing** for large embedding sets
+- **Handle empty result sets** gracefully
+- **Use appropriate thresholds** for similarity filtering
+
+### 3. Clustering
+- **Use hyperbolic clustering** for natural hierarchy formation
+- **Handle empty clusters** appropriately
+- **Compute proper statistics** for cluster analysis
+- **Implement efficient algorithms** for large embedding sets
+
+### 4. Manipulation
+- **Maintain hyperbolic constraints** in all operations
+- **Use Möbius operations** for geometric consistency
+- **Handle edge cases** (empty lists, single elements)
+- **Validate results** after manipulation
+
+### 5. Validation
+- **Check hyperbolic constraints** for all embeddings
+- **Validate data types** and dimensions
+- **Handle numerical instability** appropriately
+- **Provide meaningful error messages** for debugging
+
+## Common Patterns
+
+### 1. Embedding Pipeline
+```typescript
+// Text → Features → Hyperbolic Embedding → Validation → Storage
+const features = this.textToFeatures(text);
+const embedding = await this.h2gnn.generateEmbedding(features);
+const validation = HyperbolicEmbeddingValidator.validateEmbedding(embedding);
+if (validation.isValid) {
+  this.cache.set(key, embedding);
+}
+```
+
+### 2. Similarity Search
+```typescript
+// Query → Embedding → Distance Calculation → Ranking → Results
+const queryEmbedding = await this.generateEmbedding(query);
+const similarities = await this.findSimilar(queryEmbedding, maxResults);
+const ranked = similarities.sort((a, b) => b.similarity - a.similarity);
+```
+
+### 3. Clustering Workflow
+```typescript
+// Embeddings → Clustering → Centroids → Statistics → Organization
+const clusters = await this.clusterEmbeddings(embeddings);
+const centroids = await Promise.all(clusters.map(c => this.computeFrechetMean(c)));
+const statistics = clusters.map(c => this.computeClusterStatistics(c));
+```
+
+## Integration with H²GNN
+
+Hyperbolic embedding utilities integrate with H²GNN through:
+- **Core Operations**: Use H²GNN for embedding generation
+- **Geometric Consistency**: Maintain hyperbolic properties
+- **Memory Management**: Hierarchical memory organization
+- **Clustering**: Natural hierarchy formation
+- **Attention**: Hyperbolic attention mechanisms

@@ -356,7 +356,7 @@ export class H2GNNWebAuthn {
  * WebAuthn + BIP32 HD Addressing Demo
  */
 export async function demonstrateWebAuthnBIP32(): Promise<void> {
-  console.log('🔐 WebAuthn + BIP32 HD Addressing Demo Starting...\n');
+  console.warn('🔐 WebAuthn + BIP32 HD Addressing Demo Starting...\n');
   
   try {
     // Initialize BIP32 HD addressing
@@ -379,24 +379,24 @@ export async function demonstrateWebAuthnBIP32(): Promise<void> {
     
     const webauthn = new H2GNNWebAuthn(hdAddressing, config);
     
-    console.log('✅ WebAuthn + BIP32 HD addressing initialized\n');
+    console.warn('✅ WebAuthn + BIP32 HD addressing initialized\n');
     
     // Create registration challenge
-    console.log('📝 Creating registration challenge...');
+    console.warn('📝 Creating registration challenge...');
     const registrationChallenge = await webauthn.createRegistrationChallenge(
       'user123',
       'H²GNN User',
       'authentication'
     );
     
-    console.log('✅ Registration challenge created');
-    console.log(`   Challenge: ${Buffer.from(registrationChallenge.challenge).toString('hex')}`);
-    console.log(`   RP ID: ${registrationChallenge.rpId}`);
-    console.log(`   User ID: ${Buffer.from(registrationChallenge.userId).toString('hex')}`);
-    console.log(`   User Display Name: ${registrationChallenge.userDisplayName}\n`);
+    console.warn('✅ Registration challenge created');
+    console.warn(`   Challenge: ${Buffer.from(registrationChallenge.challenge).toString('hex')}`);
+    console.warn(`   RP ID: ${registrationChallenge.rpId}`);
+    console.warn(`   User ID: ${Buffer.from(registrationChallenge.userId).toString('hex')}`);
+    console.warn(`   User Display Name: ${registrationChallenge.userDisplayName}\n`);
     
     // Simulate credential registration (in real implementation, this would use WebAuthn API)
-    console.log('🔑 Simulating credential registration...');
+    console.warn('🔑 Simulating credential registration...');
     
     // Create mock credential
     const mockCredential = {
@@ -415,23 +415,23 @@ export async function demonstrateWebAuthnBIP32(): Promise<void> {
       'authentication'
     );
     
-    console.log('✅ Credential registered successfully');
-    console.log(`   Credential ID: ${registeredCredential.id}`);
-    console.log(`   H²GNN Address: ${registeredCredential.h2gnnAddress.path}`);
-    console.log(`   Purpose: ${registeredCredential.purpose}`);
-    console.log(`   Counter: ${registeredCredential.counter}`);
-    console.log(`   AAGUID: ${registeredCredential.aaguid}\n`);
+    console.warn('✅ Credential registered successfully');
+    console.warn(`   Credential ID: ${registeredCredential.id}`);
+    console.warn(`   H²GNN Address: ${registeredCredential.h2gnnAddress.path}`);
+    console.warn(`   Purpose: ${registeredCredential.purpose}`);
+    console.warn(`   Counter: ${registeredCredential.counter}`);
+    console.warn(`   AAGUID: ${registeredCredential.aaguid}\n`);
     
     // Create authentication challenge
-    console.log('🔐 Creating authentication challenge...');
+    console.warn('🔐 Creating authentication challenge...');
     const authChallenge = await webauthn.createAuthenticationChallenge([registeredCredential.id]);
     
-    console.log('✅ Authentication challenge created');
-    console.log(`   Challenge: ${Buffer.from(authChallenge.challenge).toString('hex')}`);
-    console.log(`   Allow Credentials: ${authChallenge.allowCredentials.length}\n`);
+    console.warn('✅ Authentication challenge created');
+    console.warn(`   Challenge: ${Buffer.from(authChallenge.challenge).toString('hex')}`);
+    console.warn(`   Allow Credentials: ${authChallenge.allowCredentials.length}\n`);
     
     // Simulate authentication
-    console.log('🔑 Simulating authentication...');
+    console.warn('🔑 Simulating authentication...');
     
     const mockAuthCredential = {
       id: 'mock-credential-id',
@@ -450,55 +450,55 @@ export async function demonstrateWebAuthnBIP32(): Promise<void> {
     );
     
     if (authResult.success && authResult.h2gnnCredential) {
-      console.log('✅ Authentication successful');
-      console.log(`   Credential ID: ${authResult.h2gnnCredential.id}`);
-      console.log(`   H²GNN Address: ${authResult.h2gnnCredential.h2gnnAddress.path}`);
-      console.log(`   Updated Counter: ${authResult.h2gnnCredential.counter}`);
+      console.warn('✅ Authentication successful');
+      console.warn(`   Credential ID: ${authResult.h2gnnCredential.id}`);
+      console.warn(`   H²GNN Address: ${authResult.h2gnnCredential.h2gnnAddress.path}`);
+      console.warn(`   Updated Counter: ${authResult.h2gnnCredential.counter}`);
     } else {
-      console.log('❌ Authentication failed');
+      console.warn('❌ Authentication failed');
     }
     
-    console.log('\n');
+    console.warn('\n');
     
     // Demonstrate key generation and signing
-    console.log('🔐 Demonstrating BIP32 HD key generation and signing...');
+    console.warn('🔐 Demonstrating BIP32 HD key generation and signing...');
     
     const h2gnnAddress = registeredCredential.h2gnnAddress;
     const keyPair = webauthn.generateKeyPairFromAddress(h2gnnAddress);
     
-    console.log('✅ Key pair generated from H²GNN address');
-    console.log(`   Public Key: ${Buffer.from(keyPair.publicKey).toString('hex').substring(0, 32)}...`);
-    console.log(`   Private Key: ${Buffer.from(keyPair.privateKey).toString('hex').substring(0, 32)}...`);
+    console.warn('✅ Key pair generated from H²GNN address');
+    console.warn(`   Public Key: ${Buffer.from(keyPair.publicKey).toString('hex').substring(0, 32)}...`);
+    console.warn(`   Private Key: ${Buffer.from(keyPair.privateKey).toString('hex').substring(0, 32)}...`);
     
     // Sign data
     const dataToSign = Buffer.from('H²GNN WebAuthn Demo Data', 'utf8');
     const signature = await webauthn.signWithHDKey(h2gnnAddress, dataToSign.buffer);
     
-    console.log('✅ Data signed with HD key');
-    console.log(`   Data: ${dataToSign.toString()}`);
-    console.log(`   Signature: ${Buffer.from(signature).toString('hex').substring(0, 32)}...`);
+    console.warn('✅ Data signed with HD key');
+    console.warn(`   Data: ${dataToSign.toString()}`);
+    console.warn(`   Signature: ${Buffer.from(signature).toString('hex').substring(0, 32)}...`);
     
     // Verify signature
     const isValid = await webauthn.verifyWithHDKey(h2gnnAddress, dataToSign.buffer, signature);
     
-    console.log(`✅ Signature verification: ${isValid ? 'VALID' : 'INVALID'}\n`);
+    console.warn(`✅ Signature verification: ${isValid ? 'VALID' : 'INVALID'}\n`);
     
     // Demonstrate RPC endpoints
-    console.log('🔗 Demonstrating WebAuthn RPC endpoints...');
+    console.warn('🔗 Demonstrating WebAuthn RPC endpoints...');
     
     const rpcEndpoint = webauthn.getWebAuthnRPCEndpoint(registeredCredential);
-    console.log(`   WebAuthn RPC Endpoint: ${rpcEndpoint}`);
+    console.warn(`   WebAuthn RPC Endpoint: ${rpcEndpoint}`);
     
     const allEndpoints = webauthn.getAllWebAuthnRPCEndpoints();
-    console.log(`   Total WebAuthn RPC Endpoints: ${allEndpoints.length}`);
+    console.warn(`   Total WebAuthn RPC Endpoints: ${allEndpoints.length}`);
     
-    console.log('\n🎉 WebAuthn + BIP32 HD Addressing Demo Completed Successfully!');
-    console.log('\n📊 Summary:');
-    console.log('   ✅ WebAuthn integration with BIP32 HD addressing');
-    console.log('   ✅ Deterministic credential addressing');
-    console.log('   ✅ HD key generation and signing');
-    console.log('   ✅ RPC endpoint generation');
-    console.log('   ✅ Secure authentication flow');
+    console.warn('\n🎉 WebAuthn + BIP32 HD Addressing Demo Completed Successfully!');
+    console.warn('\n📊 Summary:');
+    console.warn('   ✅ WebAuthn integration with BIP32 HD addressing');
+    console.warn('   ✅ Deterministic credential addressing');
+    console.warn('   ✅ HD key generation and signing');
+    console.warn('   ✅ RPC endpoint generation');
+    console.warn('   ✅ Secure authentication flow');
     
   } catch (error) {
     console.error('❌ WebAuthn + BIP32 HD addressing demo failed:', error);

@@ -1,0 +1,396 @@
+---
+description: Guidelines for maintaining geometric consistency in H²GNN operations
+globs: 
+alwaysApply: false
+---
+
+# Geometric Consistency in H²GNN
+
+Maintaining geometric consistency is crucial for the proper functioning of H²GNN systems. This guide covers best practices for ensuring geometric properties are preserved across all operations.
+
+## Core Principles
+
+### 1. Hyperbolic Constraint Preservation
+All operations must maintain the fundamental constraint: `||x|| < 1` for Poincaré ball model.
+
+### 2. Geometric Equivalence
+Operations should be geometrically meaningful and preserve hyperbolic structure.
+
+### 3. Numerical Stability
+Maintain numerical precision while preserving geometric properties.
+
+## Consistency Patterns
+
+### 1. Embedding Generation Consistency
+
+#### Always Validate Inputs
+```typescript
+// ✅ Good: Validate before processing
+async generateEmbedding(text: string, context?: any): Promise<Vector> {
+  // Validate input
+  if (!text || text.trim().length === 0) {
+    throw new Error('Text input cannot be empty');
+  }
+  
+  // Generate embedding
+  const embedding = await this.h2gnn.generateEmbedding(text, context);
+  
+  // Validate output
+  if (!HyperbolicArithmetic.validateHyperbolic(embedding)) {
+    throw new Error('Generated embedding violates hyperbolic constraints');
+  }
+  
+  return embedding;
+}
+```
+
+#### Consistent Caching Strategy
+```typescript
+// ✅ Good: Consistent cache key generation
+private getCacheKey(text: string, context?: any): string {
+  const contextStr = context ? JSON.stringify(context) : '';
+  return `${text}:${contextStr}`;
+}
+```
+
+### 2. Message Passing Consistency
+
+#### Maintain Geometric Structure
+```typescript
+// ✅ Good: Preserve hyperbolic structure in message passing
+async forwardMessage(fromEmbedding: Vector, toEmbedding: Vector, message: Vector): Promise<Vector> {
+  // Validate inputs
+  if (!HyperbolicArithmetic.validateHyperbolic(fromEmbedding) ||
+      !HyperbolicArithmetic.validateHyperbolic(toEmbedding) ||
+      !HyperbolicArithmetic.validateHyperbolic(message)) {
+    throw new Error('Invalid hyperbolic vectors in message passing');
+  }
+  
+  // Use Möbius addition for geometric consistency
+  const transportedMessage = HyperbolicArithmetic.parallelTransport(
+    message, fromEmbedding, toEmbedding
+  );
+  
+  const result = HyperbolicArithmetic.mobiusAdd(toEmbedding, transportedMessage);
+  
+  // Ensure result stays within Poincaré ball
+  return HyperbolicArithmetic.projectToPoincareBall(result);
+}
+```
+
+### 3. Attention Mechanism Consistency
+
+#### Hyperbolic Attention Weights
+```typescript
+// ✅ Good: Consistent attention computation
+async computeAttention(query: Vector, keys: Vector[], values: Vector[]): Promise<Vector> {
+  // Validate inputs
+  if (keys.length !== values.length) {
+    throw new Error('Keys and values must have same length');
+  }
+  
+  if (!HyperbolicArithmetic.validateHyperbolic(query)) {
+    throw new Error('Query vector violates hyperbolic constraints');
+  }
+  
+  // Compute attention weights
+  const attentionWeights = keys.map(key => {
+    if (!HyperbolicArithmetic.validateHyperbolic(key)) {
+      throw new Error('Key vector violates hyperbolic constraints');
+    }
+    return HyperbolicArithmetic.hyperbolicAttention(query, key);
+  });
+  
+  // Normalize weights
+  const totalWeight = attentionWeights.reduce((sum, w) => sum + w, 0);
+  const normalizedWeights = attentionWeights.map(w => w / totalWeight);
+  
+  // Weighted combination using Möbius operations
+  let result = HyperbolicArithmetic.mobiusScalarMult(normalizedWeights[0], values[0]);
+  for (let i = 1; i < values.length; i++) {
+    const weightedValue = HyperbolicArithmetic.mobiusScalarMult(
+      normalizedWeights[i], values[i]
+    );
+    result = HyperbolicArithmetic.mobiusAdd(result, weightedValue);
+  }
+  
+  return HyperbolicArithmetic.projectToPoincareBall(result);
+}
+```
+
+## Memory Consolidation Consistency
+
+### 1. Hierarchical Organization
+```typescript
+// ✅ Good: Consistent memory consolidation
+async consolidateMemories(): Promise<void> {
+  const memories = Array.from(this.memories.values());
+  
+  if (memories.length === 0) return;
+  
+  // Cluster memories using hyperbolic clustering
+  const clusters = await this.h2gnn.clusterEmbeddings(memories);
+  
+  // Compute centroids for each cluster
+  const centroids = await Promise.all(
+    clusters.map(cluster => this.computeFrechetMean(cluster))
+  );
+  
+  // Update consolidated memories
+  this.consolidatedMemories = centroids.map((centroid, index) => ({
+    id: `cluster_${index}`,
+    embedding: centroid,
+    memories: clusters[index],
+    timestamp: Date.now()
+  }));
+  
+  // Clean up old memories
+  this.memories.clear();
+}
+```
+
+### 2. Retrieval Consistency
+```typescript
+// ✅ Good: Consistent memory retrieval
+async retrieveMemories(query: string, maxResults: number = 10): Promise<Memory[]> {
+  // Generate query embedding
+  const queryEmbedding = await this.generateEmbedding(query);
+  
+  // Find similar memories using hyperbolic distance
+  const similarities = this.consolidatedMemories.map(memory => ({
+    memory,
+    distance: HyperbolicArithmetic.distance(queryEmbedding, memory.embedding)
+  }));
+  
+  // Sort by distance and return top results
+  return similarities
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, maxResults)
+    .map(item => item.memory);
+}
+```
+
+## Geographic Projection Consistency
+
+### 1. Coordinate Conversion
+```typescript
+// ✅ Good: Consistent hyperbolic-to-geographic conversion
+async projectToGeographic(hyperbolicCoords: number[]): Promise<[number, number]> {
+  // Validate hyperbolic coordinates
+  const vector = HyperbolicArithmetic.createVector(hyperbolicCoords);
+  if (!HyperbolicArithmetic.validateHyperbolic(vector)) {
+    throw new Error('Invalid hyperbolic coordinates for projection');
+  }
+  
+  // Use projection engine for conversion
+  return this.projectionEngine.poincareToGeographic(hyperbolicCoords);
+}
+```
+
+### 2. Geographic Clustering
+```typescript
+// ✅ Good: Consistent geographic clustering
+async clusterGeographicPoints(points: GeoJSON.Feature[]): Promise<GeoJSON.Feature[][]> {
+  // Convert to hyperbolic space
+  const hyperbolicPoints = points.map(point => 
+    this.projectionEngine.geographicToPoincare([
+      point.geometry.coordinates[0],
+      point.geometry.coordinates[1]
+    ])
+  );
+  
+  // Cluster in hyperbolic space
+  const clusters = await this.h2gnn.clusterEmbeddings(
+    hyperbolicPoints.map(coords => HyperbolicArithmetic.createVector(coords))
+  );
+  
+  // Convert back to geographic coordinates
+  return clusters.map(cluster => 
+    cluster.map(embedding => ({
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: this.projectionEngine.poincareToGeographic(embedding.data)
+      },
+      properties: {}
+    }))
+  );
+}
+```
+
+## Error Handling and Recovery
+
+### 1. Boundary Violation Recovery
+```typescript
+// ✅ Good: Graceful boundary violation handling
+private handleBoundaryViolation(vector: Vector): Vector {
+  const norm = HyperbolicArithmetic.norm(vector);
+  
+  if (norm >= 1.0 - this.BOUNDARY_EPS) {
+    console.warn(`Boundary violation detected: norm=${norm}`);
+    
+    // Project to safe region
+    const scale = (1.0 - this.BOUNDARY_EPS) / norm;
+    const corrected = HyperbolicArithmetic.mobiusScalarMult(scale, vector);
+    
+    // Validate correction
+    if (!HyperbolicArithmetic.validateHyperbolic(corrected)) {
+      throw new Error('Failed to correct boundary violation');
+    }
+    
+    return corrected;
+  }
+  
+  return vector;
+}
+```
+
+### 2. Numerical Instability Recovery
+```typescript
+// ✅ Good: Handle numerical instability
+private handleNumericalInstability(operation: () => Vector): Vector {
+  try {
+    return operation();
+  } catch (error) {
+    if (error.message.includes('numerical')) {
+      console.warn('Numerical instability detected, using fallback');
+      
+      // Use more conservative parameters
+      return this.fallbackOperation();
+    }
+    throw error;
+  }
+}
+```
+
+## Testing and Validation
+
+### 1. Geometric Property Tests
+```typescript
+// ✅ Good: Test geometric properties
+describe('Geometric Consistency', () => {
+  test('Möbius addition preserves hyperbolic structure', () => {
+    const u = HyperbolicArithmetic.createVector([0.1, 0.2]);
+    const v = HyperbolicArithmetic.createVector([0.3, 0.4]);
+    
+    const result = HyperbolicArithmetic.mobiusAdd(u, v);
+    
+    expect(HyperbolicArithmetic.validateHyperbolic(result)).toBe(true);
+    expect(HyperbolicArithmetic.norm(result)).toBeLessThan(1.0);
+  });
+  
+  test('Distance function satisfies triangle inequality', () => {
+    const u = HyperbolicArithmetic.createVector([0.1, 0.2]);
+    const v = HyperbolicArithmetic.createVector([0.3, 0.4]);
+    const w = HyperbolicArithmetic.createVector([0.5, 0.6]);
+    
+    const d_uv = HyperbolicArithmetic.distance(u, v);
+    const d_vw = HyperbolicArithmetic.distance(v, w);
+    const d_uw = HyperbolicArithmetic.distance(u, w);
+    
+    expect(d_uw).toBeLessThanOrEqual(d_uv + d_vw);
+  });
+});
+```
+
+### 2. Consistency Validation
+```typescript
+// ✅ Good: Validate consistency across operations
+async validateGeometricConsistency(embeddings: Vector[]): Promise<boolean> {
+  // Check all embeddings are valid
+  for (const embedding of embeddings) {
+    if (!HyperbolicArithmetic.validateHyperbolic(embedding)) {
+      return false;
+    }
+  }
+  
+  // Check distance properties
+  for (let i = 0; i < embeddings.length; i++) {
+    for (let j = i + 1; j < embeddings.length; j++) {
+      const distance = HyperbolicArithmetic.distance(embeddings[i], embeddings[j]);
+      if (distance < 0 || !isFinite(distance)) {
+        return false;
+      }
+    }
+  }
+  
+  return true;
+}
+```
+
+## Performance Considerations
+
+### 1. Batch Operations
+```typescript
+// ✅ Good: Use batch operations for efficiency
+async processBatch(vectors: Vector[]): Promise<Vector[]> {
+  // Validate all inputs first
+  for (const vector of vectors) {
+    if (!HyperbolicArithmetic.validateHyperbolic(vector)) {
+      throw new Error('Invalid vector in batch');
+    }
+  }
+  
+  // Use batch operations
+  return HyperbolicArithmetic.batchMobiusAdd(vectors);
+}
+```
+
+### 2. Caching Strategy
+```typescript
+// ✅ Good: Consistent caching with validation
+private embeddingCache = new Map<string, Vector>();
+
+async getCachedEmbedding(key: string): Promise<Vector> {
+  if (this.embeddingCache.has(key)) {
+    const cached = this.embeddingCache.get(key)!;
+    
+    // Re-validate cached embedding
+    if (HyperbolicArithmetic.validateHyperbolic(cached)) {
+      return cached;
+    } else {
+      // Remove invalid cached embedding
+      this.embeddingCache.delete(key);
+    }
+  }
+  
+  // Generate new embedding
+  const embedding = await this.generateEmbedding(key);
+  this.embeddingCache.set(key, embedding);
+  return embedding;
+}
+```
+
+## Common Anti-Patterns
+
+### ❌ Avoid: Ignoring Boundary Constraints
+```typescript
+// ❌ Bad: No boundary checking
+const result = HyperbolicArithmetic.mobiusAdd(u, v);
+```
+
+### ❌ Avoid: Inconsistent Caching
+```typescript
+// ❌ Bad: Inconsistent cache keys
+const key1 = text;
+const key2 = text + context;
+```
+
+### ❌ Avoid: Skipping Validation
+```typescript
+// ❌ Bad: No input validation
+async processVector(vector: Vector): Promise<Vector> {
+  return HyperbolicArithmetic.mobiusScalarMult(2.0, vector);
+}
+```
+
+## Best Practices Summary
+
+1. **Always validate inputs and outputs** for hyperbolic constraints
+2. **Use consistent caching strategies** with proper key generation
+3. **Handle boundary violations gracefully** with projection
+4. **Maintain numerical stability** with appropriate epsilon values
+5. **Test geometric properties** thoroughly
+6. **Use batch operations** for efficiency
+7. **Implement proper error handling** and recovery mechanisms
+8. **Document geometric assumptions** and constraints

@@ -75,16 +75,16 @@ export class WebRTCTransport {
     // Set up event handlers
     this.peerConnection.onicecandidate = (event) => {
       if (event.candidate) {
-        console.log('🧊 WebRTC ICE candidate:', event.candidate);
+        console.warn('🧊 WebRTC ICE candidate:', event.candidate);
       }
     };
 
     this.peerConnection.oniceconnectionstatechange = () => {
-      console.log('🔗 WebRTC ICE connection state:', this.peerConnection?.iceConnectionState);
+      console.warn('🔗 WebRTC ICE connection state:', this.peerConnection?.iceConnectionState);
     };
 
     this.peerConnection.onconnectionstatechange = () => {
-      console.log('🔗 WebRTC connection state:', this.peerConnection?.connectionState);
+      console.warn('🔗 WebRTC connection state:', this.peerConnection?.connectionState);
       this.isConnected = this.peerConnection?.connectionState === 'connected';
     };
 
@@ -105,11 +105,11 @@ export class WebRTCTransport {
     });
 
     this.dataChannel.onopen = () => {
-      console.log('📡 WebRTC data channel opened');
+      console.warn('📡 WebRTC data channel opened');
     };
 
     this.dataChannel.onclose = () => {
-      console.log('📡 WebRTC data channel closed');
+      console.warn('📡 WebRTC data channel closed');
     };
 
     this.dataChannel.onerror = (error) => {
@@ -152,7 +152,7 @@ export class WebRTCTransport {
     });
 
     this.dataChannel.send(payload);
-    console.log(`📤 WebRTC sent message: ${message.header.messageId}`);
+    console.warn(`📤 WebRTC sent message: ${message.header.messageId}`);
   }
 
   /**
@@ -162,7 +162,7 @@ export class WebRTCTransport {
     const addressKey = this.getAddressKey(address);
     this.messageHandlers.set(addressKey, callback);
     
-    console.log(`📥 WebRTC subscribed to address: ${addressKey}`);
+    console.warn(`📥 WebRTC subscribed to address: ${addressKey}`);
   }
 
   /**
@@ -172,7 +172,7 @@ export class WebRTCTransport {
     const addressKey = this.getAddressKey(address);
     this.messageHandlers.delete(addressKey);
     
-    console.log(`📤 WebRTC unsubscribed from address: ${addressKey}`);
+    console.warn(`📤 WebRTC unsubscribed from address: ${addressKey}`);
   }
 
   /**
@@ -190,7 +190,7 @@ export class WebRTCTransport {
         const handler = this.messageHandlers.get(addressKey);
         
         if (handler) {
-          console.log(`📥 WebRTC received message for ${addressKey}: ${message.header.messageId}`);
+          console.warn(`📥 WebRTC received message for ${addressKey}: ${message.header.messageId}`);
           handler(message);
         } else {
           console.warn(`⚠️ No handler found for WebRTC address: ${addressKey}`);
@@ -225,7 +225,7 @@ export class WebRTCTransport {
     }
 
     this.isConnected = false;
-    console.log('🔌 WebRTC Transport closed');
+    console.warn('🔌 WebRTC Transport closed');
   }
 
   /**

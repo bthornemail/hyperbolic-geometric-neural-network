@@ -76,7 +76,7 @@ export class AnalyzeTeamCodeNode extends Node<TeamLearningState> {
   }
 
   async exec([code, language, teamId]: [string, string, string]): Promise<TeamAnalysisResult> {
-    console.log(`🔍 Analyzing team code for team: ${teamId}`);
+    console.warn(`🔍 Analyzing team code for team: ${teamId}`);
     
     // Analyze code structure
     const structure = this.analyzeCodeStructure(code, language);
@@ -202,7 +202,7 @@ export class ShareTeamKnowledgeNode extends Node<TeamLearningState> {
   }
 
   async exec([teamId, concepts]: [string, string[]]): Promise<TeamKnowledgeSharingResult> {
-    console.log(`🤝 Sharing team knowledge for team: ${teamId}`);
+    console.warn(`🤝 Sharing team knowledge for team: ${teamId}`);
     
     // Retrieve team memories
     const teamMemories = await this.sharedDB.retrieveMemories(teamId);
@@ -290,7 +290,7 @@ export class ConsolidateTeamLearningNode extends Node<TeamLearningState> {
   }
 
   async exec([teamId, insights]: [string, TeamLearningInsight[]]): Promise<TeamLearningConsolidationResult> {
-    console.log(`🧠 Consolidating team learning for team: ${teamId}`);
+    console.warn(`🧠 Consolidating team learning for team: ${teamId}`);
     
     // Consolidate insights
     const consolidatedInsights = this.consolidateInsights(insights);
@@ -399,7 +399,7 @@ export class ApplyTeamInsightsNode extends Node<TeamLearningState> {
   }
 
   async exec([teamId, code, insights]: [string, string, TeamLearningInsight[]]): Promise<TeamInsightApplicationResult> {
-    console.log(`💡 Applying team insights for team: ${teamId}`);
+    console.warn(`💡 Applying team insights for team: ${teamId}`);
     
     // Generate refactoring suggestions based on insights
     const suggestions = await this.generateRefactoringSuggestions(code, insights);
@@ -524,7 +524,7 @@ export class TeamLearningWorkflow extends Flow<TeamLearningState> {
    * Execute team learning workflow
    */
   async executeTeamLearning(teamId: string, code: string, language: string = 'typescript'): Promise<TeamLearningResult> {
-    console.log(`🚀 Starting team learning workflow for team: ${teamId}`);
+    console.warn(`🚀 Starting team learning workflow for team: ${teamId}`);
     
     const state: TeamLearningState = {
       teamId,

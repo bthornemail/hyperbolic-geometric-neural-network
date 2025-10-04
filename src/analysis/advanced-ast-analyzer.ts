@@ -81,7 +81,7 @@ export class AdvancedASTAnalyzer {
     language: 'typescript' | 'javascript' | 'python' | 'java' = 'typescript',
     filePath?: string
   ): Promise<AdvancedAnalysisResult> {
-    console.log(`🔍 Performing advanced analysis on ${language} code`);
+    console.warn(`🔍 Performing advanced analysis on ${language} code`);
     
     // Parse code into AST
     const ast = this.parseCode(code, language);
@@ -988,8 +988,8 @@ export class AdvancedASTAnalyzer {
 
 // Demo function
 async function demonstrateAdvancedASTAnalysis(): Promise<void> {
-  console.log('🔍 Advanced AST Analysis Demo');
-  console.log('=============================');
+  console.warn('🔍 Advanced AST Analysis Demo');
+  console.warn('=============================');
   
   const analyzer = new AdvancedASTAnalyzer();
   
@@ -1061,47 +1061,47 @@ class UserService {
 }
   `;
   
-  console.log('\n📊 Analyzing sample code...');
+  console.warn('\n📊 Analyzing sample code...');
   const result = await analyzer.analyzeCode(sampleCode, 'typescript');
   
-  console.log('\n📈 Code Metrics:');
-  console.log(`- Cognitive Complexity: ${result.metrics.cognitiveComplexity}`);
-  console.log(`- Cyclomatic Complexity: ${result.metrics.cyclomaticComplexity}`);
-  console.log(`- Maintainability Index: ${result.metrics.maintainabilityIndex.toFixed(2)}`);
-  console.log(`- Lines of Code: ${result.metrics.linesOfCode}`);
-  console.log(`- Comment Density: ${result.metrics.commentDensity.toFixed(3)}`);
+  console.warn('\n📈 Code Metrics:');
+  console.warn(`- Cognitive Complexity: ${result.metrics.cognitiveComplexity}`);
+  console.warn(`- Cyclomatic Complexity: ${result.metrics.cyclomaticComplexity}`);
+  console.warn(`- Maintainability Index: ${result.metrics.maintainabilityIndex.toFixed(2)}`);
+  console.warn(`- Lines of Code: ${result.metrics.linesOfCode}`);
+  console.warn(`- Comment Density: ${result.metrics.commentDensity.toFixed(3)}`);
   
-  console.log('\n⚠️ Code Smells Found:');
+  console.warn('\n⚠️ Code Smells Found:');
   result.codeSmells.forEach((smell, index) => {
-    console.log(`${index + 1}. ${smell.type} (${smell.severity}): ${smell.description}`);
-    console.log(`   Suggestion: ${smell.suggestion}`);
+    console.warn(`${index + 1}. ${smell.type} (${smell.severity}): ${smell.description}`);
+    console.warn(`   Suggestion: ${smell.suggestion}`);
   });
   
-  console.log('\n🚫 Anti-Patterns Found:');
+  console.warn('\n🚫 Anti-Patterns Found:');
   result.antiPatterns.forEach((pattern, index) => {
-    console.log(`${index + 1}. ${pattern.type} (${pattern.severity}): ${pattern.description}`);
-    console.log(`   Suggestion: ${pattern.suggestion}`);
+    console.warn(`${index + 1}. ${pattern.type} (${pattern.severity}): ${pattern.description}`);
+    console.warn(`   Suggestion: ${pattern.suggestion}`);
   });
   
-  console.log('\n📊 Quality Score:');
-  console.log(`- Overall Quality: ${result.qualityScore.toFixed(1)}/100`);
+  console.warn('\n📊 Quality Score:');
+  console.warn(`- Overall Quality: ${result.qualityScore.toFixed(1)}/100`);
   
-  console.log('\n💡 Recommendations:');
+  console.warn('\n💡 Recommendations:');
   result.recommendations.forEach((rec, index) => {
-    console.log(`${index + 1}. ${rec}`);
+    console.warn(`${index + 1}. ${rec}`);
   });
   
-  console.log('\n🧠 H²GNN Insights:');
+  console.warn('\n🧠 H²GNN Insights:');
   if (result.h2gnnInsights.length > 0) {
     result.h2gnnInsights.forEach((insight, index) => {
-      console.log(`${index + 1}. ${insight.concept} (confidence: ${insight.confidence.toFixed(3)})`);
+      console.warn(`${index + 1}. ${insight.concept} (confidence: ${insight.confidence.toFixed(3)})`);
     });
   } else {
-    console.log('No H²GNN insights available');
+    console.warn('No H²GNN insights available');
   }
   
-  console.log('\n🎉 Advanced AST Analysis Demo Complete!');
-  console.log('✅ Sophisticated code analysis with H²GNN integration!');
+  console.warn('\n🎉 Advanced AST Analysis Demo Complete!');
+  console.warn('✅ Sophisticated code analysis with H²GNN integration!');
 }
 
 // Run the demo

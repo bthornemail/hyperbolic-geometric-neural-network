@@ -122,7 +122,7 @@ export class CollaborativeVisualization {
     this.sessions.set(sessionId, session);
     this.activeSessions.add(sessionId);
     
-    console.log(`🤝 Created collaboration session: ${name} (${sessionId})`);
+    console.warn(`🤝 Created collaboration session: ${name} (${sessionId})`);
     return session;
   }
 
@@ -162,7 +162,7 @@ export class CollaborativeVisualization {
       timestamp: Date.now()
     });
     
-    console.log(`👋 ${participantName} joined session ${sessionId}`);
+    console.warn(`👋 ${participantName} joined session ${sessionId}`);
     return true;
   }
 
@@ -189,7 +189,7 @@ export class CollaborativeVisualization {
       timestamp: Date.now()
     });
     
-    console.log(`👋 Participant ${participantId} left session ${sessionId}`);
+    console.warn(`👋 Participant ${participantId} left session ${sessionId}`);
     return true;
   }
 
@@ -274,7 +274,7 @@ export class CollaborativeVisualization {
       timestamp: Date.now()
     });
     
-    console.log(`📝 Added annotation by ${authorId} in session ${sessionId}`);
+    console.warn(`📝 Added annotation by ${authorId} in session ${sessionId}`);
     return annotation.id;
   }
 
@@ -304,7 +304,7 @@ export class CollaborativeVisualization {
       timestamp: Date.now()
     });
     
-    console.log(`💬 Chat message from ${authorId} in session ${sessionId}: ${content}`);
+    console.warn(`💬 Chat message from ${authorId} in session ${sessionId}: ${content}`);
     return message.id;
   }
 
@@ -349,7 +349,7 @@ export class CollaborativeVisualization {
     session.viewport.lockedBy = participantId;
     session.updatedAt = Date.now();
     
-    console.log(`🔒 Viewport locked by ${participantId} in session ${sessionId}`);
+    console.warn(`🔒 Viewport locked by ${participantId} in session ${sessionId}`);
     return true;
   }
 
@@ -364,7 +364,7 @@ export class CollaborativeVisualization {
       session.viewport.lockedBy = null;
       session.updatedAt = Date.now();
       
-      console.log(`🔓 Viewport unlocked by ${participantId} in session ${sessionId}`);
+      console.warn(`🔓 Viewport unlocked by ${participantId} in session ${sessionId}`);
       return true;
     }
     
@@ -449,7 +449,7 @@ export class CollaborativeVisualization {
       for (const participant of session.participants) {
         if (participant.isOnline && (now - participant.lastSeen) > timeout) {
           participant.isOnline = false;
-          console.log(`⏰ Participant ${participant.id} timed out in session ${session.id}`);
+          console.warn(`⏰ Participant ${participant.id} timed out in session ${session.id}`);
         }
       }
       
@@ -493,6 +493,6 @@ export class CollaborativeVisualization {
       session.isActive = false;
     }
     
-    console.log('🔧 Collaborative visualization shutdown complete');
+    console.warn('🔧 Collaborative visualization shutdown complete');
   }
 }

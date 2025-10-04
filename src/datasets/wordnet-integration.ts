@@ -95,19 +95,19 @@ export class WordNetProcessor {
    * Load WordNet data using real WordNet database
    */
   async loadWordNetData(): Promise<void> {
-    console.log('📚 Loading WordNet dataset...');
+    console.warn('📚 Loading WordNet dataset...');
     
     // Load real WordNet data using wordpos
     await this.loadRealWordNetData();
     
-    console.log(`✅ Loaded ${this.synsets.size} synsets and ${this.words.size} words`);
+    console.warn(`✅ Loaded ${this.synsets.size} synsets and ${this.words.size} words`);
   }
 
   /**
    * Load real WordNet data using wordpos library
    */
   private async loadRealWordNetData(): Promise<void> {
-    console.log('🔍 Loading real WordNet database...');
+    console.warn('🔍 Loading real WordNet database...');
     
     // Load a sample of common words and technical terms
     const sampleWords = [
@@ -261,7 +261,7 @@ export class WordNetProcessor {
       }
     }
     
-    console.log(`📊 Built ${this.synsets.size} synsets from real WordNet database`);
+    console.warn(`📊 Built ${this.synsets.size} synsets from real WordNet database`);
   }
 
   /**
@@ -548,14 +548,14 @@ export class WordNetProcessor {
       }
     }
     
-    console.log(`📊 Built ${this.relations.length} relations`);
+    console.warn(`📊 Built ${this.relations.length} relations`);
   }
 
   /**
    * Build hierarchical structure
    */
   async buildHierarchy(): Promise<WordNetHierarchy> {
-    console.log('🏗️ Building WordNet hierarchy...');
+    console.warn('🏗️ Building WordNet hierarchy...');
     
     const nodes: WordNetNode[] = [];
     const edges: WordNetEdge[] = [];
@@ -626,7 +626,7 @@ export class WordNetProcessor {
       maxDepth
     };
     
-    console.log(`✅ Built hierarchy with ${nodes.length} nodes, ${edges.length} edges, max depth: ${maxDepth}`);
+    console.warn(`✅ Built hierarchy with ${nodes.length} nodes, ${edges.length} edges, max depth: ${maxDepth}`);
     return this.hierarchy;
   }
 
@@ -638,7 +638,7 @@ export class WordNetProcessor {
       await this.buildHierarchy();
     }
     
-    console.log('🧠 Generating hyperbolic embeddings for WordNet concepts...');
+    console.warn('🧠 Generating hyperbolic embeddings for WordNet concepts...');
     
     // Prepare training data for H²GNN
     const trainingData = this.prepareTrainingData();
@@ -664,7 +664,7 @@ export class WordNetProcessor {
       }
     }
     
-    console.log('✅ Generated hyperbolic embeddings for all concepts');
+    console.warn('✅ Generated hyperbolic embeddings for all concepts');
   }
 
   /**
@@ -756,7 +756,7 @@ export class WordNetProcessor {
    * Add WordNet knowledge to RAG system
    */
   async populateRAGKnowledge(): Promise<void> {
-    console.log('📚 Populating RAG system with WordNet knowledge...');
+    console.warn('📚 Populating RAG system with WordNet knowledge...');
     
     let count = 0;
     for (const synset of this.synsets.values()) {
@@ -765,11 +765,11 @@ export class WordNetProcessor {
       count++;
       
       if (count % 100 === 0) {
-        console.log(`   Added ${count}/${this.synsets.size} synsets to RAG...`);
+        console.warn(`   Added ${count}/${this.synsets.size} synsets to RAG...`);
       }
     }
     
-    console.log(`✅ Added ${count} WordNet synsets to RAG system`);
+    console.warn(`✅ Added ${count} WordNet synsets to RAG system`);
   }
 
   /**
@@ -1019,7 +1019,7 @@ export class WordNetTrainingPipeline {
    * Run complete training pipeline
    */
   async runPipeline(): Promise<void> {
-    console.log('🚀 Starting WordNet + H²GNN training pipeline...');
+    console.warn('🚀 Starting WordNet + H²GNN training pipeline...');
     
     // Step 1: Load WordNet data
     await this.processor.loadWordNetData();
@@ -1035,9 +1035,9 @@ export class WordNetTrainingPipeline {
     
     // Step 5: Analyze results
     const analysis = this.processor.analyzeHierarchicalStructure();
-    console.log('📊 Hierarchical Structure Analysis:', analysis);
+    console.warn('📊 Hierarchical Structure Analysis:', analysis);
     
-    console.log('✅ WordNet training pipeline completed successfully!');
+    console.warn('✅ WordNet training pipeline completed successfully!');
   }
 
   getProcessor(): WordNetProcessor {

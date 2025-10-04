@@ -202,7 +202,7 @@ export class StreamingLLMClient {
     session.analytics.totalLatency = session.endTime - session.startTime;
     session.analytics.streamingEfficiency = this.calculateStreamingEfficiency(session);
     
-    console.log(`✅ Streaming session ${sessionId} completed:`, {
+    console.warn(`✅ Streaming session ${sessionId} completed:`, {
       totalChunks: session.totalChunks,
       totalContent: session.totalContent.length,
       latency: session.analytics.totalLatency,
@@ -235,7 +235,7 @@ export class StreamingLLMClient {
       this.activeSessions.delete(sessionId);
       this.analyticsBuffer.delete(sessionId);
       
-      console.log(`🚫 Streaming session ${sessionId} cancelled`);
+      console.warn(`🚫 Streaming session ${sessionId} cancelled`);
     }
   }
 

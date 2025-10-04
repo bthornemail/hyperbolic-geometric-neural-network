@@ -456,7 +456,7 @@ export class H2GNNMCPIntegration {
  * MCP + BIP32 HD Addressing Demo
  */
 export async function demonstrateMCPHDIntegration(): Promise<void> {
-  console.log('🔌 MCP + BIP32 HD Addressing Demo Starting...\n');
+  console.warn('🔌 MCP + BIP32 HD Addressing Demo Starting...\n');
   
   try {
     // Initialize BIP32 HD addressing
@@ -474,10 +474,10 @@ export async function demonstrateMCPHDIntegration(): Promise<void> {
     
     const mcpIntegration = new H2GNNMCPIntegration(hdAddressing, config);
     
-    console.log('✅ MCP integration with BIP32 HD addressing initialized\n');
+    console.warn('✅ MCP integration with BIP32 HD addressing initialized\n');
     
     // Register MCP services
-    console.log('📝 Registering MCP services...');
+    console.warn('📝 Registering MCP services...');
     
     const h2gnnService = await mcpIntegration.registerService(
       'h2gnn-mcp-server',
@@ -509,13 +509,13 @@ export async function demonstrateMCPHDIntegration(): Promise<void> {
       3003
     );
     
-    console.log('✅ MCP services registered:');
-    console.log(`   H²GNN Service: ${h2gnnService.name} (${h2gnnService.rpcEndpoint})`);
-    console.log(`   LSP Service: ${lspService.name} (${lspService.rpcEndpoint})`);
-    console.log(`   Knowledge Service: ${knowledgeService.name} (${knowledgeService.rpcEndpoint})\n`);
+    console.warn('✅ MCP services registered:');
+    console.warn(`   H²GNN Service: ${h2gnnService.name} (${h2gnnService.rpcEndpoint})`);
+    console.warn(`   LSP Service: ${lspService.name} (${lspService.rpcEndpoint})`);
+    console.warn(`   Knowledge Service: ${knowledgeService.name} (${knowledgeService.rpcEndpoint})\n`);
     
     // Register MCP tools
-    console.log('🔧 Registering MCP tools...');
+    console.warn('🔧 Registering MCP tools...');
     
     const embeddingTool = await mcpIntegration.registerTool(
       'analyze_code_ast',
@@ -541,13 +541,13 @@ export async function demonstrateMCPHDIntegration(): Promise<void> {
       'knowledge-graph-mcp-server'
     );
     
-    console.log('✅ MCP tools registered:');
-    console.log(`   Embedding Tool: ${embeddingTool.name}`);
-    console.log(`   Semantic Tool: ${semanticTool.name}`);
-    console.log(`   Graph Tool: ${graphTool.name}\n`);
+    console.warn('✅ MCP tools registered:');
+    console.warn(`   Embedding Tool: ${embeddingTool.name}`);
+    console.warn(`   Semantic Tool: ${semanticTool.name}`);
+    console.warn(`   Graph Tool: ${graphTool.name}\n`);
     
     // Register MCP resources
-    console.log('📚 Registering MCP resources...');
+    console.warn('📚 Registering MCP resources...');
     
     const codeResource = await mcpIntegration.registerResource(
       'file:///src/example.ts',
@@ -573,13 +573,13 @@ export async function demonstrateMCPHDIntegration(): Promise<void> {
       'knowledge-graph-mcp-server'
     );
     
-    console.log('✅ MCP resources registered:');
-    console.log(`   Code Resource: ${codeResource.uri}`);
-    console.log(`   Embedding Resource: ${embeddingResource.uri}`);
-    console.log(`   Graph Resource: ${graphResource.uri}\n`);
+    console.warn('✅ MCP resources registered:');
+    console.warn(`   Code Resource: ${codeResource.uri}`);
+    console.warn(`   Embedding Resource: ${embeddingResource.uri}`);
+    console.warn(`   Graph Resource: ${graphResource.uri}\n`);
     
     // Register MCP prompts
-    console.log('💬 Registering MCP prompts...');
+    console.warn('💬 Registering MCP prompts...');
     
     const codeReviewPrompt = await mcpIntegration.registerPrompt(
       'code_review_prompt',
@@ -602,13 +602,13 @@ export async function demonstrateMCPHDIntegration(): Promise<void> {
       'knowledge-graph-mcp-server'
     );
     
-    console.log('✅ MCP prompts registered:');
-    console.log(`   Code Review Prompt: ${codeReviewPrompt.name}`);
-    console.log(`   Semantic Prompt: ${semanticPrompt.name}`);
-    console.log(`   Graph Prompt: ${graphPrompt.name}\n`);
+    console.warn('✅ MCP prompts registered:');
+    console.warn(`   Code Review Prompt: ${codeReviewPrompt.name}`);
+    console.warn(`   Semantic Prompt: ${semanticPrompt.name}`);
+    console.warn(`   Graph Prompt: ${graphPrompt.name}\n`);
     
     // Call MCP tools
-    console.log('🔧 Calling MCP tools...');
+    console.warn('🔧 Calling MCP tools...');
     
     const embeddingResult = await mcpIntegration.callTool(
       'analyze_code_ast',
@@ -625,91 +625,91 @@ export async function demonstrateMCPHDIntegration(): Promise<void> {
       { path: '/src' }
     );
     
-    console.log('✅ MCP tool calls completed:');
-    console.log(`   Embedding Result: ${embeddingResult.result}`);
-    console.log(`   Semantic Result: ${semanticResult.result}`);
-    console.log(`   Graph Result: ${graphResult.result}\n`);
+    console.warn('✅ MCP tool calls completed:');
+    console.warn(`   Embedding Result: ${embeddingResult.result}`);
+    console.warn(`   Semantic Result: ${semanticResult.result}`);
+    console.warn(`   Graph Result: ${graphResult.result}\n`);
     
     // Get MCP resources
-    console.log('📚 Getting MCP resources...');
+    console.warn('📚 Getting MCP resources...');
     
     const codeContent = await mcpIntegration.getResource('file:///src/example.ts');
     const embeddingContent = await mcpIntegration.getResource('h2gnn://embeddings/latest');
     const graphContent = await mcpIntegration.getResource('graph://knowledge/latest');
     
-    console.log('✅ MCP resources retrieved:');
-    console.log(`   Code Content: ${codeContent.content}`);
-    console.log(`   Embedding Content: ${embeddingContent.content}`);
-    console.log(`   Graph Content: ${graphContent.content}\n`);
+    console.warn('✅ MCP resources retrieved:');
+    console.warn(`   Code Content: ${codeContent.content}`);
+    console.warn(`   Embedding Content: ${embeddingContent.content}`);
+    console.warn(`   Graph Content: ${graphContent.content}\n`);
     
     // Get MCP prompts
-    console.log('💬 Getting MCP prompts...');
+    console.warn('💬 Getting MCP prompts...');
     
     const codeReviewPromptText = await mcpIntegration.getPrompt('code_review_prompt', ['function example() { return "Hello, World!"; }']);
     const semanticPromptText = await mcpIntegration.getPrompt('semantic_analysis_prompt', ['artificial intelligence']);
     const graphPromptText = await mcpIntegration.getPrompt('graph_analysis_prompt', ['analyze relationships']);
     
-    console.log('✅ MCP prompts retrieved:');
-    console.log(`   Code Review: ${codeReviewPromptText}`);
-    console.log(`   Semantic: ${semanticPromptText}`);
-    console.log(`   Graph: ${graphPromptText}\n`);
+    console.warn('✅ MCP prompts retrieved:');
+    console.warn(`   Code Review: ${codeReviewPromptText}`);
+    console.warn(`   Semantic: ${semanticPromptText}`);
+    console.warn(`   Graph: ${graphPromptText}\n`);
     
     // Get service information
-    console.log('📊 Getting service information...');
+    console.warn('📊 Getting service information...');
     
     const allServices = mcpIntegration.getAllServices();
     const allTools = mcpIntegration.getAllTools();
     const allResources = mcpIntegration.getAllResources();
     const allPrompts = mcpIntegration.getAllPrompts();
     
-    console.log('✅ Service information:');
-    console.log(`   Total Services: ${allServices.length}`);
-    console.log(`   Total Tools: ${allTools.length}`);
-    console.log(`   Total Resources: ${allResources.length}`);
-    console.log(`   Total Prompts: ${allPrompts.length}\n`);
+    console.warn('✅ Service information:');
+    console.warn(`   Total Services: ${allServices.length}`);
+    console.warn(`   Total Tools: ${allTools.length}`);
+    console.warn(`   Total Resources: ${allResources.length}`);
+    console.warn(`   Total Prompts: ${allPrompts.length}\n`);
     
     // Get service health
-    console.log('🏥 Getting service health...');
+    console.warn('🏥 Getting service health...');
     
     const serviceHealth = mcpIntegration.getAllServiceHealth();
-    console.log('✅ Service health status:');
+    console.warn('✅ Service health status:');
     serviceHealth.forEach(({ service, health }) => {
-      console.log(`   ${service}: ${health.healthy ? 'HEALTHY' : 'UNHEALTHY'} - ${health.message}`);
+      console.warn(`   ${service}: ${health.healthy ? 'HEALTHY' : 'UNHEALTHY'} - ${health.message}`);
     });
     
-    console.log('\n');
+    console.warn('\n');
     
     // Get call history
-    console.log('📈 Getting call history...');
+    console.warn('📈 Getting call history...');
     
     const callHistory = mcpIntegration.getCallHistory();
-    console.log(`✅ Total MCP calls: ${callHistory.length}`);
+    console.warn(`✅ Total MCP calls: ${callHistory.length}`);
     
     const toolCallHistory = mcpIntegration.getCallHistoryByTool('analyze_code_ast');
     const serviceCallHistory = mcpIntegration.getCallHistoryByService('lsp-ast-mcp-server');
     
-    console.log(`   Code Analysis calls: ${toolCallHistory.length}`);
-    console.log(`   LSP Service calls: ${serviceCallHistory.length}\n`);
+    console.warn(`   Code Analysis calls: ${toolCallHistory.length}`);
+    console.warn(`   LSP Service calls: ${serviceCallHistory.length}\n`);
     
     // Demonstrate service status updates
-    console.log('🔄 Demonstrating service status updates...');
+    console.warn('🔄 Demonstrating service status updates...');
     
     mcpIntegration.updateServiceStatus('h2gnn-mcp-server', 'inactive');
     mcpIntegration.updateServiceStatus('lsp-ast-mcp-server', 'error');
     
     const updatedHealth = mcpIntegration.getAllServiceHealth();
-    console.log('✅ Updated service health:');
+    console.warn('✅ Updated service health:');
     updatedHealth.forEach(({ service, health }) => {
-      console.log(`   ${service}: ${health.healthy ? 'HEALTHY' : 'UNHEALTHY'} - ${health.message}`);
+      console.warn(`   ${service}: ${health.healthy ? 'HEALTHY' : 'UNHEALTHY'} - ${health.message}`);
     });
     
-    console.log('\n🎉 MCP + BIP32 HD Addressing Demo Completed Successfully!');
-    console.log('\n📊 Summary:');
-    console.log('   ✅ MCP services registered with H²GNN addressing');
-    console.log('   ✅ MCP tools, resources, and prompts integrated');
-    console.log('   ✅ Deterministic RPC endpoint generation');
-    console.log('   ✅ Service health monitoring and status updates');
-    console.log('   ✅ Call history tracking and analysis');
+    console.warn('\n🎉 MCP + BIP32 HD Addressing Demo Completed Successfully!');
+    console.warn('\n📊 Summary:');
+    console.warn('   ✅ MCP services registered with H²GNN addressing');
+    console.warn('   ✅ MCP tools, resources, and prompts integrated');
+    console.warn('   ✅ Deterministic RPC endpoint generation');
+    console.warn('   ✅ Service health monitoring and status updates');
+    console.warn('   ✅ Call history tracking and analysis');
     
   } catch (error) {
     console.error('❌ MCP + BIP32 HD addressing demo failed:', error);

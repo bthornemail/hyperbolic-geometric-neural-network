@@ -281,29 +281,29 @@ export class NativeH2GNNProtocol extends EventEmitter {
     if (this.isInitialized) return;
 
     try {
-      console.log('🚀 Initializing Native H²GNN Protocol...');
+      console.warn('🚀 Initializing Native H²GNN Protocol...');
       
       // Initialize HD addressing
-      console.log('🔑 Initializing BIP32 HD addressing...');
+      console.warn('🔑 Initializing BIP32 HD addressing...');
       
       // Initialize transport layers
-      console.log('📡 Initializing transport layers...');
+      console.warn('📡 Initializing transport layers...');
       await this.transportManager.initialize();
       
       // Initialize data encoders
-      console.log('📊 Initializing data encoders...');
+      console.warn('📊 Initializing data encoders...');
       await this.initializeEncoders();
       
       // Initialize authentication
-      console.log('🔐 Initializing authentication...');
+      console.warn('🔐 Initializing authentication...');
       await this.initializeAuthentication();
       
       // Initialize caching
-      console.log('💾 Initializing caching...');
+      console.warn('💾 Initializing caching...');
       await this.initializeCaching();
       
       this.isInitialized = true;
-      console.log('✅ Native H²GNN Protocol initialized successfully');
+      console.warn('✅ Native H²GNN Protocol initialized successfully');
     } catch (error) {
       console.error('❌ Failed to initialize Native H²GNN Protocol:', error);
       throw error;
@@ -380,7 +380,7 @@ export class NativeH2GNNProtocol extends EventEmitter {
     const transport = address.network.transport;
     const endpoint = this.getRPCEndpoint(address);
     
-    console.log(`📤 Sending message via ${transport} to ${endpoint}`);
+    console.warn(`📤 Sending message via ${transport} to ${endpoint}`);
     
     // Use transport manager to send message
     await this.transportManager.sendMessage(address, message);
@@ -397,7 +397,7 @@ export class NativeH2GNNProtocol extends EventEmitter {
     const transport = address.network.transport;
     const endpoint = this.getRPCEndpoint(address);
     
-    console.log(`📥 Receiving messages via ${transport} from ${endpoint}`);
+    console.warn(`📥 Receiving messages via ${transport} from ${endpoint}`);
     
     // Use transport manager to receive messages
     await this.transportManager.subscribe(address, callback);
@@ -406,17 +406,17 @@ export class NativeH2GNNProtocol extends EventEmitter {
   // Private methods for initialization
   private async initializeEncoders(): Promise<void> {
     // TODO: Implement data encoder initialization
-    console.log('📊 Data encoders will be implemented in separate files');
+    console.warn('📊 Data encoders will be implemented in separate files');
   }
 
   private async initializeAuthentication(): Promise<void> {
     // TODO: Implement authentication initialization
-    console.log('🔐 Authentication will be implemented in separate files');
+    console.warn('🔐 Authentication will be implemented in separate files');
   }
 
   private async initializeCaching(): Promise<void> {
     // TODO: Implement caching initialization
-    console.log('💾 Caching will be implemented in separate files');
+    console.warn('💾 Caching will be implemented in separate files');
   }
 
   // Helper methods

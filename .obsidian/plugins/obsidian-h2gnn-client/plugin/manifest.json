@@ -1,0 +1,10 @@
+{
+	"id": "opencode-agent-plugin",
+	"name": "Opencode Agent",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Collaborative agent pipelines with OpenCode.ai and Obsidian.",
+	"author": "Your Name",
+	"authorUrl": "",
+	"isDesktopOnly": true
+}

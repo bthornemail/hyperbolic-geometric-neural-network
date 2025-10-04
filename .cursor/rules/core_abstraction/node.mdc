@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # Node
 
-A **Node** is the smallest building block. Each Node has 3 steps `prep->exec->post`:
+A **Node** is the smallest building block. Each Node has 3 steps `prep->exec->post`. When enhanced with H²GNN, nodes gain hierarchical reasoning capabilities through hyperbolic geometry.
 
 
 

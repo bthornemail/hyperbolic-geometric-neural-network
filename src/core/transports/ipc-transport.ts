@@ -39,7 +39,7 @@ export class IPCTransport {
       this.socket = createConnection(this.config.socketPath);
 
       this.socket.on('connect', () => {
-        console.log('🔗 IPC Transport connected');
+        console.warn('🔗 IPC Transport connected');
         this.isConnected = true;
         resolve();
       });
@@ -51,7 +51,7 @@ export class IPCTransport {
       });
 
       this.socket.on('close', () => {
-        console.log('🔌 IPC Transport disconnected');
+        console.warn('🔌 IPC Transport disconnected');
         this.isConnected = false;
       });
 
@@ -80,7 +80,7 @@ export class IPCTransport {
           console.error('❌ IPC send error:', error);
           reject(error);
         } else {
-          console.log(`📤 IPC sent message: ${message.header.messageId}`);
+          console.warn(`📤 IPC sent message: ${message.header.messageId}`);
           resolve();
         }
       });
@@ -94,7 +94,7 @@ export class IPCTransport {
     const addressKey = this.getAddressKey(address);
     this.messageHandlers.set(addressKey, callback);
     
-    console.log(`📥 IPC subscribed to address: ${addressKey}`);
+    console.warn(`📥 IPC subscribed to address: ${addressKey}`);
   }
 
   /**
@@ -104,7 +104,7 @@ export class IPCTransport {
     const addressKey = this.getAddressKey(address);
     this.messageHandlers.delete(addressKey);
     
-    console.log(`📤 IPC unsubscribed from address: ${addressKey}`);
+    console.warn(`📤 IPC unsubscribed from address: ${addressKey}`);
   }
 
   /**
@@ -130,7 +130,7 @@ export class IPCTransport {
             const handler = this.messageHandlers.get(addressKey);
             
             if (handler) {
-              console.log(`📥 IPC received message for ${addressKey}: ${message.header.messageId}`);
+              console.warn(`📥 IPC received message for ${addressKey}: ${message.header.messageId}`);
               handler(message);
             } else {
               console.warn(`⚠️ No handler found for IPC address: ${addressKey}`);
@@ -161,7 +161,7 @@ export class IPCTransport {
       this.socket = null;
     }
     this.isConnected = false;
-    console.log('🔌 IPC Transport closed');
+    console.warn('🔌 IPC Transport closed');
   }
 
   /**
@@ -218,14 +218,14 @@ export class IPCServer {
         const connectionId = `${Date.now()}-${Math.random()}`;
         this.connections.set(connectionId, socket);
         
-        console.log(`🔗 IPC Server: New connection ${connectionId}`);
+        console.warn(`🔗 IPC Server: New connection ${connectionId}`);
         
         socket.on('data', (data) => {
           this.handleMessage(data, connectionId);
         });
         
         socket.on('close', () => {
-          console.log(`🔌 IPC Server: Connection ${connectionId} closed`);
+          console.warn(`🔌 IPC Server: Connection ${connectionId} closed`);
           this.connections.delete(connectionId);
         });
         
@@ -236,7 +236,7 @@ export class IPCServer {
       });
 
       this.server.listen(this.config.socketPath, () => {
-        console.log(`🚀 IPC Server listening on ${this.config.socketPath}`);
+        console.warn(`🚀 IPC Server listening on ${this.config.socketPath}`);
         resolve();
       });
 
@@ -254,7 +254,7 @@ export class IPCServer {
     return new Promise((resolve) => {
       if (this.server) {
         this.server.close(() => {
-          console.log('🔌 IPC Server stopped');
+          console.warn('🔌 IPC Server stopped');
           resolve();
         });
       } else {
@@ -275,7 +275,7 @@ export class IPCServer {
     for (const [connectionId, socket] of this.connections) {
       try {
         socket.write(payload + '\n');
-        console.log(`📤 IPC Server broadcast to ${connectionId}: ${message.header.messageId}`);
+        console.warn(`📤 IPC Server broadcast to ${connectionId}: ${message.header.messageId}`);
       } catch (error) {
         console.error(`❌ IPC Server broadcast error to ${connectionId}:`, error);
         this.connections.delete(connectionId);
@@ -298,7 +298,7 @@ export class IPCServer {
         const handler = this.messageHandlers.get(addressKey);
         
         if (handler) {
-          console.log(`📥 IPC Server received message for ${addressKey}: ${message.header.messageId}`);
+          console.warn(`📥 IPC Server received message for ${addressKey}: ${message.header.messageId}`);
           handler(message);
         } else {
           console.warn(`⚠️ No handler found for IPC Server address: ${addressKey}`);
@@ -325,7 +325,7 @@ export class IPCServer {
     const addressKey = this.getAddressKey(address);
     this.messageHandlers.set(addressKey, callback);
     
-    console.log(`📥 IPC Server subscribed to address: ${addressKey}`);
+    console.warn(`📥 IPC Server subscribed to address: ${addressKey}`);
   }
 
   /**

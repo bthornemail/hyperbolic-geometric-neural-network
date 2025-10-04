@@ -71,10 +71,10 @@ export class SharedLearningDatabase {
   private conflicts: Map<string, MemoryConflict> = new Map();
   private insights: Map<string, TeamLearningInsight> = new Map();
   private syncInterval: NodeJS.Timeout | null = null;
-  private syncFrequency: number = 30000; // 30 seconds
+  private syncFrequency: number = parseInt(process.env.H2GNN_SYNC_FREQUENCY || '300000', 10); // 5 minutes (configurable via env)
 
-  constructor(storagePath: string = './shared-learning') {
-    this.storagePath = storagePath;
+  constructor(storagePath?: string) {
+    this.storagePath = storagePath || process.env.H2GNN_SHARED_LEARNING_PATH || './shared-learning';
     this.initializeDatabase();
   }
 
@@ -96,7 +96,7 @@ export class SharedLearningDatabase {
       await this.loadInsights();
       
       this.startSyncProcess();
-      console.log('🤝 Shared Learning Database initialized');
+      console.warn('🤝 Shared Learning Database initialized');
     } catch (error) {
       console.warn('Warning: Could not initialize shared learning database:', error);
     }
@@ -106,9 +106,9 @@ export class SharedLearningDatabase {
    * Connect to the database
    */
   async connect(): Promise<void> {
-    console.log('🤝 Connecting to Shared Learning Database...');
+    console.warn('🤝 Connecting to Shared Learning Database...');
     // In a real implementation, this would connect to Redis/PostgreSQL
-    console.log('✅ Connected to Shared Learning Database');
+    console.warn('✅ Connected to Shared Learning Database');
   }
 
   /**
@@ -119,14 +119,14 @@ export class SharedLearningDatabase {
       clearInterval(this.syncInterval);
       this.syncInterval = null;
     }
-    console.log('🤝 Disconnected from Shared Learning Database');
+    console.warn('🤝 Disconnected from Shared Learning Database');
   }
 
   /**
    * Create a new team
    */
   async createTeam(teamId: string, config: TeamConfig): Promise<void> {
-    console.log(`🤝 Creating team: ${teamId}`);
+    console.warn(`🤝 Creating team: ${teamId}`);
     
     this.teams.set(teamId, config);
     await this.persistTeam(teamId, config);
@@ -136,14 +136,14 @@ export class SharedLearningDatabase {
     await fs.mkdir(path.join(this.storagePath, 'memories', teamId), { recursive: true });
     await fs.mkdir(path.join(this.storagePath, 'snapshots', teamId), { recursive: true });
     
-    console.log(`✅ Team ${teamId} created successfully`);
+    console.warn(`✅ Team ${teamId} created successfully`);
   }
 
   /**
    * Add a team member
    */
   async addTeamMember(teamId: string, memberId: string, role: 'admin' | 'member' | 'viewer' = 'member'): Promise<void> {
-    console.log(`🤝 Adding member ${memberId} to team ${teamId}`);
+    console.warn(`🤝 Adding member ${memberId} to team ${teamId}`);
     
     const member: TeamMember = {
       memberId,
@@ -165,14 +165,14 @@ export class SharedLearningDatabase {
       await this.persistTeam(teamId, team);
     }
     
-    console.log(`✅ Member ${memberId} added to team ${teamId}`);
+    console.warn(`✅ Member ${memberId} added to team ${teamId}`);
   }
 
   /**
    * Store a learning memory for a team
    */
   async storeMemory(teamId: string, memory: LearningMemory): Promise<void> {
-    console.log(`🤝 Storing memory for team ${teamId}: ${memory.concept}`);
+    console.warn(`🤝 Storing memory for team ${teamId}: ${memory.concept}`);
     
     // Check for conflicts
     const conflicts = await this.detectMemoryConflicts(teamId, memory);
@@ -184,14 +184,14 @@ export class SharedLearningDatabase {
     const memoryPath = path.join(this.storagePath, 'memories', teamId, `${memory.id}.json`);
     await fs.writeFile(memoryPath, JSON.stringify(memory, null, 2));
     
-    console.log(`✅ Memory stored for team ${teamId}: ${memory.concept}`);
+    console.warn(`✅ Memory stored for team ${teamId}: ${memory.concept}`);
   }
 
   /**
    * Retrieve memories for a team
    */
   async retrieveMemories(teamId: string, concept?: string): Promise<LearningMemory[]> {
-    console.log(`🤝 Retrieving memories for team ${teamId}${concept ? ` (concept: ${concept})` : ''}`);
+    console.warn(`🤝 Retrieving memories for team ${teamId}${concept ? ` (concept: ${concept})` : ''}`);
     
     const memories: LearningMemory[] = [];
     const teamMemoriesPath = path.join(this.storagePath, 'memories', teamId);
@@ -214,7 +214,7 @@ export class SharedLearningDatabase {
       console.warn(`Warning: Could not retrieve memories for team ${teamId}:`, error);
     }
     
-    console.log(`✅ Retrieved ${memories.length} memories for team ${teamId}`);
+    console.warn(`✅ Retrieved ${memories.length} memories for team ${teamId}`);
     return memories;
   }
 
@@ -222,19 +222,19 @@ export class SharedLearningDatabase {
    * Store an understanding snapshot for a team
    */
   async storeSnapshot(teamId: string, snapshot: UnderstandingSnapshot): Promise<void> {
-    console.log(`🤝 Storing snapshot for team ${teamId}: ${snapshot.id}`);
+    console.warn(`🤝 Storing snapshot for team ${teamId}: ${snapshot.id}`);
     
     const snapshotPath = path.join(this.storagePath, 'snapshots', teamId, `${snapshot.id}.json`);
     await fs.writeFile(snapshotPath, JSON.stringify(snapshot, null, 2));
     
-    console.log(`✅ Snapshot stored for team ${teamId}: ${snapshot.id}`);
+    console.warn(`✅ Snapshot stored for team ${teamId}: ${snapshot.id}`);
   }
 
   /**
    * Retrieve understanding snapshots for a team
    */
   async retrieveSnapshots(teamId: string, domain?: string): Promise<UnderstandingSnapshot[]> {
-    console.log(`🤝 Retrieving snapshots for team ${teamId}${domain ? ` (domain: ${domain})` : ''}`);
+    console.warn(`🤝 Retrieving snapshots for team ${teamId}${domain ? ` (domain: ${domain})` : ''}`);
     
     const snapshots: UnderstandingSnapshot[] = [];
     const teamSnapshotsPath = path.join(this.storagePath, 'snapshots', teamId);
@@ -257,7 +257,7 @@ export class SharedLearningDatabase {
       console.warn(`Warning: Could not retrieve snapshots for team ${teamId}:`, error);
     }
     
-    console.log(`✅ Retrieved ${snapshots.length} snapshots for team ${teamId}`);
+    console.warn(`✅ Retrieved ${snapshots.length} snapshots for team ${teamId}`);
     return snapshots;
   }
 
@@ -265,7 +265,7 @@ export class SharedLearningDatabase {
    * Sync memories across team instances
    */
   async syncMemories(teamId: string): Promise<void> {
-    console.log(`🤝 Syncing memories for team ${teamId}`);
+    console.warn(`🤝 Syncing memories for team ${teamId}`);
     
     const memories = await this.retrieveMemories(teamId);
     const snapshots = await this.retrieveSnapshots(teamId);
@@ -276,14 +276,14 @@ export class SharedLearningDatabase {
       await this.resolveSyncConflicts(teamId, conflicts);
     }
     
-    console.log(`✅ Synced ${memories.length} memories and ${snapshots.length} snapshots for team ${teamId}`);
+    console.warn(`✅ Synced ${memories.length} memories and ${snapshots.length} snapshots for team ${teamId}`);
   }
 
   /**
    * Get team learning progress
    */
   async getTeamLearningProgress(teamId: string): Promise<LearningProgress[]> {
-    console.log(`🤝 Getting learning progress for team ${teamId}`);
+    console.warn(`🤝 Getting learning progress for team ${teamId}`);
     
     const memories = await this.retrieveMemories(teamId);
     const snapshots = await this.retrieveSnapshots(teamId);
@@ -318,7 +318,7 @@ export class SharedLearningDatabase {
     }
     
     const progress = Array.from(progressMap.values());
-    console.log(`✅ Retrieved learning progress for team ${teamId}: ${progress.length} domains`);
+    console.warn(`✅ Retrieved learning progress for team ${teamId}: ${progress.length} domains`);
     return progress;
   }
 
@@ -326,7 +326,7 @@ export class SharedLearningDatabase {
    * Share knowledge between teams
    */
   async shareKnowledge(sourceTeamId: string, targetTeamId: string, concepts: string[]): Promise<void> {
-    console.log(`🤝 Sharing knowledge from team ${sourceTeamId} to team ${targetTeamId}`);
+    console.warn(`🤝 Sharing knowledge from team ${sourceTeamId} to team ${targetTeamId}`);
     
     const sourceMemories = await this.retrieveMemories(sourceTeamId);
     const relevantMemories = sourceMemories.filter(m => 
@@ -350,7 +350,7 @@ export class SharedLearningDatabase {
       await this.storeMemory(targetTeamId, sharedMemory);
     }
     
-    console.log(`✅ Shared ${relevantMemories.length} memories from team ${sourceTeamId} to team ${targetTeamId}`);
+    console.warn(`✅ Shared ${relevantMemories.length} memories from team ${sourceTeamId} to team ${targetTeamId}`);
   }
 
   /**
@@ -368,7 +368,7 @@ export class SharedLearningDatabase {
    * Handle memory conflicts
    */
   private async handleMemoryConflicts(teamId: string, newMemory: LearningMemory, conflicts: LearningMemory[]): Promise<void> {
-    console.log(`🤝 Handling memory conflicts for team ${teamId}: ${newMemory.concept}`);
+    console.warn(`🤝 Handling memory conflicts for team ${teamId}: ${newMemory.concept}`);
     
     const conflict: MemoryConflict = {
       id: `conflict_${Date.now()}_${newMemory.concept}`,
@@ -393,7 +393,7 @@ export class SharedLearningDatabase {
    * Auto-resolve simple conflicts
    */
   private async autoResolveConflict(conflict: MemoryConflict): Promise<void> {
-    console.log(`🤝 Auto-resolving conflict: ${conflict.id}`);
+    console.warn(`🤝 Auto-resolving conflict: ${conflict.id}`);
     
     const memories = conflict.conflictingMemories;
     const bestMemory = memories.reduce((best, current) => 
@@ -411,7 +411,7 @@ export class SharedLearningDatabase {
     conflict.resolved = true;
     await this.persistConflict(conflict.id, conflict);
     
-    console.log(`✅ Auto-resolved conflict: ${conflict.id}`);
+    console.warn(`✅ Auto-resolved conflict: ${conflict.id}`);
   }
 
   /**
@@ -450,26 +450,30 @@ export class SharedLearningDatabase {
    * Resolve sync conflicts
    */
   private async resolveSyncConflicts(teamId: string, conflicts: MemoryConflict[]): Promise<void> {
-    console.log(`🤝 Resolving ${conflicts.length} sync conflicts for team ${teamId}`);
+    console.warn(`🤝 Resolving ${conflicts.length} sync conflicts for team ${teamId}`);
     
     for (const conflict of conflicts) {
       await this.autoResolveConflict(conflict);
     }
     
-    console.log(`✅ Resolved ${conflicts.length} sync conflicts for team ${teamId}`);
+    console.warn(`✅ Resolved ${conflicts.length} sync conflicts for team ${teamId}`);
   }
 
   /**
    * Start the sync process
    */
   private startSyncProcess(): void {
-    this.syncInterval = setInterval(async () => {
-      console.log('🤝 Running periodic sync...');
-      
-      for (const teamId of this.teams.keys()) {
-        await this.syncMemories(teamId);
-      }
-    }, this.syncFrequency);
+    if (this.syncFrequency > 0) {
+      this.syncInterval = setInterval(async () => {
+        if (process.env.H2GNN_DEBUG === 'true') {
+          console.warn('🤝 Running periodic sync...');
+        }
+        
+        for (const teamId of this.teams.keys()) {
+          await this.syncMemories(teamId);
+        }
+      }, this.syncFrequency);
+    }
   }
 
   /**
@@ -605,8 +609,8 @@ export class SharedLearningDatabase {
 
 // Demo function
 async function demonstrateSharedLearningDatabase(): Promise<void> {
-  console.log('🤝 Shared Learning Database Demo');
-  console.log('================================');
+  console.warn('🤝 Shared Learning Database Demo');
+  console.warn('================================');
   
   const db = new SharedLearningDatabase('./persistence/shared-learning');
   await db.connect();
@@ -677,21 +681,21 @@ async function demonstrateSharedLearningDatabase(): Promise<void> {
   const frontendMemories = await db.retrieveMemories('frontend-team');
   const backendMemories = await db.retrieveMemories('backend-team');
   
-  console.log(`\n📊 Frontend Team Memories: ${frontendMemories.length}`);
-  console.log(`📊 Backend Team Memories: ${backendMemories.length}`);
+  console.warn(`\n📊 Frontend Team Memories: ${frontendMemories.length}`);
+  console.warn(`📊 Backend Team Memories: ${backendMemories.length}`);
   
   // Get learning progress
   const frontendProgress = await db.getTeamLearningProgress('frontend-team');
   const backendProgress = await db.getTeamLearningProgress('backend-team');
   
-  console.log(`\n📈 Frontend Team Learning Progress: ${frontendProgress.length} domains`);
-  console.log(`📈 Backend Team Learning Progress: ${backendProgress.length} domains`);
+  console.warn(`\n📈 Frontend Team Learning Progress: ${frontendProgress.length} domains`);
+  console.warn(`📈 Backend Team Learning Progress: ${backendProgress.length} domains`);
   
   // Share knowledge between teams
   await db.shareKnowledge('frontend-team', 'backend-team', ['react-hooks']);
   
-  console.log('\n🎉 Shared Learning Database Demo Complete!');
-  console.log('✅ Team collaboration and knowledge sharing working!');
+  console.warn('\n🎉 Shared Learning Database Demo Complete!');
+  console.warn('✅ Team collaboration and knowledge sharing working!');
   
   await db.disconnect();
 }

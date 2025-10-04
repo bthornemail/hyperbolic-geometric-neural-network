@@ -7,16 +7,16 @@
         "NODE_ENV": "production"
       }
     },
-    "enhanced-h2gnn": {
+    "knowledge-graph": {
       "command": "tsx",
-      "args": ["/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/enhanced-h2gnn-mcp-server.ts"],
+      "args": ["/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/knowledge-graph-mcp-server.ts"],
       "env": {
         "NODE_ENV": "production"
       }
     },
-    "knowledge-graph": {
+    "geometric-tools": {
       "command": "tsx",
-      "args": ["/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/knowledge-graph-mcp.ts"],
+      "args": ["/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/geometric-tools-mcp-server.ts"],
       "env": {
         "NODE_ENV": "production"
       }
@@ -24,6 +24,13 @@
     "lsp-ast": {
       "command": "tsx",
       "args": ["/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/lsp-ast-mcp-server.ts"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "enhanced-h2gnn": {
+      "command": "tsx",
+      "args": ["/home/main/devops/hyperbolic-geometric-neural-network/src/mcp/enhanced-h2gnn-mcp-server.ts"],
       "env": {
         "NODE_ENV": "production"
       }
@@ -111,57 +118,62 @@
     {
       "name": "initialize_enhanced_h2gnn",
       "description": "Initialize Enhanced H²GNN with learning and persistence capabilities",
-      "server": "enhanced-h2gnn"
+      "server": "h2gnn"
     },
     {
       "name": "learn_concept",
       "description": "Learn a new concept with enhanced memory and understanding",
-      "server": "enhanced-h2gnn"
+      "server": "h2gnn"
     },
     {
       "name": "retrieve_memories",
       "description": "Retrieve relevant memories for a query",
-      "server": "enhanced-h2gnn"
+      "server": "h2gnn"
     },
     {
       "name": "get_understanding_snapshot",
       "description": "Get understanding snapshot for a domain",
-      "server": "enhanced-h2gnn"
+      "server": "h2gnn"
     },
     {
       "name": "get_learning_progress",
       "description": "Get learning progress for all domains",
-      "server": "enhanced-h2gnn"
+      "server": "h2gnn"
     },
     {
       "name": "start_learning_session",
       "description": "Start an interactive learning session",
-      "server": "enhanced-h2gnn"
+      "server": "h2gnn"
     },
     {
       "name": "end_learning_session",
       "description": "End the current learning session and consolidate knowledge",
-      "server": "enhanced-h2gnn"
+      "server": "h2gnn"
     },
     {
       "name": "consolidate_memories",
       "description": "Manually trigger memory consolidation",
-      "server": "enhanced-h2gnn"
+      "server": "h2gnn"
     },
     {
       "name": "get_system_status",
       "description": "Get comprehensive system status including learning metrics",
-      "server": "enhanced-h2gnn"
+      "server": "h2gnn"
     },
     {
       "name": "adaptive_learning",
       "description": "Perform adaptive learning based on performance history",
-      "server": "enhanced-h2gnn"
+      "server": "h2gnn"
     },
     {
-      "name": "learn_from_node",
-      "description": "Learn from a knowledge graph node, creating direct link between code analysis and semantic understanding",
-      "server": "enhanced-h2gnn"
+      "name": "get_hd_address_info",
+      "description": "Get HD addressing information for this service",
+      "server": "h2gnn"
+    },
+    {
+      "name": "get_mcp_integration_status",
+      "description": "Get MCP integration status and health",
+      "server": "h2gnn"
     },
     {
       "name": "analyze_code_ast",
@@ -243,28 +255,40 @@
       "server": "h2gnn"
     },
     {
-      "uri": "enhanced-h2gnn://memories/all",
+      "uri": "h2gnn://memories/all",
       "name": "Enhanced H²GNN Memories",
       "description": "All learning memories from Enhanced H²GNN",
-      "server": "enhanced-h2gnn"
+      "server": "h2gnn"
     },
     {
-      "uri": "enhanced-h2gnn://snapshots/all",
+      "uri": "h2gnn://snapshots/all",
       "name": "Understanding Snapshots",
       "description": "All understanding snapshots by domain",
-      "server": "enhanced-h2gnn"
+      "server": "h2gnn"
     },
     {
-      "uri": "enhanced-h2gnn://progress/all",
+      "uri": "h2gnn://progress/all",
       "name": "Learning Progress",
       "description": "Learning progress across all domains",
-      "server": "enhanced-h2gnn"
+      "server": "h2gnn"
     },
     {
-      "uri": "enhanced-h2gnn://status/system",
+      "uri": "h2gnn://status/system",
       "name": "Enhanced System Status",
       "description": "Comprehensive system status including learning metrics",
-      "server": "enhanced-h2gnn"
+      "server": "h2gnn"
+    },
+    {
+      "uri": "h2gnn://address/info",
+      "name": "HD Address Information",
+      "description": "HD addressing information for this service",
+      "server": "h2gnn"
+    },
+    {
+      "uri": "h2gnn://integration/mcp",
+      "name": "MCP Integration Status",
+      "description": "MCP integration status and health",
+      "server": "h2gnn"
     },
     {
       "uri": "lsp-ast://capabilities",
@@ -304,12 +328,12 @@
     {
       "name": "learning_session",
       "description": "Start an interactive learning session with Enhanced H²GNN",
-      "server": "enhanced-h2gnn"
+      "server": "h2gnn"
     },
     {
       "name": "understanding_query",
       "description": "Query understanding snapshots for a specific domain",
-      "server": "enhanced-h2gnn"
+      "server": "h2gnn"
     },
     {
       "name": "code_analysis",

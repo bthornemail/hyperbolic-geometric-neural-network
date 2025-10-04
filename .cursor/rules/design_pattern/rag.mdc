@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # RAG (Retrieval Augmented Generation)
 
-For certain LLM tasks like answering questions, providing relevant context is essential. One common architecture is a **two-stage** RAG pipeline:
+For certain LLM tasks like answering questions, providing relevant context is essential. One common architecture is a **two-stage** RAG pipeline. When enhanced with H²GNN, RAG gains hierarchical retrieval capabilities through hyperbolic geometry.
 
 
 
