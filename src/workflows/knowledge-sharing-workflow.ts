@@ -10,7 +10,7 @@
  * - Collaborative learning
  */
 
-import { BaseNode as Node, Flow } from '../pocketflow/core';
+import { BaseNode, Flow } from '../pocketflow/core';
 import { SharedLearningDatabase, TeamConfig } from '../core/shared-learning-database';
 import { getSharedH2GNN } from '../core/centralized-h2gnn-config';
 
@@ -56,7 +56,7 @@ export interface KnowledgeSharingResult {
 /**
  * Node: Extract Team Knowledge
  */
-export class ExtractTeamKnowledgeNode extends Node<KnowledgeSharingState> {
+export class ExtractTeamKnowledgeNode extends BaseNode {
   private sharedDB: SharedLearningDatabase;
   private h2gnn: any;
 
@@ -189,7 +189,7 @@ export class ExtractTeamKnowledgeNode extends Node<KnowledgeSharingState> {
 /**
  * Node: Share Cross Team
  */
-export class ShareCrossTeamNode extends Node<KnowledgeSharingState> {
+export class ShareCrossTeamNode extends BaseNode {
   private sharedDB: SharedLearningDatabase;
   private h2gnn: any;
 
@@ -285,7 +285,7 @@ export class ShareCrossTeamNode extends Node<KnowledgeSharingState> {
 /**
  * Node: Integrate Team Insights
  */
-export class IntegrateTeamInsightsNode extends Node<KnowledgeSharingState> {
+export class IntegrateTeamInsightsNode extends BaseNode {
   private sharedDB: SharedLearningDatabase;
   private h2gnn: any;
 

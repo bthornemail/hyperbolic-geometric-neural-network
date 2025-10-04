@@ -41,16 +41,16 @@ export interface AIPersistenceCore {
 
 export interface IdentityConfig {
   name: string;
-  type: IdentityType;
-  capabilities: Capability[];
-  preferences: Preferences;
+  type: string;
+  capabilities: string[];
+  preferences: Record<string, any>;
   security: SecurityConfig;
 }
 
 export interface IdentityUpdate {
   name?: string;
-  capabilities?: Capability[];
-  preferences?: Preferences;
+  capabilities?: string[];
+  preferences?: Record<string, any>;
   security?: SecurityConfig;
 }
 

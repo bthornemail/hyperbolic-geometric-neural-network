@@ -11,7 +11,7 @@
  * 5. Learn from refactoring process
  */
 
-import { BaseNode as Node, Flow } from '../pocketflow/core';
+import { BaseNode, Flow } from '../pocketflow/core';
 import { AutomatedRefactoringTool, RefactoringOpportunity, RefactoringResult } from '../refactoring/automated-refactoring-tool';
 import { getSharedH2GNN } from '../core/centralized-h2gnn-config';
 
@@ -266,7 +266,7 @@ export class ApplyRefactoringNode extends BaseNode {
 /**
  * Node: Verify Refactoring Results
  */
-export class VerifyRefactoringNode extends Node<RefactoringWorkflowState> {
+export class VerifyRefactoringNode extends BaseNode {
   private refactoringTool: AutomatedRefactoringTool;
 
   constructor() {
@@ -321,7 +321,7 @@ export class VerifyRefactoringNode extends Node<RefactoringWorkflowState> {
 /**
  * Node: Learn from Refactoring Process
  */
-export class LearnFromRefactoringNode extends Node<RefactoringWorkflowState> {
+export class LearnFromRefactoringNode extends BaseNode {
   private h2gnn: any;
 
   constructor() {

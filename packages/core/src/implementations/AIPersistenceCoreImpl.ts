@@ -18,7 +18,13 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
   private memories: Map<string, Memory> = new Map();
   private security: SecurityFramework;
   private memory: MemorySystem;
-  private state: SystemState = new SystemState();
+  private state: SystemState = {
+    identities: [],
+    memories: [],
+    learningProgress: [],
+    checkpoints: [],
+    timestamp: new Date()
+  };
   private checkpoints: Map<string, Checkpoint> = new Map();
   private learningProgress: Map<string, LearningProgress> = new Map();
 

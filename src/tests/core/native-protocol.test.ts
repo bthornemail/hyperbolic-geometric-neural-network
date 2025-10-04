@@ -203,7 +203,7 @@ describe('Native H²GNN Protocol', () => {
 
   describe('Hyperbolic Geometry Integration', () => {
     it('should generate hyperbolic coordinates', () => {
-      const address = addressing.generateAddress('hyperbolic_test');
+      const address = addressing.createAddress('broker', 0, 'internal', 'mqtt', 'localhost', 1883);
       
       expect(address.hyperbolic).toBeDefined();
       expect(address.hyperbolic.curvature).toBeLessThan(0);
@@ -212,7 +212,7 @@ describe('Native H²GNN Protocol', () => {
     });
 
     it('should maintain hyperbolic constraints', () => {
-      const address = addressing.generateAddress('constraint_test');
+      const address = addressing.createAddress('provider', 0, 'internal', 'mqtt', 'localhost', 1883);
       const coordinates = address.hyperbolic.coordinates;
       
       // Check hyperbolic constraint (norm < 1 for Poincaré ball)

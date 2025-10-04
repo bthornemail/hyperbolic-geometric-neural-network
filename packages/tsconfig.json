@@ -11,8 +11,8 @@
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "./src",
-    "baseUrl": "./src",
+    "rootDir": "./",
+    "baseUrl": "./",
     "paths": {
       "@/*": ["*"],
       "@/types/*": ["types/*"],
@@ -22,6 +22,6 @@
       "@/config/*": ["config/*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "tests"]
+  "include": ["**/src/**/*", "**/*.ts"],
+  "exclude": ["node_modules", "dist", "tests", "**/*.test.ts"]
 }

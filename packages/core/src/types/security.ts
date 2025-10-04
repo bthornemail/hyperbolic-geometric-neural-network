@@ -658,7 +658,7 @@ export interface TimelineEvent {
   metadata: Record<string, any>;
 }
 
-export interface TrendDirection {
+export enum TrendDirection {
   UP = 'up',
   DOWN = 'down',
   STABLE = 'stable',

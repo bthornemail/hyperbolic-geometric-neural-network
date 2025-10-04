@@ -10,7 +10,7 @@
  * - Collaborative code improvement
  */
 
-import { BaseNode as Node, Flow } from '../pocketflow/core';
+import { BaseNode, Flow } from '../pocketflow/core';
 import { SharedLearningDatabase, TeamConfig } from '../core/shared-learning-database';
 import { CodingStandardEngine, RuleViolation } from '../rules/coding-standard-engine';
 import { getSharedH2GNN } from '../core/centralized-h2gnn-config';
@@ -61,7 +61,7 @@ export interface TeamLearningResult {
 /**
  * Node: Analyze Team Code
  */
-export class AnalyzeTeamCodeNode extends Node<TeamLearningState> {
+export class AnalyzeTeamCodeNode extends BaseNode {
   private sharedDB: SharedLearningDatabase;
   private h2gnn: any;
 
@@ -187,7 +187,7 @@ export class AnalyzeTeamCodeNode extends Node<TeamLearningState> {
 /**
  * Node: Share Team Knowledge
  */
-export class ShareTeamKnowledgeNode extends Node<TeamLearningState> {
+export class ShareTeamKnowledgeNode extends BaseNode {
   private sharedDB: SharedLearningDatabase;
   private h2gnn: any;
 
@@ -275,7 +275,7 @@ export class ShareTeamKnowledgeNode extends Node<TeamLearningState> {
 /**
  * Node: Consolidate Team Learning
  */
-export class ConsolidateTeamLearningNode extends Node<TeamLearningState> {
+export class ConsolidateTeamLearningNode extends BaseNode {
   private sharedDB: SharedLearningDatabase;
   private h2gnn: any;
 
@@ -384,7 +384,7 @@ export class ConsolidateTeamLearningNode extends Node<TeamLearningState> {
 /**
  * Node: Apply Team Insights
  */
-export class ApplyTeamInsightsNode extends Node<TeamLearningState> {
+export class ApplyTeamInsightsNode extends BaseNode {
   private codingEngine: CodingStandardEngine;
   private h2gnn: any;
 

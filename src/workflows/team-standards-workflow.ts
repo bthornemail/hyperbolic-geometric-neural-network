@@ -10,7 +10,7 @@
  * - Standards compliance tracking
  */
 
-import { BaseNode as Node, Flow } from '../pocketflow/core';
+import { BaseNode, Flow } from '../pocketflow/core';
 import { CodingStandardEngine, CodingStandardRule, RuleViolation, FixSuggestion } from '../rules/coding-standard-engine';
 import { SharedLearningDatabase } from '../core/shared-learning-database';
 import { getSharedH2GNN } from '../core/centralized-h2gnn-config';
@@ -38,7 +38,7 @@ export interface TeamStandardsResult {
 /**
  * Node: Define Team Standards
  */
-export class DefineTeamStandardsNode extends Node<TeamStandardsState> {
+export class DefineTeamStandardsNode extends BaseNode {
   private codingEngine: CodingStandardEngine;
   private sharedDB: SharedLearningDatabase;
   private h2gnn: any;
@@ -228,7 +228,7 @@ export class DefineTeamStandardsNode extends Node<TeamStandardsState> {
 /**
  * Node: Enforce Team Standards
  */
-export class EnforceTeamStandardsNode extends Node<TeamStandardsState> {
+export class EnforceTeamStandardsNode extends BaseNode {
   private codingEngine: CodingStandardEngine;
   private h2gnn: any;
 
@@ -337,7 +337,7 @@ export class EnforceTeamStandardsNode extends Node<TeamStandardsState> {
 /**
  * Node: Refine Team Standards
  */
-export class RefineTeamStandardsNode extends Node<TeamStandardsState> {
+export class RefineTeamStandardsNode extends BaseNode {
   private codingEngine: CodingStandardEngine;
   private sharedDB: SharedLearningDatabase;
   private h2gnn: any;

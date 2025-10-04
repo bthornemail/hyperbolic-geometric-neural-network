@@ -5,7 +5,7 @@
  * Converted from src/demo/integrated-improvements-demo.ts
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+// Using Vitest globals
 
 describe('Integrated System Improvements', () => {
   let improvements: any;

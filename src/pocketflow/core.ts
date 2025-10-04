@@ -67,9 +67,7 @@ export abstract class BaseNode {
   /**
    * Post-process results and return action
    */
-  post(shared: SharedStore, prepRes: any, execRes: any): Action {
-    return 'default';
-  }
+  abstract post(shared: SharedStore, prepRes: any, execRes: any): Action | Promise<Action>;
 
   /**
    * Run the complete node cycle
