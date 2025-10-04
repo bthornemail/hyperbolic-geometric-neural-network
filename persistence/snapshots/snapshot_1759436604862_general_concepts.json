@@ -1,0 +1,159 @@
+{
+  "id": "snapshot_1759436604862_general_concepts",
+  "timestamp": 1759436604862,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436604854_84tpedbi0",
+        "concept": "configuration",
+        "embedding": [
+          0.07540251777960671,
+          0.09802327311348873,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11310377666941007,
+          0.061830064579277505,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6406146769495873,
+          0.09151638242136961,
+          0.5994397922086377,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436604859_czoq2vi2h",
+        "concept": "monitoring",
+        "embedding": [
+          0.07558577713018805,
+          0.07558577713018805,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11337866569528207,
+          0.0619803372467542,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6421716797044997,
+          0.09173881138635712,
+          0.600896680654925,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "configuration",
+      "target": "orchestration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "configuration",
+      "target": "orchestration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "configuration",
+      "target": "microservices",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "configuration",
+      "target": "elasticsearch",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "configuration",
+      "target": "orchestration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "monitoring",
+      "target": "deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "monitoring",
+      "target": "compliance",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "monitoring",
+      "target": "deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "monitoring",
+      "target": "automation",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "monitoring",
+      "target": "compliance",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604485_mniasz6r4",
+  "timestamp": 1759436604485,
+  "concept": "vault",
+  "embedding": [
+    0.07582421756917829,
+    0.037912108784589144,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11373632635376742,
+    0.055351678825500135,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6441941714344309,
+    0.09202773877634728,
+    0.6027921404115145,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "monitoring",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "nginx",
+    "docker",
+    "consul",
+    "docker",
+    "nginx"
+  ],
+  "consolidated": true
+}

@@ -1,0 +1,159 @@
+{
+  "id": "snapshot_1759436605273_general_concepts",
+  "timestamp": 1759436605273,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436605259_hwuzf2vrg",
+        "concept": "monitoring",
+        "embedding": [
+          0.07564159730796631,
+          0.07564159730796631,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11346239596194946,
+          0.05143628616941709,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6426494261070566,
+          0.09180706087243666,
+          0.6013405602313101,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436605267_dgpiff2vd",
+        "concept": "docker",
+        "embedding": [
+          0.07581315545610842,
+          0.045487893273665043,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11371973318416262,
+          0.05155294571015372,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6441070507370538,
+          0.09201529296243624,
+          0.6027044268547329,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "monitoring",
+      "target": "deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "monitoring",
+      "target": "compliance",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "monitoring",
+      "target": "deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "monitoring",
+      "target": "automation",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "monitoring",
+      "target": "compliance",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "docker",
+      "target": "logging",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "docker",
+      "target": "testing",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "docker",
+      "target": "nginx",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "docker",
+      "target": "consul",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "docker",
+      "target": "scaling",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

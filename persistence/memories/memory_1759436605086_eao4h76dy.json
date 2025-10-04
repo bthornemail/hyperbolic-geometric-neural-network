@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436605086_eao4h76dy",
+  "timestamp": 1759436605086,
+  "concept": "docker",
+  "embedding": [
+    0.0757822886006304,
+    0.04546937316037823,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.1136734329009456,
+    0.0575945393364791,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6438432189821868,
+    0.09197760271174096,
+    0.6024589865709059,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "infrastructure",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "logging",
+    "testing",
+    "nginx",
+    "consul",
+    "scaling"
+  ],
+  "consolidated": false
+}

@@ -1,0 +1,159 @@
+{
+  "id": "snapshot_1759436605342_general_concepts",
+  "timestamp": 1759436605342,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436605317_79bj58qtd",
+        "concept": "security",
+        "embedding": [
+          0.0757379255895153,
+          0.060590340471612235,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11360688838427294,
+          0.0515017894008704,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6434683375949979,
+          0.09192404822785684,
+          0.6021063741061171,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436605333_7046h4o3t",
+        "concept": "deployment",
+        "embedding": [
+          0.07564155642160773,
+          0.07564155642160773,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.1134623346324116,
+          0.05143625836669326,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6426497265933337,
+          0.09180710379904766,
+          0.601340256785437,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "security",
+      "target": "logging",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "security",
+      "target": "testing",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "security",
+      "target": "scaling",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "security",
+      "target": "grafana",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "security",
+      "target": "scaling",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "deployment",
+      "target": "monitoring",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "deployment",
+      "target": "compliance",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "deployment",
+      "target": "monitoring",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "deployment",
+      "target": "automation",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "deployment",
+      "target": "compliance",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

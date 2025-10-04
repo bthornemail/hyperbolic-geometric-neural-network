@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604442_om898ho3h",
+  "timestamp": 1759436604442,
+  "concept": "nginx",
+  "embedding": [
+    0.07582424149972833,
+    0.037912120749864164,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.1137363622495925,
+    0.055351696294801675,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6441939973797224,
+    0.09202771391138889,
+    0.6027923180772412,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "monitoring",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "docker",
+    "consul",
+    "docker",
+    "kibana",
+    "vault"
+  ],
+  "consolidated": true
+}

@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604642_drts2qlah",
+  "timestamp": 1759436604642,
+  "concept": "orchestration",
+  "embedding": [
+    0.07544342040732067,
+    0.09807644652951687,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.113165130610981,
+    0.05431926269327088,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6409603317424615,
+    0.0915657616774945,
+    0.5997649008475405,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "security",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "configuration",
+    "configuration",
+    "microservices",
+    "elasticsearch",
+    "configuration"
+  ],
+  "consolidated": false
+}

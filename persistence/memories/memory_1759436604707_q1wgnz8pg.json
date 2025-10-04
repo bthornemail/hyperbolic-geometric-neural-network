@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604707_q1wgnz8pg",
+  "timestamp": 1759436604707,
+  "concept": "nomad",
+  "embedding": [
+    0.07582799620901645,
+    0.037913998104508226,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11374199431352468,
+    0.05459615727049184,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6442282226990698,
+    0.09203260324272426,
+    0.6028222450257618,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "security",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "nginx",
+    "docker",
+    "consul",
+    "docker",
+    "nginx"
+  ],
+  "consolidated": false
+}

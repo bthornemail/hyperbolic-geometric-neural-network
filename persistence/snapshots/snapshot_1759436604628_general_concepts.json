@@ -1,0 +1,184 @@
+{
+  "id": "snapshot_1759436604628_general_concepts",
+  "timestamp": 1759436604628,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436604622_sufm2khpu",
+        "concept": "deployment",
+        "embedding": [
+          0.07562699268233888,
+          0.07562699268233888,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11344048902350833,
+          0.05445143473128399,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.642519769773594,
+          0.09178853853908485,
+          0.6012242695570512,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436604627_cugs57p4l",
+        "concept": "compliance",
+        "embedding": [
+          0.0756269899213694,
+          0.0756269899213694,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.1134404848820541,
+          0.054451432743385965,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6425197900822778,
+          0.0917885414403254,
+          0.6012242490665747,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": [
+      {
+        "source": "memory_1759436604622_sufm2khpu",
+        "target": "memory_1759436604627_cugs57p4l",
+        "type": "semantic_relationship",
+        "strength": 1
+      },
+      {
+        "source": "memory_1759436604622_sufm2khpu",
+        "target": "memory_1759436604627_cugs57p4l",
+        "type": "semantic_relationship",
+        "strength": 1
+      },
+      {
+        "source": "memory_1759436604627_cugs57p4l",
+        "target": "memory_1759436604622_sufm2khpu",
+        "type": "semantic_relationship",
+        "strength": 1
+      },
+      {
+        "source": "memory_1759436604627_cugs57p4l",
+        "target": "memory_1759436604622_sufm2khpu",
+        "type": "semantic_relationship",
+        "strength": 1
+      }
+    ]
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "deployment",
+      "target": "monitoring",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "deployment",
+      "target": "compliance",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "deployment",
+      "target": "monitoring",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "deployment",
+      "target": "automation",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "deployment",
+      "target": "compliance",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "compliance",
+      "target": "deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "compliance",
+      "target": "monitoring",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "compliance",
+      "target": "deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "compliance",
+      "target": "monitoring",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "compliance",
+      "target": "automation",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

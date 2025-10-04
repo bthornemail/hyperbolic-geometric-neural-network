@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436605600_b8nqhtmzg",
+  "timestamp": 1759436605600,
+  "concept": "automation",
+  "embedding": [
+    0.07561865808769351,
+    0.07561865808769351,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11342798713154026,
+    0.05595780698489318,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6424575107064047,
+    0.09177964438662924,
+    0.6011582956958637,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "devops",
+    "type": "concept"
+  },
+  "performance": 0.9,
+  "confidence": 1,
+  "relationships": [
+    "deployment",
+    "monitoring",
+    "compliance",
+    "deployment",
+    "monitoring"
+  ],
+  "consolidated": true
+}

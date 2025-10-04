@@ -187,8 +187,8 @@ export class HyperbolicGeometricHGN {
   /**
    * Training loop with geometric loss functions
    */
-  async train(trainingData: TrainingData[], _config?: Partial<TrainingConfig>): Promise<void> {
-    console.log('🚀 Starting H²GNN Training...');
+  async train(trainingData: TrainingData[]): Promise<void> {
+    console.warn('🚀 Starting H²GNN Training...');
     
     for (let epoch = 0; epoch < this.config.maxEpochs; epoch++) {
       let totalLoss = 0;
@@ -210,17 +210,17 @@ export class HyperbolicGeometricHGN {
       });
       
       if (epoch % 10 === 0) {
-        console.log(`Epoch ${epoch}: Loss=${avgLoss.toFixed(4)}, Geometric Loss=${avgGeometricLoss.toFixed(4)}`);
+        console.warn(`Epoch ${epoch}: Loss=${avgLoss.toFixed(4)}, Geometric Loss=${avgGeometricLoss.toFixed(4)}`);
       }
       
       // Early stopping
       if (avgLoss < this.config.tolerance) {
-        console.log(`✅ Converged at epoch ${epoch}`);
+        console.warn(`✅ Converged at epoch ${epoch}`);
         break;
       }
     }
     
-    console.log('🎯 Training completed!');
+    console.warn('🎯 Training completed!');
   }
 
   /**
@@ -502,7 +502,7 @@ export class HyperbolicGeometricHGN {
         break;
     }
     
-    console.log(`🔄 Switched to ${mode} geometry (curvature: ${this.currentCurvature})`);
+    console.warn(`🔄 Switched to ${mode} geometry (curvature: ${this.currentCurvature})`);
   }
 
   /**
@@ -510,6 +510,10 @@ export class HyperbolicGeometricHGN {
    */
   getTrainingHistory(): typeof this.trainingHistory {
     return [...this.trainingHistory];
+  }
+
+  getConfig(): Required<H2GNNConfig> {
+    return this.config;
   }
 
   /**
@@ -549,7 +553,7 @@ export class HyperbolicGeometricHGN {
     // Reinitialize network with imported config
     this.initializeNetwork();
     
-    console.log('📥 Model imported successfully');
+    console.warn('📥 Model imported successfully');
   }
 }
 

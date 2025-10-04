@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436605099_f42fjlyqf",
+  "timestamp": 1759436605099,
+  "concept": "kubernetes",
+  "embedding": [
+    0.07561092785176658,
+    0.07561092785176658,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11341639177764987,
+    0.0574643051673426,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6423874588473127,
+    0.09176963697818756,
+    0.6010966954917875,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "infrastructure",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "deployment",
+    "monitoring",
+    "compliance",
+    "deployment",
+    "monitoring"
+  ],
+  "consolidated": true
+}

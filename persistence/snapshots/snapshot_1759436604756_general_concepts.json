@@ -1,0 +1,159 @@
+{
+  "id": "snapshot_1759436604756_general_concepts",
+  "timestamp": 1759436604756,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436604751_j6mip0wun",
+        "concept": "logging",
+        "embedding": [
+          0.07570414971462064,
+          0.05299290480023445,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11355622457193094,
+          0.06510556875457374,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6431764189199592,
+          0.09188234555999418,
+          0.6018376951094235,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436604754_3hoaiz3ex",
+        "concept": "deployment",
+        "embedding": [
+          0.07556792808540444,
+          0.07556792808540444,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11335189212810666,
+          0.06498841815344782,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6420191170600468,
+          0.09171701672286381,
+          0.6007547525567689,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "logging",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "logging",
+      "target": "security",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "logging",
+      "target": "scaling",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "logging",
+      "target": "testing",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "logging",
+      "target": "ansible",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "deployment",
+      "target": "monitoring",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "deployment",
+      "target": "automation",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "deployment",
+      "target": "compliance",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "deployment",
+      "target": "kubernetes",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "deployment",
+      "target": "terraform",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

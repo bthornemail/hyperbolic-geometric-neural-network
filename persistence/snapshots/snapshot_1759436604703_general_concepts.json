@@ -1,0 +1,159 @@
+{
+  "id": "snapshot_1759436604703_general_concepts",
+  "timestamp": 1759436604703,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436604698_rrw57lnr6",
+        "concept": "nginx",
+        "embedding": [
+          0.07582800121849906,
+          0.03791400060924953,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11374200182774857,
+          0.05459616087731931,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6442281862717076,
+          0.09203259803881539,
+          0.6028222822175496,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436604701_ylrzecxu5",
+        "concept": "microservices",
+        "embedding": [
+          0.07544338806454823,
+          0.0980764044839127,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11316508209682233,
+          0.05431923940647471,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6409605721417975,
+          0.09156579602025679,
+          0.5997646608995962,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "nginx",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "nginx",
+      "target": "consul",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "nginx",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "nginx",
+      "target": "kibana",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "nginx",
+      "target": "vault",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "microservices",
+      "target": "configuration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "microservices",
+      "target": "orchestration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "microservices",
+      "target": "orchestration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "microservices",
+      "target": "configuration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "microservices",
+      "target": "elasticsearch",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

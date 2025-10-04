@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436605177_i2gmtposm",
+  "timestamp": 1759436605177,
+  "concept": "prometheus",
+  "embedding": [
+    0.07561088480782649,
+    0.07561088480782649,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11341632721173972,
+    0.057464272453948126,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6423877757459623,
+    0.09176968224942318,
+    0.6010963760515351,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "infrastructure",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "deployment",
+    "monitoring",
+    "compliance",
+    "deployment",
+    "monitoring"
+  ],
+  "consolidated": true
+}

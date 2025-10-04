@@ -1,0 +1,52 @@
+{
+  "id": "memory_1759436604363_v59rpj3to",
+  "timestamp": 1759436604363,
+  "concept": "microservices",
+  "embedding": [
+    0.07541557161932898,
+    0.09804024310512766,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11312335742899346,
+    0.059578301579269875,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6407212957173288,
+    0.09153161367390412,
+    0.5995434256054331,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "containerization",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "configuration",
+    "orchestration",
+    "orchestration",
+    "configuration"
+  ],
+  "consolidated": false
+}

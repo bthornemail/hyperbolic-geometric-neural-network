@@ -1,0 +1,172 @@
+{
+  "id": "snapshot_1759436604847_general_concepts",
+  "timestamp": 1759436604847,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436604842_pi9alj38g",
+        "concept": "automation",
+        "embedding": [
+          0.07558578650217515,
+          0.07558578650217515,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11337867975326271,
+          0.06198034493178362,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6421716106062384,
+          0.0917388015151769,
+          0.6008967502035506,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436604845_cwi8dn1cn",
+        "concept": "compliance",
+        "embedding": [
+          0.07558578484829497,
+          0.07558578484829497,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11337867727244244,
+          0.06198034357560187,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6421716228000509,
+          0.09173880325715013,
+          0.6008967379302631,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": [
+      {
+        "source": "memory_1759436604842_pi9alj38g",
+        "target": "memory_1759436604845_cwi8dn1cn",
+        "type": "semantic_relationship",
+        "strength": 1
+      },
+      {
+        "source": "memory_1759436604845_cwi8dn1cn",
+        "target": "memory_1759436604842_pi9alj38g",
+        "type": "semantic_relationship",
+        "strength": 1
+      }
+    ]
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "automation",
+      "target": "deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "automation",
+      "target": "monitoring",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "automation",
+      "target": "compliance",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "automation",
+      "target": "deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "automation",
+      "target": "monitoring",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "compliance",
+      "target": "deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "compliance",
+      "target": "monitoring",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "compliance",
+      "target": "deployment",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "compliance",
+      "target": "monitoring",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "compliance",
+      "target": "automation",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

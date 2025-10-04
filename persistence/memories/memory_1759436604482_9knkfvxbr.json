@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604482_9knkfvxbr",
+  "timestamp": 1759436604482,
+  "concept": "elasticsearch",
+  "embedding": [
+    0.07543966498350976,
+    0.09807156447856269,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11315949747526464,
+    0.055070955437962116,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6409270289777861,
+    0.09156100413968374,
+    0.5997349991728343,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "monitoring",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "configuration",
+    "orchestration",
+    "orchestration",
+    "configuration",
+    "microservices"
+  ],
+  "consolidated": false
+}

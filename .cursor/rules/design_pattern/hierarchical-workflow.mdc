@@ -1,0 +1,472 @@
+---
+description: Guidelines for Hierarchical Workflows with H²GNN and PocketFlow
+globs: 
+alwaysApply: false
+---
+
+# Hierarchical Workflow
+
+Hierarchical workflows leverage H²GNN's hyperbolic geometry to create naturally hierarchical task decomposition and execution patterns.
+
+## Core Concepts
+
+### Hierarchical Structure
+- **Tree-like Organization**: Natural hierarchy representation in hyperbolic space
+- **Exponential Capacity**: Exponential growth in capacity near boundary
+- **Geometric Routing**: Use hyperbolic distance for workflow routing
+- **Memory Consolidation**: Hierarchical memory organization
+
+### Workflow Patterns
+- **Top-down Decomposition**: Break complex tasks into hierarchical subtasks
+- **Bottom-up Aggregation**: Combine results using hyperbolic operations
+- **Geometric Attention**: Use hyperbolic attention for task prioritization
+- **Dynamic Routing**: Route based on hyperbolic similarity
+
+## Implementation Patterns
+
+### 1. Hierarchical Task Decomposition
+```typescript
+export class HierarchicalTaskDecomposer extends HyperbolicNode {
+  async prep(shared: SharedStore): Promise<string> {
+    return shared.task || '';
+  }
+  
+  async exec(task: string): Promise<HierarchicalTask[]> {
+    // Generate task embedding
+    const taskEmbedding = await this.generateEmbedding(task);
+    
+    // Decompose into hierarchical subtasks
+    const subtasks = await this.decomposeTask(task, taskEmbedding);
+    
+    // Organize subtasks hierarchically
+    const hierarchicalTasks = await this.organizeHierarchically(subtasks);
+    
+    return hierarchicalTasks;
+  }
+  
+  async post(shared: SharedStore, prepRes: string, execRes: HierarchicalTask[]): Promise<Action> {
+    // Store hierarchical tasks
+    shared.hierarchicalTasks = execRes;
+    
+    // Determine next action based on task complexity
+    const complexity = this.computeTaskComplexity(execRes);
+    return complexity > 0.7 ? 'complex_hierarchy' : 'simple_hierarchy';
+  }
+  
+  private async decomposeTask(task: string, embedding: Vector): Promise<SubTask[]> {
+    // Use LLM to decompose task
+    const prompt = `
+    Decompose the following task into hierarchical subtasks:
+    Task: ${task}
+    
+    Return as JSON array of subtasks with:
+    - id: unique identifier
+    - description: subtask description
+    - priority: priority level (1-10)
+    - dependencies: array of subtask IDs this depends on
+    - estimatedComplexity: complexity estimate (0-1)
+    `;
+    
+    const response = await this.callLLM(prompt);
+    const subtasks = JSON.parse(response);
+    
+    // Generate embeddings for each subtask
+    for (const subtask of subtasks) {
+      subtask.embedding = await this.generateEmbedding(subtask.description);
+    }
+    
+    return subtasks;
+  }
+  
+  private async organizeHierarchically(subtasks: SubTask[]): Promise<HierarchicalTask[]> {
+    // Cluster subtasks using hyperbolic clustering
+    const embeddings = subtasks.map(st => st.embedding);
+    const clusters = await this.clusterEmbeddings(embeddings);
+    
+    // Create hierarchical structure
+    const hierarchicalTasks: HierarchicalTask[] = [];
+    
+    for (let i = 0; i < clusters.length; i++) {
+      const cluster = clusters[i];
+      const clusterSubtasks = cluster.map(embedding => 
+        subtasks.find(st => HyperbolicArithmetic.distance(st.embedding, embedding) < 0.01)
+      ).filter(Boolean);
+      
+      // Compute cluster centroid
+      const centroid = await this.computeFrechetMean(cluster);
+      
+      hierarchicalTasks.push({
+        id: `cluster_${i}`,
+        description: `Cluster ${i} with ${clusterSubtasks.length} subtasks`,
+        embedding: centroid,
+        subtasks: clusterSubtasks,
+        level: 0 // Top level
+      });
+    }
+    
+    return hierarchicalTasks;
+  }
+}
+```
+
+### 2. Hierarchical Execution Engine
+```typescript
+export class HierarchicalExecutionEngine extends HyperbolicNode {
+  async prep(shared: SharedStore): Promise<HierarchicalTask[]> {
+    return shared.hierarchicalTasks || [];
+  }
+  
+  async exec(tasks: HierarchicalTask[]): Promise<ExecutionResult[]> {
+    const results: ExecutionResult[] = [];
+    
+    // Execute tasks in hierarchical order
+    for (const task of tasks) {
+      const result = await this.executeTask(task);
+      results.push(result);
+    }
+    
+    return results;
+  }
+  
+  async post(shared: SharedStore, prepRes: HierarchicalTask[], execRes: ExecutionResult[]): Promise<Action> {
+    // Store execution results
+    shared.executionResults = execRes;
+    
+    // Determine next action based on execution status
+    const allCompleted = execRes.every(r => r.status === 'completed');
+    return allCompleted ? 'hierarchy_complete' : 'hierarchy_incomplete';
+  }
+  
+  private async executeTask(task: HierarchicalTask): Promise<ExecutionResult> {
+    try {
+      // Execute subtasks first (bottom-up)
+      const subtaskResults = await Promise.all(
+        task.subtasks.map(subtask => this.executeSubTask(subtask))
+      );
+      
+      // Aggregate results using hyperbolic operations
+      const aggregatedResult = await this.aggregateResults(subtaskResults);
+      
+      // Execute main task
+      const mainResult = await this.executeMainTask(task, aggregatedResult);
+      
+      return {
+        taskId: task.id,
+        status: 'completed',
+        result: mainResult,
+        subtaskResults,
+        timestamp: Date.now()
+      };
+    } catch (error) {
+      return {
+        taskId: task.id,
+        status: 'failed',
+        error: error.message,
+        timestamp: Date.now()
+      };
+    }
+  }
+  
+  private async aggregateResults(results: SubTaskResult[]): Promise<AggregatedResult> {
+    // Use hyperbolic attention to weight results
+    const embeddings = results.map(r => r.embedding);
+    const attentionWeights = embeddings.map(emb => 
+      HyperbolicArithmetic.hyperbolicAttention(emb, emb) // Self-attention
+    );
+    
+    // Weighted aggregation using Möbius operations
+    let aggregated = results[0].embedding;
+    for (let i = 1; i < results.length; i++) {
+      const weighted = HyperbolicArithmetic.mobiusScalarMult(
+        attentionWeights[i], results[i].embedding
+      );
+      aggregated = HyperbolicArithmetic.mobiusAdd(aggregated, weighted);
+    }
+    
+    return {
+      embedding: aggregated,
+      confidence: this.computeConfidence(results),
+      metadata: this.extractMetadata(results)
+    };
+  }
+}
+```
+
+### 3. Hierarchical Memory Consolidation
+```typescript
+export class HierarchicalMemoryConsolidation extends HyperbolicNode {
+  async prep(shared: SharedStore): Promise<Memory[]> {
+    return shared.memories || [];
+  }
+  
+  async exec(memories: Memory[]): Promise<ConsolidatedMemory[]> {
+    if (memories.length === 0) return [];
+    
+    // Organize memories hierarchically
+    const hierarchicalMemories = await this.organizeMemoriesHierarchically(memories);
+    
+    // Consolidate at each level
+    const consolidatedMemories = await this.consolidateHierarchicalMemories(hierarchicalMemories);
+    
+    return consolidatedMemories;
+  }
+  
+  async post(shared: SharedStore, prepRes: Memory[], execRes: ConsolidatedMemory[]): Promise<Action> {
+    // Store consolidated memories
+    shared.consolidatedMemories = execRes;
+    
+    // Clean up old memories
+    shared.memories = [];
+    
+    return 'consolidated';
+  }
+  
+  private async organizeMemoriesHierarchically(memories: Memory[]): Promise<HierarchicalMemory[]> {
+    // Extract embeddings
+    const embeddings = memories.map(m => m.embedding);
+    
+    // Cluster memories using hyperbolic clustering
+    const clusters = await this.clusterEmbeddings(embeddings);
+    
+    // Create hierarchical structure
+    const hierarchicalMemories: HierarchicalMemory[] = [];
+    
+    for (let i = 0; i < clusters.length; i++) {
+      const cluster = clusters[i];
+      const clusterMemories = cluster.map(embedding => 
+        memories.find(m => HyperbolicArithmetic.distance(m.embedding, embedding) < 0.01)
+      ).filter(Boolean);
+      
+      // Compute cluster centroid
+      const centroid = await this.computeFrechetMean(cluster);
+      
+      hierarchicalMemories.push({
+        id: `hierarchy_${i}`,
+        level: 0,
+        embedding: centroid,
+        memories: clusterMemories,
+        children: [] // Will be populated recursively
+      });
+    }
+    
+    // Recursively organize sub-clusters
+    for (const hierarchicalMemory of hierarchicalMemories) {
+      if (hierarchicalMemory.memories.length > 10) {
+        const subClusters = await this.organizeMemoriesHierarchically(
+          hierarchicalMemory.memories
+        );
+        hierarchicalMemory.children = subClusters;
+      }
+    }
+    
+    return hierarchicalMemories;
+  }
+  
+  private async consolidateHierarchicalMemories(
+    hierarchicalMemories: HierarchicalMemory[]
+  ): Promise<ConsolidatedMemory[]> {
+    const consolidated: ConsolidatedMemory[] = [];
+    
+    for (const hierarchicalMemory of hierarchicalMemories) {
+      // Consolidate current level
+      const consolidatedMemory = await this.consolidateMemoryCluster(hierarchicalMemory);
+      
+      // Recursively consolidate children
+      if (hierarchicalMemory.children.length > 0) {
+        const consolidatedChildren = await this.consolidateHierarchicalMemories(
+          hierarchicalMemory.children
+        );
+        consolidatedMemory.children = consolidatedChildren;
+      }
+      
+      consolidated.push(consolidatedMemory);
+    }
+    
+    return consolidated;
+  }
+}
+```
+
+## Advanced Patterns
+
+### 1. Dynamic Workflow Routing
+```typescript
+export class DynamicWorkflowRouter extends HyperbolicNode {
+  async prep(shared: SharedStore): Promise<{task: string, context: any}> {
+    return {
+      task: shared.currentTask || '',
+      context: shared.context || {}
+    };
+  }
+  
+  async exec({task, context}: {task: string, context: any}): Promise<RoutingDecision> {
+    // Generate task embedding
+    const taskEmbedding = await this.generateEmbedding(task);
+    
+    // Find similar completed tasks
+    const similarTasks = await this.findSimilarTasks(taskEmbedding);
+    
+    // Compute routing decision based on similarity
+    const routingDecision = await this.computeRoutingDecision(taskEmbedding, similarTasks);
+    
+    return routingDecision;
+  }
+  
+  async post(shared: SharedStore, prepRes: any, execRes: RoutingDecision): Promise<Action> {
+    // Store routing decision
+    shared.routingDecision = execRes;
+    
+    // Route to appropriate workflow
+    return execRes.nextWorkflow;
+  }
+  
+  private async findSimilarTasks(taskEmbedding: Vector): Promise<SimilarTask[]> {
+    // Find similar tasks using hyperbolic distance
+    const similarities = this.completedTasks.map(task => ({
+      task,
+      distance: HyperbolicArithmetic.distance(taskEmbedding, task.embedding)
+    }));
+    
+    // Sort by similarity and return top matches
+    return similarities
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, 5)
+      .map(item => ({
+        task: item.task,
+        similarity: 1 - item.distance,
+        confidence: this.computeConfidence(item.distance)
+      }));
+  }
+}
+```
+
+### 2. Hierarchical Attention Mechanism
+```typescript
+export class HierarchicalAttention extends HyperbolicNode {
+  async prep(shared: SharedStore): Promise<{query: Vector, keys: Vector[], values: Vector[]}> {
+    return {
+      query: shared.queryEmbedding,
+      keys: shared.keyEmbeddings || [],
+      values: shared.valueEmbeddings || []
+    };
+  }
+  
+  async exec({query, keys, values}: {query: Vector, keys: Vector[], values: Vector[]}): Promise<Vector> {
+    // Compute hierarchical attention weights
+    const attentionWeights = await this.computeHierarchicalAttention(query, keys);
+    
+    // Apply attention to values
+    const attendedValue = await this.applyHierarchicalAttention(attentionWeights, values);
+    
+    return attendedValue;
+  }
+  
+  async post(shared: SharedStore, prepRes: any, execRes: Vector): Promise<Action> {
+    // Store attention result
+    shared.attentionResult = execRes;
+    
+    return 'default';
+  }
+  
+  private async computeHierarchicalAttention(
+    query: Vector, 
+    keys: Vector[]
+  ): Promise<number[]> {
+    // Compute attention weights for each key
+    const weights = keys.map(key => 
+      HyperbolicArithmetic.hyperbolicAttention(query, key)
+    );
+    
+    // Apply hierarchical weighting
+    const hierarchicalWeights = await this.applyHierarchicalWeighting(weights, keys);
+    
+    // Normalize weights
+    const totalWeight = hierarchicalWeights.reduce((sum, w) => sum + w, 0);
+    return hierarchicalWeights.map(w => w / totalWeight);
+  }
+  
+  private async applyHierarchicalWeighting(
+    weights: number[], 
+    keys: Vector[]
+  ): Promise<number[]> {
+    // Compute hierarchical structure
+    const clusters = await this.clusterEmbeddings(keys);
+    
+    // Apply hierarchical weighting
+    const hierarchicalWeights: number[] = [];
+    
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const clusterIndex = clusters.findIndex(cluster => 
+        cluster.some(clusterKey => HyperbolicArithmetic.distance(key, clusterKey) < 0.01)
+      );
+      
+      // Weight by cluster importance
+      const clusterWeight = 1.0 / (clusterIndex + 1); // Higher weight for first cluster
+      hierarchicalWeights.push(weights[i] * clusterWeight);
+    }
+    
+    return hierarchicalWeights;
+  }
+}
+```
+
+## Best Practices
+
+### 1. Hierarchical Organization
+- **Use hyperbolic clustering** for natural hierarchy formation
+- **Implement proper level management** for hierarchical structures
+- **Handle recursive operations** carefully
+- **Maintain geometric consistency** across levels
+
+### 2. Task Decomposition
+- **Break tasks into meaningful subtasks**
+- **Maintain proper dependencies** between subtasks
+- **Use geometric similarity** for task grouping
+- **Implement proper error handling** for failed subtasks
+
+### 3. Memory Management
+- **Organize memories hierarchically** using hyperbolic clustering
+- **Implement proper consolidation** at each level
+- **Handle memory overflow** gracefully
+- **Use geometric attention** for memory retrieval
+
+### 4. Performance Optimization
+- **Use batch operations** for multiple tasks
+- **Implement lazy evaluation** for expensive operations
+- **Cache frequently used results**
+- **Optimize geometric operations** for better performance
+
+## Common Patterns
+
+### 1. Top-down Decomposition
+```typescript
+// Task → Subtasks → Hierarchical Organization → Execution
+const task = await this.decomposeTask(originalTask);
+const hierarchy = await this.organizeHierarchically(task);
+const results = await this.executeHierarchy(hierarchy);
+```
+
+### 2. Bottom-up Aggregation
+```typescript
+// Results → Hyperbolic Attention → Weighted Aggregation → Final Result
+const attentionWeights = await this.computeHierarchicalAttention(query, results);
+const aggregated = await this.aggregateWithAttention(results, attentionWeights);
+```
+
+### 3. Dynamic Routing
+```typescript
+// Task → Similarity Search → Routing Decision → Workflow Selection
+const similarity = await this.findSimilarTasks(task);
+const routing = await this.computeRoutingDecision(similarity);
+const workflow = await this.selectWorkflow(routing);
+```
+
+## Integration with PocketFlow
+
+Hierarchical workflows integrate with PocketFlow through:
+- **Node Hierarchy**: Each node can have hierarchical children
+- **Flow Routing**: Use hierarchical routing for flow control
+- **Memory Organization**: Hierarchical memory consolidation
+- **Task Decomposition**: Natural hierarchical task breakdown
+- **Geometric Attention**: Hyperbolic attention for workflow decisions

@@ -1,0 +1,172 @@
+{
+  "id": "snapshot_1759436604436_general_concepts",
+  "timestamp": 1759436604436,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436604433_nsc6480kk",
+        "concept": "scaling",
+        "embedding": [
+          0.07575974555953308,
+          0.05303182189167315,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.1136396183392996,
+          0.05530461425845913,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6436459684053001,
+          0.0919494240579,
+          0.6022795815699302,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436604435_crub0b582",
+        "concept": "testing",
+        "embedding": [
+          0.07575974444932201,
+          0.05303182111452541,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11363961667398301,
+          0.05530461344800506,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6436459765100542,
+          0.09194942521572202,
+          0.6022795733284705,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": [
+      {
+        "source": "memory_1759436604433_nsc6480kk",
+        "target": "memory_1759436604435_crub0b582",
+        "type": "semantic_relationship",
+        "strength": 1
+      },
+      {
+        "source": "memory_1759436604435_crub0b582",
+        "target": "memory_1759436604433_nsc6480kk",
+        "type": "semantic_relationship",
+        "strength": 1
+      }
+    ]
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "scaling",
+      "target": "logging",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "scaling",
+      "target": "security",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "scaling",
+      "target": "testing",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "scaling",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "scaling",
+      "target": "consul",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "testing",
+      "target": "logging",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "testing",
+      "target": "security",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "testing",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "testing",
+      "target": "consul",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "testing",
+      "target": "scaling",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

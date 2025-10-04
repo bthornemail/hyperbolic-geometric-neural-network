@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604768_anq3mmy1y",
+  "timestamp": 1759436604768,
+  "concept": "nginx",
+  "embedding": [
+    0.07576849920605906,
+    0.03788424960302953,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11365274880908859,
+    0.06516090931721077,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6437232761491839,
+    0.09196046802131198,
+    0.6023492697847589,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "javascript_automation",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "docker",
+    "kibana",
+    "vault",
+    "consul",
+    "nomad"
+  ],
+  "consolidated": false
+}

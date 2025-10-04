@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604712_sc806yk9r",
+  "timestamp": 1759436604712,
+  "concept": "compliance",
+  "embedding": [
+    0.07556795122329653,
+    0.07556795122329653,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11335192683494479,
+    0.06498843805203501,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6420189462935335,
+    0.09171699232764763,
+    0.6007549242550578,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "javascript_automation",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "deployment",
+    "monitoring",
+    "automation",
+    "kubernetes",
+    "terraform"
+  ],
+  "consolidated": true
+}

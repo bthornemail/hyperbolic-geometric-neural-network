@@ -1,0 +1,49 @@
+{
+  "id": "memory_1759436605701_sufg8ybld",
+  "timestamp": 1759436605701,
+  "concept": "kubernetes_orchestration",
+  "embedding": [
+    0.14708290864119294,
+    0.1764994903694315,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.1103121814808947,
+    0.06986438160456665,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6248104174725535,
+    0.08925863106750763,
+    0.584644830373658,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "technology",
+    "type": "pattern"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "docker_containerization"
+  ],
+  "consolidated": false
+}

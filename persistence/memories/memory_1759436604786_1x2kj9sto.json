@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604786_1x2kj9sto",
+  "timestamp": 1759436604786,
+  "concept": "monitoring",
+  "embedding": [
+    0.07561910688031452,
+    0.07561910688031452,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11342866032047177,
+    0.05595813909143273,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6424542081088673,
+    0.09177917258698105,
+    0.6011616263527069,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "automation",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "deployment",
+    "compliance",
+    "deployment",
+    "automation",
+    "compliance"
+  ],
+  "consolidated": true
+}

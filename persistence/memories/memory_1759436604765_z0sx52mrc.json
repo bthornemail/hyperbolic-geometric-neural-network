@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604765_z0sx52mrc",
+  "timestamp": 1759436604765,
+  "concept": "consul",
+  "embedding": [
+    0.07573898266963275,
+    0.04544338960177965,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11360847400444912,
+    0.06513552509588416,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6434724796531788,
+    0.0919246399504541,
+    0.6021146164556237,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "javascript_automation",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "docker",
+    "nginx",
+    "logging",
+    "scaling",
+    "testing"
+  ],
+  "consolidated": true
+}

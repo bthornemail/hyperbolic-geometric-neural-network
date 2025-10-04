@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604478_4ntq84t6s",
+  "timestamp": 1759436604478,
+  "concept": "compliance",
+  "embedding": [
+    0.07562320149788399,
+    0.07562320149788399,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11343480224682598,
+    0.0552049370934553,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.642486291090022,
+    0.09178375587000315,
+    0.6011940878534445,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "monitoring",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "deployment",
+    "monitoring",
+    "deployment",
+    "monitoring",
+    "automation"
+  ],
+  "consolidated": true
+}

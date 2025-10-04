@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604731_olon3du7l",
+  "timestamp": 1759436604731,
+  "concept": "configuration",
+  "embedding": [
+    0.0753848080604161,
+    0.09800025047854091,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11307721209062413,
+    0.06483093493195784,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6404631431899854,
+    0.0914947347414265,
+    0.5992989665695229,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "javascript_automation",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "orchestration",
+    "microservices",
+    "elasticsearch",
+    "orchestration",
+    "elasticsearch"
+  ],
+  "consolidated": true
+}

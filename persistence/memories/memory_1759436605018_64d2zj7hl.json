@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436605018_64d2zj7hl",
+  "timestamp": 1759436605018,
+  "concept": "logging",
+  "embedding": [
+    0.07574742585009678,
+    0.05302319809506775,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11362113877514517,
+    0.05756804364607355,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6435464303217614,
+    0.09193520433168022,
+    0.602181812528134,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "infrastructure",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "security",
+    "testing",
+    "docker",
+    "consul",
+    "scaling"
+  ],
+  "consolidated": false
+}

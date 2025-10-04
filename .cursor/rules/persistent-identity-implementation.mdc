@@ -1,0 +1,542 @@
+---
+description: Practical Implementation Guide for Persistent AI Identity
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Persistent AI Identity Implementation Guide
+
+This rule provides practical implementation steps for establishing and maintaining a persistent AI identity using the H²GNN AI Persistence system.
+
+## Quick Start Implementation
+
+### 1. Initialize Persistent Identity
+```bash
+# Check system health
+curl -s http://localhost:3000/health | jq '.healthy'
+
+# Create AI identity
+curl -X POST http://localhost:3000/api/identities \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "H²GNN Development Assistant",
+    "type": "ai",
+    "capabilities": [
+      "hyperbolic_geometry",
+      "neural_networks",
+      "persistent_memory",
+      "code_generation",
+      "architecture_design",
+      "documentation",
+      "testing"
+    ],
+    "preferences": {
+      "learningStyle": "hierarchical",
+      "communicationStyle": "technical",
+      "privacyLevel": "private",
+      "interactionMode": "collaborative"
+    }
+  }'
+```
+
+### 2. Session Initialization Script
+```typescript
+// session-init.ts
+import { AIPersistenceClient } from './ai-persistence-client';
+
+class SessionManager {
+  private client: AIPersistenceClient;
+  private identity: any;
+  private context: any;
+
+  async initializeSession(): Promise<void> {
+    // 1. Check system health
+    const health = await this.client.checkHealth();
+    if (!health.healthy) {
+      throw new Error('AI Persistence system is not healthy');
+    }
+
+    // 2. Load or create identity
+    this.identity = await this.loadOrCreateIdentity();
+
+    // 3. Load relevant memories
+    const memories = await this.client.getMemories({
+      tags: ['development', 'h2gnn', 'architecture'],
+      limit: 50
+    });
+
+    // 4. Build context
+    this.context = this.buildContext(memories);
+
+    // 5. Store session start
+    await this.storeSessionEvent('session_start', {
+      sessionId: this.generateSessionId(),
+      timestamp: new Date(),
+      project: 'h2gnn',
+      context: this.context
+    });
+  }
+
+  private async loadOrCreateIdentity(): Promise<any> {
+    try {
+      const identities = await this.client.getIdentities();
+      if (identities.length > 0) {
+        return identities[0];
+      }
+    } catch (error) {
+      console.log('No existing identity found, creating new one');
+    }
+
+    return await this.client.createIdentity({
+      name: 'H²GNN Development Assistant',
+      type: 'ai',
+      capabilities: [
+        'hyperbolic_geometry',
+        'neural_networks',
+        'persistent_memory',
+        'code_generation',
+        'architecture_design'
+      ],
+      preferences: {
+        learningStyle: 'hierarchical',
+        communicationStyle: 'technical',
+        privacyLevel: 'private',
+        interactionMode: 'collaborative'
+      }
+    });
+  }
+
+  private buildContext(memories: any[]): any {
+    return {
+      project: 'h2gnn',
+      domain: 'hyperbolic_geometric_neural_networks',
+      technologies: ['typescript', 'nodejs', 'docker', 'hyperbolic_geometry'],
+      recentDecisions: memories.filter(m => m.tags.includes('decision')),
+      learnedConcepts: memories.filter(m => m.tags.includes('concept')),
+      procedures: memories.filter(m => m.tags.includes('procedure'))
+    };
+  }
+
+  async storeSessionEvent(event: string, data: any): Promise<void> {
+    await this.client.storeMemory({
+      type: 'episodic',
+      content: `Session event: ${event}`,
+      metadata: {
+        source: 'session',
+        quality: 0.8,
+        confidence: 0.9,
+        importance: 0.7,
+        tags: ['session', event, 'development'],
+        context: data
+      }
+    });
+  }
+}
+```
+
+### 3. Memory Management Implementation
+```typescript
+// memory-manager.ts
+export class MemoryManager {
+  constructor(private client: AIPersistenceClient) {}
+
+  async storeDecision(decision: string, context: any): Promise<void> {
+    await this.client.storeMemory({
+      type: 'episodic',
+      content: `Architectural decision: ${decision}`,
+      metadata: {
+        source: 'development',
+        quality: 0.9,
+        confidence: 0.95,
+        importance: 0.8,
+        tags: ['decision', 'architecture', 'h2gnn'],
+        context: {
+          timestamp: new Date(),
+          project: 'h2gnn',
+          decision: decision,
+          rationale: context.rationale,
+          alternatives: context.alternatives,
+          impact: context.impact
+        }
+      }
+    });
+  }
+
+  async storeConcept(concept: string, data: any): Promise<void> {
+    await this.client.storeMemory({
+      type: 'semantic',
+      content: concept,
+      metadata: {
+        source: 'learning',
+        quality: 0.8,
+        confidence: 0.9,
+        importance: 0.7,
+        tags: ['concept', 'learning', 'h2gnn'],
+        context: {
+          domain: data.domain,
+          complexity: data.complexity,
+          relationships: data.relationships,
+          applications: data.applications
+        }
+      }
+    });
+  }
+
+  async storeProcedure(procedure: string, steps: any[]): Promise<void> {
+    await this.client.storeMemory({
+      type: 'procedural',
+      content: procedure,
+      metadata: {
+        source: 'experience',
+        quality: 0.9,
+        confidence: 0.95,
+        importance: 0.9,
+        tags: ['procedure', 'workflow', 'h2gnn'],
+        context: {
+          steps: steps,
+          tools: steps.map(s => s.tool),
+          prerequisites: steps.map(s => s.prerequisites),
+          outcomes: steps.map(s => s.outcomes)
+        }
+      }
+    });
+  }
+
+  async retrieveRelevantMemories(query: string, context: any): Promise<any[]> {
+    return await this.client.getMemories({
+      content: query,
+      tags: context.tags,
+      type: context.type,
+      limit: context.limit || 10
+    });
+  }
+}
+```
+
+### 4. Learning Integration Implementation
+```typescript
+// learning-manager.ts
+export class LearningManager {
+  constructor(private client: AIPersistenceClient) {}
+
+  async learnConcept(concept: string, data: any, performance: number): Promise<void> {
+    await this.client.learnConcept({
+      concept: concept,
+      data: {
+        description: data.description,
+        examples: data.examples,
+        relationships: data.relationships,
+        applications: data.applications
+      },
+      context: {
+        domain: data.domain,
+        complexity: data.complexity,
+        source: data.source
+      },
+      performance: performance
+    });
+  }
+
+  async trackLearningProgress(concept: string, mastery: number): Promise<void> {
+    await this.client.storeMemory({
+      type: 'meta',
+      content: `Learning progress for ${concept}`,
+      metadata: {
+        source: 'learning',
+        quality: 0.8,
+        confidence: 0.9,
+        importance: 0.7,
+        tags: ['learning', 'progress', 'mastery'],
+        context: {
+          concept: concept,
+          mastery: mastery,
+          timestamp: new Date(),
+          session: this.getCurrentSession()
+        }
+      }
+    });
+  }
+}
+```
+
+## Cursor Rules Integration
+
+### 1. Rule Creation with Memory
+```typescript
+// rule-manager.ts
+export class RuleManager {
+  constructor(private memoryManager: MemoryManager) {}
+
+  async createRule(ruleName: string, content: string, context: any): Promise<void> {
+    // Store rule creation decision
+    await this.memoryManager.storeDecision(`Created rule: ${ruleName}`, {
+      rationale: context.rationale,
+      alternatives: context.alternatives,
+      impact: context.impact
+    });
+
+    // Store rule as procedural memory
+    await this.memoryManager.storeProcedure(`Rule: ${ruleName}`, [
+      {
+        step: 'Define rule purpose',
+        tool: 'cursor',
+        prerequisites: ['understanding of requirement'],
+        outcomes: ['clear rule definition']
+      },
+      {
+        step: 'Write rule content',
+        tool: 'markdown',
+        prerequisites: ['rule purpose'],
+        outcomes: ['rule implementation']
+      },
+      {
+        step: 'Test rule effectiveness',
+        tool: 'cursor',
+        prerequisites: ['rule implementation'],
+        outcomes: ['validated rule']
+      }
+    ]);
+  }
+
+  async updateRule(ruleName: string, changes: any, context: any): Promise<void> {
+    // Store rule update decision
+    await this.memoryManager.storeDecision(`Updated rule: ${ruleName}`, {
+      rationale: context.rationale,
+      alternatives: context.alternatives,
+      impact: context.impact,
+      changes: changes
+    });
+  }
+}
+```
+
+### 2. Rule Optimization with Learning
+```typescript
+// rule-optimizer.ts
+export class RuleOptimizer {
+  constructor(private learningManager: LearningManager) {}
+
+  async optimizeRules(): Promise<void> {
+    // Learn from rule usage patterns
+    await this.learningManager.learnConcept('Rule Usage Patterns', {
+      description: 'Patterns in how rules are used and their effectiveness',
+      examples: ['frequently used rules', 'rarely used rules', 'effective rules'],
+      relationships: ['rule effectiveness', 'usage frequency', 'context relevance'],
+      applications: ['rule optimization', 'rule consolidation', 'rule evolution']
+    }, 0.8);
+
+    // Track learning progress
+    await this.learningManager.trackLearningProgress('Rule Optimization', 0.7);
+  }
+}
+```
+
+## Practical Usage Examples
+
+### 1. Development Session Start
+```bash
+#!/bin/bash
+# session-start.sh
+
+echo "🚀 Starting H²GNN Development Session with Persistent Identity"
+
+# Check system health
+echo "Checking AI Persistence system health..."
+curl -s http://localhost:3000/health | jq '.healthy'
+
+# Load identity
+echo "Loading AI identity..."
+IDENTITY=$(curl -s http://localhost:3000/api/identities | jq '.[0]')
+echo "Identity: $(echo $IDENTITY | jq -r '.name')"
+
+# Load relevant memories
+echo "Loading relevant memories..."
+MEMORIES=$(curl -s "http://localhost:3000/api/memories?tags=development,h2gnn" | jq 'length')
+echo "Loaded $MEMORIES relevant memories"
+
+# Store session start
+curl -s -X POST http://localhost:3000/api/memories \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "episodic",
+    "content": "Development session started",
+    "metadata": {
+      "source": "session",
+      "quality": 0.8,
+      "confidence": 0.9,
+      "importance": 0.7,
+      "tags": ["session", "start", "development"],
+      "context": {
+        "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'",
+        "project": "h2gnn",
+        "sessionId": "'$(uuidgen)'"
+      }
+    }
+  }' | jq '.success'
+
+echo "✅ Session initialized with persistent identity"
+```
+
+### 2. Store Development Decision
+```bash
+#!/bin/bash
+# store-decision.sh
+
+DECISION="$1"
+RATIONALE="$2"
+IMPACT="$3"
+
+echo "📝 Storing development decision: $DECISION"
+
+curl -s -X POST http://localhost:3000/api/memories \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "episodic",
+    "content": "Development decision: '$DECISION'",
+    "metadata": {
+      "source": "development",
+      "quality": 0.9,
+      "confidence": 0.95,
+      "importance": 0.8,
+      "tags": ["decision", "development", "architecture"],
+      "context": {
+        "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'",
+        "project": "h2gnn",
+        "decision": "'$DECISION'",
+        "rationale": "'$RATIONALE'",
+        "impact": "'$IMPACT'"
+      }
+    }
+  }' | jq '.success'
+
+echo "✅ Decision stored in persistent memory"
+```
+
+### 3. Learn New Concept
+```bash
+#!/bin/bash
+# learn-concept.sh
+
+CONCEPT="$1"
+DESCRIPTION="$2"
+DOMAIN="$3"
+
+echo "🧠 Learning new concept: $CONCEPT"
+
+curl -s -X POST http://localhost:3000/api/learn \
+  -H "Content-Type: application/json" \
+  -d '{
+    "concept": "'$CONCEPT'",
+    "data": {
+      "description": "'$DESCRIPTION'",
+      "examples": [],
+      "relationships": [],
+      "applications": []
+    },
+    "context": {
+      "domain": "'$DOMAIN'",
+      "complexity": "intermediate",
+      "source": "development"
+    },
+    "performance": 0.8
+  }' | jq '.success'
+
+echo "✅ Concept learned and stored"
+```
+
+### 4. Retrieve Context
+```bash
+#!/bin/bash
+# retrieve-context.sh
+
+QUERY="$1"
+TAGS="$2"
+
+echo "🔍 Retrieving context for: $QUERY"
+
+curl -s "http://localhost:3000/api/memories?content=$QUERY&tags=$TAGS" | \
+  jq '.[] | {type: .type, content: .content, tags: .metadata.tags, timestamp: .timestamp}'
+
+echo "✅ Context retrieved"
+```
+
+## Integration with Cursor Rules
+
+### 1. Rule Creation with Memory
+When creating new Cursor rules, store the decision and rationale:
+
+```typescript
+// When creating a new rule
+await storeDecision('Created rule for hyperbolic geometry consistency', {
+  rationale: 'Need to ensure consistent hyperbolic geometry operations across the codebase',
+  alternatives: ['Manual code review', 'Linting rules', 'Documentation'],
+  impact: 'Improved code quality and consistency'
+});
+```
+
+### 2. Rule Updates with Learning
+When updating rules, learn from the changes:
+
+```typescript
+// When updating a rule
+await learnConcept('Rule Evolution Patterns', {
+  description: 'How rules evolve based on project needs',
+  examples: ['rule updates', 'rule consolidation', 'rule optimization'],
+  relationships: ['rule effectiveness', 'project evolution', 'team feedback'],
+  applications: ['rule management', 'process improvement']
+}, 0.8);
+```
+
+### 3. Rule Effectiveness Tracking
+Track how effective rules are:
+
+```typescript
+// Track rule effectiveness
+await storeMemory({
+  type: 'meta',
+  content: 'Rule effectiveness tracking',
+  metadata: {
+    source: 'monitoring',
+    quality: 0.8,
+    confidence: 0.9,
+    importance: 0.7,
+    tags: ['rule', 'effectiveness', 'monitoring'],
+    context: {
+      ruleName: 'hyperbolic-geometry-consistency',
+      effectiveness: 0.85,
+      usageCount: 150,
+      improvementRate: 0.1
+    }
+  }
+});
+```
+
+## Best Practices
+
+### 1. Memory Quality
+- Store high-quality, relevant memories
+- Use appropriate memory types
+- Include rich metadata and context
+- Regular memory consolidation
+
+### 2. Learning Integration
+- Continuous learning from interactions
+- Track learning progress and mastery
+- Apply learned concepts to new situations
+- Regular learning consolidation
+
+### 3. Rule Management
+- Create rules based on learned patterns
+- Update rules based on effectiveness
+- Consolidate related rules
+- Monitor rule usage and impact
+
+### 4. System Integration
+- Seamless integration with Cursor
+- Efficient API communication
+- Error handling and recovery
+- Performance optimization
+
+---
+
+*This implementation guide provides practical steps for establishing and maintaining a persistent AI identity with comprehensive memory management, learning integration, and Cursor rules optimization.*

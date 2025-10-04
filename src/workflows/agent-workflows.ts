@@ -22,8 +22,8 @@ import { HyperbolicArithmetic, Vector } from '../math/hyperbolic-arithmetic';
 export class HierarchicalQAWorkflow {
   private wordnetProcessor: WordNetProcessor;
   private h2gnn: HyperbolicGeometricHGN;
-  private ragNode: RAGNode;
-  private agentNode: AgentNode;
+  private ragNode: any;
+  private agentNode: any;
   private flow: Flow;
 
   constructor() {
@@ -41,7 +41,8 @@ export class HierarchicalQAWorkflow {
   }
 
   private buildWorkflow(): void {
-    const wordnetProcessorRef = this.wordnetProcessor;
+    const wordnetProcessor = this.wordnetProcessor;
+
     // Question Analysis Node
     const analyzeQuestion = new LLMNode({
       systemPrompt: `You are a question analyzer. Analyze the given question and determine:
@@ -62,7 +63,7 @@ Respond in structured format.`,
         };
       }
       async exec(prepRes: any): Promise<any> {
-        const question = prepRes?.question || '';
+        const question = prepRes.question || '';
         
         // Use WordNet to find relevant concepts
         const concepts = await this.findRelevantConcepts(question);
@@ -82,14 +83,17 @@ Respond in structured format.`,
       }
 
       private async findRelevantConcepts(question: string): Promise<any[]> {
-        const words = (question || '').toLowerCase().split(/\s+/);
+        if (!question) {
+          return [];
+        }
+        const words = question.toLowerCase().split(/\s+/);
         const concepts: any[] = [];
 
         for (const word of words) {
-          const wordData = wordnetProcessorRef.getWords().get(word);
+          const wordData = wordnetProcessor.getWords().get(word);
           if (wordData) {
             for (const synsetId of wordData.synsets) {
-              const synset = wordnetProcessorRef.getSynsets().get(synsetId);
+              const synset = wordnetProcessor.getSynsets().get(synsetId);
               if (synset) {
                 concepts.push({
                   word,
@@ -141,7 +145,7 @@ Respond in structured format.`,
         const hierarchies: any[] = [];
 
         for (const concept of concepts) {
-          const synset = wordnetProcessorRef.getSynsets().get(concept.synset);
+          const synset = wordnetProcessor.getSynsets().get(concept.synset);
           if (synset) {
             const hierarchy = {
               concept: concept.synset,
@@ -157,7 +161,7 @@ Respond in structured format.`,
       }
 
       private async calculateDepth(synsetId: string): Promise<number> {
-        const hierarchy = wordnetProcessorRef.getHierarchy();
+        const hierarchy = wordnetProcessor.getHierarchy();
         if (hierarchy) {
           const node = hierarchy.nodes.find(n => n.id === synsetId);
           return node?.depth || 0;
@@ -198,6 +202,16 @@ Structure your response with clear sections and explanations.`,
   }
 
   async answerQuestion(question: string): Promise<any> {
+    if (!question) {
+      return {
+        question: '',
+        answer: 'No question provided',
+        concepts: [],
+        hierarchicalInsights: '',
+        confidence: 0.0
+      };
+    }
+
     const shared: SharedStore = {
       question,
       originalQuestion: question
@@ -207,16 +221,16 @@ Structure your response with clear sections and explanations.`,
 
     return {
       question,
-      answer: shared.llmResponse,
-      reasoning: shared.reasoning,
-      concepts: shared.agentResult,
-      hierarchicalInsights: shared.hierarchicalInsights,
+      answer: shared.llmResponse || 'No answer generated',
+      concepts: shared.agentResult || [],
+      hierarchicalInsights: shared.ragResponse || '',
+      reasoning: `Generated answer using ${(shared.agentResult || []).length} concepts from WordNet hierarchy`,
       confidence: shared.llmConfidence || 0.8
     };
   }
 
   async initialize(): Promise<void> {
-    console.log('🔧 Initializing Hierarchical QA Workflow...');
+    console.warn('🔧 Initializing Hierarchical QA Workflow...');
     
     // Load WordNet data
     await this.wordnetProcessor.loadWordNetData();
@@ -224,7 +238,7 @@ Structure your response with clear sections and explanations.`,
     await this.wordnetProcessor.generateHyperbolicEmbeddings();
     await this.wordnetProcessor.populateRAGKnowledge();
     
-    console.log('✅ Hierarchical QA Workflow initialized');
+    console.warn('✅ Hierarchical QA Workflow initialized');
   }
 }
 
@@ -234,7 +248,7 @@ Structure your response with clear sections and explanations.`,
 export class ConceptLearningWorkflow {
   private wordnetProcessor: WordNetProcessor;
   private h2gnn: HyperbolicGeometricHGN;
-  private taskDecomposition: TaskDecompositionNode;
+  private taskDecomposition: any;
   private flow: AsyncFlow;
 
   constructor() {
@@ -251,14 +265,14 @@ export class ConceptLearningWorkflow {
   }
 
   private buildWorkflow(): void {
-    const wordnetProcessorRef = this.wordnetProcessor;
+    const wordnetProcessor = this.wordnetProcessor;
+
     // Concept Discovery Node
     const discoverConcepts = new class extends AgentNode {
-      prep(shared: SharedStore): any {
-        return {
-          domain: shared.domain || shared.query || shared.task || ''
-        };
+      prep(shared: SharedStore): { domain: string } {
+        return { domain: shared.domain };
       }
+
       async exec(prepRes: any): Promise<any> {
         const domain = prepRes?.domain || '';
         
@@ -282,7 +296,7 @@ export class ConceptLearningWorkflow {
         const concepts: any[] = [];
         
         // Search WordNet for domain-related concepts
-        for (const [id, synset] of wordnetProcessorRef.getSynsets()) {
+        for (const [id, synset] of wordnetProcessor.getSynsets()) {
           if (this.isRelevantToDomain(synset, domain)) {
             concepts.push({
               id,
@@ -451,21 +465,21 @@ Provide a structured, actionable learning plan.`,
 
     return {
       domain,
-      concepts: shared.agentResult,
-      hierarchicalStructure: shared.taskHierarchy,
-      learningPlan: shared.llmResponse,
-      subtasks: shared.subtasks
+      concepts: shared.agentResult || [],
+      hierarchicalStructure: shared.taskHierarchy || {},
+      learningPlan: shared.llmResponse || `Learning plan for domain: ${domain}`,
+      subtasks: shared.subtasks || []
     };
   }
 
   async initialize(): Promise<void> {
-    console.log('🎓 Initializing Concept Learning Workflow...');
+    console.warn('🎓 Initializing Concept Learning Workflow...');
     
     await this.wordnetProcessor.loadWordNetData();
     await this.wordnetProcessor.buildHierarchy();
     await this.wordnetProcessor.generateHyperbolicEmbeddings();
     
-    console.log('✅ Concept Learning Workflow initialized');
+    console.warn('✅ Concept Learning Workflow initialized');
   }
 }
 
@@ -475,7 +489,7 @@ Provide a structured, actionable learning plan.`,
 export class SemanticExplorationWorkflow {
   private wordnetProcessor: WordNetProcessor;
   private h2gnn: HyperbolicGeometricHGN;
-  private ragNode: RAGNode;
+  private ragNode: any;
   private flow: Flow;
 
   constructor() {
@@ -707,13 +721,13 @@ Provide clear, educational insights.`,
   }
 
   async initialize(): Promise<void> {
-    console.log('🔍 Initializing Semantic Exploration Workflow...');
+    console.warn('🔍 Initializing Semantic Exploration Workflow...');
     
     await this.wordnetProcessor.loadWordNetData();
     await this.wordnetProcessor.buildHierarchy();
     await this.wordnetProcessor.generateHyperbolicEmbeddings();
     
-    console.log('✅ Semantic Exploration Workflow initialized');
+    console.warn('✅ Semantic Exploration Workflow initialized');
   }
 }
 
@@ -721,8 +735,8 @@ Provide clear, educational insights.`,
  * Multi-Agent Reasoning Workflow
  */
 export class MultiAgentReasoningWorkflow {
-  private agents: Map<string, AgentNode> = new Map();
-  private coordinator: AgentNode;
+  private agents: Map<string, any> = new Map();
+  private coordinator: any;
   private h2gnn: HyperbolicGeometricHGN;
   private wordnetProcessor: WordNetProcessor;
 
@@ -761,7 +775,7 @@ export class MultiAgentReasoningWorkflow {
   }
 
   async reasonAboutQuery(query: string): Promise<any> {
-    console.log(`🤖 Multi-agent reasoning about: ${query}`);
+    console.warn(`🤖 Multi-agent reasoning about: ${query}`);
 
     // Step 1: Coordinator analyzes the query
     const analysis = await this.coordinator.run({
@@ -800,13 +814,13 @@ export class MultiAgentReasoningWorkflow {
   }
 
   async initialize(): Promise<void> {
-    console.log('🤖 Initializing Multi-Agent Reasoning Workflow...');
+    console.warn('🤖 Initializing Multi-Agent Reasoning Workflow...');
     
     await this.wordnetProcessor.loadWordNetData();
     await this.wordnetProcessor.buildHierarchy();
     await this.wordnetProcessor.generateHyperbolicEmbeddings();
     
-    console.log('✅ Multi-Agent Reasoning Workflow initialized');
+    console.warn('✅ Multi-Agent Reasoning Workflow initialized');
   }
 }
 

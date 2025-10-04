@@ -1,0 +1,53 @@
+{
+  "id": "memory_1759436604796_9jh4hx9kz",
+  "timestamp": 1759436604796,
+  "concept": "scaling",
+  "embedding": [
+    0.07575559875274213,
+    0.053028919126919496,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.11363339812911318,
+    0.05605914307702916,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.6436139204054271,
+    0.09194484577220387,
+    0.6022467211178705,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "context": {
+    "domain": "automation",
+    "type": "concept"
+  },
+  "performance": 0.8,
+  "confidence": 1,
+  "relationships": [
+    "logging",
+    "security",
+    "testing",
+    "docker",
+    "consul"
+  ],
+  "consolidated": true
+}

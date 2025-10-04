@@ -1,0 +1,159 @@
+{
+  "id": "snapshot_1759436605254_general_concepts",
+  "timestamp": 1759436605254,
+  "domain": "general_concepts",
+  "knowledgeGraph": {
+    "nodes": [
+      {
+        "id": "memory_1759436605218_ra54s7kwu",
+        "concept": "grafana",
+        "embedding": [
+          0.07574731488238101,
+          0.053023120417666714,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11362097232357152,
+          0.05756795931060957,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.643547240955535,
+          0.091935320136505,
+          0.6021809887967722,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      },
+      {
+        "id": "memory_1759436605249_pdzp00df8",
+        "concept": "elasticsearch",
+        "embedding": [
+          0.07542740103365334,
+          0.09805562134374932,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.11314110155047999,
+          0.057324824785576524,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.6408295317474745,
+          0.09154707596392493,
+          0.5996377256495913,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "performance": 0.8,
+        "confidence": 1
+      }
+    ],
+    "edges": []
+  },
+  "embeddings": {},
+  "relationships": [
+    {
+      "source": "grafana",
+      "target": "logging",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "grafana",
+      "target": "security",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "grafana",
+      "target": "testing",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "grafana",
+      "target": "docker",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "grafana",
+      "target": "consul",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "elasticsearch",
+      "target": "configuration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "elasticsearch",
+      "target": "orchestration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "elasticsearch",
+      "target": "orchestration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "elasticsearch",
+      "target": "configuration",
+      "type": "semantic_similarity",
+      "strength": 1
+    },
+    {
+      "source": "elasticsearch",
+      "target": "microservices",
+      "type": "semantic_similarity",
+      "strength": 1
+    }
+  ],
+  "insights": [
+    "Average performance: 0.800",
+    "Concept diversity: 2 unique concepts",
+    "Recent learning activity: 2 concepts learned"
+  ],
+  "confidence": 0.8
+}

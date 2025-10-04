@@ -1,0 +1,155 @@
+{
+  "name": "H²GNN Gemini Markdown Configuration",
+  "version": "1.0.0",
+  "description": "Configuration for Gemini markdown processing in H²GNN system",
+  "project": {
+    "name": "hyperbolic-geometric-neural-network",
+    "type": "ai-system",
+    "framework": "h2gnn",
+    "language": "typescript"
+  },
+  "markdown": {
+    "processing": {
+      "enabled": true,
+      "autoProcess": true,
+      "watchMode": true,
+      "includePatterns": [
+        "**/*.md",
+        "**/*.MD",
+        "docs/**/*.md",
+        "src/**/*.md"
+      ],
+      "excludePatterns": [
+        "node_modules/**",
+        "dist/**",
+        "coverage/**",
+        ".git/**",
+        "logs/**"
+      ]
+    },
+    "features": {
+      "syntaxHighlighting": true,
+      "linkResolution": true,
+      "imageProcessing": true,
+      "tableProcessing": true,
+      "codeBlockProcessing": true,
+      "mathProcessing": true
+    },
+    "output": {
+      "format": "html",
+      "includeTOC": true,
+      "includeMetadata": true,
+      "includeSource": true,
+      "compressOutput": false
+    }
+  },
+  "h2gnn": {
+    "integration": {
+      "enabled": true,
+      "autoLearn": true,
+      "conceptExtraction": true,
+      "relationshipMapping": true,
+      "knowledgeGraph": true
+    },
+    "processing": {
+      "extractConcepts": true,
+      "extractRelationships": true,
+      "extractMetadata": true,
+      "extractCodeBlocks": true,
+      "extractMath": true,
+      "extractImages": true
+    },
+    "learning": {
+      "autoLearn": true,
+      "conceptThreshold": 0.7,
+      "relationshipThreshold": 0.8,
+      "performanceScore": 0.9
+    }
+  },
+  "pocketflow": {
+    "integration": {
+      "enabled": true,
+      "workflowProcessing": true,
+      "nodeExtraction": true,
+      "flowMapping": true
+    },
+    "processing": {
+      "extractWorkflows": true,
+      "extractNodes": true,
+      "extractFlows": true,
+      "extractPatterns": true
+    }
+  },
+  "mcp": {
+    "integration": {
+      "enabled": true,
+      "toolExtraction": true,
+      "commandMapping": true,
+      "serverIntegration": true
+    },
+    "processing": {
+      "extractTools": true,
+      "extractCommands": true,
+      "extractServers": true,
+      "extractResources": true
+    }
+  },
+  "analysis": {
+    "codeAnalysis": {
+      "enabled": true,
+      "astAnalysis": true,
+      "syntaxAnalysis": true,
+      "semanticAnalysis": true
+    },
+    "documentAnalysis": {
+      "enabled": true,
+      "structureAnalysis": true,
+      "contentAnalysis": true,
+      "relationshipAnalysis": true
+    },
+    "knowledgeAnalysis": {
+      "enabled": true,
+      "conceptAnalysis": true,
+      "relationshipAnalysis": true,
+      "hierarchyAnalysis": true
+    }
+  },
+  "output": {
+    "formats": ["html", "json", "markdown"],
+    "destinations": [
+      "./dist/docs",
+      "./persistence/analysis",
+      "./shared-learning/insights"
+    ],
+    "naming": {
+      "pattern": "{name}-{timestamp}.{format}",
+      "timestamp": "YYYY-MM-DD-HH-mm-ss"
+    }
+  },
+  "processing": {
+    "batchSize": 10,
+    "concurrency": 3,
+    "timeout": 30000,
+    "retries": 3,
+    "backoff": "exponential"
+  },
+  "monitoring": {
+    "enabled": true,
+    "logging": true,
+    "metrics": true,
+    "alerts": true,
+    "reporting": true
+  },
+  "security": {
+    "sanitization": true,
+    "validation": true,
+    "encryption": false,
+    "accessControl": true
+  },
+  "performance": {
+    "caching": true,
+    "compression": true,
+    "optimization": true,
+    "monitoring": true
+  }
+}

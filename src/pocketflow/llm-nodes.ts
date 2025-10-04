@@ -49,7 +49,7 @@ export class LLMCaller {
 
   async call(prompt: string, systemPrompt?: string): Promise<LLMResponse> {
     // Mock implementation - replace with actual LLM API call
-    console.log(`🤖 LLM Call: ${prompt.substring(0, 100)}...`);
+    console.warn(`🤖 LLM Call: ${prompt.substring(0, 100)}...`);
     
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -131,35 +131,25 @@ export class LLMNode extends HyperbolicNode {
     };
     
     const result = await this.h2gnn.predict(trainingData);
-    return result.embeddings[0] || createVector(new Array(this.h2gnn.getEmbeddingDim()).fill(0));
+    return result.embeddings[0] || createVector(new Array(this.h2gnn.getConfig().embeddingDim).fill(0));
   }
 
   private textToFeatures(text: string): number[] {
-    // Simple text feature extraction (dimension-adaptive)
-    const dim = this.h2gnn.getEmbeddingDim();
-    const words = (text || '').toLowerCase().trim().length > 0 ? (text.toLowerCase().split(/\s+/)) : [];
-    const features = new Array(dim).fill(0);
-
-    if (dim > 0) {
-      // Basic features
-      features[0] = words.length > 0 ? Math.min(words.length / 100, 1) : 0; // Length feature
+    // Simple text feature extraction
+    const features = new Array(this.h2gnn.getConfig().embeddingDim).fill(0);
+    const words = text.split(/\s+/).filter(word => word.length > 0);
+    
+    // Basic features
+    features[0] = Math.min(words.length / 100, 1); // Length feature
+    features[1] = (text.match(/[.!?]/g) || []).length / 10; // Sentence count
+    features[2] = (text.match(/[A-Z]/g) || []).length / text.length; // Capital ratio
+    
+    // Word-based features
+    for (let i = 0; i < words.length && i < 10; i++) {
+      const word = words[i];
+      features[3 + i] = (word.charCodeAt(0) || 0) / 256; // Character features
     }
-    if (dim > 1) {
-      const sentences = (text.match(/[.!?]/g) || []).length;
-      features[1] = Math.min(sentences / 10, 1);
-    }
-    if (dim > 2) {
-      const capitals = (text.match(/[A-Z]/g) || []).length;
-      features[2] = text.length > 0 ? Math.min(capitals / text.length, 1) : 0;
-    }
-
-    // Word-based hashed features starting at index 3
-    const maxWordFeatures = Math.max(0, dim - 3);
-    for (let i = 0; i < Math.min(words.length, maxWordFeatures); i++) {
-      const word = words[i] || '';
-      features[3 + i] = (word.charCodeAt(0) || 0) / 256;
-    }
-
+    
     return features;
   }
 }
@@ -246,20 +236,17 @@ export class RAGNode extends HyperbolicNode {
     };
     
     const result = await this.h2gnn.predict(trainingData);
-    return result.embeddings[0] || createVector(new Array(this.h2gnn.getEmbeddingDim()).fill(0));
+    return result.embeddings[0] || createVector(new Array(this.h2gnn.getConfig().embeddingDim).fill(0));
   }
 
   private textToAdvancedFeatures(text: string, context?: any): number[] {
-    const dim = this.h2gnn.getEmbeddingDim();
-    const features = new Array(dim).fill(0);
-    const words = (text || '').toLowerCase().trim().length > 0 ? text.toLowerCase().split(/\s+/) : [];
-
-    if (dim > 0) features[0] = words.length > 0 ? Math.min(words.length / 200, 1) : 0;
-    if (dim > 1) {
-      const sentenceCount = (text.match(/[.!?]/g) || []).length;
-      features[1] = words.length > 0 ? sentenceCount / Math.max(words.length / 10, 1) : 0;
-    }
-
+    const features = new Array(this.h2gnn.getConfig().embeddingDim).fill(0);
+    const words = text.toLowerCase().split(/\s+/);
+    
+    // Basic text features
+    features[0] = Math.min(words.length / 200, 1);
+    features[1] = (text.match(/[.!?]/g) || []).length / Math.max(words.length / 10, 1);
+    
     // Semantic features (simplified)
     const questionWords = ['what', 'how', 'why', 'when', 'where', 'who'];
     if (dim > 2) {
@@ -453,12 +440,11 @@ Provide a structured comparison highlighting key relationships and hierarchical 
     };
     
     const result = await this.h2gnn.predict(trainingData);
-    return result.embeddings[0] || createVector(new Array(16).fill(0));
+    return result.embeddings[0] || createVector(new Array(this.h2gnn.getConfig().embeddingDim).fill(0));
   }
 
   private textToAgentFeatures(text: string, context?: any): number[] {
-    const dim = this.h2gnn.getEmbeddingDim();
-    const features = new Array(dim).fill(0);
+    const features = new Array(this.h2gnn.getConfig().embeddingDim).fill(0);
     
     // Agent-specific features
     const actionWords = ['search', 'analyze', 'compare', 'summarize', 'find', 'identify'];
@@ -607,12 +593,11 @@ Format as a structured list with clear hierarchy.`;
     };
     
     const result = await this.h2gnn.predict(trainingData);
-    return result.embeddings[0] || createVector(new Array(this.h2gnn.getEmbeddingDim()).fill(0));
+    return result.embeddings[0] || createVector(new Array(this.h2gnn.getConfig().embeddingDim).fill(0));
   }
 
   private textToTaskFeatures(text: string, context?: any): number[] {
-    const dim = this.h2gnn.getEmbeddingDim();
-    const features = new Array(dim).fill(0);
+    const features = new Array(this.h2gnn.getConfig().embeddingDim).fill(0);
     
     // Task complexity indicators
     const complexityWords = ['analyze', 'create', 'design', 'implement', 'evaluate', 'synthesize'];

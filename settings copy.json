@@ -1,0 +1,108 @@
+{
+  "inputs": [
+    {
+      "id": "codacy_account_token",
+      "type": "promptString",
+      "description": "Codacy Account Token for API access",
+      "password": true
+    },
+    {
+      "id": "NOTION_TOKEN",
+      "type": "promptString",
+      "description": "Notion API Token (https://www.notion.so/profile/integrations)",
+      "password": true
+    },
+    {
+      "id": "memory_file_path",
+      "type": "promptString",
+      "description": "Path to the memory storage file",
+      "default": "./data/memory.json",
+      "password": false
+    },
+    {
+      "id": "redis_url",
+      "type": "promptString",
+      "description": "Redis connection URL",
+      "default": "redis://127.0.0.1:6379",
+      "password": false
+    },
+    {
+      "id": "remote_mcp_url",
+      "type": "promptString",
+      "description": "Remote MCP endpoint (e.g. ws://localhost:3000)",
+      "default": "ws://localhost:3000",
+      "password": false
+    }
+  ],
+  "mcpServers": {
+    "memory": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory@latest"]
+    },
+    "sequentialthinking": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking@latest"]
+    },
+    "redis": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-redis"],
+      "env": {
+        "REDIS_URL": "redis://127.0.0.1:6379"
+      }
+    },
+    "claude": {
+      "command": "claude",
+      "args": ["mcp", "serve"],
+      "env": {}
+    },
+    "ollama": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "ollama-mcp-server@latest"],
+      "env": {
+        "OLLAMA_BASE_URL": "http://localhost:11434"
+      }
+    },
+    "wiki-vector-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/home/main/devops/universal-life-protocol/packages/universal-life-vault/dist/wiki-vector-mcp.js"]
+    },
+    "axiom-canvas-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/home/main/devops/universal-life-protocol/packages/universal-life-vault/dist/axiom-canvas-mcp.js"]
+    },
+    "obsidian-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/home/main/devops/universal-life-protocol/packages/universal-life-vault/dist/obsidian-mcp.js"]
+    },
+    "identity-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/home/main/devops/universal-life-protocol/packages/universal-life-vault/dist/identity-mcp.js"]
+    },
+    "logos-client": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/home/main/devops/archive/universal-life-schema/production/logos-client/dist/logos-client.js"],
+      "env": {
+        "LOGOS_API_URL": "http://127.0.0.1:3000",
+        "LOGOS_CREATOR_ID": "logos-client"
+      }
+    },
+    "logos-server": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/home/main/devops/archive/universal-life-schema/production/logos-client/dist/logos-server.js"],
+      "env": {
+        "LOGOS_API_URL": "http://127.0.0.1:3000",
+        "LOGOS_CREATOR_ID": "logos-server"
+      }
+    }
+  }
+}
