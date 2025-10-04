@@ -22,8 +22,8 @@ import { HyperbolicArithmetic, Vector } from '../math/hyperbolic-arithmetic';
 export class HierarchicalQAWorkflow {
   private wordnetProcessor: WordNetProcessor;
   private h2gnn: HyperbolicGeometricHGN;
-  private ragNode: RAGNode;
-  private agentNode: AgentNode;
+  private ragNode: any;
+  private agentNode: any;
   private flow: Flow;
 
   constructor() {
@@ -222,7 +222,7 @@ Structure your response with clear sections and explanations.`,
 export class ConceptLearningWorkflow {
   private wordnetProcessor: WordNetProcessor;
   private h2gnn: HyperbolicGeometricHGN;
-  private taskDecomposition: TaskDecompositionNode;
+  private taskDecomposition: any;
   private flow: AsyncFlow;
 
   constructor() {
@@ -446,7 +446,7 @@ Provide a structured, actionable learning plan.`,
 export class SemanticExplorationWorkflow {
   private wordnetProcessor: WordNetProcessor;
   private h2gnn: HyperbolicGeometricHGN;
-  private ragNode: RAGNode;
+  private ragNode: any;
   private flow: Flow;
 
   constructor() {
@@ -660,8 +660,8 @@ Provide clear, educational insights.`,
  * Multi-Agent Reasoning Workflow
  */
 export class MultiAgentReasoningWorkflow {
-  private agents: Map<string, AgentNode> = new Map();
-  private coordinator: AgentNode;
+  private agents: Map<string, any> = new Map();
+  private coordinator: any;
   private h2gnn: HyperbolicGeometricHGN;
   private wordnetProcessor: WordNetProcessor;
 

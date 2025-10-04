@@ -142,6 +142,9 @@ class NodeConnector {
  */
 export abstract class Node<T = any> extends BaseNode {
   // Generic node implementation
+  abstract prep(shared: any): any;
+  abstract exec(prepRes: any): any;
+  abstract post(shared: any, prepRes: any, execRes: any): string;
 }
 
 /**

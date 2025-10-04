@@ -170,6 +170,7 @@
   },
   "active": "4f00e0c2f9f7d877",
   "lastOpenFiles": [
+    "packages/FILE_BASED_PERSISTENCE_GUIDE.md",
     "packages/tests/file-based-persistence.test.ts",
     "packages/MISSING_METHODS_IMPLEMENTATION.md",
     "packages/AI_IDENTITY_PERSISTENCE_VERIFICATION.md",
@@ -182,7 +183,6 @@
     "src/test-storage/test-1759544614918/conflicts",
     "src/test-storage/test-1759544614918",
     "src/test-storage/test-1759544614696/insights",
-    "src/test-storage/test-1759544614696",
     "packages/IMPLEMENTATION_GUIDE.md",
     "docs/01-architecture/diagrams/visualization-architecture.md",
     "docs/07-intelligence/AI_PERSISTENCE_ARCHITECTURE.md",

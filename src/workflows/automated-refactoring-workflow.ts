@@ -31,7 +31,7 @@ export interface RefactoringWorkflowState {
 /**
  * Node: Analyze Code for Refactoring Opportunities
  */
-export class AnalyzeRefactoringOpportunitiesNode extends Node<RefactoringWorkflowState> {
+export class AnalyzeRefactoringOpportunitiesNode extends BaseNode {
   private refactoringTool: AutomatedRefactoringTool;
 
   constructor() {
@@ -73,7 +73,7 @@ export class AnalyzeRefactoringOpportunitiesNode extends Node<RefactoringWorkflo
 /**
  * Node: Propose Refactoring Suggestions
  */
-export class ProposeRefactoringNode extends Node<RefactoringWorkflowState> {
+export class ProposeRefactoringNode extends BaseNode {
   async prep(shared: RefactoringWorkflowState): Promise<RefactoringOpportunity[]> {
     return shared.opportunities;
   }
@@ -118,7 +118,7 @@ export class ProposeRefactoringNode extends Node<RefactoringWorkflowState> {
 /**
  * Node: Apply Refactoring
  */
-export class ApplyRefactoringNode extends Node<RefactoringWorkflowState> {
+export class ApplyRefactoringNode extends BaseNode {
   private refactoringTool: AutomatedRefactoringTool;
 
   constructor() {
