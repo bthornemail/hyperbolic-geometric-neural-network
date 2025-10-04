@@ -16,22 +16,22 @@ import { KnowledgeDistillationSystem, TeacherModel, StudentModel } from '../tran
 import { TransferLearningWorkflow, TransferLearningConfig } from '../transfer/transfer-learning-workflow.js';
 
 async function demonstrateKnowledgeTransferLearning(): Promise<void> {
-  console.log('🔄 Phase 4: Knowledge Transfer Learning Demo');
-  console.log('============================================');
+  console.warn('🔄 Phase 4: Knowledge Transfer Learning Demo');
+  console.warn('============================================');
   
   // Initialize transfer learning systems
-  console.log('\n📊 Phase 1: Setting up Transfer Learning Systems');
-  console.log('--------------------------------------------------');
+  console.warn('\n📊 Phase 1: Setting up Transfer Learning Systems');
+  console.warn('--------------------------------------------------');
   
   const domainAdaptation = new DomainAdaptationSystem();
   const knowledgeDistillation = new KnowledgeDistillationSystem();
   const transferWorkflow = new TransferLearningWorkflow();
   
-  console.log('✅ Transfer learning systems initialized');
+  console.warn('✅ Transfer learning systems initialized');
   
   // Create sample domains
-  console.log('\n📊 Phase 2: Creating Sample Domains');
-  console.log('-------------------------------------');
+  console.warn('\n📊 Phase 2: Creating Sample Domains');
+  console.warn('-------------------------------------');
   
   const mathematicsDomain: Domain = {
     id: 'mathematics',
@@ -104,51 +104,51 @@ async function demonstrateKnowledgeTransferLearning(): Promise<void> {
   domainAdaptation.registerDomain(physicsDomain);
   domainAdaptation.registerDomain(computerScienceDomain);
   
-  console.log('✅ Sample domains created and registered');
+  console.warn('✅ Sample domains created and registered');
   
   // Test domain mapping
-  console.log('\n📊 Phase 3: Testing Domain Mapping');
-  console.log('-----------------------------------');
+  console.warn('\n📊 Phase 3: Testing Domain Mapping');
+  console.warn('-----------------------------------');
   
   try {
     const mathToPhysicsMapping = domainAdaptation.mapConcepts('mathematics', 'physics');
-    console.log(`🔗 Mathematics → Physics mapping: ${mathToPhysicsMapping.conceptMappings.length} concepts mapped`);
-    console.log(`   Overall similarity: ${mathToPhysicsMapping.overallSimilarity.toFixed(3)}`);
-    console.log(`   Adaptation strategy: ${mathToPhysicsMapping.adaptationStrategy}`);
+    console.warn(`🔗 Mathematics → Physics mapping: ${mathToPhysicsMapping.conceptMappings.length} concepts mapped`);
+    console.warn(`   Overall similarity: ${mathToPhysicsMapping.overallSimilarity.toFixed(3)}`);
+    console.warn(`   Adaptation strategy: ${mathToPhysicsMapping.adaptationStrategy}`);
     
     const physicsToCSMapping = domainAdaptation.mapConcepts('physics', 'computer_science');
-    console.log(`🔗 Physics → Computer Science mapping: ${physicsToCSMapping.conceptMappings.length} concepts mapped`);
-    console.log(`   Overall similarity: ${physicsToCSMapping.overallSimilarity.toFixed(3)}`);
-    console.log(`   Adaptation strategy: ${physicsToCSMapping.adaptationStrategy}`);
+    console.warn(`🔗 Physics → Computer Science mapping: ${physicsToCSMapping.conceptMappings.length} concepts mapped`);
+    console.warn(`   Overall similarity: ${physicsToCSMapping.overallSimilarity.toFixed(3)}`);
+    console.warn(`   Adaptation strategy: ${physicsToCSMapping.adaptationStrategy}`);
     
   } catch (error) {
-    console.log('⚠️ Domain mapping not available (using mock results)');
-    console.log('🔗 Mathematics → Physics mapping: 3 concepts mapped (similarity: 0.65)');
-    console.log('🔗 Physics → Computer Science mapping: 2 concepts mapped (similarity: 0.45)');
+    console.warn('⚠️ Domain mapping not available (using mock results)');
+    console.warn('🔗 Mathematics → Physics mapping: 3 concepts mapped (similarity: 0.65)');
+    console.warn('🔗 Physics → Computer Science mapping: 2 concepts mapped (similarity: 0.45)');
   }
   
   // Test domain adaptation
-  console.log('\n📊 Phase 4: Testing Domain Adaptation');
-  console.log('--------------------------------------');
+  console.warn('\n📊 Phase 4: Testing Domain Adaptation');
+  console.warn('--------------------------------------');
   
   try {
     const adaptationResult = await domainAdaptation.transferKnowledge('mathematics', 'physics');
-    console.log(`✅ Domain adaptation completed: ${adaptationResult.adaptedConcepts.length} concepts adapted`);
-    console.log(`   Transfer metrics: similarity=${adaptationResult.transferMetrics.similarity.toFixed(3)}, coverage=${adaptationResult.transferMetrics.coverage.toFixed(3)}`);
-    console.log(`   Failed concepts: ${adaptationResult.failedConcepts.length}`);
-    console.log(`   Recommendations: ${adaptationResult.recommendations.length} suggestions`);
+    console.warn(`✅ Domain adaptation completed: ${adaptationResult.adaptedConcepts.length} concepts adapted`);
+    console.warn(`   Transfer metrics: similarity=${adaptationResult.transferMetrics.similarity.toFixed(3)}, coverage=${adaptationResult.transferMetrics.coverage.toFixed(3)}`);
+    console.warn(`   Failed concepts: ${adaptationResult.failedConcepts.length}`);
+    console.warn(`   Recommendations: ${adaptationResult.recommendations.length} suggestions`);
     
   } catch (error) {
-    console.log('⚠️ Domain adaptation not available (using mock results)');
-    console.log('✅ Domain adaptation completed: 3 concepts adapted');
-    console.log('   Transfer metrics: similarity=0.65, coverage=0.60');
-    console.log('   Failed concepts: 2');
-    console.log('   Recommendations: 3 suggestions');
+    console.warn('⚠️ Domain adaptation not available (using mock results)');
+    console.warn('✅ Domain adaptation completed: 3 concepts adapted');
+    console.warn('   Transfer metrics: similarity=0.65, coverage=0.60');
+    console.warn('   Failed concepts: 2');
+    console.warn('   Recommendations: 3 suggestions');
   }
   
   // Test knowledge distillation
-  console.log('\n📊 Phase 5: Testing Knowledge Distillation');
-  console.log('-------------------------------------------');
+  console.warn('\n📊 Phase 5: Testing Knowledge Distillation');
+  console.warn('-------------------------------------------');
   
   // Create teacher and student models
   const teacherModel: TeacherModel = {
@@ -190,22 +190,22 @@ async function demonstrateKnowledgeTransferLearning(): Promise<void> {
       }
     );
     
-    console.log(`✅ Knowledge distillation completed: ${distillationResult.iterations} iterations`);
-    console.log(`   Quality metrics: fidelity=${distillationResult.qualityMetrics.fidelity.toFixed(3)}, compression=${distillationResult.qualityMetrics.compression.toFixed(3)}`);
-    console.log(`   Efficiency: ${distillationResult.qualityMetrics.efficiency.toFixed(3)}`);
-    console.log(`   Accuracy: ${distillationResult.qualityMetrics.accuracy.toFixed(3)}`);
+    console.warn(`✅ Knowledge distillation completed: ${distillationResult.iterations} iterations`);
+    console.warn(`   Quality metrics: fidelity=${distillationResult.qualityMetrics.fidelity.toFixed(3)}, compression=${distillationResult.qualityMetrics.compression.toFixed(3)}`);
+    console.warn(`   Efficiency: ${distillationResult.qualityMetrics.efficiency.toFixed(3)}`);
+    console.warn(`   Accuracy: ${distillationResult.qualityMetrics.accuracy.toFixed(3)}`);
     
   } catch (error) {
-    console.log('⚠️ Knowledge distillation not available (using mock results)');
-    console.log('✅ Knowledge distillation completed: 25 iterations');
-    console.log('   Quality metrics: fidelity=0.85, compression=2.0');
-    console.log('   Efficiency: 0.75');
-    console.log('   Accuracy: 0.80');
+    console.warn('⚠️ Knowledge distillation not available (using mock results)');
+    console.warn('✅ Knowledge distillation completed: 25 iterations');
+    console.warn('   Quality metrics: fidelity=0.85, compression=2.0');
+    console.warn('   Efficiency: 0.75');
+    console.warn('   Accuracy: 0.80');
   }
   
   // Test transfer learning workflow
-  console.log('\n📊 Phase 6: Testing Transfer Learning Workflow');
-  console.log('---------------------------------------------');
+  console.warn('\n📊 Phase 6: Testing Transfer Learning Workflow');
+  console.warn('---------------------------------------------');
   
   const transferConfig: TransferLearningConfig = {
     sourceDomains: ['mathematics', 'physics'],
@@ -221,28 +221,28 @@ async function demonstrateKnowledgeTransferLearning(): Promise<void> {
   
   try {
     const workflowResult = await transferWorkflow.executeTransferLearning(transferConfig);
-    console.log(`✅ Transfer learning workflow completed: ${workflowResult.executionTime}ms`);
-    console.log(`   Overall metrics: transferSuccess=${workflowResult.overallMetrics.transferSuccess.toFixed(3)}`);
-    console.log(`   Knowledge retention: ${workflowResult.overallMetrics.knowledgeRetention.toFixed(3)}`);
-    console.log(`   Domain alignment: ${workflowResult.overallMetrics.domainAlignment.toFixed(3)}`);
-    console.log(`   Efficiency: ${workflowResult.overallMetrics.efficiency.toFixed(3)}`);
-    console.log(`   Quality: ${workflowResult.overallMetrics.quality.toFixed(3)}`);
-    console.log(`   Recommendations: ${workflowResult.recommendations.length} suggestions`);
+    console.warn(`✅ Transfer learning workflow completed: ${workflowResult.executionTime}ms`);
+    console.warn(`   Overall metrics: transferSuccess=${workflowResult.overallMetrics.transferSuccess.toFixed(3)}`);
+    console.warn(`   Knowledge retention: ${workflowResult.overallMetrics.knowledgeRetention.toFixed(3)}`);
+    console.warn(`   Domain alignment: ${workflowResult.overallMetrics.domainAlignment.toFixed(3)}`);
+    console.warn(`   Efficiency: ${workflowResult.overallMetrics.efficiency.toFixed(3)}`);
+    console.warn(`   Quality: ${workflowResult.overallMetrics.quality.toFixed(3)}`);
+    console.warn(`   Recommendations: ${workflowResult.recommendations.length} suggestions`);
     
   } catch (error) {
-    console.log('⚠️ Transfer learning workflow not available (using mock results)');
-    console.log('✅ Transfer learning workflow completed: 1500ms');
-    console.log('   Overall metrics: transferSuccess=0.75');
-    console.log('   Knowledge retention: 0.82');
-    console.log('   Domain alignment: 0.68');
-    console.log('   Efficiency: 0.71');
-    console.log('   Quality: 0.79');
-    console.log('   Recommendations: 4 suggestions');
+    console.warn('⚠️ Transfer learning workflow not available (using mock results)');
+    console.warn('✅ Transfer learning workflow completed: 1500ms');
+    console.warn('   Overall metrics: transferSuccess=0.75');
+    console.warn('   Knowledge retention: 0.82');
+    console.warn('   Domain alignment: 0.68');
+    console.warn('   Efficiency: 0.71');
+    console.warn('   Quality: 0.79');
+    console.warn('   Recommendations: 4 suggestions');
   }
   
   // Test progressive transfer learning
-  console.log('\n📊 Phase 7: Testing Progressive Transfer Learning');
-  console.log('--------------------------------------------------');
+  console.warn('\n📊 Phase 7: Testing Progressive Transfer Learning');
+  console.warn('--------------------------------------------------');
   
   try {
     const progressiveSteps = await transferWorkflow.executeProgressiveTransfer(
@@ -250,26 +250,26 @@ async function demonstrateKnowledgeTransferLearning(): Promise<void> {
       'computer_science'
     );
     
-    console.log(`✅ Progressive transfer learning completed: ${progressiveSteps.length} steps`);
+    console.warn(`✅ Progressive transfer learning completed: ${progressiveSteps.length} steps`);
     for (const step of progressiveSteps) {
-      console.log(`   Step ${step.step}: ${step.sourceDomain} → ${step.targetDomain}`);
-      console.log(`     Knowledge retention: ${step.cumulativeMetrics.knowledgeRetention.toFixed(3)}`);
-      console.log(`     Domain alignment: ${step.cumulativeMetrics.domainAlignment.toFixed(3)}`);
-      console.log(`     Efficiency: ${step.cumulativeMetrics.efficiency.toFixed(3)}`);
+      console.warn(`   Step ${step.step}: ${step.sourceDomain} → ${step.targetDomain}`);
+      console.warn(`     Knowledge retention: ${step.cumulativeMetrics.knowledgeRetention.toFixed(3)}`);
+      console.warn(`     Domain alignment: ${step.cumulativeMetrics.domainAlignment.toFixed(3)}`);
+      console.warn(`     Efficiency: ${step.cumulativeMetrics.efficiency.toFixed(3)}`);
     }
     
   } catch (error) {
-    console.log('⚠️ Progressive transfer learning not available (using mock results)');
-    console.log('✅ Progressive transfer learning completed: 2 steps');
-    console.log('   Step 1: mathematics → computer_science');
-    console.log('     Knowledge retention: 0.75, Domain alignment: 0.65, Efficiency: 0.70');
-    console.log('   Step 2: physics → computer_science');
-    console.log('     Knowledge retention: 0.80, Domain alignment: 0.70, Efficiency: 0.75');
+    console.warn('⚠️ Progressive transfer learning not available (using mock results)');
+    console.warn('✅ Progressive transfer learning completed: 2 steps');
+    console.warn('   Step 1: mathematics → computer_science');
+    console.warn('     Knowledge retention: 0.75, Domain alignment: 0.65, Efficiency: 0.70');
+    console.warn('   Step 2: physics → computer_science');
+    console.warn('     Knowledge retention: 0.80, Domain alignment: 0.70, Efficiency: 0.75');
   }
   
   // Test multi-domain transfer learning
-  console.log('\n📊 Phase 8: Testing Multi-Domain Transfer Learning');
-  console.log('--------------------------------------------------');
+  console.warn('\n📊 Phase 8: Testing Multi-Domain Transfer Learning');
+  console.warn('--------------------------------------------------');
   
   try {
     const multiDomainResult = await transferWorkflow.executeMultiDomainTransfer(
@@ -277,46 +277,46 @@ async function demonstrateKnowledgeTransferLearning(): Promise<void> {
       'computer_science'
     );
     
-    console.log(`✅ Multi-domain transfer learning completed: ${multiDomainResult.overallSuccess.toFixed(3)} overall success`);
-    console.log(`   Cross-domain insights: ${multiDomainResult.crossDomainInsights.length} insights`);
-    console.log(`   Domain similarities: ${multiDomainResult.domainSimilarities.size} calculated`);
+    console.warn(`✅ Multi-domain transfer learning completed: ${multiDomainResult.overallSuccess.toFixed(3)} overall success`);
+    console.warn(`   Cross-domain insights: ${multiDomainResult.crossDomainInsights.length} insights`);
+    console.warn(`   Domain similarities: ${multiDomainResult.domainSimilarities.size} calculated`);
     
     for (const [domain, similarity] of multiDomainResult.domainSimilarities) {
-      console.log(`     ${domain}: ${similarity.toFixed(3)} similarity`);
+      console.warn(`     ${domain}: ${similarity.toFixed(3)} similarity`);
     }
     
   } catch (error) {
-    console.log('⚠️ Multi-domain transfer learning not available (using mock results)');
-    console.log('✅ Multi-domain transfer learning completed: 0.78 overall success');
-    console.log('   Cross-domain insights: 3 insights');
-    console.log('   Domain similarities: 2 calculated');
-    console.log('     mathematics: 0.65 similarity');
-    console.log('     physics: 0.45 similarity');
+    console.warn('⚠️ Multi-domain transfer learning not available (using mock results)');
+    console.warn('✅ Multi-domain transfer learning completed: 0.78 overall success');
+    console.warn('   Cross-domain insights: 3 insights');
+    console.warn('   Domain similarities: 2 calculated');
+    console.warn('     mathematics: 0.65 similarity');
+    console.warn('     physics: 0.45 similarity');
   }
   
   // Test evaluation metrics
-  console.log('\n📊 Phase 9: Testing Evaluation Metrics');
-  console.log('---------------------------------------');
+  console.warn('\n📊 Phase 9: Testing Evaluation Metrics');
+  console.warn('---------------------------------------');
   
   try {
     const mathToPhysicsEvaluation = domainAdaptation.evaluateTransfer('mathematics', 'physics');
-    console.log(`📊 Mathematics → Physics evaluation:`);
-    console.log(`   Similarity: ${mathToPhysicsEvaluation.similarity.toFixed(3)}`);
-    console.log(`   Coverage: ${mathToPhysicsEvaluation.coverage.toFixed(3)}`);
-    console.log(`   Accuracy: ${mathToPhysicsEvaluation.accuracy.toFixed(3)}`);
-    console.log(`   Efficiency: ${mathToPhysicsEvaluation.efficiency.toFixed(3)}`);
-    console.log(`   Success rate: ${mathToPhysicsEvaluation.successRate.toFixed(3)}`);
+    console.warn(`📊 Mathematics → Physics evaluation:`);
+    console.warn(`   Similarity: ${mathToPhysicsEvaluation.similarity.toFixed(3)}`);
+    console.warn(`   Coverage: ${mathToPhysicsEvaluation.coverage.toFixed(3)}`);
+    console.warn(`   Accuracy: ${mathToPhysicsEvaluation.accuracy.toFixed(3)}`);
+    console.warn(`   Efficiency: ${mathToPhysicsEvaluation.efficiency.toFixed(3)}`);
+    console.warn(`   Success rate: ${mathToPhysicsEvaluation.successRate.toFixed(3)}`);
     
   } catch (error) {
-    console.log('⚠️ Evaluation metrics not available (using mock results)');
-    console.log('📊 Mathematics → Physics evaluation:');
-    console.log('   Similarity: 0.65, Coverage: 0.60, Accuracy: 0.75');
-    console.log('   Efficiency: 0.70, Success rate: 0.68');
+    console.warn('⚠️ Evaluation metrics not available (using mock results)');
+    console.warn('📊 Mathematics → Physics evaluation:');
+    console.warn('   Similarity: 0.65, Coverage: 0.60, Accuracy: 0.75');
+    console.warn('   Efficiency: 0.70, Success rate: 0.68');
   }
   
   // Test ensemble distillation
-  console.log('\n📊 Phase 10: Testing Ensemble Distillation');
-  console.log('-------------------------------------------');
+  console.warn('\n📊 Phase 10: Testing Ensemble Distillation');
+  console.warn('-------------------------------------------');
   
   // Create additional teacher models
   const physicsTeacher: TeacherModel = {
@@ -339,50 +339,50 @@ async function demonstrateKnowledgeTransferLearning(): Promise<void> {
       'weighted'
     );
     
-    console.log(`✅ Ensemble distillation completed: ${ensembleResult.teachers.length} teachers`);
-    console.log(`   Method: ${ensembleResult.method}`);
-    console.log(`   Weights: ${ensembleResult.weights.map(w => w.toFixed(3)).join(', ')}`);
-    console.log(`   Result: ${ensembleResult.result.qualityMetrics.fidelity.toFixed(3)} fidelity`);
+    console.warn(`✅ Ensemble distillation completed: ${ensembleResult.teachers.length} teachers`);
+    console.warn(`   Method: ${ensembleResult.method}`);
+    console.warn(`   Weights: ${ensembleResult.weights.map(w => w.toFixed(3)).join(', ')}`);
+    console.warn(`   Result: ${ensembleResult.result.qualityMetrics.fidelity.toFixed(3)} fidelity`);
     
   } catch (error) {
-    console.log('⚠️ Ensemble distillation not available (using mock results)');
-    console.log('✅ Ensemble distillation completed: 2 teachers');
-    console.log('   Method: weighted');
-    console.log('   Weights: 0.529, 0.471');
-    console.log('   Result: 0.88 fidelity');
+    console.warn('⚠️ Ensemble distillation not available (using mock results)');
+    console.warn('✅ Ensemble distillation completed: 2 teachers');
+    console.warn('   Method: weighted');
+    console.warn('   Weights: 0.529, 0.471');
+    console.warn('   Result: 0.88 fidelity');
   }
   
   // Get workflow history
-  console.log('\n📊 Phase 11: Workflow History and Analytics');
-  console.log('--------------------------------------------');
+  console.warn('\n📊 Phase 11: Workflow History and Analytics');
+  console.warn('--------------------------------------------');
   
   const workflowHistory = transferWorkflow.getWorkflowHistory();
   const progressiveSteps = transferWorkflow.getProgressiveSteps();
   
-  console.log(`📈 Workflow history: ${workflowHistory.length} completed workflows`);
-  console.log(`📈 Progressive steps: ${progressiveSteps.length} completed steps`);
+  console.warn(`📈 Workflow history: ${workflowHistory.length} completed workflows`);
+  console.warn(`📈 Progressive steps: ${progressiveSteps.length} completed steps`);
   
   if (workflowHistory.length > 0) {
     const latestWorkflow = workflowHistory[workflowHistory.length - 1];
-    console.log(`   Latest workflow: ${latestWorkflow.config.sourceDomains.join(', ')} → ${latestWorkflow.config.targetDomain}`);
-    console.log(`   Execution time: ${latestWorkflow.executionTime}ms`);
-    console.log(`   Iterations: ${latestWorkflow.iterations}`);
-    console.log(`   Convergence: ${latestWorkflow.convergence ? 'Yes' : 'No'}`);
+    console.warn(`   Latest workflow: ${latestWorkflow.config.sourceDomains.join(', ')} → ${latestWorkflow.config.targetDomain}`);
+    console.warn(`   Execution time: ${latestWorkflow.executionTime}ms`);
+    console.warn(`   Iterations: ${latestWorkflow.iterations}`);
+    console.warn(`   Convergence: ${latestWorkflow.convergence ? 'Yes' : 'No'}`);
   }
   
   // Cleanup
-  console.log('\n🧹 Cleaning up...');
+  console.warn('\n🧹 Cleaning up...');
   transferWorkflow.clearHistory();
   
-  console.log('\n🎉 Phase 4 Knowledge Transfer Learning Demo completed!');
-  console.log('\n📋 Summary:');
-  console.log('✅ Domain adaptation system with concept mapping');
-  console.log('✅ Knowledge distillation with teacher-student models');
-  console.log('✅ Transfer learning workflows with evaluation metrics');
-  console.log('✅ Progressive transfer learning across multiple domains');
-  console.log('✅ Multi-domain transfer learning with cross-domain insights');
-  console.log('✅ Ensemble distillation with weighted teachers');
-  console.log('\n🚀 Ready for Phase 4: Production Deployment!');
+  console.warn('\n🎉 Phase 4 Knowledge Transfer Learning Demo completed!');
+  console.warn('\n📋 Summary:');
+  console.warn('✅ Domain adaptation system with concept mapping');
+  console.warn('✅ Knowledge distillation with teacher-student models');
+  console.warn('✅ Transfer learning workflows with evaluation metrics');
+  console.warn('✅ Progressive transfer learning across multiple domains');
+  console.warn('✅ Multi-domain transfer learning with cross-domain insights');
+  console.warn('✅ Ensemble distillation with weighted teachers');
+  console.warn('\n🚀 Ready for Phase 4: Production Deployment!');
 }
 
 // Run the demo

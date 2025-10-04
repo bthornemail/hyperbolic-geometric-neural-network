@@ -112,7 +112,7 @@ export class ProductionLLMService {
    * Initialize the LLM service with providers
    */
   async initialize(providers: LLMProvider[]): Promise<void> {
-    console.log('🤖 Initializing Production LLM Service...');
+    console.warn('🤖 Initializing Production LLM Service...');
     
     for (const provider of providers) {
       await this.addProvider(provider);
@@ -125,10 +125,10 @@ export class ProductionLLMService {
     
     if (enabledProviders.length > 0) {
       this.activeProvider = enabledProviders[0];
-      console.log(`✅ Active provider: ${this.activeProvider.name}`);
+      console.warn(`✅ Active provider: ${this.activeProvider.name}`);
     }
     
-    console.log('✅ Production LLM Service initialized');
+    console.warn('✅ Production LLM Service initialized');
   }
 
   /**
@@ -170,7 +170,7 @@ export class ProductionLLMService {
       errors: 0
     };
     
-    console.log(`✅ Added provider: ${provider.name}`);
+    console.warn(`✅ Added provider: ${provider.name}`);
   }
 
   /**
@@ -208,7 +208,7 @@ export class ProductionLLMService {
       
       for (const fallbackProvider of fallbackProviders) {
         try {
-          console.log(`🔄 Trying fallback provider: ${fallbackProvider.name}`);
+          console.warn(`🔄 Trying fallback provider: ${fallbackProvider.name}`);
           const response = await this.callProvider(fallbackProvider, prompt, options);
           const latency = Date.now() - startTime;
           
@@ -492,7 +492,7 @@ export class ProductionLLMService {
     }
     
     this.activeProvider = provider;
-    console.log(`🔄 Switched to provider: ${provider.name}`);
+    console.warn(`🔄 Switched to provider: ${provider.name}`);
   }
 
   /**
@@ -520,7 +520,7 @@ export class ProductionLLMService {
    * Handle rate limiting
    */
   async handleRateLimit(): Promise<void> {
-    console.log('⏳ Rate limit reached, waiting...');
+    console.warn('⏳ Rate limit reached, waiting...');
     await new Promise(resolve => setTimeout(resolve, 60000)); // Wait 1 minute
   }
 }

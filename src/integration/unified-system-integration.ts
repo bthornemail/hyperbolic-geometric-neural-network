@@ -264,10 +264,10 @@ export class UnifiedSystemIntegration extends EventEmitter {
       this.updateStatus('overall', 'running');
       this.emit('system:initialized');
       
-      console.log('🎉 Unified System Integration initialized successfully!');
-      console.log(`📍 System Address: ${this.systemAddress.path}`);
-      console.log(`🔗 RPC Endpoint: ${this.hdAddressing.getRPCEndpoint(this.systemAddress)}`);
-      console.log(`🤝 Collaboration Interfaces: ${this.config.collaborationInterfaces.enableBasicCollaboration ? 'Basic' : ''}${this.config.collaborationInterfaces.enableEnhancedCollaboration ? ' Enhanced' : ''}${this.config.collaborationInterfaces.enableLSPASTIntegration ? ' LSP-AST' : ''}`);
+      console.warn('🎉 Unified System Integration initialized successfully!');
+      console.warn(`📍 System Address: ${this.systemAddress.path}`);
+      console.warn(`🔗 RPC Endpoint: ${this.hdAddressing.getRPCEndpoint(this.systemAddress)}`);
+      console.warn(`🤝 Collaboration Interfaces: ${this.config.collaborationInterfaces.enableBasicCollaboration ? 'Basic' : ''}${this.config.collaborationInterfaces.enableEnhancedCollaboration ? ' Enhanced' : ''}${this.config.collaborationInterfaces.enableLSPASTIntegration ? ' LSP-AST' : ''}`);
       
     } catch (error) {
       this.updateStatus('overall', 'error');

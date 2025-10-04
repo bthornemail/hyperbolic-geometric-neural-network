@@ -87,7 +87,7 @@ export class KnowledgeDistillationSystem {
       regularization: 0.001
     };
     
-    console.log('🧠 Knowledge Distillation System initialized');
+    console.warn('🧠 Knowledge Distillation System initialized');
   }
 
   /**
@@ -95,7 +95,7 @@ export class KnowledgeDistillationSystem {
    */
   registerTeacher(teacher: TeacherModel): void {
     this.teachers.set(teacher.id, teacher);
-    console.log(`👨‍🏫 Registered teacher: ${teacher.name} (${teacher.domain})`);
+    console.warn(`👨‍🏫 Registered teacher: ${teacher.name} (${teacher.domain})`);
   }
 
   /**
@@ -103,7 +103,7 @@ export class KnowledgeDistillationSystem {
    */
   registerStudent(student: StudentModel): void {
     this.students.set(student.id, student);
-    console.log(`👨‍🎓 Registered student: ${student.name} (${student.domain})`);
+    console.warn(`👨‍🎓 Registered student: ${student.name} (${student.domain})`);
   }
 
   /**
@@ -125,7 +125,7 @@ export class KnowledgeDistillationSystem {
     
     const finalConfig = { ...this.defaultConfig, ...config };
     
-    console.log(`🧠 Starting knowledge distillation: ${teacher.name} → ${student.name}`);
+    console.warn(`🧠 Starting knowledge distillation: ${teacher.name} → ${student.name}`);
     
     // Initialize distilled embeddings
     const distilledEmbeddings = new Map<string, number[]>();
@@ -168,7 +168,7 @@ export class KnowledgeDistillationSystem {
       iteration++;
       
       if (iteration % 10 === 0) {
-        console.log(`🔄 Distillation iteration ${iteration}/${finalConfig.maxIterations}`);
+        console.warn(`🔄 Distillation iteration ${iteration}/${finalConfig.maxIterations}`);
       }
     }
     
@@ -198,7 +198,7 @@ export class KnowledgeDistillationSystem {
     
     this.distillationHistory.push(result);
     
-    console.log(`✅ Knowledge distillation completed: ${iteration} iterations, ${distillationTime}ms`);
+    console.warn(`✅ Knowledge distillation completed: ${iteration} iterations, ${distillationTime}ms`);
     return result;
   }
 
@@ -483,7 +483,7 @@ export class KnowledgeDistillationSystem {
     // Calculate weights if not provided
     const finalWeights = weights || this.calculateEnsembleWeights(teachers);
     
-    console.log(`🧠 Starting ensemble distillation: ${teachers.length} teachers → ${student.name}`);
+    console.warn(`🧠 Starting ensemble distillation: ${teachers.length} teachers → ${student.name}`);
     
     // Perform ensemble distillation
     const result = await this.performEnsembleDistillation(teachers, student, method, finalWeights);
@@ -498,7 +498,7 @@ export class KnowledgeDistillationSystem {
     
     this.ensembleDistillations.push(ensembleDistillation);
     
-    console.log(`✅ Ensemble distillation completed`);
+    console.warn(`✅ Ensemble distillation completed`);
     return ensembleDistillation;
   }
 

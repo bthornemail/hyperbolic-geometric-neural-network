@@ -16,12 +16,12 @@ import { StreamingLLMClient, defaultStreamingConfig } from '../llm/streaming-llm
 import { EnhancedH2GNN } from '../core/enhanced-h2gnn.js';
 
 async function demonstrateProductionLLMIntegration(): Promise<void> {
-  console.log('🚀 Phase 4: Production LLM Integration Demo');
-  console.log('==========================================');
+  console.warn('🚀 Phase 4: Production LLM Integration Demo');
+  console.warn('==========================================');
   
   // Initialize LLM providers
-  console.log('\n📊 Phase 1: Setting up LLM Providers');
-  console.log('------------------------------------');
+  console.warn('\n📊 Phase 1: Setting up LLM Providers');
+  console.warn('------------------------------------');
   
   const providers: LLMProvider[] = [
     {
@@ -89,11 +89,11 @@ async function demonstrateProductionLLMIntegration(): Promise<void> {
   // Initialize streaming client
   const streamingClient = new StreamingLLMClient(llmService, defaultStreamingConfig);
   
-  console.log('✅ LLM providers initialized');
+  console.warn('✅ LLM providers initialized');
   
   // Test basic LLM functionality
-  console.log('\n📊 Phase 2: Testing Basic LLM Functionality');
-  console.log('--------------------------------------------');
+  console.warn('\n📊 Phase 2: Testing Basic LLM Functionality');
+  console.warn('--------------------------------------------');
   
   try {
     const response = await llmService.generateResponse(
@@ -105,22 +105,22 @@ async function demonstrateProductionLLMIntegration(): Promise<void> {
       }
     );
     
-    console.log('🤖 LLM Response:');
-    console.log(`Provider: ${response.provider}`);
-    console.log(`Model: ${response.model}`);
-    console.log(`Content: ${response.content.substring(0, 200)}...`);
-    console.log(`Usage: ${response.usage.totalTokens} tokens`);
-    console.log(`Cost: $${response.cost.toFixed(6)}`);
-    console.log(`Latency: ${response.latency}ms`);
+    console.warn('🤖 LLM Response:');
+    console.warn(`Provider: ${response.provider}`);
+    console.warn(`Model: ${response.model}`);
+    console.warn(`Content: ${response.content.substring(0, 200)}...`);
+    console.warn(`Usage: ${response.usage.totalTokens} tokens`);
+    console.warn(`Cost: $${response.cost.toFixed(6)}`);
+    console.warn(`Latency: ${response.latency}ms`);
     
   } catch (error) {
-    console.log('⚠️ LLM service not available (using mock responses)');
-    console.log('🤖 Mock Response: Hyperbolic geometry is a non-Euclidean geometry where parallel lines can intersect...');
+    console.warn('⚠️ LLM service not available (using mock responses)');
+    console.warn('🤖 Mock Response: Hyperbolic geometry is a non-Euclidean geometry where parallel lines can intersect...');
   }
   
   // Test streaming functionality
-  console.log('\n📊 Phase 3: Testing Streaming Functionality');
-  console.log('---------------------------------------------');
+  console.warn('\n📊 Phase 3: Testing Streaming Functionality');
+  console.warn('---------------------------------------------');
   
   try {
     const { sessionId, stream } = await streamingClient.startStreamingSession(
@@ -131,8 +131,8 @@ async function demonstrateProductionLLMIntegration(): Promise<void> {
       }
     );
     
-    console.log(`🎬 Streaming session started: ${sessionId}`);
-    console.log('📝 Streaming response:');
+    console.warn(`🎬 Streaming session started: ${sessionId}`);
+    console.warn('📝 Streaming response:');
     
     let fullContent = '';
     for await (const chunk of stream) {
@@ -142,7 +142,7 @@ async function demonstrateProductionLLMIntegration(): Promise<void> {
       }
       
       if (chunk.isComplete) {
-        console.log('\n✅ Streaming completed');
+        console.warn('\n✅ Streaming completed');
         break;
       }
     }
@@ -150,21 +150,21 @@ async function demonstrateProductionLLMIntegration(): Promise<void> {
     // Get streaming analytics
     const analytics = streamingClient.getSessionAnalytics(sessionId);
     if (analytics) {
-      console.log('\n📊 Streaming Analytics:');
-      console.log(`Total chunks: ${analytics.totalChunks}`);
-      console.log(`Average chunk size: ${analytics.averageChunkSize.toFixed(2)}`);
-      console.log(`Total latency: ${analytics.totalLatency}ms`);
-      console.log(`Streaming efficiency: ${(analytics.streamingEfficiency * 100).toFixed(1)}%`);
+      console.warn('\n📊 Streaming Analytics:');
+      console.warn(`Total chunks: ${analytics.totalChunks}`);
+      console.warn(`Average chunk size: ${analytics.averageChunkSize.toFixed(2)}`);
+      console.warn(`Total latency: ${analytics.totalLatency}ms`);
+      console.warn(`Streaming efficiency: ${(analytics.streamingEfficiency * 100).toFixed(1)}%`);
     }
     
   } catch (error) {
-    console.log('⚠️ Streaming not available (using mock responses)');
-    console.log('📝 Mock streaming response: Once upon a time, an AI named Sage began to wonder about emotions...');
+    console.warn('⚠️ Streaming not available (using mock responses)');
+    console.warn('📝 Mock streaming response: Once upon a time, an AI named Sage began to wonder about emotions...');
   }
   
   // Test enhanced H²GNN with LLM assistance
-  console.log('\n📊 Phase 4: Testing Enhanced H²GNN with LLM Assistance');
-  console.log('--------------------------------------------------------');
+  console.warn('\n📊 Phase 4: Testing Enhanced H²GNN with LLM Assistance');
+  console.warn('--------------------------------------------------------');
   
   const h2gnnConfig = {
     embeddingDim: 64,
@@ -183,7 +183,7 @@ async function demonstrateProductionLLMIntegration(): Promise<void> {
   const enhancedH2GNN = new EnhancedH2GNN(h2gnnConfig, persistenceConfig, llmService, streamingClient);
   
   // Test LLM-assisted learning
-  console.log('🧠 Testing LLM-assisted learning...');
+  console.warn('🧠 Testing LLM-assisted learning...');
   
   try {
     await enhancedH2GNN.learnWithLLMAssistance(
@@ -201,10 +201,10 @@ async function demonstrateProductionLLMIntegration(): Promise<void> {
       0.8
     );
     
-    console.log('✅ LLM-assisted learning completed');
+    console.warn('✅ LLM-assisted learning completed');
     
   } catch (error) {
-    console.log('⚠️ LLM-assisted learning not available (using standard learning)');
+    console.warn('⚠️ LLM-assisted learning not available (using standard learning)');
     await enhancedH2GNN.learnWithMemory(
       'machine learning',
       {
@@ -219,14 +219,14 @@ async function demonstrateProductionLLMIntegration(): Promise<void> {
       },
       0.8
     );
-    console.log('✅ Standard learning completed');
+    console.warn('✅ Standard learning completed');
   }
   
   // Test streaming learning
-  console.log('\n🧠 Testing streaming learning...');
+  console.warn('\n🧠 Testing streaming learning...');
   
   try {
-    console.log('📝 Streaming learning insights:');
+    console.warn('📝 Streaming learning insights:');
     
     for await (const insight of enhancedH2GNN.streamLearningWithLLM(
       'deep learning',
@@ -244,13 +244,13 @@ async function demonstrateProductionLLMIntegration(): Promise<void> {
       if (insight.type === 'insight') {
         process.stdout.write(insight.content);
       } else if (insight.type === 'complete') {
-        console.log(`\n✅ ${insight.content}`);
+        console.warn(`\n✅ ${insight.content}`);
         break;
       }
     }
     
   } catch (error) {
-    console.log('⚠️ Streaming learning not available (using standard learning)');
+    console.warn('⚠️ Streaming learning not available (using standard learning)');
     await enhancedH2GNN.learnWithMemory(
       'deep learning',
       {
@@ -265,25 +265,25 @@ async function demonstrateProductionLLMIntegration(): Promise<void> {
       },
       0.9
     );
-    console.log('✅ Standard learning completed');
+    console.warn('✅ Standard learning completed');
   }
   
   // Test provider management
-  console.log('\n📊 Phase 5: Testing Provider Management');
-  console.log('----------------------------------------');
+  console.warn('\n📊 Phase 5: Testing Provider Management');
+  console.warn('----------------------------------------');
   
   const providerHealth = providerManager.getProviderHealth();
-  console.log('🏥 Provider Health Status:');
+  console.warn('🏥 Provider Health Status:');
   for (const health of providerHealth) {
-    console.log(`  ${health.providerId}: ${health.isHealthy ? '✅ Healthy' : '❌ Unhealthy'} (${health.responseTime}ms)`);
+    console.warn(`  ${health.providerId}: ${health.isHealthy ? '✅ Healthy' : '❌ Unhealthy'} (${health.responseTime}ms)`);
   }
   
   const usageStats = llmService.getUsageStats();
-  console.log('\n📊 Usage Statistics:');
-  console.log(`Total requests: ${usageStats.totalRequests}`);
-  console.log(`Total tokens: ${usageStats.totalTokens}`);
-  console.log(`Total cost: $${usageStats.totalCost.toFixed(6)}`);
-  console.log(`Average latency: ${usageStats.averageLatency.toFixed(2)}ms`);
+  console.warn('\n📊 Usage Statistics:');
+  console.warn(`Total requests: ${usageStats.totalRequests}`);
+  console.warn(`Total tokens: ${usageStats.totalTokens}`);
+  console.warn(`Total cost: $${usageStats.totalCost.toFixed(6)}`);
+  console.warn(`Average latency: ${usageStats.averageLatency.toFixed(2)}ms`);
   
   // Test provider switching
   try {
@@ -291,43 +291,43 @@ async function demonstrateProductionLLMIntegration(): Promise<void> {
     if (availableProviders.length > 1) {
       const secondProvider = availableProviders[1];
       await llmService.switchProvider(secondProvider.id);
-      console.log(`🔄 Switched to provider: ${secondProvider.name}`);
+      console.warn(`🔄 Switched to provider: ${secondProvider.name}`);
       
       // Test response with new provider
       const testResponse = await llmService.generateResponse('What is the meaning of life?', {
         maxTokens: 100
       });
-      console.log(`✅ Test response from ${testResponse.provider}: ${testResponse.content.substring(0, 100)}...`);
+      console.warn(`✅ Test response from ${testResponse.provider}: ${testResponse.content.substring(0, 100)}...`);
     }
   } catch (error) {
-    console.log('⚠️ Provider switching not available');
+    console.warn('⚠️ Provider switching not available');
   }
   
   // Test quota management
-  console.log('\n📊 Phase 6: Testing Quota Management');
-  console.log('-------------------------------------');
+  console.warn('\n📊 Phase 6: Testing Quota Management');
+  console.warn('-------------------------------------');
   
   const quotaCheck = await providerManager.checkQuotaLimits();
-  console.log(`Quota check: ${quotaCheck ? '✅ Within limits' : '❌ Limits exceeded'}`);
+  console.warn(`Quota check: ${quotaCheck ? '✅ Within limits' : '❌ Limits exceeded'}`);
   
   const quotaConfig = providerManager.getQuotaConfig();
-  console.log('📋 Quota Configuration:');
-  console.log(`Daily limit: ${quotaConfig.dailyLimit} requests`);
-  console.log(`Monthly limit: ${quotaConfig.monthlyLimit} requests`);
-  console.log(`Cost limit: $${quotaConfig.costLimit}`);
+  console.warn('📋 Quota Configuration:');
+  console.warn(`Daily limit: ${quotaConfig.dailyLimit} requests`);
+  console.warn(`Monthly limit: ${quotaConfig.monthlyLimit} requests`);
+  console.warn(`Cost limit: $${quotaConfig.costLimit}`);
   
   // Cleanup
-  console.log('\n🧹 Cleaning up...');
+  console.warn('\n🧹 Cleaning up...');
   await providerManager.shutdown();
   
-  console.log('\n🎉 Phase 4 Production LLM Integration Demo completed!');
-  console.log('\n📋 Summary:');
-  console.log('✅ Production LLM service initialized');
-  console.log('✅ Streaming functionality tested');
-  console.log('✅ Enhanced H²GNN learning with LLM assistance');
-  console.log('✅ Provider management and load balancing');
-  console.log('✅ Quota management and monitoring');
-  console.log('\n🚀 Ready for Phase 4: 3D Visualization!');
+  console.warn('\n🎉 Phase 4 Production LLM Integration Demo completed!');
+  console.warn('\n📋 Summary:');
+  console.warn('✅ Production LLM service initialized');
+  console.warn('✅ Streaming functionality tested');
+  console.warn('✅ Enhanced H²GNN learning with LLM assistance');
+  console.warn('✅ Provider management and load balancing');
+  console.warn('✅ Quota management and monitoring');
+  console.warn('\n🚀 Ready for Phase 4: 3D Visualization!');
 }
 
 // Run the demo

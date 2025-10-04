@@ -111,7 +111,7 @@ export class ObsidianSync {
         this.startFileWatcher();
       }
       
-      console.log('🔗 Obsidian sync initialized successfully');
+      console.warn('🔗 Obsidian sync initialized successfully');
     } catch (error) {
       console.error('❌ Failed to initialize Obsidian sync:', error);
     }
@@ -141,7 +141,7 @@ export class ObsidianSync {
     await this.scanVaultFiles();
     await this.buildKnowledgeGraph();
     
-    console.log(`📚 Loaded vault "${vaultName}" with ${this.vault.notes.size} notes`);
+    console.warn(`📚 Loaded vault "${vaultName}" with ${this.vault.notes.size} notes`);
   }
 
   /**
@@ -284,7 +284,7 @@ export class ObsidianSync {
     
     this.vault.graph = { nodes, edges, clusters };
     
-    console.log(`🕸️ Built knowledge graph with ${nodes.length} nodes and ${edges.length} edges`);
+    console.warn(`🕸️ Built knowledge graph with ${nodes.length} nodes and ${edges.length} edges`);
   }
 
   /**
@@ -365,7 +365,7 @@ export class ObsidianSync {
       nodes[i].embedding = result.embeddings[i];
     }
     
-    console.log('🧠 Generated hyperbolic embeddings for knowledge graph');
+    console.warn('🧠 Generated hyperbolic embeddings for knowledge graph');
   }
 
   /**
@@ -416,7 +416,7 @@ export class ObsidianSync {
       }
     }
     
-    console.log(`🎯 Detected ${clusters.length} knowledge clusters`);
+    console.warn(`🎯 Detected ${clusters.length} knowledge clusters`);
     return clusters;
   }
 
@@ -507,7 +507,7 @@ export class ObsidianSync {
       await this.performSync();
     }, this.config.syncInterval);
     
-    console.log(`⏰ Auto-sync started (interval: ${this.config.syncInterval}ms)`);
+    console.warn(`⏰ Auto-sync started (interval: ${this.config.syncInterval}ms)`);
   }
 
   /**
@@ -515,7 +515,7 @@ export class ObsidianSync {
    */
   private startFileWatcher(): void {
     // In a real implementation, would use fs.watch or chokidar
-    console.log('👁️ File watcher started for real-time updates');
+    console.warn('👁️ File watcher started for real-time updates');
   }
 
   /**
@@ -523,13 +523,13 @@ export class ObsidianSync {
    */
   private async performSync(): Promise<void> {
     try {
-      console.log('🔄 Performing Obsidian sync...');
+      console.warn('🔄 Performing Obsidian sync...');
       
       // Check for modified files
       const modifiedNotes = await this.detectModifiedNotes();
       
       if (modifiedNotes.length > 0) {
-        console.log(`📝 Found ${modifiedNotes.length} modified notes`);
+        console.warn(`📝 Found ${modifiedNotes.length} modified notes`);
         
         // Update knowledge graph
         await this.updateKnowledgeGraph(modifiedNotes);
@@ -541,7 +541,7 @@ export class ObsidianSync {
       }
       
       this.lastAnalysis = new Date();
-      console.log('✅ Sync completed successfully');
+      console.warn('✅ Sync completed successfully');
       
     } catch (error) {
       console.error('❌ Sync failed:', error);
@@ -564,7 +564,7 @@ export class ObsidianSync {
    */
   private async updateKnowledgeGraph(modifiedNotes: ObsidianNote[]): Promise<void> {
     // Incremental update logic would go here
-    console.log(`🔧 Updating knowledge graph for ${modifiedNotes.length} notes`);
+    console.warn(`🔧 Updating knowledge graph for ${modifiedNotes.length} notes`);
   }
 
   /**
@@ -573,7 +573,7 @@ export class ObsidianSync {
   private async regenerateEmbeddings(): Promise<void> {
     if (!this.vault) return;
     
-    console.log('🧠 Regenerating hyperbolic embeddings...');
+    console.warn('🧠 Regenerating hyperbolic embeddings...');
     await this.generateHyperbolicEmbeddings(this.vault.graph.nodes, this.vault.graph.edges);
   }
 
@@ -731,7 +731,7 @@ export class ObsidianSync {
       this.fileWatcher = undefined;
     }
     
-    console.log('🛑 Obsidian sync stopped');
+    console.warn('🛑 Obsidian sync stopped');
   }
 }
 

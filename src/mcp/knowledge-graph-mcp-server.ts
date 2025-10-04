@@ -87,7 +87,7 @@ const KnowledgeGraphMCP = FallbackKnowledgeGraphMCP;
 // Fallback implementations for missing modules
 class FallbackBIP32HDAddressing {
   constructor(seed: Buffer, network: string) {
-    console.log('Using fallback HD addressing implementation');
+    // Using fallback HD addressing implementation
   }
   
   createAddress(service: string, index: number, type: string, transport: string, host: string, port: number) {
@@ -110,11 +110,11 @@ class FallbackBIP32HDAddressing {
 
 class FallbackH2GNNMCPIntegration {
   constructor(hdAddressing: any, config: any) {
-    console.log('Using fallback MCP integration implementation');
+    // Using fallback MCP integration implementation
   }
   
   async registerService(name: string, version: string, description: string, capabilities: string[], transport: string, host: string, port: number) {
-    console.log(`Registered service: ${name} v${version}`);
+    // Registered service: ${name} v${version}
   }
   
   getAllServices() { return []; }
@@ -272,9 +272,9 @@ class KnowledgeGraphMCPServerHD {
         3001
       );
 
-      console.log(`Consolidated Knowledge Graph MCP Server initialized with address: ${this.h2gnnAddress.path}`);
+      // Consolidated Knowledge Graph MCP Server initialized with address: ${this.h2gnnAddress.path}
     } catch (error) {
-      console.warn('HD addressing initialization failed, using fallback:', error);
+      // HD addressing initialization failed, using fallback: ${error}
       // Continue with fallback implementation
     }
   }
@@ -1503,7 +1503,7 @@ The knowledge base contains semantic relationships between code concepts, ready 
 
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.log("Consolidated Knowledge Graph MCP Server running on stdio");
+    // Consolidated Knowledge Graph MCP Server running on stdio
   }
 }
 

@@ -524,7 +524,7 @@ class MockRedisClient implements RedisClient {
  * Redis + BIP32 HD Addressing Demo
  */
 export async function demonstrateRedisHDCaching(): Promise<void> {
-  console.log('🗄️ Redis + BIP32 HD Addressing Demo Starting...\n');
+  console.warn('🗄️ Redis + BIP32 HD Addressing Demo Starting...\n');
   
   try {
     // Initialize BIP32 HD addressing
@@ -546,20 +546,20 @@ export async function demonstrateRedisHDCaching(): Promise<void> {
     
     const cache = new H2GNNRedisCache(hdAddressing, mockRedis, config);
     
-    console.log('✅ Redis cache with BIP32 HD addressing initialized\n');
+    console.warn('✅ Redis cache with BIP32 HD addressing initialized\n');
     
     // Create H²GNN addresses for different components
     const brokerAddress = hdAddressing.createAddress('broker', 0, 'external', 'mqtt', 'localhost', 1883);
     const providerAddress = hdAddressing.createAddress('provider', 0, 'external', 'websocket', 'localhost', 8080);
     const consumerAddress = hdAddressing.createAddress('consumer', 0, 'external', 'tcp', 'localhost', 3000);
     
-    console.log('📍 Created H²GNN addresses:');
-    console.log(`   Broker: ${brokerAddress.path}`);
-    console.log(`   Provider: ${providerAddress.path}`);
-    console.log(`   Consumer: ${consumerAddress.path}\n`);
+    console.warn('📍 Created H²GNN addresses:');
+    console.warn(`   Broker: ${brokerAddress.path}`);
+    console.warn(`   Provider: ${providerAddress.path}`);
+    console.warn(`   Consumer: ${consumerAddress.path}\n`);
     
     // Store data in cache
-    console.log('💾 Storing data in cache...');
+    console.warn('💾 Storing data in cache...');
     
     const embeddingData = {
       coordinates: [0.5, -0.3],
@@ -591,46 +591,46 @@ export async function demonstrateRedisHDCaching(): Promise<void> {
     await cache.set(providerAddress, 'training', 'progress', trainingData, 3600);
     await cache.set(consumerAddress, 'visualization', 'graph', visualizationData, 900);
     
-    console.log('✅ Data stored in cache successfully\n');
+    console.warn('✅ Data stored in cache successfully\n');
     
     // Retrieve data from cache
-    console.log('📥 Retrieving data from cache...');
+    console.warn('📥 Retrieving data from cache...');
     
     const retrievedEmbedding = await cache.get(brokerAddress, 'embeddings', 'hyperbolic');
     const retrievedTraining = await cache.get(providerAddress, 'training', 'progress');
     const retrievedVisualization = await cache.get(consumerAddress, 'visualization', 'graph');
     
-    console.log('✅ Data retrieved from cache:');
-    console.log(`   Embedding data: ${retrievedEmbedding ? 'Found' : 'Not found'}`);
-    console.log(`   Training data: ${retrievedTraining ? 'Found' : 'Not found'}`);
-    console.log(`   Visualization data: ${retrievedVisualization ? 'Found' : 'Not found'}\n`);
+    console.warn('✅ Data retrieved from cache:');
+    console.warn(`   Embedding data: ${retrievedEmbedding ? 'Found' : 'Not found'}`);
+    console.warn(`   Training data: ${retrievedTraining ? 'Found' : 'Not found'}`);
+    console.warn(`   Visualization data: ${retrievedVisualization ? 'Found' : 'Not found'}\n`);
     
     // Check cache existence
-    console.log('🔍 Checking cache existence...');
+    console.warn('🔍 Checking cache existence...');
     
     const embeddingExists = await cache.exists(brokerAddress, 'embeddings', 'hyperbolic');
     const trainingExists = await cache.exists(providerAddress, 'training', 'progress');
     const visualizationExists = await cache.exists(consumerAddress, 'visualization', 'graph');
     
-    console.log('✅ Cache existence check:');
-    console.log(`   Embedding exists: ${embeddingExists}`);
-    console.log(`   Training exists: ${trainingExists}`);
-    console.log(`   Visualization exists: ${visualizationExists}\n`);
+    console.warn('✅ Cache existence check:');
+    console.warn(`   Embedding exists: ${embeddingExists}`);
+    console.warn(`   Training exists: ${trainingExists}`);
+    console.warn(`   Visualization exists: ${visualizationExists}\n`);
     
     // Get cache keys for different criteria
-    console.log('🔑 Getting cache keys...');
+    console.warn('🔑 Getting cache keys...');
     
     const brokerKeys = await cache.getKeysForAddress(brokerAddress);
     const embeddingKeys = await cache.getKeysForPurpose('embeddings');
     const hyperbolicKeys = await cache.getKeysForComponent('hyperbolic');
     
-    console.log('✅ Cache keys retrieved:');
-    console.log(`   Broker keys: ${brokerKeys.length}`);
-    console.log(`   Embedding keys: ${embeddingKeys.length}`);
-    console.log(`   Hyperbolic keys: ${hyperbolicKeys.length}\n`);
+    console.warn('✅ Cache keys retrieved:');
+    console.warn(`   Broker keys: ${brokerKeys.length}`);
+    console.warn(`   Embedding keys: ${embeddingKeys.length}`);
+    console.warn(`   Hyperbolic keys: ${hyperbolicKeys.length}\n`);
     
     // Batch operations
-    console.log('📦 Demonstrating batch operations...');
+    console.warn('📦 Demonstrating batch operations...');
     
     const batchEntries = [
       {
@@ -654,7 +654,7 @@ export async function demonstrateRedisHDCaching(): Promise<void> {
     ];
     
     const batchSetResults = await cache.batchSet(batchEntries);
-    console.log(`✅ Batch set results: ${batchSetResults.filter(r => r).length}/${batchSetResults.length} successful`);
+    console.warn(`✅ Batch set results: ${batchSetResults.filter(r => r).length}/${batchSetResults.length} successful`);
     
     const batchQueries = batchEntries.map(entry => ({
       h2gnnAddress: entry.h2gnnAddress,
@@ -663,52 +663,52 @@ export async function demonstrateRedisHDCaching(): Promise<void> {
     }));
     
     const batchGetResults = await cache.batchGet(batchQueries);
-    console.log(`✅ Batch get results: ${batchGetResults.filter(r => r !== null).length}/${batchGetResults.length} successful\n`);
+    console.warn(`✅ Batch get results: ${batchGetResults.filter(r => r !== null).length}/${batchGetResults.length} successful\n`);
     
     // Get cache statistics
-    console.log('📊 Getting cache statistics...');
+    console.warn('📊 Getting cache statistics...');
     
     const stats = await cache.getStats();
-    console.log('✅ Cache statistics:');
-    console.log(`   Total keys: ${stats.totalKeys}`);
-    console.log(`   Hit rate: ${stats.hitRate.toFixed(2)}%`);
-    console.log(`   Miss rate: ${stats.missRate.toFixed(2)}%`);
-    console.log(`   Evictions: ${stats.evictions}`);
-    console.log(`   Connected clients: ${stats.connectedClients}\n`);
+    console.warn('✅ Cache statistics:');
+    console.warn(`   Total keys: ${stats.totalKeys}`);
+    console.warn(`   Hit rate: ${stats.hitRate.toFixed(2)}%`);
+    console.warn(`   Miss rate: ${stats.missRate.toFixed(2)}%`);
+    console.warn(`   Evictions: ${stats.evictions}`);
+    console.warn(`   Connected clients: ${stats.connectedClients}\n`);
     
     // Get cache health status
-    console.log('🏥 Checking cache health...');
+    console.warn('🏥 Checking cache health...');
     
     const health = await cache.getHealthStatus();
-    console.log(`✅ Cache health: ${health.healthy ? 'HEALTHY' : 'UNHEALTHY'}`);
-    console.log(`   Message: ${health.message}\n`);
+    console.warn(`✅ Cache health: ${health.healthy ? 'HEALTHY' : 'UNHEALTHY'}`);
+    console.warn(`   Message: ${health.message}\n`);
     
     // Clear cache operations
-    console.log('🧹 Demonstrating cache clearing...');
+    console.warn('🧹 Demonstrating cache clearing...');
     
     const clearedBroker = await cache.clearAddress(brokerAddress);
     const clearedEmbeddings = await cache.clearPurpose('embeddings');
     const clearedHyperbolic = await cache.clearComponent('hyperbolic');
     
-    console.log('✅ Cache clearing results:');
-    console.log(`   Cleared broker keys: ${clearedBroker}`);
-    console.log(`   Cleared embedding keys: ${clearedEmbeddings}`);
-    console.log(`   Cleared hyperbolic keys: ${clearedHyperbolic}\n`);
+    console.warn('✅ Cache clearing results:');
+    console.warn(`   Cleared broker keys: ${clearedBroker}`);
+    console.warn(`   Cleared embedding keys: ${clearedEmbeddings}`);
+    console.warn(`   Cleared hyperbolic keys: ${clearedHyperbolic}\n`);
     
     // Final statistics
     const finalStats = await cache.getStats();
-    console.log('📊 Final cache statistics:');
-    console.log(`   Total keys: ${finalStats.totalKeys}`);
-    console.log(`   Hit rate: ${finalStats.hitRate.toFixed(2)}%`);
-    console.log(`   Miss rate: ${finalStats.missRate.toFixed(2)}%`);
+    console.warn('📊 Final cache statistics:');
+    console.warn(`   Total keys: ${finalStats.totalKeys}`);
+    console.warn(`   Hit rate: ${finalStats.hitRate.toFixed(2)}%`);
+    console.warn(`   Miss rate: ${finalStats.missRate.toFixed(2)}%`);
     
-    console.log('\n🎉 Redis + BIP32 HD Addressing Demo Completed Successfully!');
-    console.log('\n📊 Summary:');
-    console.log('   ✅ Deterministic cache key generation');
-    console.log('   ✅ Hierarchical data management');
-    console.log('   ✅ Batch operations support');
-    console.log('   ✅ Cache statistics and health monitoring');
-    console.log('   ✅ Efficient cache clearing operations');
+    console.warn('\n🎉 Redis + BIP32 HD Addressing Demo Completed Successfully!');
+    console.warn('\n📊 Summary:');
+    console.warn('   ✅ Deterministic cache key generation');
+    console.warn('   ✅ Hierarchical data management');
+    console.warn('   ✅ Batch operations support');
+    console.warn('   ✅ Cache statistics and health monitoring');
+    console.warn('   ✅ Efficient cache clearing operations');
     
   } catch (error) {
     console.error('❌ Redis + BIP32 HD addressing demo failed:', error);

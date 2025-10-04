@@ -71,7 +71,7 @@ export class EnhancedD3Wrapper extends EventEmitter {
   private initializeSVG(): void {
     // Initialize SVG container
     // Note: In a real implementation, this would use actual D3
-    console.log(`🎨 Initializing D3 SVG in container: ${this.options.container}`);
+    console.warn(`🎨 Initializing D3 SVG in container: ${this.options.container}`);
     
     // Mock SVG setup
     this.svg = {
@@ -93,7 +93,7 @@ export class EnhancedD3Wrapper extends EventEmitter {
   private setupProjection(): void {
     // Setup D3 geographic projection
     const projectionType = this.options.projection || 'mercator';
-    console.log(`🗺️ Setting up ${projectionType} projection`);
+    console.warn(`🗺️ Setting up ${projectionType} projection`);
     
     // Mock projection setup
     this.projection = {
@@ -142,7 +142,7 @@ export class EnhancedD3Wrapper extends EventEmitter {
   async renderGeoJSON(geoJSON: any, options: D3VisualizationOptions = {}): Promise<void> {
     this.currentData = geoJSON;
     
-    console.log('🎨 Rendering GeoJSON with D3');
+    console.warn('🎨 Rendering GeoJSON with D3');
     
     // Clear previous visualization
     this.clearVisualization();
@@ -171,11 +171,11 @@ export class EnhancedD3Wrapper extends EventEmitter {
     this.addCollaborationOverlay();
     this.addRealTimeInteractions();
     
-    console.log('🎨 Real-time GeoJSON rendering complete');
+    console.warn('🎨 Real-time GeoJSON rendering complete');
   }
 
   private clearVisualization(): void {
-    console.log('🧹 Clearing previous visualization');
+    console.warn('🧹 Clearing previous visualization');
     // Clear SVG content
   }
 
@@ -188,7 +188,7 @@ export class EnhancedD3Wrapper extends EventEmitter {
   }
 
   private renderFeatures(features: any[], path: any): void {
-    console.log(`🎨 Rendering ${features.length} features`);
+    console.warn(`🎨 Rendering ${features.length} features`);
     
     features.forEach((feature, index) => {
       this.renderFeature(feature, index);
@@ -200,7 +200,7 @@ export class EnhancedD3Wrapper extends EventEmitter {
     const coordinates = feature.geometry.coordinates;
     const properties = feature.properties;
     
-    console.log(`📍 Rendering feature ${index}: ${properties.semantic_label || 'unnamed'}`);
+    console.warn(`📍 Rendering feature ${index}: ${properties.semantic_label || 'unnamed'}`);
     
     // Apply semantic coloring
     const color = this.getSemanticColor(properties);
@@ -245,18 +245,18 @@ export class EnhancedD3Wrapper extends EventEmitter {
   private visualizeHyperbolicDistance(feature: any, distance: number): void {
     // Visualize hyperbolic distance as size or opacity
     const size = Math.max(2, 10 - distance * 5);
-    console.log(`📏 Visualizing hyperbolic distance: ${distance} -> size: ${size}`);
+    console.warn(`📏 Visualizing hyperbolic distance: ${distance} -> size: ${size}`);
   }
 
   private visualizeSemanticCohesion(feature: any, cohesion: number): void {
     // Visualize semantic cohesion as color intensity
     const opacity = Math.max(0.3, cohesion);
-    console.log(`🔗 Visualizing semantic cohesion: ${cohesion} -> opacity: ${opacity}`);
+    console.warn(`🔗 Visualizing semantic cohesion: ${cohesion} -> opacity: ${opacity}`);
   }
 
   // 🎯 INTERACTIVE FEATURES
   private addZoomBehavior(): void {
-    console.log('🔍 Adding zoom behavior');
+    console.warn('🔍 Adding zoom behavior');
     this.zoomBehavior = {
       scaleExtent: [0.5, 10],
       on: (event: string, handler: any) => this
@@ -264,17 +264,17 @@ export class EnhancedD3Wrapper extends EventEmitter {
   }
 
   private addTooltips(): void {
-    console.log('💡 Adding tooltips');
+    console.warn('💡 Adding tooltips');
     this.tooltip = {
       show: (content: string, x: number, y: number) => {
-        console.log(`💡 Tooltip: ${content} at (${x}, ${y})`);
+        console.warn(`💡 Tooltip: ${content} at (${x}, ${y})`);
       },
-      hide: () => console.log('💡 Tooltip hidden')
+      hide: () => console.warn('💡 Tooltip hidden')
     };
   }
 
   private addRealTimeInteractions(): void {
-    console.log('⚡ Adding real-time interactions');
+    console.warn('⚡ Adding real-time interactions');
     
     // Set up event handlers for interactive exploration
     this.setupClickHandlers();
@@ -283,23 +283,23 @@ export class EnhancedD3Wrapper extends EventEmitter {
   }
 
   private setupClickHandlers(): void {
-    console.log('🖱️ Setting up click handlers');
+    console.warn('🖱️ Setting up click handlers');
     // Setup click event handlers
   }
 
   private setupHoverHandlers(): void {
-    console.log('👆 Setting up hover handlers');
+    console.warn('👆 Setting up hover handlers');
     // Setup hover event handlers
   }
 
   private setupKeyboardShortcuts(): void {
-    console.log('⌨️ Setting up keyboard shortcuts');
+    console.warn('⌨️ Setting up keyboard shortcuts');
     // Setup keyboard shortcuts for navigation
   }
 
   // 🎨 REAL-TIME ENHANCEMENTS
   private addConfidenceHeatmap(geoJSON: any): void {
-    console.log('🔥 Adding confidence heatmap');
+    console.warn('🔥 Adding confidence heatmap');
     
     // Create confidence-based heatmap overlay
     const confidenceScale = this.createConfidenceScale();
@@ -309,7 +309,7 @@ export class EnhancedD3Wrapper extends EventEmitter {
       const radius = this.calculateConfidenceRadius(confidence);
       const color = confidenceScale(confidence);
       
-      console.log(`🔥 Confidence circle: ${confidence} -> radius: ${radius}, color: ${color}`);
+      console.warn(`🔥 Confidence circle: ${confidence} -> radius: ${radius}, color: ${color}`);
     });
   }
 
@@ -332,13 +332,13 @@ export class EnhancedD3Wrapper extends EventEmitter {
   }
 
   private addCollaborationOverlay(): void {
-    console.log('👥 Adding collaboration overlay');
+    console.warn('👥 Adding collaboration overlay');
     this.collaborationOverlay.initialize(this.svg);
   }
 
   // 🎬 ANIMATION METHODS
   private async handleRealTimeVisualizationUpdate(data: any): Promise<void> {
-    console.log('🎬 Handling real-time visualization update');
+    console.warn('🎬 Handling real-time visualization update');
     
     // Animate the update
     await this.realTimeAnimator.animateEmbeddingUpdate({
@@ -350,7 +350,7 @@ export class EnhancedD3Wrapper extends EventEmitter {
   }
 
   private async updateTrainingProgressVisualization(progress: any): Promise<void> {
-    console.log('📊 Updating training progress visualization');
+    console.warn('📊 Updating training progress visualization');
     
     // Update progress indicators
     this.updateProgressIndicators(progress);
@@ -360,7 +360,7 @@ export class EnhancedD3Wrapper extends EventEmitter {
   }
 
   private async animateTopologicalChanges(changes: any): Promise<void> {
-    console.log('🔗 Animating topological changes');
+    console.warn('🔗 Animating topological changes');
     
     await this.realTimeAnimator.animateTopologyChange({
       type: 'topology_change',
@@ -370,18 +370,18 @@ export class EnhancedD3Wrapper extends EventEmitter {
   }
 
   private updateProgressIndicators(progress: any): void {
-    console.log('📊 Updating progress indicators');
+    console.warn('📊 Updating progress indicators');
     // Update visual progress indicators
   }
 
   private async animateProgressChanges(progress: any): Promise<void> {
-    console.log('🎬 Animating progress changes');
+    console.warn('🎬 Animating progress changes');
     // Animate progress changes
   }
 
   // 🤝 COLLABORATION FEATURES
   private async handleCollaborationEvent(event: any): Promise<void> {
-    console.log('🤝 Handling collaboration event:', event.type);
+    console.warn('🤝 Handling collaboration event:', event.type);
     
     switch (event.type) {
       case 'feature_hover':
@@ -394,55 +394,55 @@ export class EnhancedD3Wrapper extends EventEmitter {
         this.showAnnotation(event);
         break;
       default:
-        console.log('🤝 Unknown collaboration event type:', event.type);
+        console.warn('🤝 Unknown collaboration event type:', event.type);
     }
   }
 
   private showUserHover(event: any): void {
-    console.log(`👤 User ${event.userId} hovering over feature ${event.featureId}`);
+    console.warn(`👤 User ${event.userId} hovering over feature ${event.featureId}`);
     // Show user hover indicator
   }
 
   private showUserSelection(event: any): void {
-    console.log(`👤 User ${event.userId} selected feature ${event.featureId}`);
+    console.warn(`👤 User ${event.userId} selected feature ${event.featureId}`);
     // Show user selection indicator
   }
 
   private showAnnotation(event: any): void {
-    console.log(`📝 Annotation added by ${event.userId}`);
+    console.warn(`📝 Annotation added by ${event.userId}`);
     // Show annotation on map
   }
 
   // 🎯 HIGHLIGHTING AND FILTERING
   highlightRelatedRegions(neighbors: any[]): void {
-    console.log(`🎯 Highlighting ${neighbors.length} related regions`);
+    console.warn(`🎯 Highlighting ${neighbors.length} related regions`);
     
     // Highlight regions that are semantically related in hyperbolic space
     neighbors.forEach(neighbor => {
-      console.log(`🎯 Highlighting neighbor: ${neighbor.clusterId}`);
+      console.warn(`🎯 Highlighting neighbor: ${neighbor.clusterId}`);
     });
   }
 
   visualizeSemanticQuery(results: any): void {
-    console.log('🔍 Visualizing semantic query results');
+    console.warn('🔍 Visualizing semantic query results');
     
     // Visualize semantic query results with special styling
     results.relatedIds.forEach((id: string) => {
-      console.log(`🔍 Highlighting result: ${id}`);
+      console.warn(`🔍 Highlighting result: ${id}`);
     });
   }
 
   highlightAlertRegions(alerts: any[]): void {
-    console.log(`⚠️ Highlighting ${alerts.length} alert regions`);
+    console.warn(`⚠️ Highlighting ${alerts.length} alert regions`);
     
     alerts.forEach(alert => {
-      console.log(`⚠️ Alert: ${alert.message} at ${alert.location}`);
+      console.warn(`⚠️ Alert: ${alert.message} at ${alert.location}`);
     });
   }
 
   // 🎨 VISUALIZATION UTILITIES
   private addRealTimeEnhancements(geoJSON: any): void {
-    console.log('⚡ Adding real-time enhancements');
+    console.warn('⚡ Adding real-time enhancements');
     
     // Add confidence visualization
     this.addConfidenceHeatmap(geoJSON);
@@ -456,28 +456,28 @@ export class EnhancedD3Wrapper extends EventEmitter {
 
   // 🎬 ANIMATION SUPPORT
   animateFeatureSelection(feature: any): void {
-    console.log('🎬 Animating feature selection');
+    console.warn('🎬 Animating feature selection');
     // Animate feature selection
   }
 
   animateEmbeddingUpdate(update: any): void {
-    console.log('🎬 Animating embedding update');
+    console.warn('🎬 Animating embedding update');
     // Animate embedding update
   }
 
   animateTopologyChange(change: any): void {
-    console.log('🎬 Animating topology change');
+    console.warn('🎬 Animating topology change');
     // Animate topology change
   }
 
   animateUserInteraction(interaction: any): void {
-    console.log('🎬 Animating user interaction');
+    console.warn('🎬 Animating user interaction');
     // Animate user interaction
   }
 
   // 🎯 EVENT HANDLERS
   private handleFeatureClick(event: any, feature: any): void {
-    console.log('🖱️ Feature clicked:', feature.properties.semantic_label);
+    console.warn('🖱️ Feature clicked:', feature.properties.semantic_label);
     
     // Emit custom event for consumer to handle
     this.emit('featureClick', {
@@ -488,7 +488,7 @@ export class EnhancedD3Wrapper extends EventEmitter {
   }
 
   private handleFeatureHover(event: any, feature: any): void {
-    console.log('👆 Feature hovered:', feature.properties.semantic_label);
+    console.warn('👆 Feature hovered:', feature.properties.semantic_label);
     
     // Show tooltip with hyperbolic metrics
     const tooltipContent = this.generateHyperbolicTooltip(feature.properties);
@@ -515,13 +515,13 @@ export class EnhancedD3Wrapper extends EventEmitter {
   }
 
   private showTooltip(content: string, x: number, y: number): void {
-    console.log(`💡 Showing tooltip: ${content.substring(0, 50)}...`);
+    console.warn(`💡 Showing tooltip: ${content.substring(0, 50)}...`);
     // Show tooltip
   }
 
   // 🎯 COLLABORATION OVERLAY
   private setupCollaborationOverlay(): void {
-    console.log('👥 Setting up collaboration overlay');
+    console.warn('👥 Setting up collaboration overlay');
     // Setup collaboration overlay for showing other users' interactions
   }
 }
@@ -533,21 +533,21 @@ class CollaborationOverlay {
 
   initialize(svg: any): void {
     this.svg = svg;
-    console.log('👥 Collaboration overlay initialized');
+    console.warn('👥 Collaboration overlay initialized');
   }
 
   showUserPresence(user: any): void {
-    console.log(`👤 Showing presence for user: ${user.name}`);
+    console.warn(`👤 Showing presence for user: ${user.name}`);
     // Show user presence indicator
   }
 
   showUserAction(user: any, action: any): void {
-    console.log(`👤 Showing action for user ${user.name}: ${action.type}`);
+    console.warn(`👤 Showing action for user ${user.name}: ${action.type}`);
     // Show user action indicator
   }
 
   hideUserPresence(userId: string): void {
-    console.log(`👤 Hiding presence for user: ${userId}`);
+    console.warn(`👤 Hiding presence for user: ${userId}`);
     // Hide user presence indicator
   }
 }
@@ -575,7 +575,7 @@ class ConfidenceVisualizer {
   }
 
   visualizeConfidence(feature: any, confidence: number): void {
-    console.log(`🔥 Visualizing confidence ${confidence} for feature`);
+    console.warn(`🔥 Visualizing confidence ${confidence} for feature`);
     // Apply confidence visualization
   }
 }
@@ -586,17 +586,17 @@ class RealTimeAnimator {
   private currentAnimations: Set<any> = new Set();
 
   async animateEmbeddingUpdate(update: any): Promise<void> {
-    console.log('🎬 Animating embedding update');
+    console.warn('🎬 Animating embedding update');
     // Animate embedding update
   }
 
   async animateTopologyChange(change: any): Promise<void> {
-    console.log('🎬 Animating topology change');
+    console.warn('🎬 Animating topology change');
     // Animate topology change
   }
 
   async animateUserInteraction(interaction: any): Promise<void> {
-    console.log('🎬 Animating user interaction');
+    console.warn('🎬 Animating user interaction');
     // Animate user interaction
   }
 }
@@ -618,10 +618,10 @@ export class IntegratedD3VisualizationSystem {
     await this.broker.initialize();
     await this.collaborationEngine.joinSession();
     
-    console.log('🎨 Integrated D3 Visualization System Started');
-    console.log('🗺️ D3 Rendering: ACTIVE');
-    console.log('⚡ Real-time Updates: ENABLED');
-    console.log('🤝 Collaboration: ENABLED');
+    console.warn('🎨 Integrated D3 Visualization System Started');
+    console.warn('🗺️ D3 Rendering: ACTIVE');
+    console.warn('⚡ Real-time Updates: ENABLED');
+    console.warn('🤝 Collaboration: ENABLED');
   }
 
   async renderData(geoJSON: any, options: RealTimeOptions): Promise<void> {
@@ -629,7 +629,7 @@ export class IntegratedD3VisualizationSystem {
   }
 
   async updateVisualization(update: VisualizationUpdate): Promise<void> {
-    console.log('🔄 Updating visualization:', update.type);
+    console.warn('🔄 Updating visualization:', update.type);
     // Handle visualization update
   }
 }

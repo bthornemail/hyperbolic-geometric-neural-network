@@ -74,7 +74,7 @@ export class TransferLearningWorkflow {
   constructor() {
     this.domainAdaptation = new DomainAdaptationSystem();
     this.knowledgeDistillation = new KnowledgeDistillationSystem();
-    console.log('🔄 Transfer Learning Workflow initialized');
+    console.warn('🔄 Transfer Learning Workflow initialized');
   }
 
   /**
@@ -82,25 +82,25 @@ export class TransferLearningWorkflow {
    */
   async executeTransferLearning(config: TransferLearningConfig): Promise<TransferLearningResult> {
     const startTime = Date.now();
-    console.log(`🚀 Starting transfer learning workflow: ${config.sourceDomains.join(', ')} → ${config.targetDomain}`);
+    console.warn(`🚀 Starting transfer learning workflow: ${config.sourceDomains.join(', ')} → ${config.targetDomain}`);
     
     const adaptationResults: AdaptationResult[] = [];
     const distillationResults: DistillationResult[] = [];
     
     // Step 1: Domain Adaptation
-    console.log('\n📊 Step 1: Domain Adaptation');
+    console.warn('\n📊 Step 1: Domain Adaptation');
     for (const sourceDomain of config.sourceDomains) {
       try {
         const adaptationResult = await this.domainAdaptation.transferKnowledge(sourceDomain, config.targetDomain);
         adaptationResults.push(adaptationResult);
-        console.log(`✅ Domain adaptation completed: ${sourceDomain} → ${config.targetDomain}`);
+        console.warn(`✅ Domain adaptation completed: ${sourceDomain} → ${config.targetDomain}`);
       } catch (error) {
         console.error(`❌ Domain adaptation failed: ${sourceDomain} → ${config.targetDomain}`, error);
       }
     }
     
     // Step 2: Knowledge Distillation
-    console.log('\n📊 Step 2: Knowledge Distillation');
+    console.warn('\n📊 Step 2: Knowledge Distillation');
     if (config.distillationMethod === 'ensemble') {
       const ensembleResult = await this.executeEnsembleDistillation(config, adaptationResults);
       distillationResults.push(ensembleResult);
@@ -116,7 +116,7 @@ export class TransferLearningWorkflow {
     }
     
     // Step 3: Evaluation and Metrics
-    console.log('\n📊 Step 3: Evaluation and Metrics');
+    console.warn('\n📊 Step 3: Evaluation and Metrics');
     const overallMetrics = this.calculateOverallMetrics(adaptationResults, distillationResults);
     const recommendations = this.generateRecommendations(adaptationResults, distillationResults, overallMetrics);
     
@@ -136,7 +136,7 @@ export class TransferLearningWorkflow {
     
     this.workflowHistory.push(result);
     
-    console.log(`✅ Transfer learning workflow completed: ${executionTime}ms`);
+    console.warn(`✅ Transfer learning workflow completed: ${executionTime}ms`);
     return result;
   }
 
@@ -382,7 +382,7 @@ export class TransferLearningWorkflow {
     targetDomain: string,
     config: Partial<TransferLearningConfig> = {}
   ): Promise<ProgressiveTransferStep[]> {
-    console.log(`🔄 Starting progressive transfer learning: ${sourceDomains.join(' → ')} → ${targetDomain}`);
+    console.warn(`🔄 Starting progressive transfer learning: ${sourceDomains.join(' → ')} → ${targetDomain}`);
     
     const progressiveSteps: ProgressiveTransferStep[] = [];
     let cumulativeMetrics = {
@@ -406,7 +406,7 @@ export class TransferLearningWorkflow {
         ...config
       };
       
-      console.log(`📊 Progressive step ${i + 1}: ${sourceDomain} → ${targetDomain}`);
+      console.warn(`📊 Progressive step ${i + 1}: ${sourceDomain} → ${targetDomain}`);
       
       try {
         const result = await this.executeTransferLearning(stepConfig);
@@ -427,7 +427,7 @@ export class TransferLearningWorkflow {
         
         progressiveSteps.push(step);
         
-        console.log(`✅ Progressive step ${i + 1} completed`);
+        console.warn(`✅ Progressive step ${i + 1} completed`);
         
       } catch (error) {
         console.error(`❌ Progressive step ${i + 1} failed:`, error);
@@ -435,7 +435,7 @@ export class TransferLearningWorkflow {
     }
     
     this.progressiveSteps.push(...progressiveSteps);
-    console.log(`✅ Progressive transfer learning completed: ${progressiveSteps.length} steps`);
+    console.warn(`✅ Progressive transfer learning completed: ${progressiveSteps.length} steps`);
     
     return progressiveSteps;
   }
@@ -448,7 +448,7 @@ export class TransferLearningWorkflow {
     targetDomain: string,
     config: Partial<TransferLearningConfig> = {}
   ): Promise<MultiDomainTransfer> {
-    console.log(`🌐 Starting multi-domain transfer learning: ${sourceDomains.join(', ')} → ${targetDomain}`);
+    console.warn(`🌐 Starting multi-domain transfer learning: ${sourceDomains.join(', ')} → ${targetDomain}`);
     
     const transferResults = new Map<string, TransferLearningResult>();
     const domainSimilarities = new Map<string, number>();
@@ -505,7 +505,7 @@ export class TransferLearningWorkflow {
       overallSuccess
     };
     
-    console.log(`✅ Multi-domain transfer learning completed: ${overallSuccess.toFixed(2)} overall success`);
+    console.warn(`✅ Multi-domain transfer learning completed: ${overallSuccess.toFixed(2)} overall success`);
     return multiDomainTransfer;
   }
 
@@ -543,6 +543,6 @@ export class TransferLearningWorkflow {
   clearHistory(): void {
     this.workflowHistory = [];
     this.progressiveSteps = [];
-    console.log('🧹 Transfer learning workflow history cleared');
+    console.warn('🧹 Transfer learning workflow history cleared');
   }
 }

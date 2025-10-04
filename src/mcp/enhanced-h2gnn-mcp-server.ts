@@ -112,7 +112,7 @@ class EnhancedH2GNNMCPServerHD {
       3001
     );
 
-    console.log(`Enhanced H²GNN MCP Server HD initialized with address: ${this.h2gnnAddress.path}`);
+    // Enhanced H²GNN MCP Server HD initialized with address: ${this.h2gnnAddress.path}
   }
 
   /**
@@ -1389,7 +1389,7 @@ RPC Endpoint: ${this.h2gnnAddress ? hdAddressing?.getRPCEndpoint(this.h2gnnAddre
   async start(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.log("Enhanced H²GNN MCP Server HD running on stdio");
+    // Enhanced H²GNN MCP Server HD running on stdio
   }
 }
 

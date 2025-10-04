@@ -204,7 +204,7 @@ Structure your response with clear sections and explanations.`,
   }
 
   async initialize(): Promise<void> {
-    console.log('🔧 Initializing Hierarchical QA Workflow...');
+    console.warn('🔧 Initializing Hierarchical QA Workflow...');
     
     // Load WordNet data
     await this.wordnetProcessor.loadWordNetData();
@@ -212,7 +212,7 @@ Structure your response with clear sections and explanations.`,
     await this.wordnetProcessor.generateHyperbolicEmbeddings();
     await this.wordnetProcessor.populateRAGKnowledge();
     
-    console.log('✅ Hierarchical QA Workflow initialized');
+    console.warn('✅ Hierarchical QA Workflow initialized');
   }
 }
 
@@ -430,13 +430,13 @@ Provide a structured, actionable learning plan.`,
   }
 
   async initialize(): Promise<void> {
-    console.log('🎓 Initializing Concept Learning Workflow...');
+    console.warn('🎓 Initializing Concept Learning Workflow...');
     
     await this.wordnetProcessor.loadWordNetData();
     await this.wordnetProcessor.buildHierarchy();
     await this.wordnetProcessor.generateHyperbolicEmbeddings();
     
-    console.log('✅ Concept Learning Workflow initialized');
+    console.warn('✅ Concept Learning Workflow initialized');
   }
 }
 
@@ -646,13 +646,13 @@ Provide clear, educational insights.`,
   }
 
   async initialize(): Promise<void> {
-    console.log('🔍 Initializing Semantic Exploration Workflow...');
+    console.warn('🔍 Initializing Semantic Exploration Workflow...');
     
     await this.wordnetProcessor.loadWordNetData();
     await this.wordnetProcessor.buildHierarchy();
     await this.wordnetProcessor.generateHyperbolicEmbeddings();
     
-    console.log('✅ Semantic Exploration Workflow initialized');
+    console.warn('✅ Semantic Exploration Workflow initialized');
   }
 }
 
@@ -700,7 +700,7 @@ export class MultiAgentReasoningWorkflow {
   }
 
   async reasonAboutQuery(query: string): Promise<any> {
-    console.log(`🤖 Multi-agent reasoning about: ${query}`);
+    console.warn(`🤖 Multi-agent reasoning about: ${query}`);
 
     // Step 1: Coordinator analyzes the query
     const analysis = await this.coordinator.run({
@@ -739,13 +739,13 @@ export class MultiAgentReasoningWorkflow {
   }
 
   async initialize(): Promise<void> {
-    console.log('🤖 Initializing Multi-Agent Reasoning Workflow...');
+    console.warn('🤖 Initializing Multi-Agent Reasoning Workflow...');
     
     await this.wordnetProcessor.loadWordNetData();
     await this.wordnetProcessor.buildHierarchy();
     await this.wordnetProcessor.generateHyperbolicEmbeddings();
     
-    console.log('✅ Multi-Agent Reasoning Workflow initialized');
+    console.warn('✅ Multi-Agent Reasoning Workflow initialized');
   }
 }
 

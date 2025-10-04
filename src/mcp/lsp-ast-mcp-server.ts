@@ -188,7 +188,7 @@ class LSPASTMCPServerHD {
       3002
     );
 
-    console.log(`LSP AST MCP Server HD initialized with address: ${this.h2gnnAddress.path}`);
+    // LSP AST MCP Server HD initialized with address: ${this.h2gnnAddress.path}
   }
 
   private setupHandlers(): void {
@@ -1091,7 +1091,7 @@ Please provide:
   async start(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.log("LSP AST MCP Server HD running on stdio");
+    // LSP AST MCP Server HD running on stdio
   }
 }
 

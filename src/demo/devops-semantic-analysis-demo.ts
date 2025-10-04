@@ -83,9 +83,9 @@ class DevOpsSemanticAnalyzer {
   }
 
   async runFullAnalysis(): Promise<void> {
-    console.log('🔍 DevOps Semantic and Syntax Space Analysis');
-    console.log('============================================');
-    console.log(`📁 Analyzing: ${this.analysisPath}`);
+    console.warn('🔍 DevOps Semantic and Syntax Space Analysis');
+    console.warn('============================================');
+    console.warn(`📁 Analyzing: ${this.analysisPath}`);
     
     // Phase 1: File Discovery and Analysis
     await this.discoverAndAnalyzeFiles();
@@ -105,16 +105,16 @@ class DevOpsSemanticAnalyzer {
     // Phase 6: Persistence and Knowledge Storage
     await this.persistKnowledge();
     
-    console.log('\n🎉 DevOps Semantic and Syntax Analysis Complete!');
+    console.warn('\n🎉 DevOps Semantic and Syntax Analysis Complete!');
   }
 
   private async discoverAndAnalyzeFiles(): Promise<void> {
-    console.log('\n📊 Phase 1: File Discovery and Analysis');
-    console.log('Discovering and analyzing files...');
+    console.warn('\n📊 Phase 1: File Discovery and Analysis');
+    console.warn('Discovering and analyzing files...');
     
     await this.scanDirectory(this.analysisPath);
     
-    console.log(`✅ Analyzed ${this.fileAnalyses.length} files`);
+    console.warn(`✅ Analyzed ${this.fileAnalyses.length} files`);
     
     // Show file distribution
     const extensions = new Map<string, number>();
@@ -125,15 +125,15 @@ class DevOpsSemanticAnalyzer {
       categories.set(file.semanticCategory, (categories.get(file.semanticCategory) || 0) + 1);
     }
     
-    console.log('\n📈 File Distribution:');
-    console.log('Extensions:');
+    console.warn('\n📈 File Distribution:');
+    console.warn('Extensions:');
     for (const [ext, count] of extensions) {
-      console.log(`  • ${ext}: ${count} files`);
+      console.warn(`  • ${ext}: ${count} files`);
     }
     
-    console.log('\nSemantic Categories:');
+    console.warn('\nSemantic Categories:');
     for (const [category, count] of categories) {
-      console.log(`  • ${category}: ${count} files`);
+      console.warn(`  • ${category}: ${count} files`);
     }
   }
 
@@ -327,8 +327,8 @@ class DevOpsSemanticAnalyzer {
   }
 
   private async analyzeSemanticSpace(): Promise<void> {
-    console.log('\n🧠 Phase 2: Semantic Space Analysis');
-    console.log('Analyzing semantic relationships...');
+    console.warn('\n🧠 Phase 2: Semantic Space Analysis');
+    console.warn('Analyzing semantic relationships...');
     
     // Group files by semantic category
     const categoryGroups = new Map<string, FileAnalysis[]>();
@@ -341,7 +341,7 @@ class DevOpsSemanticAnalyzer {
     
     // Analyze semantic relationships
     for (const [category, files] of categoryGroups) {
-      console.log(`\n📊 Analyzing category: ${category} (${files.length} files)`);
+      console.warn(`\n📊 Analyzing category: ${category} (${files.length} files)`);
       
       // Extract concepts from all files in category
       const categoryConcepts = new Set<string>();
@@ -369,13 +369,13 @@ class DevOpsSemanticAnalyzer {
     // Analyze cross-category relationships
     await this.analyzeCrossCategoryRelationships();
     
-    console.log(`✅ Semantic space analysis complete`);
-    console.log(`   • Categories: ${this.semanticSpace.categories.size}`);
-    console.log(`   • Total concepts: ${Array.from(this.semanticSpace.categories.values()).flat().length}`);
+    console.warn(`✅ Semantic space analysis complete`);
+    console.warn(`   • Categories: ${this.semanticSpace.categories.size}`);
+    console.warn(`   • Total concepts: ${Array.from(this.semanticSpace.categories.values()).flat().length}`);
   }
 
   private async analyzeCrossCategoryRelationships(): Promise<void> {
-    console.log('\n🔗 Analyzing cross-category relationships...');
+    console.warn('\n🔗 Analyzing cross-category relationships...');
     
     const categories = Array.from(this.semanticSpace.categories.keys());
     
@@ -397,15 +397,15 @@ class DevOpsSemanticAnalyzer {
             strength: commonConcepts.length / Math.max(concepts1.length, concepts2.length)
           });
           
-          console.log(`  • ${cat1} ↔ ${cat2}: ${commonConcepts.length} common concepts`);
+          console.warn(`  • ${cat1} ↔ ${cat2}: ${commonConcepts.length} common concepts`);
         }
       }
     }
   }
 
   private async analyzeSyntaxSpace(): Promise<void> {
-    console.log('\n📝 Phase 3: Syntax Space Analysis');
-    console.log('Analyzing syntax patterns and structures...');
+    console.warn('\n📝 Phase 3: Syntax Space Analysis');
+    console.warn('Analyzing syntax patterns and structures...');
     
     // Analyze syntax patterns
     const patternCounts = new Map<string, number>();
@@ -435,17 +435,17 @@ class DevOpsSemanticAnalyzer {
     this.syntaxSpace.structures = structureMap;
     this.syntaxSpace.conventions = conventionMap;
     
-    console.log('\n📊 Syntax Pattern Distribution:');
+    console.warn('\n📊 Syntax Pattern Distribution:');
     for (const [pattern, count] of patternCounts) {
-      console.log(`  • ${pattern}: ${count} files`);
+      console.warn(`  • ${pattern}: ${count} files`);
     }
     
-    console.log('\n📋 Convention Analysis:');
+    console.warn('\n📋 Convention Analysis:');
     for (const [convention, files] of conventionMap) {
-      console.log(`  • ${convention}: ${files.length} files`);
+      console.warn(`  • ${convention}: ${files.length} files`);
     }
     
-    console.log(`✅ Syntax space analysis complete`);
+    console.warn(`✅ Syntax space analysis complete`);
   }
 
   private analyzeConventions(file: FileAnalysis): string[] {
@@ -482,8 +482,8 @@ class DevOpsSemanticAnalyzer {
   }
 
   private async integrateH2GNNLearning(): Promise<void> {
-    console.log('\n🧠 Phase 4: H²GNN Learning Integration');
-    console.log('Integrating DevOps knowledge with H²GNN learning...');
+    console.warn('\n🧠 Phase 4: H²GNN Learning Integration');
+    console.warn('Integrating DevOps knowledge with H²GNN learning...');
     
     // Learn DevOps concepts
     const devopsConcepts = [
@@ -524,12 +524,12 @@ class DevOpsSemanticAnalyzer {
       );
     }
     
-    console.log('✅ H²GNN learning integration complete');
+    console.warn('✅ H²GNN learning integration complete');
   }
 
   private async generateImprovementRecommendations(): Promise<void> {
-    console.log('\n🎯 Phase 5: Improvement Recommendations');
-    console.log('Generating H²GNN-based improvement recommendations...');
+    console.warn('\n🎯 Phase 5: Improvement Recommendations');
+    console.warn('Generating H²GNN-based improvement recommendations...');
     
     const recommendations: string[] = [];
     
@@ -549,9 +549,9 @@ class DevOpsSemanticAnalyzer {
     const automationOpportunities = this.identifyAutomationOpportunities();
     recommendations.push(...automationOpportunities);
     
-    console.log('\n📋 H²GNN-Based Improvement Recommendations:');
+    console.warn('\n📋 H²GNN-Based Improvement Recommendations:');
     for (let i = 0; i < recommendations.length; i++) {
-      console.log(`\n${i + 1}. ${recommendations[i]}`);
+      console.warn(`\n${i + 1}. ${recommendations[i]}`);
     }
     
     this.syntaxSpace.improvements = recommendations;
@@ -675,8 +675,8 @@ class DevOpsSemanticAnalyzer {
   }
 
   private async persistKnowledge(): Promise<void> {
-    console.log('\n💾 Phase 6: Persistence and Knowledge Storage');
-    console.log('Storing analysis results in persistence layer...');
+    console.warn('\n💾 Phase 6: Persistence and Knowledge Storage');
+    console.warn('Storing analysis results in persistence layer...');
     
     // Store file analysis results
     await this.enhancedH2GNN.learnWithMemory(
@@ -715,15 +715,15 @@ class DevOpsSemanticAnalyzer {
       0.8
     );
     
-    console.log('✅ Knowledge persistence complete');
+    console.warn('✅ Knowledge persistence complete');
     
     // Get system status
     const status = this.enhancedH2GNN.getSystemStatus();
-    console.log(`\n📊 Persistence Status:`);
-    console.log(`  • Total memories: ${status.totalMemories}`);
-    console.log(`  • Understanding snapshots: ${status.totalSnapshots}`);
-    console.log(`  • Learning domains: ${status.totalDomains}`);
-    console.log(`  • Average confidence: ${status.averageConfidence.toFixed(3)}`);
+    console.warn(`\n📊 Persistence Status:`);
+    console.warn(`  • Total memories: ${status.totalMemories}`);
+    console.warn(`  • Understanding snapshots: ${status.totalSnapshots}`);
+    console.warn(`  • Learning domains: ${status.totalDomains}`);
+    console.warn(`  • Average confidence: ${status.averageConfidence.toFixed(3)}`);
   }
 }
 
@@ -733,7 +733,9 @@ async function main() {
   await analyzer.runFullAnalysis();
 }
 
-// Run the analysis
-main().catch(console.error);
+// Run the analysis only if this file is executed directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch(console.error);
+}
 
 export { DevOpsSemanticAnalyzer };

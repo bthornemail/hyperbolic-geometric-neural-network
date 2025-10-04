@@ -55,7 +55,7 @@ export class MQTTTransport {
       this.client = mqtt.connect(options);
 
       this.client.on('connect', () => {
-        console.log('🔗 MQTT Transport connected to broker');
+        console.warn('🔗 MQTT Transport connected to broker');
         this.isConnected = true;
         resolve();
       });
@@ -67,12 +67,12 @@ export class MQTTTransport {
       });
 
       this.client.on('disconnect', () => {
-        console.log('🔌 MQTT Transport disconnected');
+        console.warn('🔌 MQTT Transport disconnected');
         this.isConnected = false;
       });
 
       this.client.on('reconnect', () => {
-        console.log('🔄 MQTT Transport reconnecting...');
+        console.warn('🔄 MQTT Transport reconnecting...');
       });
 
       this.client.on('message', (topic, message) => {
@@ -88,7 +88,7 @@ export class MQTTTransport {
     if (this.client && this.isConnected) {
       return new Promise((resolve) => {
         this.client!.end(false, {}, () => {
-          console.log('🔌 MQTT Transport disconnected');
+          console.warn('🔌 MQTT Transport disconnected');
           this.isConnected = false;
           resolve();
         });
@@ -113,7 +113,7 @@ export class MQTTTransport {
           console.error('❌ MQTT publish error:', error);
           reject(error);
         } else {
-          console.log(`📤 MQTT published to ${topic}: ${message.header.messageId}`);
+          console.warn(`📤 MQTT published to ${topic}: ${message.header.messageId}`);
           resolve();
         }
       });
@@ -136,7 +136,7 @@ export class MQTTTransport {
           console.error('❌ MQTT subscribe error:', error);
           reject(error);
         } else {
-          console.log(`📥 MQTT subscribed to ${topic}`);
+          console.warn(`📥 MQTT subscribed to ${topic}`);
           this.subscriptions.set(topic, callback);
           resolve();
         }
@@ -160,7 +160,7 @@ export class MQTTTransport {
           console.error('❌ MQTT unsubscribe error:', error);
           reject(error);
         } else {
-          console.log(`📤 MQTT unsubscribed from ${topic}`);
+          console.warn(`📤 MQTT unsubscribed from ${topic}`);
           this.subscriptions.delete(topic);
           resolve();
         }
@@ -194,7 +194,7 @@ export class MQTTTransport {
       // Find the appropriate handler for this topic
       const handler = this.subscriptions.get(topic);
       if (handler) {
-        console.log(`📥 MQTT received message on ${topic}: ${protocolMessage.header.messageId}`);
+        console.warn(`📥 MQTT received message on ${topic}: ${protocolMessage.header.messageId}`);
         handler(protocolMessage);
       } else {
         console.warn(`⚠️ No handler found for MQTT topic: ${topic}`);

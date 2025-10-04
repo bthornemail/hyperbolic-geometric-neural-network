@@ -482,7 +482,7 @@ export class MCPGeoIntelligenceServer {
   private async getGeoJSONMap(args: any): Promise<any> {
     const { semantic_filter, projection_type, include_hyperbolic_metrics } = args;
     
-    console.log(`Generating GeoJSON map with filter: ${semantic_filter}`);
+    // Generating GeoJSON map with filter: ${semantic_filter}
     
     // Get embeddings from H²GNN
     const embeddings = await this.getHyperbolicEmbeddings();
@@ -520,7 +520,7 @@ export class MCPGeoIntelligenceServer {
   private async defineGeoConcept(args: any): Promise<any> {
     const { geo_json, semantic_concept, confidence_threshold } = args;
     
-    console.log(`🎯 Defining geo concept: ${semantic_concept}`);
+    // Defining geo concept: ${semantic_concept}
     
     // Associate geographic region with semantic concept
     await this.broker.defineGeoConcept(geo_json, semantic_concept);
@@ -552,7 +552,7 @@ export class MCPGeoIntelligenceServer {
   private async queryHyperbolicGeography(args: any): Promise<any> {
     const { geo_point, max_neighbors, distance_threshold, include_semantic_similarity } = args;
     
-    console.log(`🔍 Querying hyperbolic geography for point: ${JSON.stringify(geo_point.coordinates)}`);
+    // Querying hyperbolic geography for point: ${JSON.stringify(geo_point.coordinates)}
     
     // Convert geographic point to hyperbolic coordinates
     const hyperbolicPoint = this.projectionEngine.geographicToPoincare([
@@ -594,7 +594,7 @@ export class MCPGeoIntelligenceServer {
   private async semanticGeographicSearch(args: any): Promise<any> {
     const { query, space, max_results, similarity_threshold } = args;
     
-    console.log(`🔍 Performing semantic geographic search: ${query}`);
+    // Performing semantic geographic search: ${query}
     
     // Perform semantic search in the specified space
     const results = await this.performSemanticSearch(query, space, max_results, similarity_threshold);
@@ -618,7 +618,7 @@ export class MCPGeoIntelligenceServer {
   private async analyzeGeographicClusters(args: any): Promise<any> {
     const { region_bounds, cluster_algorithm, min_cluster_size, include_topology_analysis } = args;
     
-    console.log(`📊 Analyzing geographic clusters using ${cluster_algorithm}`);
+    // Analyzing geographic clusters using ${cluster_algorithm}
     
     // Get embeddings within region bounds
     const regionEmbeddings = await this.getEmbeddingsInRegion(region_bounds);
@@ -655,7 +655,7 @@ export class MCPGeoIntelligenceServer {
   private async generateGeographicInsights(args: any): Promise<any> {
     const { analysis_type, focus_region, include_recommendations } = args;
     
-    console.log(`Generating geographic insights: ${analysis_type}`);
+    // Generating geographic insights: ${analysis_type}
     
     // Perform the requested analysis
     const insights = await this.performGeographicAnalysis(analysis_type, focus_region);
@@ -912,7 +912,7 @@ export class MCPGeoIntelligenceServer {
   async start(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.log("MCP Geo-Intelligence Server running on stdio");
+    // MCP Geo-Intelligence Server running on stdio
   }
 }
 
@@ -934,10 +934,10 @@ export class IntegratedGeoIntelligenceSystem {
     await this.geoServer.start();
     await this.collaborationEngine.joinSession();
     
-    console.log('Integrated Geo-Intelligence System Started');
-    console.log('MCP Geo-Tools: ACTIVE');
-    console.log('Real-time Collaboration: ENABLED');
-    console.log('H2GNN Intelligence: OPERATIONAL');
+    // Integrated Geo-Intelligence System Started
+    // MCP Geo-Tools: ACTIVE
+    // Real-time Collaboration: ENABLED
+    // H2GNN Intelligence: OPERATIONAL
   }
 }
 

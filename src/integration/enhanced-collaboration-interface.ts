@@ -105,7 +105,7 @@ export class EnhancedCollaborationInterface {
    */
   async initialize(): Promise<void> {
     try {
-      console.log("🚀 Initializing Enhanced AI-Human Collaboration Interface...");
+      console.warn("🚀 Initializing Enhanced AI-Human Collaboration Interface...");
       
       // Start H²GNN MCP server
       await this.startH2GNNServer();
@@ -122,7 +122,7 @@ export class EnhancedCollaborationInterface {
       // Initialize WordNet
       await this.initializeWordNet();
       
-      console.log("✅ Enhanced Collaboration Interface initialized successfully!");
+      console.warn("✅ Enhanced Collaboration Interface initialized successfully!");
     } catch (error) {
       console.error("❌ Failed to initialize Enhanced Collaboration Interface:", error);
       throw error;
@@ -167,7 +167,7 @@ export class EnhancedCollaborationInterface {
       await this.analyzeCodebase(sessionId, config.codebase.path, config.codebase.language);
     }
 
-    console.log(`🤝 Created collaboration session: ${sessionId}`);
+    console.warn(`🤝 Created collaboration session: ${sessionId}`);
     return sessionId;
   }
 
@@ -177,7 +177,7 @@ export class EnhancedCollaborationInterface {
   async analyzeCodebase(sessionId: string, codebasePath: string, language: string): Promise<CodeAnalysisResult> {
     const session = this.getSession(sessionId);
     
-    console.log(`🔍 Analyzing codebase: ${codebasePath} (${language})`);
+    console.warn(`🔍 Analyzing codebase: ${codebasePath} (${language})`);
     
     try {
       // Perform AST analysis
@@ -229,7 +229,7 @@ export class EnhancedCollaborationInterface {
         data: { codebasePath, language, analysisResult }
       });
 
-      console.log(`✅ Codebase analysis completed for session: ${sessionId}`);
+      console.warn(`✅ Codebase analysis completed for session: ${sessionId}`);
       return analysisResult;
 
     } catch (error) {
@@ -248,7 +248,7 @@ export class EnhancedCollaborationInterface {
   ): Promise<ConceptInsight> {
     const session = this.getSession(sessionId);
     
-    console.log(`🧠 Analyzing concept collaboratively: ${concept}`);
+    console.warn(`🧠 Analyzing concept collaboratively: ${concept}`);
     
     try {
       // Get H²GNN insights
@@ -292,7 +292,7 @@ export class EnhancedCollaborationInterface {
         data: { concept, insight, codeInsights }
       });
 
-      console.log(`✅ Concept analysis completed: ${concept}`);
+      console.warn(`✅ Concept analysis completed: ${concept}`);
       return insight;
 
     } catch (error) {
@@ -315,7 +315,7 @@ export class EnhancedCollaborationInterface {
   }> {
     const session = this.getSession(sessionId);
     
-    console.log(`🤔 Performing collaborative reasoning: ${question}`);
+    console.warn(`🤔 Performing collaborative reasoning: ${question}`);
     
     try {
       // Get hierarchical Q&A
@@ -350,7 +350,7 @@ export class EnhancedCollaborationInterface {
         data: { question, result }
       });
 
-      console.log(`✅ Collaborative reasoning completed`);
+      console.warn(`✅ Collaborative reasoning completed`);
       return result;
 
     } catch (error) {
@@ -373,7 +373,7 @@ export class EnhancedCollaborationInterface {
   ): Promise<void> {
     const session = this.getSession(sessionId);
     
-    console.log(`🎓 Training concepts collaboratively: ${concepts.map(c => c.name).join(', ')}`);
+    console.warn(`🎓 Training concepts collaboratively: ${concepts.map(c => c.name).join(', ')}`);
     
     try {
       for (const concept of concepts) {
@@ -422,7 +422,7 @@ export class EnhancedCollaborationInterface {
         data: { concepts }
       });
 
-      console.log(`✅ Concept training completed`);
+      console.warn(`✅ Concept training completed`);
     } catch (error) {
       console.error(`❌ Failed to train concepts:`, error);
       throw error;
@@ -440,7 +440,7 @@ export class EnhancedCollaborationInterface {
   }> {
     const session = this.getSession(sessionId);
     
-    console.log(`📊 Getting session insights: ${sessionId}`);
+    console.warn(`📊 Getting session insights: ${sessionId}`);
     
     try {
       // Get H²GNN learning progress
@@ -462,7 +462,7 @@ export class EnhancedCollaborationInterface {
         recommendations: this.generateRecommendations(session, learningProgress)
       };
 
-      console.log(`✅ Session insights generated`);
+      console.warn(`✅ Session insights generated`);
       return insights;
 
     } catch (error) {
@@ -485,7 +485,7 @@ export class EnhancedCollaborationInterface {
   }> {
     const session = this.getSession(sessionId);
     
-    console.log(`🤖 Getting AI assistance: ${request}`);
+    console.warn(`🤖 Getting AI assistance: ${request}`);
     
     try {
       // Get memories for context
@@ -523,7 +523,7 @@ export class EnhancedCollaborationInterface {
         data: { request, result }
       });
 
-      console.log(`✅ AI assistance provided`);
+      console.warn(`✅ AI assistance provided`);
       return result;
 
     } catch (error) {
@@ -545,7 +545,7 @@ export class EnhancedCollaborationInterface {
     });
 
     this.sessions.delete(sessionId);
-    console.log(`🔚 Closed collaboration session: ${sessionId}`);
+    console.warn(`🔚 Closed collaboration session: ${sessionId}`);
   }
 
   /**
@@ -562,7 +562,7 @@ export class EnhancedCollaborationInterface {
       this.serverProcess = null;
     }
 
-    console.log("🧹 Enhanced Collaboration Interface cleaned up");
+    console.warn("🧹 Enhanced Collaboration Interface cleaned up");
   }
 
   // Private helper methods
@@ -586,7 +586,7 @@ export class EnhancedCollaborationInterface {
 
       // Wait a bit for server to start
       setTimeout(() => {
-        console.log("🚀 H²GNN server started");
+        console.warn("🚀 H²GNN server started");
         resolve();
       }, 2000);
     });
@@ -601,7 +601,7 @@ export class EnhancedCollaborationInterface {
           embeddingDim: 128
         }
       });
-      console.log("📚 WordNet initialized");
+      console.warn("📚 WordNet initialized");
     } catch (error) {
       console.warn("⚠️ WordNet initialization failed:", error);
     }
@@ -724,8 +724,8 @@ export class EnhancedCollaborationInterface {
 
 // Demo function
 export async function demonstrateEnhancedCollaboration(): Promise<void> {
-  console.log("🚀 Enhanced AI-Human Collaboration Demo");
-  console.log("=====================================");
+  console.warn("🚀 Enhanced AI-Human Collaboration Demo");
+  console.warn("=====================================");
 
   const interface_ = new EnhancedCollaborationInterface();
   
@@ -750,7 +750,7 @@ export async function demonstrateEnhancedCollaboration(): Promise<void> {
 
     // Analyze codebase
     const codeAnalysis = await interface_.analyzeCodebase(sessionId, "./src", "typescript");
-    console.log("📊 Code analysis completed");
+    console.warn("📊 Code analysis completed");
 
     // Analyze concept with code context
     const conceptInsight = await interface_.analyzeConceptCollaboratively(
@@ -758,7 +758,7 @@ export async function demonstrateEnhancedCollaboration(): Promise<void> {
       "neural_networks",
       true
     );
-    console.log("🧠 Concept analysis completed");
+    console.warn("🧠 Concept analysis completed");
 
     // Perform collaborative reasoning
     const reasoning = await interface_.performCollaborativeReasoning(
@@ -766,11 +766,11 @@ export async function demonstrateEnhancedCollaboration(): Promise<void> {
       "How can we improve code maintainability?",
       true
     );
-    console.log("🤔 Collaborative reasoning completed");
+    console.warn("🤔 Collaborative reasoning completed");
 
     // Get session insights
     const insights = await interface_.getSessionInsights(sessionId);
-    console.log("📈 Session insights generated");
+    console.warn("📈 Session insights generated");
 
     // Get AI assistance
     const assistance = await interface_.getAIAssistance(
@@ -778,13 +778,13 @@ export async function demonstrateEnhancedCollaboration(): Promise<void> {
       "Help me refactor this complex function",
       true
     );
-    console.log("🤖 AI assistance provided");
+    console.warn("🤖 AI assistance provided");
 
     // Close session
     await interface_.closeSession(sessionId);
     
-    console.log("✅ Enhanced Collaboration Demo Complete!");
-    console.log("🎉 LSP + AST + MCP integration working!");
+    console.warn("✅ Enhanced Collaboration Demo Complete!");
+    console.warn("🎉 LSP + AST + MCP integration working!");
     
   } catch (error) {
     console.error("❌ Demo failed:", error);

@@ -163,14 +163,6 @@
         "REDIS_URL": "redis://127.0.0.1:6379"
       }
     },
-    "claude": {
-      "command": "claude",
-      "args": [
-        "mcp",
-        "serve"
-      ],
-      "env": {}
-    },
     "ollama": {
       "type": "stdio",
       "command": "npx",

@@ -37,7 +37,7 @@ import { IntelligentCodeGenerator } from '../generation/intelligent-code-generat
 // Fallback implementations for missing modules
 class FallbackEnhancedH2GNN {
   constructor(config: any, persistenceConfig: any) {
-    console.log('Using fallback Enhanced H²GNN implementation');
+    // Using fallback Enhanced H²GNN implementation
   }
   
   async learnWithMemory(concept: string, data: any, context: any, performance: number) {
@@ -64,7 +64,7 @@ class FallbackEnhancedH2GNN {
   }
   
   async consolidateMemories() {
-    console.log('Memory consolidation completed');
+    // Memory consolidation completed
   }
   
   getSystemStatus() {
@@ -80,7 +80,7 @@ class FallbackEnhancedH2GNN {
 
 class FallbackBIP32HDAddressing {
   constructor(seed: Buffer, network: string) {
-    console.log('Using fallback HD addressing implementation');
+    // Using fallback HD addressing implementation
   }
   
   createAddress(service: string, index: number, type: string, transport: string, host: string, port: number) {
@@ -103,11 +103,11 @@ class FallbackBIP32HDAddressing {
 
 class FallbackH2GNNMCPIntegration {
   constructor(hdAddressing: any, config: any) {
-    console.log('Using fallback MCP integration implementation');
+    // Using fallback MCP integration implementation
   }
   
   async registerService(name: string, version: string, description: string, capabilities: string[], transport: string, host: string, port: number) {
-    console.log(`Registered service: ${name} v${version}`);
+    // Registered service: ${name} v${version}
   }
   
   getAllServices() { return []; }
@@ -336,7 +336,7 @@ class H2GNNMCPServer {
       3000
     );
 
-    console.log(`Consolidated H²GNN MCP Server initialized with address: ${this.h2gnnAddress.path}`);
+    // Consolidated H²GNN MCP Server initialized with address: ${this.h2gnnAddress.path}
   }
 
   /**
@@ -2488,18 +2488,13 @@ These insights are generated using H²GNN semantic understanding and learned cod
    * Start the MCP server
    */
   async start(): Promise<void> {
-    console.error("🚀 Starting Consolidated H²GNN MCP Server...");
-    
     // Initialize HD addressing if enabled
     if (this.networkConfig.hdAddressing.enabled) {
-      console.error("🔗 Initializing HD addressing...");
       await this.initializeHDAddressing();
     }
 
-    console.error("📡 Setting up stdio transport...");
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.error("✅ Consolidated H²GNN MCP Server running on stdio");
   }
 }
 

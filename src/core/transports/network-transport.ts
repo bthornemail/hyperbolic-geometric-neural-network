@@ -47,12 +47,12 @@ export class UDPTransport {
     });
 
     this.socket.on('close', () => {
-      console.log('🔌 UDP Transport socket closed');
+      console.warn('🔌 UDP Transport socket closed');
       this.isConnected = false;
     });
 
     this.isConnected = true;
-    console.log('🔗 UDP Transport connected');
+    console.warn('🔗 UDP Transport connected');
   }
 
   /**
@@ -74,7 +74,7 @@ export class UDPTransport {
           console.error('❌ UDP send error:', error);
           reject(error);
         } else {
-          console.log(`📤 UDP sent message: ${message.header.messageId}`);
+          console.warn(`📤 UDP sent message: ${message.header.messageId}`);
           resolve();
         }
       });
@@ -88,7 +88,7 @@ export class UDPTransport {
     const addressKey = this.getAddressKey(address);
     this.messageHandlers.set(addressKey, callback);
     
-    console.log(`📥 UDP subscribed to address: ${addressKey}`);
+    console.warn(`📥 UDP subscribed to address: ${addressKey}`);
   }
 
   /**
@@ -98,7 +98,7 @@ export class UDPTransport {
     const addressKey = this.getAddressKey(address);
     this.messageHandlers.delete(addressKey);
     
-    console.log(`📤 UDP unsubscribed from address: ${addressKey}`);
+    console.warn(`📤 UDP unsubscribed from address: ${addressKey}`);
   }
 
   /**
@@ -116,7 +116,7 @@ export class UDPTransport {
         const handler = this.messageHandlers.get(addressKey);
         
         if (handler) {
-          console.log(`📥 UDP received message for ${addressKey}: ${message.header.messageId}`);
+          console.warn(`📥 UDP received message for ${addressKey}: ${message.header.messageId}`);
           handler(message);
         } else {
           console.warn(`⚠️ No handler found for UDP address: ${addressKey}`);
@@ -145,7 +145,7 @@ export class UDPTransport {
       this.socket = null;
     }
     this.isConnected = false;
-    console.log('🔌 UDP Transport closed');
+    console.warn('🔌 UDP Transport closed');
   }
 
   /**
@@ -205,7 +205,7 @@ export class TCPTransport {
       });
 
       this.socket.on('connect', () => {
-        console.log('🔗 TCP Transport connected');
+        console.warn('🔗 TCP Transport connected');
         this.isConnected = true;
         resolve();
       });
@@ -217,7 +217,7 @@ export class TCPTransport {
       });
 
       this.socket.on('close', () => {
-        console.log('🔌 TCP Transport disconnected');
+        console.warn('🔌 TCP Transport disconnected');
         this.isConnected = false;
       });
 
@@ -246,7 +246,7 @@ export class TCPTransport {
           console.error('❌ TCP send error:', error);
           reject(error);
         } else {
-          console.log(`📤 TCP sent message: ${message.header.messageId}`);
+          console.warn(`📤 TCP sent message: ${message.header.messageId}`);
           resolve();
         }
       });
@@ -260,7 +260,7 @@ export class TCPTransport {
     const addressKey = this.getAddressKey(address);
     this.messageHandlers.set(addressKey, callback);
     
-    console.log(`📥 TCP subscribed to address: ${addressKey}`);
+    console.warn(`📥 TCP subscribed to address: ${addressKey}`);
   }
 
   /**
@@ -270,7 +270,7 @@ export class TCPTransport {
     const addressKey = this.getAddressKey(address);
     this.messageHandlers.delete(addressKey);
     
-    console.log(`📤 TCP unsubscribed from address: ${addressKey}`);
+    console.warn(`📤 TCP unsubscribed from address: ${addressKey}`);
   }
 
   /**
@@ -296,7 +296,7 @@ export class TCPTransport {
             const handler = this.messageHandlers.get(addressKey);
             
             if (handler) {
-              console.log(`📥 TCP received message for ${addressKey}: ${message.header.messageId}`);
+              console.warn(`📥 TCP received message for ${addressKey}: ${message.header.messageId}`);
               handler(message);
             } else {
               console.warn(`⚠️ No handler found for TCP address: ${addressKey}`);
@@ -327,7 +327,7 @@ export class TCPTransport {
       this.socket = null;
     }
     this.isConnected = false;
-    console.log('🔌 TCP Transport closed');
+    console.warn('🔌 TCP Transport closed');
   }
 
   /**

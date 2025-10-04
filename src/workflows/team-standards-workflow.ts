@@ -55,7 +55,7 @@ export class DefineTeamStandardsNode extends Node<TeamStandardsState> {
   }
 
   async exec([teamId, language]: [string, string]): Promise<TeamStandardsDefinitionResult> {
-    console.log(`📋 Defining team standards for team: ${teamId}`);
+    console.warn(`📋 Defining team standards for team: ${teamId}`);
     
     // Get existing team rules
     const existingRules = this.codingEngine.getTeamRules(teamId);
@@ -243,7 +243,7 @@ export class EnforceTeamStandardsNode extends Node<TeamStandardsState> {
   }
 
   async exec([code, teamId]: [string, string]): Promise<TeamStandardsEnforcementResult> {
-    console.log(`🔍 Enforcing team standards for team: ${teamId}`);
+    console.warn(`🔍 Enforcing team standards for team: ${teamId}`);
     
     // Enforce rules
     const violations = await this.codingEngine.enforceRules(code, teamId);
@@ -354,7 +354,7 @@ export class RefineTeamStandardsNode extends Node<TeamStandardsState> {
   }
 
   async exec([teamId, violations, rules]: [string, RuleViolation[], CodingStandardRule[]]): Promise<TeamStandardsRefinementResult> {
-    console.log(`🔧 Refining team standards for team: ${teamId}`);
+    console.warn(`🔧 Refining team standards for team: ${teamId}`);
     
     // Analyze violation patterns
     const violationPatterns = this.analyzeViolationPatterns(violations);
@@ -522,7 +522,7 @@ export class TeamStandardsWorkflow extends Flow<TeamStandardsState> {
     code: string, 
     language: string = 'typescript'
   ): Promise<TeamStandardsResult> {
-    console.log(`🚀 Starting team standards workflow for team: ${teamId}`);
+    console.warn(`🚀 Starting team standards workflow for team: ${teamId}`);
     
     const state: TeamStandardsState = {
       teamId,

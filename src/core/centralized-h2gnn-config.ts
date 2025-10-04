@@ -114,7 +114,7 @@ export class CentralizedH2GNNManager {
    */
   public setCurrentTeam(teamId: string): void {
     this.currentTeamId = teamId;
-    console.log(`🤝 Set current team: ${teamId}`);
+    console.warn(`🤝 Set current team: ${teamId}`);
   }
 
   /**
@@ -122,7 +122,7 @@ export class CentralizedH2GNNManager {
    */
   public async createTeam(teamId: string, config: TeamConfig): Promise<void> {
     await this.sharedDb.createTeam(teamId, config);
-    console.log(`🤝 Created team: ${teamId}`);
+    console.warn(`🤝 Created team: ${teamId}`);
   }
 
   /**
@@ -130,7 +130,7 @@ export class CentralizedH2GNNManager {
    */
   public async addTeamMember(teamId: string, memberId: string, role: 'admin' | 'member' | 'viewer' = 'member'): Promise<void> {
     await this.sharedDb.addTeamMember(teamId, memberId, role);
-    console.log(`🤝 Added member ${memberId} to team ${teamId}`);
+    console.warn(`🤝 Added member ${memberId} to team ${teamId}`);
   }
 
   /**
@@ -149,7 +149,7 @@ export class CentralizedH2GNNManager {
       // Store in shared database
       const memory = await this.h2gnn.learnWithMemory(concept, data, context, performance);
       await this.sharedDb.storeMemory(effectiveTeamId, memory);
-      console.log(`🤝 Learned concept ${concept} for team ${effectiveTeamId}`);
+      console.warn(`🤝 Learned concept ${concept} for team ${effectiveTeamId}`);
       return memory;
     } else {
       // Fallback to individual learning
@@ -176,7 +176,7 @@ export class CentralizedH2GNNManager {
    */
   public async shareKnowledge(sourceTeamId: string, targetTeamId: string, concepts: string[]): Promise<void> {
     await this.sharedDb.shareKnowledge(sourceTeamId, targetTeamId, concepts);
-    console.log(`🤝 Shared knowledge from ${sourceTeamId} to ${targetTeamId}`);
+    console.warn(`🤝 Shared knowledge from ${sourceTeamId} to ${targetTeamId}`);
   }
 
   /**
@@ -184,7 +184,7 @@ export class CentralizedH2GNNManager {
    */
   public async syncTeamMemories(teamId: string): Promise<void> {
     await this.sharedDb.syncMemories(teamId);
-    console.log(`🤝 Synced memories for team ${teamId}`);
+    console.warn(`🤝 Synced memories for team ${teamId}`);
   }
 
   /**
@@ -236,7 +236,7 @@ export class CentralizedH2GNNManager {
   public async adaptiveLearning(domain: string, learningRate: number = 0.01): Promise<void> {
     // Note: adaptiveLearning method is not available in EnhancedH2GNN
     // This is a placeholder for future implementation
-    console.log(`🎯 Adaptive learning requested for domain: ${domain}, learning rate: ${learningRate}`);
+    console.warn(`🎯 Adaptive learning requested for domain: ${domain}, learning rate: ${learningRate}`);
   }
 }
 
@@ -312,17 +312,17 @@ export function getSharedH2GNN(): EnhancedH2GNN {
  * Demo function to show centralized configuration
  */
 async function demonstrateCentralizedH2GNN(): Promise<void> {
-  console.log('🏗️ Centralized H²GNN Configuration Demo');
-  console.log('=====================================');
+  console.warn('🏗️ Centralized H²GNN Configuration Demo');
+  console.warn('=====================================');
   
   // Initialize with default config
   const manager = initializeCentralizedH2GNN();
   
-  console.log('\n📊 Configuration:');
-  console.log(JSON.stringify(manager.getConfig(), null, 2));
+  console.warn('\n📊 Configuration:');
+  console.warn(JSON.stringify(manager.getConfig(), null, 2));
   
   // Learn some concepts
-  console.log('\n🧠 Learning Concepts:');
+  console.warn('\n🧠 Learning Concepts:');
   await manager.learnWithMemory(
     'centralized_config',
     { type: 'configuration', features: ['centralized', 'shared', 'consistent'] },
@@ -338,21 +338,21 @@ async function demonstrateCentralizedH2GNN(): Promise<void> {
   );
   
   // Get system status
-  console.log('\n📈 System Status:');
+  console.warn('\n📈 System Status:');
   const status = await manager.getSystemStatus();
-  console.log(`- Total Memories: ${status.totalMemories}`);
-  console.log(`- Domains: ${Object.keys(status.domains).join(', ')}`);
-  console.log(`- Learning Progress: ${status.learningProgress.toFixed(3)}`);
+  console.warn(`- Total Memories: ${status.totalMemories}`);
+  console.warn(`- Domains: ${Object.keys(status.domains).join(', ')}`);
+  console.warn(`- Learning Progress: ${status.learningProgress.toFixed(3)}`);
   
   // Retrieve memories
-  console.log('\n🔍 Memory Retrieval:');
+  console.warn('\n🔍 Memory Retrieval:');
   const memories = await manager.retrieveMemories('centralized', 3);
   for (const memory of memories) {
-    console.log(`- ${memory.concept}: ${memory.confidence.toFixed(3)}`);
+    console.warn(`- ${memory.concept}: ${memory.confidence.toFixed(3)}`);
   }
   
-  console.log('\n🎉 Centralized H²GNN Configuration Demo Complete!');
-  console.log('✅ All components using shared configuration!');
+  console.warn('\n🎉 Centralized H²GNN Configuration Demo Complete!');
+  console.warn('✅ All components using shared configuration!');
 }
 
 // Run the demo (commented out for production)

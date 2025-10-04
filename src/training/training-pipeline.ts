@@ -183,35 +183,35 @@ export class TrainingPipeline {
    * Run the complete training pipeline
    */
   async train(): Promise<EvaluationResult> {
-    console.log('🚀 Starting comprehensive training pipeline...');
+    console.warn('🚀 Starting comprehensive training pipeline...');
     this.isTraining = true;
 
     try {
       // Phase 1: Data Preparation
-      console.log('\n📊 Phase 1: Data Preparation');
+      console.warn('\n📊 Phase 1: Data Preparation');
       await this.prepareData();
 
       // Phase 2: WordNet Integration
-      console.log('\n📚 Phase 2: WordNet Integration');
+      console.warn('\n📚 Phase 2: WordNet Integration');
       await this.trainWordNet();
 
       // Phase 3: H²GNN Training
-      console.log('\n🧠 Phase 3: H²GNN Training');
+      console.warn('\n🧠 Phase 3: H²GNN Training');
       await this.trainH2GNN();
 
       // Phase 4: Workflow Training
-      console.log('\n🔄 Phase 4: Workflow Training');
+      console.warn('\n🔄 Phase 4: Workflow Training');
       await this.trainWorkflows();
 
       // Phase 5: Evaluation
-      console.log('\n📈 Phase 5: Evaluation');
+      console.warn('\n📈 Phase 5: Evaluation');
       const evaluation = await this.evaluate();
 
       // Phase 6: Optimization
-      console.log('\n⚡ Phase 6: Optimization');
+      console.warn('\n⚡ Phase 6: Optimization');
       await this.optimize(evaluation);
 
-      console.log('\n✅ Training pipeline completed successfully!');
+      console.warn('\n✅ Training pipeline completed successfully!');
       return evaluation;
 
     } catch (error) {
@@ -226,7 +226,7 @@ export class TrainingPipeline {
    * Phase 1: Data Preparation
    */
   private async prepareData(): Promise<void> {
-    console.log('  📋 Preparing training data...');
+    console.warn('  📋 Preparing training data...');
     
     // Validate configuration
     this.validateConfig();
@@ -238,7 +238,7 @@ export class TrainingPipeline {
     // Filter data based on configuration
     await this.filterWordNetData(processor);
     
-    console.log('  ✅ Data preparation completed');
+    console.warn('  ✅ Data preparation completed');
   }
 
   private validateConfig(): void {
@@ -280,14 +280,14 @@ export class TrainingPipeline {
       }
     }
     
-    console.log(`  📊 Filtered to ${filteredSynsets.size} synsets`);
+    console.warn(`  📊 Filtered to ${filteredSynsets.size} synsets`);
   }
 
   /**
    * Phase 2: WordNet Training
    */
   private async trainWordNet(): Promise<void> {
-    console.log('  📚 Training WordNet integration...');
+    console.warn('  📚 Training WordNet integration...');
     
     await this.wordnetPipeline.runPipeline();
     
@@ -309,14 +309,14 @@ export class TrainingPipeline {
     };
     
     this.metrics.push(initialMetrics);
-    console.log('  ✅ WordNet training completed');
+    console.warn('  ✅ WordNet training completed');
   }
 
   /**
    * Phase 3: H²GNN Training
    */
   private async trainH2GNN(): Promise<void> {
-    console.log('  🧠 Training H²GNN model...');
+    console.warn('  🧠 Training H²GNN model...');
     
     const processor = this.wordnetPipeline.getProcessor();
     const trainingData = processor.exportTrainingData().h2gnn;
@@ -347,7 +347,7 @@ export class TrainingPipeline {
     let patienceCounter = 0;
 
     for (let epoch = 1; epoch <= this.config.h2gnn.epochs; epoch++) {
-      console.log(`    Epoch ${epoch}/${this.config.h2gnn.epochs}`);
+      console.warn(`    Epoch ${epoch}/${this.config.h2gnn.epochs}`);
       
       // Train one epoch
       await this.h2gnn.train([trainData], trainingConfig);
@@ -378,18 +378,18 @@ export class TrainingPipeline {
       } else {
         patienceCounter++;
         if (patienceCounter >= this.config.training.earlyStoppingPatience) {
-          console.log(`    Early stopping at epoch ${epoch}`);
+          console.warn(`    Early stopping at epoch ${epoch}`);
           break;
         }
       }
       
       // Checkpoint
       if (epoch % this.config.training.checkpointInterval === 0) {
-        console.log(`    Checkpoint: Loss=${loss.toFixed(4)}, Accuracy=${accuracy.toFixed(4)}`);
+        console.warn(`    Checkpoint: Loss=${loss.toFixed(4)}, Accuracy=${accuracy.toFixed(4)}`);
       }
     }
     
-    console.log('  ✅ H²GNN training completed');
+    console.warn('  ✅ H²GNN training completed');
   }
 
   private calculateLoss(result: any, data: TrainingData): number {
@@ -486,18 +486,18 @@ export class TrainingPipeline {
    * Phase 4: Workflow Training
    */
   private async trainWorkflows(): Promise<void> {
-    console.log('  🔄 Training agent workflows...');
+    console.warn('  🔄 Training agent workflows...');
     
     // Initialize all workflows
     for (const [name, workflow] of this.workflows) {
-      console.log(`    Initializing ${name} workflow...`);
+      console.warn(`    Initializing ${name} workflow...`);
       await workflow.initialize();
     }
     
     // Test workflows with sample data
     await this.testWorkflows();
     
-    console.log('  ✅ Workflow training completed');
+    console.warn('  ✅ Workflow training completed');
   }
 
   private async testWorkflows(): Promise<void> {
@@ -512,7 +512,7 @@ export class TrainingPipeline {
     
     // Test QA workflow
     if (this.workflows.has('qa')) {
-      console.log('    Testing QA workflow...');
+      console.warn('    Testing QA workflow...');
       const qaWorkflow = this.workflows.get('qa');
       let qaScore = 0;
       
@@ -530,7 +530,7 @@ export class TrainingPipeline {
     
     // Test concept learning workflow
     if (this.workflows.has('conceptLearning')) {
-      console.log('    Testing concept learning workflow...');
+      console.warn('    Testing concept learning workflow...');
       const clWorkflow = this.workflows.get('conceptLearning');
       
       try {
@@ -544,7 +544,7 @@ export class TrainingPipeline {
     
     // Test semantic exploration workflow
     if (this.workflows.has('semanticExploration')) {
-      console.log('    Testing semantic exploration workflow...');
+      console.warn('    Testing semantic exploration workflow...');
       const seWorkflow = this.workflows.get('semanticExploration');
       
       try {
@@ -566,7 +566,7 @@ export class TrainingPipeline {
    * Phase 5: Evaluation
    */
   private async evaluate(): Promise<EvaluationResult> {
-    console.log('  📈 Evaluating overall performance...');
+    console.warn('  📈 Evaluating overall performance...');
     
     const latestMetrics = this.metrics[this.metrics.length - 1];
     
@@ -612,10 +612,10 @@ export class TrainingPipeline {
       recommendations
     };
     
-    console.log(`  📊 Overall Score: ${(overallScore * 100).toFixed(1)}%`);
-    console.log(`    H²GNN: ${(h2gnnScore * 100).toFixed(1)}%`);
-    console.log(`    WordNet: ${(wordnetScore * 100).toFixed(1)}%`);
-    console.log(`    Workflows: ${(workflowScore * 100).toFixed(1)}%`);
+    console.warn(`  📊 Overall Score: ${(overallScore * 100).toFixed(1)}%`);
+    console.warn(`    H²GNN: ${(h2gnnScore * 100).toFixed(1)}%`);
+    console.warn(`    WordNet: ${(wordnetScore * 100).toFixed(1)}%`);
+    console.warn(`    Workflows: ${(workflowScore * 100).toFixed(1)}%`);
     
     return evaluation;
   }
@@ -624,20 +624,20 @@ export class TrainingPipeline {
    * Phase 6: Optimization
    */
   private async optimize(evaluation: EvaluationResult): Promise<void> {
-    console.log('  ⚡ Applying optimizations...');
+    console.warn('  ⚡ Applying optimizations...');
     
     // Auto-optimization based on evaluation
     if (evaluation.componentScores.h2gnn < 0.7) {
-      console.log('    Optimizing H²GNN parameters...');
+      console.warn('    Optimizing H²GNN parameters...');
       // Could adjust learning rate, architecture, etc.
     }
     
     if (evaluation.componentScores.workflows < 0.6) {
-      console.log('    Optimizing workflow configurations...');
+      console.warn('    Optimizing workflow configurations...');
       // Could adjust prompts, add more training examples, etc.
     }
     
-    console.log('  ✅ Optimization completed');
+    console.warn('  ✅ Optimization completed');
   }
 
   /**
@@ -645,7 +645,7 @@ export class TrainingPipeline {
    */
   async continueTraining(newData: TrainingData): Promise<void> {
     if (!this.isTraining) {
-      console.log('🔄 Continuing training with new data...');
+      console.warn('🔄 Continuing training with new data...');
       
       // Incremental training
       await this.h2gnn.train([newData]);
@@ -666,7 +666,7 @@ export class TrainingPipeline {
       
       this.metrics.push(newMetrics);
       
-      console.log('✅ Continuous training completed');
+      console.warn('✅ Continuous training completed');
     }
   }
 

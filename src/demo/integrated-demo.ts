@@ -69,8 +69,8 @@ export class IntegratedDemo {
    */
   async run(): Promise<DemoResults> {
     this.startTime = Date.now();
-    console.log('🚀 Starting PocketFlow + H²GNN + WordNet Integrated Demo');
-    console.log('=' .repeat(60));
+    console.warn('🚀 Starting PocketFlow + H²GNN + WordNet Integrated Demo');
+    console.warn('=' .repeat(60));
 
     const results: DemoResults = {
       workflowResults: new Map(),
@@ -82,34 +82,34 @@ export class IntegratedDemo {
     try {
       // Phase 1: Training (if enabled)
       if (this.config.enableTraining) {
-        console.log('\n🧠 Phase 1: Training the Integrated System');
-        console.log('-'.repeat(40));
+        console.warn('\n🧠 Phase 1: Training the Integrated System');
+        console.warn('-'.repeat(40));
         results.trainingResults = await this.runTraining();
       }
 
       // Phase 2: Workflow Demonstrations
       if (this.config.enableWorkflows) {
-        console.log('\n🔄 Phase 2: Demonstrating Agent Workflows');
-        console.log('-'.repeat(40));
+        console.warn('\n🔄 Phase 2: Demonstrating Agent Workflows');
+        console.warn('-'.repeat(40));
         await this.runWorkflowDemos(results);
       }
 
       // Phase 3: Performance Analysis
-      console.log('\n📊 Phase 3: Performance Analysis');
-      console.log('-'.repeat(40));
+      console.warn('\n📊 Phase 3: Performance Analysis');
+      console.warn('-'.repeat(40));
       results.performanceMetrics = await this.analyzePerformance();
 
       // Phase 4: Interactive Mode (if configured)
       if (this.config.mode === 'interactive') {
-        console.log('\n💬 Phase 4: Interactive Mode');
-        console.log('-'.repeat(40));
+        console.warn('\n💬 Phase 4: Interactive Mode');
+        console.warn('-'.repeat(40));
         await this.runInteractiveMode(results);
       }
 
       results.duration = Date.now() - this.startTime;
       
-      console.log('\n✅ Demo completed successfully!');
-      console.log(`⏱️  Total duration: ${(results.duration / 1000).toFixed(2)}s`);
+      console.warn('\n✅ Demo completed successfully!');
+      console.warn(`⏱️  Total duration: ${(results.duration / 1000).toFixed(2)}s`);
       
       return results;
 
@@ -123,10 +123,10 @@ export class IntegratedDemo {
    * Phase 1: Training
    */
   private async runTraining(): Promise<any> {
-    console.log('  🔧 Initializing training pipeline...');
+    console.warn('  🔧 Initializing training pipeline...');
 
     if (this.config.mode === 'quick') {
-      console.log('  ⚡ Running quick training (optimized for demo)...');
+      console.warn('  ⚡ Running quick training (optimized for demo)...');
       
       const trainingResults = await quickTrain({
         h2gnn: {
@@ -138,12 +138,12 @@ export class IntegratedDemo {
         }
       });
 
-      console.log(`  📈 Training completed with overall score: ${(trainingResults.overallScore * 100).toFixed(1)}%`);
+      console.warn(`  📈 Training completed with overall score: ${(trainingResults.overallScore * 100).toFixed(1)}%`);
       
       return trainingResults;
 
     } else {
-      console.log('  🏋️ Running full training pipeline...');
+      console.warn('  🏋️ Running full training pipeline...');
       
       this.pipeline = createTrainingPipeline({
         h2gnn: {
@@ -157,7 +157,7 @@ export class IntegratedDemo {
 
       const trainingResults = await this.pipeline.train();
       
-      console.log(`  📈 Training completed with overall score: ${(trainingResults.overallScore * 100).toFixed(1)}%`);
+      console.warn(`  📈 Training completed with overall score: ${(trainingResults.overallScore * 100).toFixed(1)}%`);
       
       return trainingResults;
     }
@@ -171,26 +171,26 @@ export class IntegratedDemo {
     await this.initializeWorkflows();
 
     // Demo 1: Hierarchical Question Answering
-    console.log('\n  🤖 Demo 1: Hierarchical Question Answering');
+    console.warn('\n  🤖 Demo 1: Hierarchical Question Answering');
     await this.demoHierarchicalQA(results);
 
     // Demo 2: Concept Learning
-    console.log('\n  🎓 Demo 2: Concept Learning');
+    console.warn('\n  🎓 Demo 2: Concept Learning');
     await this.demoConceptLearning(results);
 
     // Demo 3: Semantic Exploration
-    console.log('\n  🔍 Demo 3: Semantic Exploration');
+    console.warn('\n  🔍 Demo 3: Semantic Exploration');
     await this.demoSemanticExploration(results);
 
     // Demo 4: Multi-Agent Reasoning (if enabled)
     if (this.config.mode === 'full') {
-      console.log('\n  🤖🤖 Demo 4: Multi-Agent Reasoning');
+      console.warn('\n  🤖🤖 Demo 4: Multi-Agent Reasoning');
       await this.demoMultiAgentReasoning(results);
     }
   }
 
   private async initializeWorkflows(): Promise<void> {
-    console.log('    Initializing workflows...');
+    console.warn('    Initializing workflows...');
 
     // Create workflows
     this.workflows.set('qa', new HierarchicalQAWorkflow());
@@ -203,11 +203,11 @@ export class IntegratedDemo {
 
     // Initialize all workflows
     for (const [name, workflow] of this.workflows) {
-      console.log(`      Initializing ${name}...`);
+      console.warn(`      Initializing ${name}...`);
       await workflow.initialize();
     }
 
-    console.log('    ✅ All workflows initialized');
+    console.warn('    ✅ All workflows initialized');
   }
 
   private async demoHierarchicalQA(results: DemoResults): Promise<void> {
@@ -221,19 +221,19 @@ export class IntegratedDemo {
       'What are the characteristics of vertebrates?'
     ];
 
-    console.log('    Testing hierarchical question answering...');
+    console.warn('    Testing hierarchical question answering...');
     const qaResults: any[] = [];
 
     for (const question of questions) {
-      console.log(`      Q: ${question}`);
+      console.warn(`      Q: ${question}`);
       
       try {
         const result = await qaWorkflow.answerQuestion(question);
         qaResults.push(result);
         
         if (this.config.logLevel === 'detailed' || this.config.logLevel === 'verbose') {
-          console.log(`      A: ${result.answer?.substring(0, 100)}...`);
-          console.log(`      Confidence: ${(result.confidence * 100).toFixed(1)}%`);
+          console.warn(`      A: ${result.answer?.substring(0, 100)}...`);
+          console.warn(`      Confidence: ${(result.confidence * 100).toFixed(1)}%`);
         }
       } catch (error) {
         console.warn(`      ⚠️  Failed to answer: ${question}`);
@@ -242,7 +242,7 @@ export class IntegratedDemo {
     }
 
     results.workflowResults.set('hierarchicalQA', qaResults);
-    console.log(`    ✅ Completed ${qaResults.length} Q&A demonstrations`);
+    console.warn(`    ✅ Completed ${qaResults.length} Q&A demonstrations`);
   }
 
   private async demoConceptLearning(results: DemoResults): Promise<void> {
@@ -250,19 +250,19 @@ export class IntegratedDemo {
     if (!clWorkflow) return;
 
     const domains = ['animals', 'plants', 'objects'];
-    console.log('    Testing concept learning...');
+    console.warn('    Testing concept learning...');
     const clResults: any[] = [];
 
     for (const domain of domains) {
-      console.log(`      Learning domain: ${domain}`);
+      console.warn(`      Learning domain: ${domain}`);
       
       try {
         const result = await clWorkflow.learnDomain(domain);
         clResults.push(result);
         
         if (this.config.logLevel === 'detailed' || this.config.logLevel === 'verbose') {
-          console.log(`      Discovered ${result.concepts?.length || 0} concepts`);
-          console.log(`      Learning plan: ${result.learningPlan?.substring(0, 80)}...`);
+          console.warn(`      Discovered ${result.concepts?.length || 0} concepts`);
+          console.warn(`      Learning plan: ${result.learningPlan?.substring(0, 80)}...`);
         }
       } catch (error) {
         console.warn(`      ⚠️  Failed to learn domain: ${domain}`);
@@ -271,7 +271,7 @@ export class IntegratedDemo {
     }
 
     results.workflowResults.set('conceptLearning', clResults);
-    console.log(`    ✅ Completed ${clResults.length} concept learning demonstrations`);
+    console.warn(`    ✅ Completed ${clResults.length} concept learning demonstrations`);
   }
 
   private async demoSemanticExploration(results: DemoResults): Promise<void> {
@@ -279,19 +279,19 @@ export class IntegratedDemo {
     if (!seWorkflow) return;
 
     const concepts = ['cat', 'animal', 'organism', 'entity'];
-    console.log('    Testing semantic exploration...');
+    console.warn('    Testing semantic exploration...');
     const seResults: any[] = [];
 
     for (const concept of concepts) {
-      console.log(`      Exploring concept: ${concept}`);
+      console.warn(`      Exploring concept: ${concept}`);
       
       try {
         const result = await seWorkflow.exploreConcept(concept);
         seResults.push(result);
         
         if (this.config.logLevel === 'detailed' || this.config.logLevel === 'verbose') {
-          console.log(`      Found ${result.neighbors?.length || 0} semantic neighbors`);
-          console.log(`      Insights: ${result.insights?.substring(0, 80)}...`);
+          console.warn(`      Found ${result.neighbors?.length || 0} semantic neighbors`);
+          console.warn(`      Insights: ${result.insights?.substring(0, 80)}...`);
         }
       } catch (error) {
         console.warn(`      ⚠️  Failed to explore concept: ${concept}`);
@@ -300,7 +300,7 @@ export class IntegratedDemo {
     }
 
     results.workflowResults.set('semanticExploration', seResults);
-    console.log(`    ✅ Completed ${seResults.length} semantic exploration demonstrations`);
+    console.warn(`    ✅ Completed ${seResults.length} semantic exploration demonstrations`);
   }
 
   private async demoMultiAgentReasoning(results: DemoResults): Promise<void> {
@@ -312,19 +312,19 @@ export class IntegratedDemo {
       'Analyze the hierarchical structure of living organisms'
     ];
 
-    console.log('    Testing multi-agent reasoning...');
+    console.warn('    Testing multi-agent reasoning...');
     const maResults: any[] = [];
 
     for (const query of queries) {
-      console.log(`      Query: ${query}`);
+      console.warn(`      Query: ${query}`);
       
       try {
         const result = await maWorkflow.reasonAboutQuery(query);
         maResults.push(result);
         
         if (this.config.logLevel === 'verbose') {
-          console.log(`      Analysis: ${result.analysis?.substring(0, 80)}...`);
-          console.log(`      Synthesis: ${result.synthesis?.substring(0, 80)}...`);
+          console.warn(`      Analysis: ${result.analysis?.substring(0, 80)}...`);
+          console.warn(`      Synthesis: ${result.synthesis?.substring(0, 80)}...`);
         }
       } catch (error) {
         console.warn(`      ⚠️  Failed multi-agent reasoning for: ${query}`);
@@ -333,14 +333,14 @@ export class IntegratedDemo {
     }
 
     results.workflowResults.set('multiAgentReasoning', maResults);
-    console.log(`    ✅ Completed ${maResults.length} multi-agent reasoning demonstrations`);
+    console.warn(`    ✅ Completed ${maResults.length} multi-agent reasoning demonstrations`);
   }
 
   /**
    * Phase 3: Performance Analysis
    */
   private async analyzePerformance(): Promise<any> {
-    console.log('  📊 Analyzing system performance...');
+    console.warn('  📊 Analyzing system performance...');
 
     const metrics = {
       training: {},
@@ -386,9 +386,9 @@ export class IntegratedDemo {
       mode: this.config.mode
     };
 
-    console.log(`    Training accuracy: ${((metrics.training as any).finalAccuracy * 100 || 0).toFixed(1)}%`);
-    console.log(`    Workflow success rate: ${(metrics.workflows.successRate * 100).toFixed(1)}%`);
-    console.log(`    Memory usage: ${metrics.system.memoryUsage.toFixed(1)}MB`);
+    console.warn(`    Training accuracy: ${((metrics.training as any).finalAccuracy * 100 || 0).toFixed(1)}%`);
+    console.warn(`    Workflow success rate: ${(metrics.workflows.successRate * 100).toFixed(1)}%`);
+    console.warn(`    Memory usage: ${metrics.system.memoryUsage.toFixed(1)}MB`);
 
     return metrics;
   }
@@ -402,8 +402,8 @@ export class IntegratedDemo {
    * Phase 4: Interactive Mode
    */
   private async runInteractiveMode(results: DemoResults): Promise<void> {
-    console.log('  💬 Starting interactive mode...');
-    console.log('    (In a real implementation, this would accept user input)');
+    console.warn('  💬 Starting interactive mode...');
+    console.warn('    (In a real implementation, this would accept user input)');
     
     // Mock interactive session
     const mockQueries = [
@@ -413,7 +413,7 @@ export class IntegratedDemo {
     ];
 
     for (const query of mockQueries) {
-      console.log(`    User: ${query}`);
+      console.warn(`    User: ${query}`);
       
       // Route to appropriate workflow based on query
       const workflow = this.selectWorkflowForQuery(query);
@@ -428,14 +428,14 @@ export class IntegratedDemo {
             response = await workflow.exploreConcept(concept);
           }
           
-          console.log(`    System: ${response?.answer || response?.insights || 'Response generated'}`.substring(0, 100) + '...');
+          console.warn(`    System: ${response?.answer || response?.insights || 'Response generated'}`.substring(0, 100) + '...');
         } catch (error) {
-          console.log(`    System: I apologize, I encountered an error processing your query.`);
+          console.warn(`    System: I apologize, I encountered an error processing your query.`);
         }
       }
     }
 
-    console.log('  ✅ Interactive mode demonstration completed');
+    console.warn('  ✅ Interactive mode demonstration completed');
   }
 
   private selectWorkflowForQuery(query: string): any {
@@ -555,8 +555,8 @@ export async function runInteractiveDemo(): Promise<DemoResults> {
 
 // Main demo execution (if run directly)
 export async function main(): Promise<void> {
-  console.log('🎯 PocketFlow + H²GNN + WordNet Integration Demo');
-  console.log('Choose demo mode: quick, full, or interactive');
+  console.warn('🎯 PocketFlow + H²GNN + WordNet Integration Demo');
+  console.warn('Choose demo mode: quick, full, or interactive');
   
   // For demo purposes, run quick mode
   const results = await runQuickDemo();
@@ -564,7 +564,7 @@ export async function main(): Promise<void> {
   // Generate and display report
   const demo = new IntegratedDemo();
   const report = demo.generateReport(results);
-  console.log('\n' + report);
+  console.warn('\n' + report);
 }
 
 // Export everything

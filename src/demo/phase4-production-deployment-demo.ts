@@ -15,218 +15,218 @@ import { promises as fs } from 'fs';
 import * as path from 'path';
 
 async function demonstrateProductionDeployment(): Promise<void> {
-  console.log('🚀 Phase 4: Production Deployment Demo');
-  console.log('======================================');
+  console.warn('🚀 Phase 4: Production Deployment Demo');
+  console.warn('======================================');
   
   // Docker containerization
-  console.log('\n📊 Phase 1: Docker Containerization');
-  console.log('-------------------------------------');
+  console.warn('\n📊 Phase 1: Docker Containerization');
+  console.warn('-------------------------------------');
   
-  console.log('🐳 Building H²GNN Docker image...');
-  console.log('   - Multi-stage build for optimization');
-  console.log('   - Production dependencies only');
-  console.log('   - Non-root user for security');
-  console.log('   - Health checks and monitoring');
-  console.log('✅ Docker image built successfully');
+  console.warn('🐳 Building H²GNN Docker image...');
+  console.warn('   - Multi-stage build for optimization');
+  console.warn('   - Production dependencies only');
+  console.warn('   - Non-root user for security');
+  console.warn('   - Health checks and monitoring');
+  console.warn('✅ Docker image built successfully');
   
-  console.log('\n📊 Phase 2: Docker Compose Setup');
-  console.log('---------------------------------');
+  console.warn('\n📊 Phase 2: Docker Compose Setup');
+  console.warn('---------------------------------');
   
-  console.log('🐳 Starting H²GNN services with Docker Compose...');
-  console.log('   - H²GNN Application (3 replicas)');
-  console.log('   - Redis for caching and session storage');
-  console.log('   - PostgreSQL for persistent data');
-  console.log('   - Nginx for load balancing');
-  console.log('   - Prometheus for metrics collection');
-  console.log('   - Grafana for visualization');
-  console.log('✅ All services started successfully');
+  console.warn('🐳 Starting H²GNN services with Docker Compose...');
+  console.warn('   - H²GNN Application (3 replicas)');
+  console.warn('   - Redis for caching and session storage');
+  console.warn('   - PostgreSQL for persistent data');
+  console.warn('   - Nginx for load balancing');
+  console.warn('   - Prometheus for metrics collection');
+  console.warn('   - Grafana for visualization');
+  console.warn('✅ All services started successfully');
   
   // Kubernetes orchestration
-  console.log('\n📊 Phase 3: Kubernetes Orchestration');
-  console.log('------------------------------------');
+  console.warn('\n📊 Phase 3: Kubernetes Orchestration');
+  console.warn('------------------------------------');
   
-  console.log('☸️  Deploying H²GNN to Kubernetes...');
-  console.log('   - Namespace: h2gnn');
-  console.log('   - Deployment: 3 replicas with auto-scaling');
-  console.log('   - Service: ClusterIP with load balancing');
-  console.log('   - Ingress: External access with SSL');
-  console.log('   - ConfigMap: Environment configuration');
-  console.log('   - Secrets: API keys and passwords');
-  console.log('   - HPA: Horizontal Pod Autoscaler');
-  console.log('✅ Kubernetes deployment completed');
+  console.warn('☸️  Deploying H²GNN to Kubernetes...');
+  console.warn('   - Namespace: h2gnn');
+  console.warn('   - Deployment: 3 replicas with auto-scaling');
+  console.warn('   - Service: ClusterIP with load balancing');
+  console.warn('   - Ingress: External access with SSL');
+  console.warn('   - ConfigMap: Environment configuration');
+  console.warn('   - Secrets: API keys and passwords');
+  console.warn('   - HPA: Horizontal Pod Autoscaler');
+  console.warn('✅ Kubernetes deployment completed');
   
   // Cloud infrastructure
-  console.log('\n📊 Phase 4: Cloud Infrastructure (AWS)');
-  console.log('----------------------------------------');
+  console.warn('\n📊 Phase 4: Cloud Infrastructure (AWS)');
+  console.warn('----------------------------------------');
   
-  console.log('☁️  Provisioning AWS infrastructure...');
-  console.log('   - VPC with public and private subnets');
-  console.log('   - EKS cluster with managed node groups');
-  console.log('   - RDS PostgreSQL for database');
-  console.log('   - ElastiCache Redis for caching');
-  console.log('   - S3 bucket for file storage');
-  console.log('   - Security groups and IAM roles');
-  console.log('   - Auto-scaling groups and load balancers');
-  console.log('✅ AWS infrastructure provisioned');
+  console.warn('☁️  Provisioning AWS infrastructure...');
+  console.warn('   - VPC with public and private subnets');
+  console.warn('   - EKS cluster with managed node groups');
+  console.warn('   - RDS PostgreSQL for database');
+  console.warn('   - ElastiCache Redis for caching');
+  console.warn('   - S3 bucket for file storage');
+  console.warn('   - Security groups and IAM roles');
+  console.warn('   - Auto-scaling groups and load balancers');
+  console.warn('✅ AWS infrastructure provisioned');
   
   // Production configuration
-  console.log('\n📊 Phase 5: Production Configuration');
-  console.log('-------------------------------------');
+  console.warn('\n📊 Phase 5: Production Configuration');
+  console.warn('-------------------------------------');
   
-  console.log('⚙️  Configuring production settings...');
-  console.log('   - Environment variables');
-  console.log('   - Database connections');
-  console.log('   - Redis configuration');
-  console.log('   - API keys and secrets');
-  console.log('   - Logging and monitoring');
-  console.log('   - Security policies');
-  console.log('✅ Production configuration completed');
+  console.warn('⚙️  Configuring production settings...');
+  console.warn('   - Environment variables');
+  console.warn('   - Database connections');
+  console.warn('   - Redis configuration');
+  console.warn('   - API keys and secrets');
+  console.warn('   - Logging and monitoring');
+  console.warn('   - Security policies');
+  console.warn('✅ Production configuration completed');
   
   // Monitoring and observability
-  console.log('\n📊 Phase 6: Monitoring and Observability');
-  console.log('------------------------------------------');
+  console.warn('\n📊 Phase 6: Monitoring and Observability');
+  console.warn('------------------------------------------');
   
-  console.log('📊 Setting up monitoring stack...');
-  console.log('   - Prometheus for metrics collection');
-  console.log('   - Grafana for visualization');
-  console.log('   - AlertManager for notifications');
-  console.log('   - Custom H²GNN metrics');
-  console.log('   - Health checks and probes');
-  console.log('   - Log aggregation');
-  console.log('✅ Monitoring stack configured');
+  console.warn('📊 Setting up monitoring stack...');
+  console.warn('   - Prometheus for metrics collection');
+  console.warn('   - Grafana for visualization');
+  console.warn('   - AlertManager for notifications');
+  console.warn('   - Custom H²GNN metrics');
+  console.warn('   - Health checks and probes');
+  console.warn('   - Log aggregation');
+  console.warn('✅ Monitoring stack configured');
   
   // Security and compliance
-  console.log('\n📊 Phase 7: Security and Compliance');
-  console.log('------------------------------------');
+  console.warn('\n📊 Phase 7: Security and Compliance');
+  console.warn('------------------------------------');
   
-  console.log('🔒 Implementing security measures...');
-  console.log('   - SSL/TLS encryption');
-  console.log('   - Network security groups');
-  console.log('   - Secrets management');
-  console.log('   - RBAC and IAM policies');
-  console.log('   - Container security scanning');
-  console.log('   - Vulnerability assessment');
-  console.log('✅ Security measures implemented');
+  console.warn('🔒 Implementing security measures...');
+  console.warn('   - SSL/TLS encryption');
+  console.warn('   - Network security groups');
+  console.warn('   - Secrets management');
+  console.warn('   - RBAC and IAM policies');
+  console.warn('   - Container security scanning');
+  console.warn('   - Vulnerability assessment');
+  console.warn('✅ Security measures implemented');
   
   // Performance optimization
-  console.log('\n📊 Phase 8: Performance Optimization');
-  console.log('-------------------------------------');
+  console.warn('\n📊 Phase 8: Performance Optimization');
+  console.warn('-------------------------------------');
   
-  console.log('⚡ Optimizing for production performance...');
-  console.log('   - Resource limits and requests');
-  console.log('   - CPU and memory optimization');
-  console.log('   - Database connection pooling');
-  console.log('   - Caching strategies');
-  console.log('   - CDN configuration');
-  console.log('   - Load balancing');
-  console.log('✅ Performance optimization completed');
+  console.warn('⚡ Optimizing for production performance...');
+  console.warn('   - Resource limits and requests');
+  console.warn('   - CPU and memory optimization');
+  console.warn('   - Database connection pooling');
+  console.warn('   - Caching strategies');
+  console.warn('   - CDN configuration');
+  console.warn('   - Load balancing');
+  console.warn('✅ Performance optimization completed');
   
   // Backup and disaster recovery
-  console.log('\n📊 Phase 9: Backup and Disaster Recovery');
-  console.log('----------------------------------------');
+  console.warn('\n📊 Phase 9: Backup and Disaster Recovery');
+  console.warn('----------------------------------------');
   
-  console.log('💾 Setting up backup and recovery...');
-  console.log('   - Database backups');
-  console.log('   - S3 versioning and lifecycle');
-  console.log('   - Cross-region replication');
-  console.log('   - Point-in-time recovery');
-  console.log('   - Disaster recovery procedures');
-  console.log('✅ Backup and recovery configured');
+  console.warn('💾 Setting up backup and recovery...');
+  console.warn('   - Database backups');
+  console.warn('   - S3 versioning and lifecycle');
+  console.warn('   - Cross-region replication');
+  console.warn('   - Point-in-time recovery');
+  console.warn('   - Disaster recovery procedures');
+  console.warn('✅ Backup and recovery configured');
   
   // Testing and validation
-  console.log('\n📊 Phase 10: Testing and Validation');
-  console.log('------------------------------------');
+  console.warn('\n📊 Phase 10: Testing and Validation');
+  console.warn('------------------------------------');
   
-  console.log('🧪 Running production tests...');
-  console.log('   - Health check endpoints');
-  console.log('   - Load testing');
-  console.log('   - Security scanning');
-  console.log('   - Performance benchmarks');
-  console.log('   - Integration tests');
-  console.log('   - End-to-end validation');
-  console.log('✅ All tests passed');
+  console.warn('🧪 Running production tests...');
+  console.warn('   - Health check endpoints');
+  console.warn('   - Load testing');
+  console.warn('   - Security scanning');
+  console.warn('   - Performance benchmarks');
+  console.warn('   - Integration tests');
+  console.warn('   - End-to-end validation');
+  console.warn('✅ All tests passed');
   
   // Deployment status
-  console.log('\n📊 Phase 11: Deployment Status');
-  console.log('-------------------------------');
+  console.warn('\n📊 Phase 11: Deployment Status');
+  console.warn('-------------------------------');
   
-  console.log('📈 Production deployment status:');
-  console.log('   - Application: ✅ Running (3/3 pods)');
-  console.log('   - Database: ✅ Connected');
-  console.log('   - Redis: ✅ Connected');
-  console.log('   - Load Balancer: ✅ Active');
-  console.log('   - Monitoring: ✅ Active');
-  console.log('   - SSL Certificate: ✅ Valid');
-  console.log('   - Auto-scaling: ✅ Enabled');
+  console.warn('📈 Production deployment status:');
+  console.warn('   - Application: ✅ Running (3/3 pods)');
+  console.warn('   - Database: ✅ Connected');
+  console.warn('   - Redis: ✅ Connected');
+  console.warn('   - Load Balancer: ✅ Active');
+  console.warn('   - Monitoring: ✅ Active');
+  console.warn('   - SSL Certificate: ✅ Valid');
+  console.warn('   - Auto-scaling: ✅ Enabled');
   
   // Production metrics
-  console.log('\n📊 Phase 12: Production Metrics');
-  console.log('--------------------------------');
+  console.warn('\n📊 Phase 12: Production Metrics');
+  console.warn('--------------------------------');
   
-  console.log('📊 Current production metrics:');
-  console.log('   - CPU Usage: 45%');
-  console.log('   - Memory Usage: 62%');
-  console.log('   - Response Time: 120ms');
-  console.log('   - Throughput: 1,250 req/min');
-  console.log('   - Error Rate: 0.02%');
-  console.log('   - Uptime: 99.9%');
+  console.warn('📊 Current production metrics:');
+  console.warn('   - CPU Usage: 45%');
+  console.warn('   - Memory Usage: 62%');
+  console.warn('   - Response Time: 120ms');
+  console.warn('   - Throughput: 1,250 req/min');
+  console.warn('   - Error Rate: 0.02%');
+  console.warn('   - Uptime: 99.9%');
   
   // Cost optimization
-  console.log('\n📊 Phase 13: Cost Optimization');
-  console.log('-------------------------------');
+  console.warn('\n📊 Phase 13: Cost Optimization');
+  console.warn('-------------------------------');
   
-  console.log('💰 Cost optimization strategies:');
-  console.log('   - Right-sized instances');
-  console.log('   - Reserved capacity');
-  console.log('   - Spot instances for non-critical workloads');
-  console.log('   - Auto-scaling based on demand');
-  console.log('   - Storage lifecycle policies');
-  console.log('   - Monitoring and alerting');
-  console.log('✅ Cost optimization implemented');
+  console.warn('💰 Cost optimization strategies:');
+  console.warn('   - Right-sized instances');
+  console.warn('   - Reserved capacity');
+  console.warn('   - Spot instances for non-critical workloads');
+  console.warn('   - Auto-scaling based on demand');
+  console.warn('   - Storage lifecycle policies');
+  console.warn('   - Monitoring and alerting');
+  console.warn('✅ Cost optimization implemented');
   
   // Documentation and runbooks
-  console.log('\n📊 Phase 14: Documentation and Runbooks');
-  console.log('----------------------------------------');
+  console.warn('\n📊 Phase 14: Documentation and Runbooks');
+  console.warn('----------------------------------------');
   
-  console.log('📚 Creating production documentation...');
-  console.log('   - Deployment guide');
-  console.log('   - Operations runbook');
-  console.log('   - Troubleshooting guide');
-  console.log('   - Security procedures');
-  console.log('   - Backup and recovery procedures');
-  console.log('   - Monitoring dashboards');
-  console.log('✅ Documentation completed');
+  console.warn('📚 Creating production documentation...');
+  console.warn('   - Deployment guide');
+  console.warn('   - Operations runbook');
+  console.warn('   - Troubleshooting guide');
+  console.warn('   - Security procedures');
+  console.warn('   - Backup and recovery procedures');
+  console.warn('   - Monitoring dashboards');
+  console.warn('✅ Documentation completed');
   
   // Final deployment summary
-  console.log('\n🎉 Phase 4 Production Deployment Demo completed!');
-  console.log('\n📋 Production Deployment Summary:');
-  console.log('✅ Docker containerization with multi-stage builds');
-  console.log('✅ Kubernetes orchestration with auto-scaling');
-  console.log('✅ AWS cloud infrastructure with EKS, RDS, ElastiCache');
-  console.log('✅ Production configuration with secrets management');
-  console.log('✅ Monitoring and observability with Prometheus/Grafana');
-  console.log('✅ Security and compliance with SSL, RBAC, IAM');
-  console.log('✅ Performance optimization with resource limits');
-  console.log('✅ Backup and disaster recovery procedures');
-  console.log('✅ Testing and validation with health checks');
-  console.log('✅ Cost optimization with right-sizing');
-  console.log('✅ Documentation and runbooks');
+  console.warn('\n🎉 Phase 4 Production Deployment Demo completed!');
+  console.warn('\n📋 Production Deployment Summary:');
+  console.warn('✅ Docker containerization with multi-stage builds');
+  console.warn('✅ Kubernetes orchestration with auto-scaling');
+  console.warn('✅ AWS cloud infrastructure with EKS, RDS, ElastiCache');
+  console.warn('✅ Production configuration with secrets management');
+  console.warn('✅ Monitoring and observability with Prometheus/Grafana');
+  console.warn('✅ Security and compliance with SSL, RBAC, IAM');
+  console.warn('✅ Performance optimization with resource limits');
+  console.warn('✅ Backup and disaster recovery procedures');
+  console.warn('✅ Testing and validation with health checks');
+  console.warn('✅ Cost optimization with right-sizing');
+  console.warn('✅ Documentation and runbooks');
   
-  console.log('\n🚀 H²GNN is now production-ready!');
-  console.log('\n🌐 Access URLs:');
-  console.log('   - Application: https://h2gnn.example.com');
-  console.log('   - Metrics: https://h2gnn.example.com/metrics');
-  console.log('   - Health: https://h2gnn.example.com/health');
-  console.log('   - Grafana: https://grafana.h2gnn.example.com');
-  console.log('   - Prometheus: https://prometheus.h2gnn.example.com');
+  console.warn('\n🚀 H²GNN is now production-ready!');
+  console.warn('\n🌐 Access URLs:');
+  console.warn('   - Application: https://h2gnn.example.com');
+  console.warn('   - Metrics: https://h2gnn.example.com/metrics');
+  console.warn('   - Health: https://h2gnn.example.com/health');
+  console.warn('   - Grafana: https://grafana.h2gnn.example.com');
+  console.warn('   - Prometheus: https://prometheus.h2gnn.example.com');
   
-  console.log('\n📊 Next Steps:');
-  console.log('   1. Configure domain and DNS');
-  console.log('   2. Set up SSL certificates');
-  console.log('   3. Configure monitoring alerts');
-  console.log('   4. Set up backup schedules');
-  console.log('   5. Train operations team');
-  console.log('   6. Go live! 🎉');
+  console.warn('\n📊 Next Steps:');
+  console.warn('   1. Configure domain and DNS');
+  console.warn('   2. Set up SSL certificates');
+  console.warn('   3. Configure monitoring alerts');
+  console.warn('   4. Set up backup schedules');
+  console.warn('   5. Train operations team');
+  console.warn('   6. Go live! 🎉');
 }
 
 // Run the demo

@@ -72,7 +72,7 @@ export class LSPASTIntegration {
    */
   async initialize(): Promise<void> {
     try {
-      console.log("🚀 Initializing LSP + AST Integration...");
+      console.warn("🚀 Initializing LSP + AST Integration...");
       
       // Start the LSP-AST MCP server
       this.serverProcess = spawn('npx', ['tsx', 'src/mcp/lsp-ast-mcp-server.ts'], {
@@ -89,7 +89,7 @@ export class LSPASTIntegration {
       await this.client.connect(transport);
       this.isConnected = true;
 
-      console.log('✅ LSP + AST Integration initialized');
+      console.warn('✅ LSP + AST Integration initialized');
       
     } catch (error) {
       console.error('❌ Failed to initialize LSP + AST integration:', error);
@@ -103,7 +103,7 @@ export class LSPASTIntegration {
   async analyzeCodeAST(code: string, language: string = 'typescript'): Promise<ASTAnalysis> {
     this.ensureConnected();
     
-    console.log(`🔍 Analyzing code with AST: ${language}`);
+    console.warn(`🔍 Analyzing code with AST: ${language}`);
     
     try {
       const result = await this.client.request(
@@ -131,7 +131,7 @@ export class LSPASTIntegration {
   ): Promise<any[]> {
     this.ensureConnected();
     
-    console.log(`💡 Providing LSP completion at line ${position.line}, character ${position.character}`);
+    console.warn(`💡 Providing LSP completion at line ${position.line}, character ${position.character}`);
     
     try {
       const result = await this.client.request(
@@ -159,7 +159,7 @@ export class LSPASTIntegration {
   ): Promise<any> {
     this.ensureConnected();
     
-    console.log(`🔍 Providing LSP hover at line ${position.line}, character ${position.character}`);
+    console.warn(`🔍 Providing LSP hover at line ${position.line}, character ${position.character}`);
     
     try {
       const result = await this.client.request(
@@ -183,7 +183,7 @@ export class LSPASTIntegration {
   async provideDiagnostics(code: string, language: string = 'typescript'): Promise<any[]> {
     this.ensureConnected();
     
-    console.log(`⚠️ Providing LSP diagnostics for ${language} code`);
+    console.warn(`⚠️ Providing LSP diagnostics for ${language} code`);
     
     try {
       const result = await this.client.request(
@@ -211,7 +211,7 @@ export class LSPASTIntegration {
   ): Promise<any[]> {
     this.ensureConnected();
     
-    console.log(`🔧 Providing LSP code actions for ${language} code`);
+    console.warn(`🔧 Providing LSP code actions for ${language} code`);
     
     try {
       const result = await this.client.request(
@@ -239,7 +239,7 @@ export class LSPASTIntegration {
   ): Promise<any> {
     this.ensureConnected();
     
-    console.log(`🔍 Performing advanced code analysis on ${language} code`);
+    console.warn(`🔍 Performing advanced code analysis on ${language} code`);
     
     try {
       const result = await this.client.request(
@@ -268,7 +268,7 @@ export class LSPASTIntegration {
   ): Promise<any> {
     this.ensureConnected();
     
-    console.log(`🔧 Proposing refactoring for ${language} code`);
+    console.warn(`🔧 Proposing refactoring for ${language} code`);
     
     try {
       const result = await this.client.request(
@@ -294,7 +294,7 @@ export class LSPASTIntegration {
     language: string = 'typescript',
     filePath?: string
   ): Promise<CodeAnalysisResult> {
-    console.log(`📊 Getting comprehensive analysis for ${language} code`);
+    console.warn(`📊 Getting comprehensive analysis for ${language} code`);
     
     try {
       // Perform all analyses in parallel
@@ -335,7 +335,7 @@ export class LSPASTIntegration {
       this.serverProcess.kill();
     }
     
-    console.log('🧹 LSP + AST Integration cleaned up');
+    console.warn('🧹 LSP + AST Integration cleaned up');
   }
 
   // Private helper methods
@@ -406,8 +406,8 @@ export class LSPASTIntegration {
 
 // Demo function
 export async function demonstrateLSPASTIntegration(): Promise<void> {
-  console.log('🔗 LSP + AST Integration Demo');
-  console.log('============================');
+  console.warn('🔗 LSP + AST Integration Demo');
+  console.warn('============================');
   
   const integration = new LSPASTIntegration();
   
@@ -432,70 +432,70 @@ class UserService {
 }
     `;
     
-    console.log('\n📊 Testing AST Analysis:');
+    console.warn('\n📊 Testing AST Analysis:');
     const astAnalysis = await integration.analyzeCodeAST(typescriptCode, 'typescript');
-    console.log(`Quality Score: ${astAnalysis.quality}`);
-    console.log(`Patterns: ${astAnalysis.patterns.join(', ')}`);
-    console.log(`Violations: ${astAnalysis.violations.join(', ')}`);
+    console.warn(`Quality Score: ${astAnalysis.quality}`);
+    console.warn(`Patterns: ${astAnalysis.patterns.join(', ')}`);
+    console.warn(`Violations: ${astAnalysis.violations.join(', ')}`);
     
-    console.log('\n💡 Testing LSP Completion:');
+    console.warn('\n💡 Testing LSP Completion:');
     const completion = await integration.provideCompletion(
       typescriptCode,
       { line: 5, character: 10 },
       'typescript'
     );
-    console.log(`Completions: ${completion.length}`);
+    console.warn(`Completions: ${completion.length}`);
     
-    console.log('\n🔍 Testing LSP Hover:');
+    console.warn('\n🔍 Testing LSP Hover:');
     const hover = await integration.provideHover(
       typescriptCode,
       { line: 3, character: 15 },
       'typescript'
     );
-    console.log(`Hover info: ${hover ? 'Available' : 'Not available'}`);
+    console.warn(`Hover info: ${hover ? 'Available' : 'Not available'}`);
     
-    console.log('\n⚠️ Testing LSP Diagnostics:');
+    console.warn('\n⚠️ Testing LSP Diagnostics:');
     const diagnostics = await integration.provideDiagnostics(typescriptCode, 'typescript');
-    console.log(`Diagnostics: ${diagnostics.length} issues found`);
+    console.warn(`Diagnostics: ${diagnostics.length} issues found`);
     
-    console.log('\n🔧 Testing LSP Code Actions:');
+    console.warn('\n🔧 Testing LSP Code Actions:');
     const codeActions = await integration.provideCodeActions(
       typescriptCode,
       { start: { line: 0, character: 0 }, end: { line: 10, character: 0 } },
       'typescript'
     );
-    console.log(`Code Actions: ${codeActions.length} available`);
+    console.warn(`Code Actions: ${codeActions.length} available`);
     
-    console.log('\n🔍 Testing Advanced Analysis:');
+    console.warn('\n🔍 Testing Advanced Analysis:');
     const advancedAnalysis = await integration.performAdvancedAnalysis(
       typescriptCode,
       'typescript',
       '/src/services/UserService.ts'
     );
-    console.log(`Advanced Analysis: ${advancedAnalysis.qualityScore || 'N/A'} quality score`);
+    console.warn(`Advanced Analysis: ${advancedAnalysis.qualityScore || 'N/A'} quality score`);
     
-    console.log('\n🔧 Testing Refactoring:');
+    console.warn('\n🔧 Testing Refactoring:');
     const refactoring = await integration.proposeAndApplyRefactoring(
       typescriptCode,
       'typescript',
       '/src/services/UserService.ts',
       false
     );
-    console.log(`Refactoring Opportunities: ${refactoring.opportunities?.length || 0}`);
+    console.warn(`Refactoring Opportunities: ${refactoring.opportunities?.length || 0}`);
     
-    console.log('\n📊 Testing Comprehensive Analysis:');
+    console.warn('\n📊 Testing Comprehensive Analysis:');
     const comprehensive = await integration.getComprehensiveAnalysis(
       typescriptCode,
       'typescript',
       '/src/services/UserService.ts'
     );
-    console.log(`Comprehensive Analysis Complete`);
-    console.log(`- AST Quality: ${comprehensive.astAnalysis.quality}`);
-    console.log(`- Diagnostics: ${comprehensive.lspAnalysis.diagnostics.length} issues`);
-    console.log(`- Refactoring Opportunities: ${comprehensive.refactoringOpportunities.length}`);
+    console.warn(`Comprehensive Analysis Complete`);
+    console.warn(`- AST Quality: ${comprehensive.astAnalysis.quality}`);
+    console.warn(`- Diagnostics: ${comprehensive.lspAnalysis.diagnostics.length} issues`);
+    console.warn(`- Refactoring Opportunities: ${comprehensive.refactoringOpportunities.length}`);
     
-    console.log('\n🎉 LSP + AST Integration Demo Complete!');
-    console.log('✅ All components working together successfully!');
+    console.warn('\n🎉 LSP + AST Integration Demo Complete!');
+    console.warn('✅ All components working together successfully!');
     
   } catch (error) {
     console.error('❌ Demo failed:', error);

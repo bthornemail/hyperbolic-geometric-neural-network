@@ -106,7 +106,7 @@ export class H2GNNBroker extends EventEmitter {
     
     coreChannels.forEach(channel => {
       this.channels.set(channel, new Set());
-      console.log(`📡 Initialized channel: ${channel}`);
+      console.warn(`📡 Initialized channel: ${channel}`);
     });
   }
 
@@ -135,7 +135,7 @@ export class H2GNNBroker extends EventEmitter {
       source: 'broker'
     });
     
-    console.log(`📤 Published to ${channel}: ${message.type}`);
+    console.warn(`📤 Published to ${channel}: ${message.type}`);
   }
 
   subscribe(channel: string, callback: (msg: PubSubMessage) => void): () => void {
@@ -144,12 +144,12 @@ export class H2GNNBroker extends EventEmitter {
     }
     
     this.channels.get(channel)!.add(callback);
-    console.log(`📥 Subscribed to ${channel}`);
+    console.warn(`📥 Subscribed to ${channel}`);
     
     // Return unsubscribe function
     return () => {
       this.channels.get(channel)?.delete(callback);
-      console.log(`📤 Unsubscribed from ${channel}`);
+      console.warn(`📤 Unsubscribed from ${channel}`);
     };
   }
 
@@ -285,7 +285,7 @@ export class H2GNNBroker extends EventEmitter {
       // Shared learning database is already initialized in constructor
       
       this.isInitialized = true;
-      console.log('🏗️ H²GNN Broker initialized successfully');
+      console.warn('🏗️ H²GNN Broker initialized successfully');
     } catch (error) {
       console.error('Failed to initialize H²GNN Broker:', error);
       throw error;
@@ -443,7 +443,7 @@ export class H2GNNProvider {
     try {
       await this.broker.initialize();
       this.isRunning = true;
-      console.log('🚀 H²GNN Provider started successfully');
+      console.warn('🚀 H²GNN Provider started successfully');
     } catch (error) {
       console.error('Failed to start H²GNN Provider:', error);
       throw error;
@@ -482,7 +482,7 @@ export class H2GNNConsumer {
   }
 
   private async handleVisualizationData(data: any): Promise<void> {
-    console.log('🎨 Handling visualization data update');
+    console.warn('🎨 Handling visualization data update');
     
     // Render geographic visualization using D3
     // This will be implemented in step 3
@@ -495,7 +495,7 @@ export class H2GNNConsumer {
   private setupUserInteractions(): void {
     // Set up event handlers for interactive exploration
     // This will be implemented in step 3
-    console.log('🎯 Setting up user interactions');
+    console.warn('🎯 Setting up user interactions');
   }
 
   private async handleRegionClick(event: any): Promise<void> {
@@ -537,27 +537,27 @@ export class H2GNNConsumer {
   }
 
   private highlightRelatedRegions(neighbors: any[]): void {
-    console.log('🎯 Highlighting related regions:', neighbors.length);
+    console.warn('🎯 Highlighting related regions:', neighbors.length);
   }
 
   private displayHyperbolicDistances(neighbors: any[]): void {
-    console.log('📏 Displaying hyperbolic distances:', neighbors.length);
+    console.warn('📏 Displaying hyperbolic distances:', neighbors.length);
   }
 
   private visualizeSemanticQuery(results: any): void {
-    console.log('🔍 Visualizing semantic query results');
+    console.warn('🔍 Visualizing semantic query results');
   }
 
   private updateTrainingProgressUI(progress: any): void {
-    console.log('📊 Updating training progress:', progress);
+    console.warn('📊 Updating training progress:', progress);
   }
 
   private handleCollaborationEvent(event: any): void {
-    console.log('🤝 Handling collaboration event:', event.type);
+    console.warn('🤝 Handling collaboration event:', event.type);
   }
 
   private displayHyperbolicInsights(metrics: any): void {
-    console.log('🧠 Displaying hyperbolic insights:', metrics);
+    console.warn('🧠 Displaying hyperbolic insights:', metrics);
   }
 }
 
@@ -610,10 +610,10 @@ export class IntegratedH2GNNSystem {
     
     await Promise.all(this.providers.map(provider => provider.start()));
     
-    console.log('🌐 H²GNN Distributed System Started');
-    console.log('📊 Broker: Central Knowledge Authority');
-    console.log('⚡ Providers: High-Performance Compute'); 
-    console.log('🎨 Consumers: Visualization & Interaction');
+    console.warn('🌐 H²GNN Distributed System Started');
+    console.warn('📊 Broker: Central Knowledge Authority');
+    console.warn('⚡ Providers: High-Performance Compute'); 
+    console.warn('🎨 Consumers: Visualization & Interaction');
   }
 }
 

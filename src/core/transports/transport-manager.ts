@@ -44,53 +44,53 @@ export class TransportManager {
   async initialize(): Promise<void> {
     if (this.isInitialized) return;
 
-    console.log('🚀 Initializing Transport Manager...');
+    console.warn('🚀 Initializing Transport Manager...');
 
     try {
       // Initialize MQTT transport
       if (this.config.mqtt) {
-        console.log('📡 Initializing MQTT transport...');
+        console.warn('📡 Initializing MQTT transport...');
         this.mqttTransport = new MQTTTransport(this.config.mqtt);
         await this.mqttTransport.connect();
       }
 
       // Initialize WebSocket transport
       if (this.config.websocket) {
-        console.log('📡 Initializing WebSocket transport...');
+        console.warn('📡 Initializing WebSocket transport...');
         this.websocketTransport = new WebSocketTransport(this.config.websocket);
         await this.websocketTransport.connect();
       }
 
       // Initialize WebRTC transport
       if (this.config.webrtc) {
-        console.log('📡 Initializing WebRTC transport...');
+        console.warn('📡 Initializing WebRTC transport...');
         this.webrtcTransport = new WebRTCTransport(this.config.webrtc);
         await this.webrtcTransport.createPeerConnection();
       }
 
       // Initialize UDP transport
       if (this.config.udp) {
-        console.log('📡 Initializing UDP transport...');
+        console.warn('📡 Initializing UDP transport...');
         this.udpTransport = new UDPTransport(this.config.udp);
         await this.udpTransport.connect();
       }
 
       // Initialize TCP transport
       if (this.config.tcp) {
-        console.log('📡 Initializing TCP transport...');
+        console.warn('📡 Initializing TCP transport...');
         this.tcpTransport = new TCPTransport(this.config.tcp);
         await this.tcpTransport.connect();
       }
 
       // Initialize IPC transport
       if (this.config.ipc) {
-        console.log('📡 Initializing IPC transport...');
+        console.warn('📡 Initializing IPC transport...');
         this.ipcTransport = new IPCTransport(this.config.ipc);
         await this.ipcTransport.connect();
       }
 
       this.isInitialized = true;
-      console.log('✅ Transport Manager initialized successfully');
+      console.warn('✅ Transport Manager initialized successfully');
     } catch (error) {
       console.error('❌ Failed to initialize Transport Manager:', error);
       throw error;
@@ -343,7 +343,7 @@ export class TransportManager {
    * Close all transports
    */
   async close(): Promise<void> {
-    console.log('🔌 Closing all transports...');
+    console.warn('🔌 Closing all transports...');
     
     const closePromises: Promise<void>[] = [];
     
@@ -373,7 +373,7 @@ export class TransportManager {
     
     await Promise.all(closePromises);
     this.isInitialized = false;
-    console.log('✅ All transports closed');
+    console.warn('✅ All transports closed');
   }
 }
 

@@ -56,7 +56,7 @@ export class IntegratedKnowledgeBaseCreator {
       maxFileSize?: number;
     } = {}
   ): Promise<Map<string, KnowledgeNode>> {
-    console.log('🔍 Analyzing codebase with H²GNN...');
+    console.warn('🔍 Analyzing codebase with H²GNN...');
 
     const {
       includePatterns = ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx', '**/*.py', '**/*.md'],
@@ -71,7 +71,7 @@ export class IntegratedKnowledgeBaseCreator {
       try {
         const stats = fs.statSync(filePath);
         if (stats.size > maxFileSize) {
-          console.log(`⚠️ Skipping large file: ${filePath} (${stats.size} bytes)`);
+          console.warn(`⚠️ Skipping large file: ${filePath} (${stats.size} bytes)`);
           continue;
         }
 
@@ -82,7 +82,7 @@ export class IntegratedKnowledgeBaseCreator {
       }
     }
 
-    console.log(`✅ Knowledge extraction complete. Found ${this.knowledgeGraph.size} concepts.`);
+    console.warn(`✅ Knowledge extraction complete. Found ${this.knowledgeGraph.size} concepts.`);
     return this.knowledgeGraph;
   }
 
@@ -94,7 +94,7 @@ export class IntegratedKnowledgeBaseCreator {
     outputPath: string,
     h2gnnEmbedding: (text: string, context?: any) => Promise<Vector>
   ): Promise<string> {
-    console.log(`📝 Generating ${request.type} documentation...`);
+    console.warn(`📝 Generating ${request.type} documentation...`);
 
     // Get relevant knowledge nodes using H²GNN
     const relevantNodes = await this.getRelevantNodes(request.focusAreas || [], h2gnnEmbedding);
@@ -105,7 +105,7 @@ export class IntegratedKnowledgeBaseCreator {
     // Save document
     await this.saveDocument(content, outputPath, request.format);
 
-    console.log(`✅ Documentation generated: ${outputPath}`);
+    console.warn(`✅ Documentation generated: ${outputPath}`);
     return content;
   }
 
@@ -116,7 +116,7 @@ export class IntegratedKnowledgeBaseCreator {
     documentPath: string,
     h2gnnEmbedding: (text: string, context?: any) => Promise<Vector>
   ): Promise<string> {
-    console.log(`🔧 Refining documentation: ${documentPath}`);
+    console.warn(`🔧 Refining documentation: ${documentPath}`);
     
     const originalContent = fs.readFileSync(documentPath, 'utf-8');
     
@@ -136,7 +136,7 @@ export class IntegratedKnowledgeBaseCreator {
     const refinedPath = documentPath.replace(/\.(md|html|txt)$/, '_refined.$1');
     fs.writeFileSync(refinedPath, refinedContent, 'utf-8');
     
-    console.log(`✅ Refined documentation saved: ${refinedPath}`);
+    console.warn(`✅ Refined documentation saved: ${refinedPath}`);
     return refinedContent;
   }
 
@@ -151,7 +151,7 @@ export class IntegratedKnowledgeBaseCreator {
     };
 
     fs.writeFileSync(outputPath, JSON.stringify(exportData, null, 2), 'utf-8');
-    console.log(`📦 Knowledge base exported: ${outputPath}`);
+    console.warn(`📦 Knowledge base exported: ${outputPath}`);
   }
 
   /**

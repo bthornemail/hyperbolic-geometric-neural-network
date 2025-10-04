@@ -3,14 +3,14 @@
   "totalConcepts": 2,
   "learnedConcepts": 2,
   "masteryLevel": 0.14500000000000002,
-  "lastUpdated": 1759535719115,
+  "lastUpdated": 1759536154597,
   "learningCurve": [
     {
-      "timestamp": 1759535719041,
+      "timestamp": 1759536154577,
       "performance": 0.65
     },
     {
-      "timestamp": 1759535719115,
+      "timestamp": 1759536154597,
       "performance": 0.8
     }
   ],

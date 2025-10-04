@@ -131,7 +131,7 @@ export class RealTimeCollaborationEngine extends EventEmitter {
   }
 
   private initializeCollaborativeUI(): void {
-    console.log('🎨 Initializing collaborative UI components');
+    console.warn('🎨 Initializing collaborative UI components');
     // UI initialization will be handled by D3 wrapper in step 3
   }
 
@@ -146,7 +146,7 @@ export class RealTimeCollaborationEngine extends EventEmitter {
   }
 
   private async handleRealTimeVisualizationUpdate(data: any): Promise<void> {
-    console.log('🎨 Handling real-time visualization update');
+    console.warn('🎨 Handling real-time visualization update');
     
     // Animate the update
     await this.animationEngine.animateEmbeddingUpdate({
@@ -161,7 +161,7 @@ export class RealTimeCollaborationEngine extends EventEmitter {
   }
 
   private async handleUserAction(action: any): Promise<void> {
-    console.log('👤 Handling user action:', action.type);
+    console.warn('👤 Handling user action:', action.type);
     
     // Animate user interaction
     await this.animationEngine.animateUserInteraction({
@@ -176,7 +176,7 @@ export class RealTimeCollaborationEngine extends EventEmitter {
   }
 
   private async updateLiveTrainingMetrics(metrics: any): Promise<void> {
-    console.log('📊 Updating live training metrics');
+    console.warn('📊 Updating live training metrics');
     
     await this.trainingDashboard.updateLiveMetrics(metrics);
     
@@ -191,7 +191,7 @@ export class RealTimeCollaborationEngine extends EventEmitter {
   }
 
   private async animateTopologicalChanges(changes: any): Promise<void> {
-    console.log('🔗 Animating topological changes');
+    console.warn('🔗 Animating topological changes');
     
     await this.animationEngine.animateTopologyChange({
       type: 'topology_change',
@@ -201,7 +201,7 @@ export class RealTimeCollaborationEngine extends EventEmitter {
   }
 
   private async handleSyncUpdate(update: any): Promise<void> {
-    console.log('🔄 Handling sync update');
+    console.warn('🔄 Handling sync update');
     
     await this.realTimeSync.handleRealTimeUpdate(update);
   }
@@ -211,7 +211,7 @@ export class RealTimeCollaborationEngine extends EventEmitter {
   }
 
   async initializeVisualization(): Promise<void> {
-    console.log('🎨 Initializing real-time visualization');
+    console.warn('🎨 Initializing real-time visualization');
     // Visualization initialization will be handled by D3 wrapper
   }
 }
@@ -235,7 +235,7 @@ export class CollaborationSession {
   }
 
   private initializeSessionStorage(): void {
-    console.log(`📝 Initializing session storage for ${this.sessionId}`);
+    console.warn(`📝 Initializing session storage for ${this.sessionId}`);
   }
 
   async joinSession(user: CollaborationUser): Promise<void> {
@@ -257,7 +257,7 @@ export class CollaborationSession {
     // Sync current session state to new user
     await this.syncSessionState(user);
     
-    console.log(`👤 User ${user.name} joined session ${this.sessionId}`);
+    console.warn(`👤 User ${user.name} joined session ${this.sessionId}`);
   }
 
   async addAnnotation(annotation: SharedAnnotation): Promise<void> {
@@ -281,7 +281,7 @@ export class CollaborationSession {
       priority: 1
     });
     
-    console.log(`📝 Annotation added by ${annotation.authorId}`);
+    console.warn(`📝 Annotation added by ${annotation.authorId}`);
   }
 
   async performCollaborativeQuery(query: CollaborativeQuery): Promise<CollaborativeResult> {
@@ -357,7 +357,7 @@ export class CollaborationSession {
   }
 
   private async visualizeConsensus(result: CollaborativeResult): Promise<void> {
-    console.log('🎨 Visualizing collaborative consensus');
+    console.warn('🎨 Visualizing collaborative consensus');
     // Visualization will be handled by D3 wrapper
   }
 
@@ -369,7 +369,7 @@ export class CollaborationSession {
       history: this.sessionHistory.slice(-10) // Last 10 events
     };
     
-    console.log(`🔄 Syncing session state to ${user.name}`);
+    console.warn(`🔄 Syncing session state to ${user.name}`);
   }
 }
 
@@ -422,15 +422,15 @@ export class RealTimeSyncEngine {
   }
 
   private async animateEmbeddingUpdate(update: VisualizationUpdate): Promise<void> {
-    console.log('🎬 Animating embedding update');
+    console.warn('🎬 Animating embedding update');
   }
 
   private async animateTopologyChange(update: VisualizationUpdate): Promise<void> {
-    console.log('🔗 Animating topology change');
+    console.warn('🔗 Animating topology change');
   }
 
   private async animateUserInteraction(update: VisualizationUpdate): Promise<void> {
-    console.log('👤 Animating user interaction');
+    console.warn('👤 Animating user interaction');
   }
 
   private async syncWithPeers(update: VisualizationUpdate): Promise<void> {
@@ -442,7 +442,7 @@ export class RealTimeSyncEngine {
     
     // Broadcast to other participants
     // Note: In real implementation, this would use the broker
-    console.log('📡 Broadcasting sync update to peers');
+    console.warn('📡 Broadcasting sync update to peers');
     
     // Update sync state
     this.syncState.lastSync = Date.now();
@@ -506,7 +506,7 @@ export class UserPresenceManager {
     // Broadcast presence update
     // Note: In real implementation, this would use the broker
     if (process.env.H2GNN_DEBUG === 'true') {
-    console.log(`💓 Presence heartbeat for ${this.currentUser.name}`);
+    console.warn(`💓 Presence heartbeat for ${this.currentUser.name}`);
     }
   }
 
@@ -515,14 +515,14 @@ export class UserPresenceManager {
     user.currentFocus = focus;
     
     // Broadcast focus update to other users
-    console.log(`🎯 User ${user.name} focused on ${focus.type}: ${focus.target}`);
+    console.warn(`🎯 User ${user.name} focused on ${focus.type}: ${focus.target}`);
   }
 
   async startCollaborativeAnalysis(region: any): Promise<void> {
     // Invite other users to collaborate on specific region
     const analysisSession = await this.createAnalysisSession(region);
     
-    console.log(`🤝 Starting collaborative analysis for region`);
+    console.warn(`🤝 Starting collaborative analysis for region`);
   }
 
   private async createAnalysisSession(region: any): Promise<any> {
@@ -605,11 +605,11 @@ export class LiveTrainingDashboard {
   }
 
   private async handleTrainingAlerts(alerts: any[]): Promise<void> {
-    console.log('⚠️ Training alerts detected:', alerts.length);
+    console.warn('⚠️ Training alerts detected:', alerts.length);
   }
 
   private async updateProgressIndicators(metrics: any): Promise<void> {
-    console.log('📊 Updating progress indicators');
+    console.warn('📊 Updating progress indicators');
   }
 }
 
@@ -659,11 +659,11 @@ export class RealTimeAnimator {
   }
 
   async animateTopologyChange(change: any): Promise<void> {
-    console.log('🔗 Animating topology change');
+    console.warn('🔗 Animating topology change');
   }
 
   async animateUserInteraction(interaction: any): Promise<void> {
-    console.log('👤 Animating user interaction');
+    console.warn('👤 Animating user interaction');
   }
 
   private createAnimation(type: string, config: any): Animation {
@@ -676,7 +676,7 @@ export class RealTimeAnimator {
   }
 
   private finalizeEmbeddingUpdate(update: any): void {
-    console.log('✅ Embedding update finalized');
+    console.warn('✅ Embedding update finalized');
   }
 
   private startAnimationLoop(): void {
@@ -769,19 +769,19 @@ class ConflictResolver {
 
 class EmbeddingUpdateStrategy implements SyncStrategy {
   async handle(update: VisualizationUpdate): Promise<void> {
-    console.log('🔄 Handling embedding update strategy');
+    console.warn('🔄 Handling embedding update strategy');
   }
 }
 
 class TopologyChangeStrategy implements SyncStrategy {
   async handle(update: VisualizationUpdate): Promise<void> {
-    console.log('🔗 Handling topology change strategy');
+    console.warn('🔗 Handling topology change strategy');
   }
 }
 
 class UserInteractionStrategy implements SyncStrategy {
   async handle(update: VisualizationUpdate): Promise<void> {
-    console.log('👤 Handling user interaction strategy');
+    console.warn('👤 Handling user interaction strategy');
   }
 }
 
@@ -789,7 +789,7 @@ class Animation {
   constructor(private type: string, private config: any) {}
   
   start(time: number): void {
-    console.log(`🎬 Starting ${this.type} animation`);
+    console.warn(`🎬 Starting ${this.type} animation`);
   }
   
   update(time: number): boolean {
@@ -802,7 +802,7 @@ class RealTimeChart {
   constructor(private config: any) {}
   
   addDataPoint(data: any): void {
-    console.log('📊 Adding data point to chart');
+    console.warn('📊 Adding data point to chart');
   }
 }
 

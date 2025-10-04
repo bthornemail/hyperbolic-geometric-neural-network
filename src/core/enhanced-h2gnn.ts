@@ -94,7 +94,7 @@ export class EnhancedH2GNN {
       await this.loadMemories();
       await this.loadUnderstandingSnapshots();
       await this.loadLearningProgress();
-      console.log('🧠 Enhanced H²GNN persistence layer initialized');
+      console.warn('🧠 Enhanced H²GNN persistence layer initialized');
     } catch (error) {
       console.warn('Warning: Could not initialize persistence layer:', error);
     }
@@ -109,7 +109,7 @@ export class EnhancedH2GNN {
     context: Record<string, any> = {},
     performance: number = 0.5
   ): Promise<LearningMemory> {
-    console.log(`🧠 Learning concept: ${concept}`);
+    console.warn(`🧠 Learning concept: ${concept}`);
     
     // Generate embedding for the concept
     const embedding = await this.generateConceptEmbedding(concept, data);
@@ -141,7 +141,7 @@ export class EnhancedH2GNN {
     // Persist memory
     await this.persistMemory(memory);
     
-    console.log(`✅ Learned concept: ${concept} (confidence: ${memory.confidence.toFixed(3)})`);
+    console.warn(`✅ Learned concept: ${concept} (confidence: ${memory.confidence.toFixed(3)})`);
     return memory;
   }
 
@@ -397,36 +397,36 @@ export class EnhancedH2GNN {
    * Consolidate memories to improve understanding
    */
   private async consolidateMemories(): Promise<void> {
-    console.log('🧠 [DEBUG] Starting memory consolidation...');
+    console.warn('🧠 [DEBUG] Starting memory consolidation...');
     
     const conceptGroups = new Map<string, LearningMemory[]>();
     const memoriesToProcess = Array.from(this.memories.values()).filter(m => !m.consolidated);
-    console.log(`🧠 [DEBUG] Found ${memoriesToProcess.length} non-consolidated memories to process.`);
+    console.warn(`🧠 [DEBUG] Found ${memoriesToProcess.length} non-consolidated memories to process.`);
 
     for (const memory of memoriesToProcess) {
       const groupKey = this.findConceptGroup(memory.concept);
-      console.log(`🧠 [DEBUG] Memory '${memory.concept}' assigned to group '${groupKey}'.`);
+      console.warn(`🧠 [DEBUG] Memory '${memory.concept}' assigned to group '${groupKey}'.`);
       if (!conceptGroups.has(groupKey)) {
         conceptGroups.set(groupKey, []);
       }
       conceptGroups.get(groupKey)!.push(memory);
     }
     
-    console.log(`🧠 [DEBUG] Created ${conceptGroups.size} concept groups.`);
+    console.warn(`🧠 [DEBUG] Created ${conceptGroups.size} concept groups.`);
     conceptGroups.forEach((memories, key) => {
-      console.log(`🧠 [DEBUG] Group '${key}' has ${memories.length} memories.`);
+      console.warn(`🧠 [DEBUG] Group '${key}' has ${memories.length} memories.`);
     });
 
     for (const [groupKey, memories] of conceptGroups) {
       if (memories.length > 1) {
-        console.log(`🧠 [DEBUG] Consolidating group '${groupKey}' with ${memories.length} memories.`);
+        console.warn(`🧠 [DEBUG] Consolidating group '${groupKey}' with ${memories.length} memories.`);
         await this.consolidateConceptGroup(groupKey, memories);
       } else {
-        console.log(`🧠 [DEBUG] Skipping group '${groupKey}' (only ${memories.length} memory).`);
+        console.warn(`🧠 [DEBUG] Skipping group '${groupKey}' (only ${memories.length} memory).`);
       }
     }
     
-    console.log(`✅ [DEBUG] Finished memory consolidation. Processed ${conceptGroups.size} concept groups.`);
+    console.warn(`✅ [DEBUG] Finished memory consolidation. Processed ${conceptGroups.size} concept groups.`);
   }
 
   /**
@@ -453,7 +453,7 @@ export class EnhancedH2GNN {
    * Consolidate a group of related memories
    */
   private async consolidateConceptGroup(groupKey: string, memories: LearningMemory[]): Promise<void> {
-    console.log(`🧠 [DEBUG] consolidateConceptGroup called for group '${groupKey}'.`);
+    console.warn(`🧠 [DEBUG] consolidateConceptGroup called for group '${groupKey}'.`);
     const avgEmbedding = this.calculateAverageEmbedding(memories.map(m => m.embedding));
     const avgPerformance = memories.reduce((sum, m) => sum + m.performance, 0) / memories.length;
     
@@ -468,7 +468,7 @@ export class EnhancedH2GNN {
       confidence: avgPerformance
     };
     
-    console.log(`🧠 [DEBUG] Created snapshot with ID: ${snapshot.id}`);
+    console.warn(`🧠 [DEBUG] Created snapshot with ID: ${snapshot.id}`);
     this.understandingSnapshots.set(snapshot.id, snapshot);
     
     for (const memory of memories) {
@@ -476,7 +476,7 @@ export class EnhancedH2GNN {
     }
     
     await this.persistUnderstandingSnapshot(snapshot);
-    console.log(`🧠 [DEBUG] Successfully persisted snapshot ${snapshot.id}.`);
+    console.warn(`🧠 [DEBUG] Successfully persisted snapshot ${snapshot.id}.`);
   }
 
   /**
@@ -650,7 +650,7 @@ export class EnhancedH2GNN {
       // Enhanced learning with LLM insights
       await this.learnWithMemory(concept, data, { ...context, llmInsights: insights }, performance);
       
-      console.log(`🧠 Enhanced learning completed for concept: ${concept}`);
+      console.warn(`🧠 Enhanced learning completed for concept: ${concept}`);
       
     } catch (error) {
       console.error('❌ LLM-assisted learning failed:', error);

@@ -150,7 +150,7 @@ export class SystemAuditKnowledgeGraph {
 
   // 🔍 COMPREHENSIVE SYSTEM AUDIT
   async performSystemAudit(): Promise<SystemAuditReport> {
-    console.log('🔍 Starting comprehensive system audit...');
+    console.warn('🔍 Starting comprehensive system audit...');
     
     // 1. Analyze file structure
     await this.analyzeFileStructure();
@@ -170,12 +170,12 @@ export class SystemAuditKnowledgeGraph {
     // 6. Generate audit report
     const report = await this.generateAuditReport();
     
-    console.log('✅ System audit completed');
+    console.warn('✅ System audit completed');
     return report;
   }
 
   private async analyzeFileStructure(): Promise<void> {
-    console.log('📁 Analyzing file structure...');
+    console.warn('📁 Analyzing file structure...');
     
     const srcPath = path.join(process.cwd(), 'src');
     const directories = await this.getDirectoryStructure(srcPath);
@@ -185,7 +185,7 @@ export class SystemAuditKnowledgeGraph {
     // Analyze organization patterns
     this.fileStructure.organization = this.analyzeOrganizationPattern(directories);
     
-    console.log(`📁 Analyzed ${directories.length} directories`);
+    console.warn(`📁 Analyzed ${directories.length} directories`);
   }
 
   private async getDirectoryStructure(dirPath: string): Promise<DirectoryStructure[]> {
@@ -298,7 +298,7 @@ export class SystemAuditKnowledgeGraph {
   }
 
   private async analyzeNamingPatterns(): Promise<void> {
-    console.log('📝 Analyzing naming patterns...');
+    console.warn('📝 Analyzing naming patterns...');
     
     // Analyze file naming patterns
     const patterns = await this.identifyNamingPatterns();
@@ -307,7 +307,7 @@ export class SystemAuditKnowledgeGraph {
       this.namingPatterns.set(pattern.convention, pattern);
     });
     
-    console.log(`📝 Identified ${patterns.length} naming patterns`);
+    console.warn(`📝 Identified ${patterns.length} naming patterns`);
   }
 
   private async identifyNamingPatterns(): Promise<NamingPattern[]> {
@@ -353,7 +353,7 @@ export class SystemAuditKnowledgeGraph {
   }
 
   private async analyzeComponentDependencies(): Promise<void> {
-    console.log('🔗 Analyzing component dependencies...');
+    console.warn('🔗 Analyzing component dependencies...');
     
     // This would analyze actual import statements in files
     // For now, we'll create a simplified analysis
@@ -375,11 +375,11 @@ export class SystemAuditKnowledgeGraph {
       }
     }
     
-    console.log('🔗 Component dependencies analyzed');
+    console.warn('🔗 Component dependencies analyzed');
   }
 
   private async analyzeIntegrationPoints(): Promise<void> {
-    console.log('🔌 Analyzing integration points...');
+    console.warn('🔌 Analyzing integration points...');
     
     const integrations: SystemIntegration[] = [
       {
@@ -428,11 +428,11 @@ export class SystemAuditKnowledgeGraph {
       this.integrations.set(integration.id, integration);
     });
     
-    console.log(`🔌 Identified ${integrations.length} integration points`);
+    console.warn(`🔌 Identified ${integrations.length} integration points`);
   }
 
   private async assessSystemArchitecture(): Promise<void> {
-    console.log('🏗️ Assessing system architecture...');
+    console.warn('🏗️ Assessing system architecture...');
     
     // Define architectural layers
     this.architecture.layers = [
@@ -505,11 +505,11 @@ export class SystemAuditKnowledgeGraph {
       }
     ];
     
-    console.log('🏗️ System architecture assessed');
+    console.warn('🏗️ System architecture assessed');
   }
 
   private async generateAuditReport(): Promise<SystemAuditReport> {
-    console.log('📊 Generating audit report...');
+    console.warn('📊 Generating audit report...');
     
     const report: SystemAuditReport = {
       timestamp: new Date(),
@@ -740,12 +740,12 @@ export async function performSystemAudit(): Promise<SystemAuditReport> {
 if (import.meta.url === `file://${process.argv[1]}`) {
   performSystemAudit()
     .then(report => {
-      console.log('📊 System Audit Report Generated');
-      console.log(`📁 Total Components: ${report.summary.totalComponents}`);
-      console.log(`🔌 Total Integrations: ${report.summary.totalIntegrations}`);
-      console.log(`📂 Total Directories: ${report.summary.totalDirectories}`);
-      console.log(`🏗️ Architecture Layers: ${report.summary.architectureLayers}`);
-      console.log(`🎯 Architectural Patterns: ${report.summary.architecturalPatterns}`);
+      console.warn('📊 System Audit Report Generated');
+      console.warn(`📁 Total Components: ${report.summary.totalComponents}`);
+      console.warn(`🔌 Total Integrations: ${report.summary.totalIntegrations}`);
+      console.warn(`📂 Total Directories: ${report.summary.totalDirectories}`);
+      console.warn(`🏗️ Architecture Layers: ${report.summary.architectureLayers}`);
+      console.warn(`🎯 Architectural Patterns: ${report.summary.architecturalPatterns}`);
     })
     .catch(console.error);
 }

@@ -180,7 +180,7 @@ class IntelligentCodeGenerator {
    * Analyze code and generate intelligent suggestions
    */
   async analyzeCodeAndSuggest(context: CodeContext): Promise<CodeSuggestion[]> {
-    console.log(`🧠 Analyzing code: ${context.filePath}`);
+    console.warn(`🧠 Analyzing code: ${context.filePath}`);
     
     // Learn from the current code
     await this.learnFromCode(context);
@@ -508,7 +508,7 @@ class IntelligentCodeGenerator {
     const practices: string[] = [];
     
     if (code.includes('try') && code.includes('catch')) practices.push('error_handling');
-    if (code.includes('log') || code.includes('console.log')) practices.push('logging');
+    if (code.includes('log') || code.includes('console.warn')) practices.push('logging');
     if (code.includes('test') || code.includes('spec')) practices.push('testing');
     if (code.includes('validate') || code.includes('check')) practices.push('validation');
     if (code.includes('const') || code.includes('final')) practices.push('immutability');
@@ -843,7 +843,7 @@ class IntelligentCodeGenerator {
    */
   async integrateWithAST(filePath: string): Promise<any> {
     // This would integrate with AST parsers like @babel/parser, typescript compiler, etc.
-    console.log(`🔍 AST Integration for: ${filePath}`);
+    console.warn(`🔍 AST Integration for: ${filePath}`);
     
     // In a real implementation, this would:
     // 1. Parse the file into an AST
@@ -863,7 +863,7 @@ class IntelligentCodeGenerator {
    */
   async integrateWithLSP(): Promise<any> {
     // This would integrate with Language Server Protocol
-    console.log('🔗 LSP Integration enabled');
+    console.warn('🔗 LSP Integration enabled');
     
     // In a real implementation, this would:
     // 1. Implement LSP server
@@ -888,8 +888,8 @@ class IntelligentCodeGenerator {
 
 // Demo function
 async function demonstrateIntelligentCodeGeneration(): Promise<void> {
-  console.log('🧠 Intelligent Code Generation Demo');
-  console.log('==================================');
+  console.warn('🧠 Intelligent Code Generation Demo');
+  console.warn('==================================');
   
   const generator = new IntelligentCodeGenerator();
   
@@ -928,33 +928,35 @@ class UserService {
   // Analyze and generate suggestions
   const suggestions = await generator.analyzeCodeAndSuggest(context);
   
-  console.log('\n📋 Generated Suggestions:');
+  console.warn('\n📋 Generated Suggestions:');
   for (let i = 0; i < suggestions.length; i++) {
     const suggestion = suggestions[i];
-    console.log(`\n${i + 1}. ${suggestion.type.toUpperCase()}: ${suggestion.description}`);
-    console.log(`   Confidence: ${suggestion.confidence.toFixed(2)}`);
-    console.log(`   Impact: ${suggestion.impact}`);
-    console.log(`   Reasoning: ${suggestion.reasoning}`);
-    console.log(`   Code: ${suggestion.code}`);
+    console.warn(`\n${i + 1}. ${suggestion.type.toUpperCase()}: ${suggestion.description}`);
+    console.warn(`   Confidence: ${suggestion.confidence.toFixed(2)}`);
+    console.warn(`   Impact: ${suggestion.impact}`);
+    console.warn(`   Reasoning: ${suggestion.reasoning}`);
+    console.warn(`   Code: ${suggestion.code}`);
   }
   
   // Get learning insights
   const insights = await generator.getLearningInsights();
-  console.log('\n🧠 Learning Insights:');
+  console.warn('\n🧠 Learning Insights:');
   for (const insight of insights) {
-    console.log(`\nPattern: ${insight.pattern}`);
-    console.log(`Quality: ${insight.quality.toFixed(2)}`);
-    console.log(`Improvements: ${insight.improvements.join(', ')}`);
+    console.warn(`\nPattern: ${insight.pattern}`);
+    console.warn(`Quality: ${insight.quality.toFixed(2)}`);
+    console.warn(`Improvements: ${insight.improvements.join(', ')}`);
   }
   
   // Demonstrate AST and LSP integration
   await generator.integrateWithAST(context.filePath);
   await generator.integrateWithLSP();
   
-  console.log('\n🎉 Intelligent Code Generation Demo Complete!');
+  console.warn('\n🎉 Intelligent Code Generation Demo Complete!');
 }
 
-// Run the demo
-demonstrateIntelligentCodeGeneration().catch(console.error);
+// Run the demo only if this file is executed directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  demonstrateIntelligentCodeGeneration().catch(console.error);
+}
 
 export { IntelligentCodeGenerator, CodeContext, CodeSuggestion, CodePattern };

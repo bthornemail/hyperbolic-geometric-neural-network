@@ -75,10 +75,10 @@ export function PocketFlowDemo() {
     
     try {
       // Capture console logs
-      const originalLog = console.log;
+      const originalLog = console.warn;
       const logs: string[] = [];
       
-      console.log = (...args) => {
+      console.warn = (...args) => {
         const message = args.join(' ');
         logs.push(message);
         setDemoState(prev => ({ ...prev, logs: [...prev.logs, message] }));
@@ -88,8 +88,8 @@ export function PocketFlowDemo() {
       // Run the integrated demo
       const results = await runQuickDemo();
       
-      // Restore console.log
-      console.log = originalLog;
+      // Restore console.warn
+      console.warn = originalLog;
       
       setDemoState(prev => ({
         ...prev,

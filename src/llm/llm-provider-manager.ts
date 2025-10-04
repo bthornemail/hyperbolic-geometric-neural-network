@@ -58,7 +58,7 @@ export class LLMProviderManager {
    * Initialize the provider manager
    */
   async initialize(): Promise<void> {
-    console.log('🔧 Initializing LLM Provider Manager...');
+    console.warn('🔧 Initializing LLM Provider Manager...');
     
     // Start health monitoring
     this.startHealthMonitoring();
@@ -76,7 +76,7 @@ export class LLMProviderManager {
       });
     }
     
-    console.log('✅ LLM Provider Manager initialized');
+    console.warn('✅ LLM Provider Manager initialized');
   }
 
   /**
@@ -284,7 +284,7 @@ export class LLMProviderManager {
       try {
         const newProviderId = await this.selectProvider();
         await this.llmService.switchProvider(newProviderId);
-        console.log(`🔄 Switched to provider: ${newProviderId}`);
+        console.warn(`🔄 Switched to provider: ${newProviderId}`);
       } catch (error) {
         console.error('❌ Failed to switch to healthy provider:', error);
       }
@@ -335,7 +335,7 @@ export class LLMProviderManager {
       this.healthCheckInterval = null;
     }
     
-    console.log('🔧 LLM Provider Manager shutdown complete');
+    console.warn('🔧 LLM Provider Manager shutdown complete');
   }
 }
 

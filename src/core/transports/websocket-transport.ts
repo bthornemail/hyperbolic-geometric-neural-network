@@ -46,7 +46,7 @@ export class WebSocketTransport {
       });
 
       this.socket.on('open', () => {
-        console.log('🔗 WebSocket Transport connected to server');
+        console.warn('🔗 WebSocket Transport connected to server');
         this.isConnected = true;
         this.reconnectAttempts = 0;
         resolve();
@@ -59,7 +59,7 @@ export class WebSocketTransport {
       });
 
       this.socket.on('close', (code, reason) => {
-        console.log(`🔌 WebSocket Transport disconnected: ${code} - ${reason}`);
+        console.warn(`🔌 WebSocket Transport disconnected: ${code} - ${reason}`);
         this.isConnected = false;
         this.handleReconnect();
       });
@@ -104,7 +104,7 @@ export class WebSocketTransport {
           console.error('❌ WebSocket send error:', error);
           reject(error);
         } else {
-          console.log(`📤 WebSocket sent message: ${message.header.messageId}`);
+          console.warn(`📤 WebSocket sent message: ${message.header.messageId}`);
           resolve();
         }
       });
@@ -118,7 +118,7 @@ export class WebSocketTransport {
     const addressKey = this.getAddressKey(address);
     this.messageHandlers.set(addressKey, callback);
     
-    console.log(`📥 WebSocket subscribed to address: ${addressKey}`);
+    console.warn(`📥 WebSocket subscribed to address: ${addressKey}`);
   }
 
   /**
@@ -128,7 +128,7 @@ export class WebSocketTransport {
     const addressKey = this.getAddressKey(address);
     this.messageHandlers.delete(addressKey);
     
-    console.log(`📤 WebSocket unsubscribed from address: ${addressKey}`);
+    console.warn(`📤 WebSocket unsubscribed from address: ${addressKey}`);
   }
 
   /**
@@ -143,7 +143,7 @@ export class WebSocketTransport {
     this.reconnectAttempts++;
     const delay = this.config.reconnectInterval || 5000;
     
-    console.log(`🔄 WebSocket Transport: Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts})`);
+    console.warn(`🔄 WebSocket Transport: Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts})`);
     
     this.reconnectTimer = setTimeout(() => {
       this.connect().catch((error) => {
@@ -168,7 +168,7 @@ export class WebSocketTransport {
         const handler = this.messageHandlers.get(addressKey);
         
         if (handler) {
-          console.log(`📥 WebSocket received message for ${addressKey}: ${message.header.messageId}`);
+          console.warn(`📥 WebSocket received message for ${addressKey}: ${message.header.messageId}`);
           handler(message);
         } else {
           console.warn(`⚠️ No handler found for WebSocket address: ${addressKey}`);
