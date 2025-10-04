@@ -5,7 +5,7 @@
  * Converted from src/demo/enhanced-h2gnn-learning-demo.ts
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 
 describe('Enhanced H²GNN Learning', () => {
   let h2gnn: any;

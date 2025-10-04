@@ -39,6 +39,8 @@ export interface UnderstandingSnapshot {
   relationships: Array<{source: string, target: string, type: string, strength: number}>;
   insights: string[];
   confidence: number;
+  concepts?: string[];
+  patterns?: string[];
 }
 
 export interface LearningProgress {
@@ -394,9 +396,103 @@ export class EnhancedH2GNN {
   }
 
   /**
+   * Initialize the enhanced H²GNN system
+   */
+  async initialize(): Promise<void> {
+    await this.initializePersistence();
+    console.warn('🚀 Enhanced H²GNN initialized');
+  }
+
+  /**
+   * Shutdown the enhanced H²GNN system
+   */
+  async shutdown(): Promise<void> {
+    await this.saveAllData();
+    console.warn('🛑 Enhanced H²GNN shutdown');
+  }
+
+  /**
+   * Check if the system is initialized
+   */
+  async isInitialized(): Promise<boolean> {
+    return this.memories.size > 0 || this.understandingSnapshots.size > 0;
+  }
+
+  /**
+   * Get memories for a specific concept
+   */
+  async getMemories(concept: string): Promise<LearningMemory[]> {
+    if (!concept) {
+      throw new Error('Concept cannot be empty');
+    }
+    
+    const memories = Array.from(this.memories.values())
+      .filter(memory => memory.concept.includes(concept))
+      .sort((a, b) => b.timestamp - a.timestamp);
+    
+    return memories;
+  }
+
+  /**
+   * Store an understanding snapshot
+   */
+  async storeSnapshot(snapshot: UnderstandingSnapshot): Promise<void> {
+    this.understandingSnapshots.set(snapshot.id, snapshot);
+    await this.persistSnapshot(snapshot);
+  }
+
+  /**
+   * Get understanding snapshots for a domain
+   */
+  async getSnapshots(domain: string): Promise<UnderstandingSnapshot[]> {
+    if (!domain) {
+      throw new Error('Domain cannot be empty');
+    }
+    
+    const snapshots = Array.from(this.understandingSnapshots.values())
+      .filter(snapshot => snapshot.domain === domain)
+      .sort((a, b) => b.timestamp - a.timestamp);
+    
+    return snapshots;
+  }
+
+  /**
+   * Save all data to persistence
+   */
+  async saveAllData(): Promise<void> {
+    // Save memories
+    for (const memory of this.memories.values()) {
+      await this.persistMemory(memory);
+    }
+    
+    // Save snapshots
+    for (const snapshot of this.understandingSnapshots.values()) {
+      await this.persistSnapshot(snapshot);
+    }
+    
+    // Save learning progress
+    for (const progress of this.learningProgress.values()) {
+      await this.persistLearningProgress(progress);
+    }
+  }
+
+  /**
+   * Persist a snapshot to storage
+   */
+  async persistSnapshot(snapshot: UnderstandingSnapshot): Promise<void> {
+    try {
+      const filePath = path.join(this.persistenceConfig.storagePath, 'snapshots', `${snapshot.id}.json`);
+      await fs.mkdir(path.dirname(filePath), { recursive: true });
+      await fs.writeFile(filePath, JSON.stringify(snapshot, null, 2));
+    } catch (error) {
+      console.warn('Failed to persist snapshot:', error);
+    }
+  }
+
+  /**
    * Consolidate memories to improve understanding
    */
-  private async consolidateMemories(): Promise<void> {
+  public async consolidateMemories(): Promise<void> {
     console.warn('🧠 [DEBUG] Starting memory consolidation...');
     
     const conceptGroups = new Map<string, LearningMemory[]>();
@@ -833,6 +929,10 @@ Format your response as structured insights.
       learningProgress: this.getLearningProgress()
     };
   }
+
+
+
+
 }
 
 export default EnhancedH2GNN;

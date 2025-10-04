@@ -5,7 +5,7 @@
  * Converted from src/demo/unified-system-demo.ts
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 
 describe('Unified System Integration', () => {
   let unifiedSystem: any;

@@ -79,20 +79,24 @@ export class H2GNNWebAuthn {
     const challenge = randomBytes(32);
     const userIdBuffer = Buffer.from(userId, 'utf8');
     
+    // Map purpose to component type
+    const componentType = purpose === 'authentication' ? 'consumer' : 
+                         purpose === 'encryption' ? 'provider' : 'broker';
+    
     // Create H²GNN address for this credential
     const h2gnnAddress = this.hdAddressing.createAddress(
-      purpose,
+      componentType,
       0,
       'external',
-      'webauthn',
+      'websocket',
       this.config.rpId,
       0
     );
 
     const challengeData: WebAuthnChallenge = {
-      challenge: challenge.buffer,
+      challenge: challenge.buffer as ArrayBuffer,
       rpId: this.config.rpId,
-      userId: userIdBuffer.buffer,
+      userId: userIdBuffer.buffer as ArrayBuffer,
       userDisplayName,
       pubKeyCredParams: [
         { type: 'public-key', alg: -7 }, // ES256
@@ -125,19 +129,26 @@ export class H2GNNWebAuthn {
       throw new Error('Invalid credential response');
     }
 
+    // Map purpose to component type
+    const componentType = purpose === 'authentication' ? 'consumer' : 
+                         purpose === 'encryption' ? 'provider' : 'broker';
+    
     // Create H²GNN address for this credential
     const h2gnnAddress = this.hdAddressing.createAddress(
-      purpose,
+      componentType,
       0,
       'external',
-      'webauthn',
+      'websocket',
       this.config.rpId,
       0
     );
 
     // Extract credential data
     const credentialId = credential.rawId;
-    const publicKey = response.publicKey;
+    const publicKey = response.getPublicKey();
+    if (!publicKey) {
+      throw new Error('Failed to get public key from credential');
+    }
     const attestationObject = response.attestationObject;
     
     // Parse attestation object to get counter and AAGUID
@@ -148,7 +159,7 @@ export class H2GNNWebAuthn {
       publicKey: publicKey,
       counter: attestationData.counter,
       aaguid: attestationData.aaguid,
-      transports: credential.response.transports,
+      transports: (credential as any).transports || [],
       h2gnnAddress,
       derivationPath: h2gnnAddress.path,
       purpose
@@ -193,7 +204,7 @@ export class H2GNNWebAuthn {
     }
 
     return {
-      challenge: challenge.buffer,
+      challenge: challenge.buffer as ArrayBuffer,
       allowCredentials
     };
   }
@@ -224,7 +235,7 @@ export class H2GNNWebAuthn {
       clientDataJSON: response.clientDataJSON,
       authenticatorData: response.authenticatorData,
       signature: response.signature,
-      userHandle: response.userHandle
+      userHandle: response.userHandle || undefined
     };
 
     // Update counter
@@ -297,7 +308,7 @@ export class H2GNNWebAuthn {
       .update(Buffer.concat([Buffer.from(keyPair.privateKey), dataHash]))
       .digest();
     
-    return signature.buffer;
+    return signature.buffer as ArrayBuffer;
   }
 
   /**
@@ -407,7 +418,7 @@ export async function demonstrateWebAuthnBIP32(): Promise<void> {
         attestationObject: randomBytes(64).buffer,
         transports: ['internal', 'usb']
       }
-    } as PublicKeyCredential;
+    } as unknown as PublicKeyCredential;
     
     const registeredCredential = await webauthn.registerCredential(
       registrationChallenge,
@@ -442,7 +453,7 @@ export async function demonstrateWebAuthnBIP32(): Promise<void> {
         signature: randomBytes(64).buffer,
         userHandle: randomBytes(16).buffer
       }
-    } as PublicKeyCredential;
+    } as unknown as PublicKeyCredential;
     
     const authResult = await webauthn.authenticate(
       authChallenge.challenge,

@@ -12,6 +12,7 @@
 import { HyperbolicGeometricHGN, TrainingData } from '../core/H2GNN';
 import { HyperbolicArithmetic, Vector, createVector } from '../math/hyperbolic-arithmetic';
 import LLMNodes from '../pocketflow/llm-nodes';
+// @ts-ignore - wordpos doesn't have type declarations
 import WordPOS from 'wordpos';
 const { RAGNode } = LLMNodes;
 
@@ -77,7 +78,7 @@ export class WordNetProcessor {
   private relations: WordNetRelation[] = [];
   private hierarchy: WordNetHierarchy | null = null;
   private h2gnn: HyperbolicGeometricHGN;
-  private ragNode: RAGNode;
+  private ragNode: InstanceType<typeof RAGNode>;
   private wordpos: WordPOS;
 
   constructor(h2gnn?: HyperbolicGeometricHGN) {
@@ -925,7 +926,7 @@ export class WordNetProcessor {
     return this.h2gnn;
   }
 
-  getRAGNode(): RAGNode {
+  getRAGNode(): InstanceType<typeof RAGNode> {
     return this.ragNode;
   }
 

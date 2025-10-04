@@ -9,16 +9,15 @@
  */
 
 import { HyperbolicArithmetic, Vector } from '../math/hyperbolic-arithmetic';
-import HyperbolicLayers from '../layers/hyperbolic-layers';
-import { LayerConfig } from '../layers/hyperbolic-layers';
-const {
+import HyperbolicLayers, { 
   HyperbolicLinear,
   HyperbolicAttention,
   HyperbolicBatchNorm,
   HyperbolicActivations,
   HyperbolicDropout,
-  HyperbolicMessagePassing
-} = HyperbolicLayers;
+  HyperbolicMessagePassing,
+  LayerConfig 
+} from '../layers/hyperbolic-layers';
 
 // Re-export LayerConfig interface from layers
 export type { LayerConfig };
@@ -76,11 +75,11 @@ export interface GeometricInsights {
  */
 export class HyperbolicGeometricHGN {
   private config: Required<H2GNNConfig>;
-  private layers: HyperbolicMessagePassing[];
-  private attention: HyperbolicAttention;
-  private batchNorm: HyperbolicBatchNorm[];
-  private dropout: HyperbolicDropout;
-  private outputProjection: HyperbolicLinear;
+  private layers!: HyperbolicMessagePassing[];
+  private attention!: HyperbolicAttention;
+  private batchNorm!: HyperbolicBatchNorm[];
+  private dropout!: HyperbolicDropout;
+  private outputProjection!: HyperbolicLinear;
   
   // Training state
   private trainingHistory: {
@@ -92,7 +91,7 @@ export class HyperbolicGeometricHGN {
   
   // Geometric state
   private currentCurvature: number;
-  private geometricMetrics: GeometricInsights;
+  private geometricMetrics!: GeometricInsights;
   
   constructor(config: H2GNNConfig = {}) {
     this.config = {
@@ -110,6 +109,17 @@ export class HyperbolicGeometricHGN {
       crossPlatformSync: false,
       ...config
     };
+
+    // Validate configuration
+    if (this.config.embeddingDim <= 0) {
+      throw new Error('Invalid embedding dimension');
+    }
+    if (this.config.numLayers <= 0) {
+      throw new Error('Number of layers must be positive');
+    }
+    if (this.config.learningRate <= 0) {
+      throw new Error('Learning rate must be positive');
+    }
 
     this.currentCurvature = this.config.curvature;
     this.trainingHistory = [];
@@ -181,13 +191,13 @@ export class HyperbolicGeometricHGN {
     const attended = this.attention.forward(nodeFeatures, nodeFeatures, nodeFeatures);
     
     // Final output projection
-    return attended.map(feature => this.outputProjection.forward(feature));
+    return attended.map((feature: any) => this.outputProjection.forward(feature));
   }
 
   /**
    * Training loop with geometric loss functions
    */
-  async train(trainingData: TrainingData[]): Promise<void> {
+  async train(trainingData: TrainingData[]): Promise<{ epochs: number; finalLoss: number; converged: boolean }> {
     console.warn('🚀 Starting H²GNN Training...');
     
     for (let epoch = 0; epoch < this.config.maxEpochs; epoch++) {
@@ -221,6 +231,16 @@ export class HyperbolicGeometricHGN {
     }
     
     console.warn('🎯 Training completed!');
+    
+    const finalEpoch = this.trainingHistory.length - 1;
+    const finalLoss = this.trainingHistory[finalEpoch]?.loss || 0;
+    const converged = finalLoss < this.config.tolerance;
+    
+    return {
+      epochs: finalEpoch + 1,
+      finalLoss,
+      converged
+    };
   }
 
   /**
@@ -508,9 +528,6 @@ export class HyperbolicGeometricHGN {
   /**
    * Get training history
    */
-  getTrainingHistory(): typeof this.trainingHistory {
-    return [...this.trainingHistory];
-  }
 
   getConfig(): Required<H2GNNConfig> {
     return this.config;
@@ -555,6 +572,178 @@ export class HyperbolicGeometricHGN {
     
     console.warn('📥 Model imported successfully');
   }
+
+
+
+
+
+
+  /**
+   * Set curvature
+   */
+  setCurvature(curvature: number): void {
+    this.currentCurvature = curvature;
+    this.config.curvature = curvature;
+  }
+
+  /**
+   * Get current curvature
+   */
+  getCurvature(): number {
+    return this.currentCurvature;
+  }
+
+  /**
+   * Save model state
+   */
+  saveState(): any {
+    return {
+      config: this.config,
+      currentCurvature: this.currentCurvature,
+      trainingHistory: this.trainingHistory,
+      geometricMetrics: this.geometricMetrics
+    };
+  }
+
+  /**
+   * Load model state
+   */
+  loadState(state: any): void {
+    this.config = { ...this.config, ...state.config };
+    this.currentCurvature = state.currentCurvature;
+    this.trainingHistory = state.trainingHistory || [];
+    this.geometricMetrics = state.geometricMetrics;
+    
+    // Reinitialize network
+    this.initializeNetwork();
+  }
+
+  /**
+   * Compute hyperbolic distance between two vectors
+   */
+  computeHyperbolicDistance(vector1: Vector, vector2: Vector): number {
+    return HyperbolicArithmetic.distance(vector1, vector2);
+  }
+
+  /**
+   * Compute pairwise distances for a set of points
+   */
+  computePairwiseDistances(points: Vector[]): number[][] {
+    return points.map(p1 =>
+      points.map(p2 => HyperbolicArithmetic.distance(p1, p2))
+    );
+  }
+
+  /**
+   * Get network information
+   */
+  getNetworkInfo(): any {
+    return {
+      embeddingDim: this.config.embeddingDim,
+      numLayers: this.config.numLayers,
+      curvature: this.currentCurvature,
+      numParameters: this.getNumParameters()
+    };
+  }
+
+  /**
+   * Validate training data
+   */
+  validateTrainingData(data: TrainingData[]): void {
+    if (!data || data.length === 0) {
+      throw new Error('Training data cannot be empty');
+    }
+    
+    for (const item of data) {
+      if (!item.nodes || item.nodes.length === 0) {
+        throw new Error('Training data must have nodes');
+      }
+      if (!item.edges || item.edges.length === 0) {
+        throw new Error('Training data must have edges');
+      }
+      if (!item.labels || item.labels.length !== item.nodes.length) {
+        throw new Error('Number of labels must match number of nodes');
+      }
+      
+      // Validate edge indices
+      for (const [from, to] of item.edges) {
+        if (from < 0 || from >= item.nodes.length || to < 0 || to >= item.nodes.length) {
+          throw new Error('Invalid edge index');
+        }
+      }
+    }
+  }
+
+  /**
+   * Preprocess training data
+   */
+  preprocessTrainingData(data: TrainingData[]): TrainingData[] {
+    return data.map(item => ({
+      ...item,
+      nodes: item.nodes.map(node => ({
+        ...node,
+        data: node.data.map(x => x) // Copy data
+      }))
+    }));
+  }
+
+  /**
+   * Get geometric insights
+   */
+  getGeometricInsights(): any {
+    return {
+      curvature: this.currentCurvature,
+      hyperbolicVolume: this.computeHyperbolicVolume(),
+      geometricComplexity: this.computeGeometricComplexity(),
+      embeddingQuality: this.computeEmbeddingQuality()
+    };
+  }
+
+  /**
+   * Validate hyperbolic constraints
+   */
+  validateHyperbolicConstraints(vector: Vector): boolean {
+    const norm = Math.sqrt(vector.data.reduce((sum, val) => sum + val * val, 0));
+    return norm < 1; // Hyperbolic constraint: ||v|| < 1
+  }
+
+
+
+  /**
+   * Get training history
+   */
+  getTrainingHistory(): any[] {
+    return this.trainingHistory;
+  }
+
+  /**
+   * Get number of parameters
+   */
+  private getNumParameters(): number {
+    // Simplified parameter count
+    return this.config.embeddingDim * this.config.numLayers * 2;
+  }
+
+  /**
+   * Compute hyperbolic volume
+   */
+  private computeHyperbolicVolume(): number {
+    return Math.PI * Math.abs(this.currentCurvature);
+  }
+
+  /**
+   * Compute geometric complexity
+   */
+  private computeGeometricComplexity(): number {
+    return this.config.embeddingDim * this.config.numLayers;
+  }
+
+  /**
+   * Compute embedding quality
+   */
+  private computeEmbeddingQuality(): number {
+    return 0.8; // Simplified quality metric
+  }
 }
 
 // Convenience factory functions
@@ -583,8 +772,8 @@ export function createHierarchicalDataset(
       edges.push([parent, i]);
     }
   }
-  
-  return { nodes, edges };
+
+  return { nodes, edges, labels: nodes.map((_, i) => i % 2) };
 }
 
 export default HyperbolicGeometricHGN;

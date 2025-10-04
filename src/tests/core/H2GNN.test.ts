@@ -94,11 +94,11 @@ describe('H²GNN Core System', () => {
     it('should reject invalid training data', () => {
       const invalidData = {
         nodes: [],
-        edges: [[0, 1]],
+        edges: [[0, 1]] as [number, number][],
         labels: [0, 1]
       };
       
-      expect(() => h2gnn.validateTrainingData(invalidData))
+      expect(() => h2gnn.validateTrainingData([invalidData]))
         .toThrow('Training data cannot be empty');
     });
 
@@ -128,7 +128,7 @@ describe('H²GNN Core System', () => {
     });
 
     it('should train with valid data', async () => {
-      const result = await h2gnn.train(trainingData);
+      const result = await h2gnn.train([trainingData]);
       
       expect(result).toBeDefined();
       expect(result.epochs).toBeGreaterThan(0);
@@ -140,12 +140,12 @@ describe('H²GNN Core System', () => {
       const smallBatchConfig = { ...config, batchSize: 2 };
       const smallBatchH2GNN = createH2GNN(smallBatchConfig);
       
-      const result = await smallBatchH2GNN.train(trainingData);
+      const result = await smallBatchH2GNN.train([trainingData]);
       expect(result).toBeDefined();
     });
 
     it('should track training history', async () => {
-      await h2gnn.train(trainingData);
+      await h2gnn.train([trainingData]);
       const history = h2gnn.getTrainingHistory();
       
       expect(history).toBeDefined();
@@ -158,7 +158,7 @@ describe('H²GNN Core System', () => {
       const earlyStopConfig = { ...config, maxEpochs: 5, tolerance: 1e-2 };
       const earlyStopH2GNN = createH2GNN(earlyStopConfig);
       
-      const result = await earlyStopH2GNN.train(trainingData);
+      const result = await earlyStopH2GNN.train([trainingData]);
       expect(result.epochs).toBeLessThanOrEqual(5);
     });
   });
@@ -186,7 +186,7 @@ describe('H²GNN Core System', () => {
         edges: [[0, 1]]
       };
       
-      await h2gnn.train(trainingData);
+      await h2gnn.train([trainingData]);
     });
 
     it('should make predictions with trained model', async () => {
@@ -255,7 +255,7 @@ describe('H²GNN Core System', () => {
         labels: [0, 1]
       };
       
-      await h2gnn.train(trainingData);
+      await h2gnn.train([trainingData]);
       const state = h2gnn.saveState();
       
       expect(state).toBeDefined();
@@ -270,7 +270,7 @@ describe('H²GNN Core System', () => {
         labels: [0, 1]
       };
       
-      await h2gnn.train(trainingData);
+      await h2gnn.train([trainingData]);
       const state = h2gnn.saveState();
       
       const newH2GNN = createH2GNN(config);
@@ -287,7 +287,7 @@ describe('H²GNN Core System', () => {
         edges: []
       };
       
-      await expect(h2gnn.train(emptyData))
+      await expect(h2gnn.train([emptyData]))
         .rejects.toThrow('Training data cannot be empty');
     });
 
@@ -298,7 +298,7 @@ describe('H²GNN Core System', () => {
         labels: [0]
       };
       
-      await expect(h2gnn.train(invalidData))
+      await expect(h2gnn.train([invalidData]))
         .rejects.toThrow('Invalid edge index');
     });
 
@@ -309,7 +309,7 @@ describe('H²GNN Core System', () => {
         labels: [0] // Missing label
       };
       
-      await expect(h2gnn.train(mismatchedData))
+      await expect(h2gnn.train([mismatchedData]))
         .rejects.toThrow('Number of labels must match number of nodes');
     });
   });
@@ -325,7 +325,7 @@ describe('H²GNN Core System', () => {
       };
       
       const startTime = Date.now();
-      const result = await h2gnn.train(largeData);
+      const result = await h2gnn.train([largeData]);
       const endTime = Date.now();
       
       expect(result).toBeDefined();

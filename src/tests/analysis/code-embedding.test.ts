@@ -5,7 +5,7 @@
  * Converted from src/demo/code-embedding-demo.ts
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { CodeEmbeddingGenerator, analyzeProjectCode } from '../../analysis/code-embeddings';
 import { HyperbolicArithmetic } from '../../math/hyperbolic-arithmetic';
 import * as path from 'path';

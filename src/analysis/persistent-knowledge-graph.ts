@@ -798,7 +798,7 @@ export class PersistentKnowledgeGraphBuilder {
         id: 'phase4-orchestrates-all',
         source: 'unified-system-integration',
         target: 'pubsub-architecture',
-        type: 'orchestrates',
+        type: 'integrates_with',
         strength: 1.0,
         description: 'Phase 4 system orchestrates all components'
       }

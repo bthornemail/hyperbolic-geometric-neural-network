@@ -27,7 +27,7 @@ if (!fs.existsSync(TEST_CONFIG.storagePath)) {
 }
 
 // Global test utilities
-global.testUtils = {
+(global as any).testUtils = {
   /**
    * Create a unique test storage path
    */
@@ -45,7 +45,7 @@ global.testUtils = {
       try {
         fs.rmSync(storagePath, { recursive: true, force: true });
       } catch (error) {
-        console.warn(`Warning: Could not clean up test storage: ${error.message}`);
+        console.warn(`Warning: Could not clean up test storage: ${(error as Error).message}`);
       }
     }
   },
@@ -184,7 +184,7 @@ global.testUtils = {
 };
 
 // Mock implementations for external dependencies
-global.mocks = {
+(global as any).mocks = {
   /**
    * Mock H2GNN instance
    */
@@ -235,16 +235,14 @@ afterAll(() => {
     try {
       fs.rmSync(TEST_CONFIG.storagePath, { recursive: true, force: true });
     } catch (error) {
-      console.warn(`Warning: Could not clean up test storage: ${error.message}`);
+      console.warn(`Warning: Could not clean up test storage: ${(error as Error).message}`);
     }
   }
 });
 
 // Global test timeout
 // Note: Vitest handles timeouts differently, this is for Jest compatibility
-if (typeof jest !== 'undefined') {
-  jest.setTimeout(TEST_CONFIG.timeout);
-}
+// Vitest timeout is set in vitest.config.ts
 
 // Export test utilities for use in tests
 export { TEST_CONFIG };

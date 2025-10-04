@@ -103,6 +103,24 @@ export class SharedLearningDatabase {
   }
 
   /**
+   * Public initialize method
+   */
+  async initialize(): Promise<void> {
+    await this.initializeDatabase();
+  }
+
+  /**
+   * Cleanup method
+   */
+  async cleanup(): Promise<void> {
+    if (this.syncInterval) {
+      clearInterval(this.syncInterval);
+      this.syncInterval = null;
+    }
+    console.warn('🛑 Shared Learning Database cleaned up');
+  }
+
+  /**
    * Connect to the database
    */
   async connect(): Promise<void> {
@@ -605,6 +623,17 @@ export class SharedLearningDatabase {
       console.warn('Warning: Could not load insights:', error);
     }
   }
+
+
+  /**
+   * Add a team
+   */
+  async addTeam(teamConfig: TeamConfig): Promise<void> {
+    this.teams.set(teamConfig.teamId, teamConfig);
+  }
+
+
+
 }
 
 // Demo function

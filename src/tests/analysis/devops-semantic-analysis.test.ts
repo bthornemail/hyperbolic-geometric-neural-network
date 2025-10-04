@@ -5,7 +5,7 @@
  * Converted from src/demo/devops-semantic-analysis-demo.ts
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 
 describe('DevOps Semantic Analysis', () => {
   let analysisResults: any;

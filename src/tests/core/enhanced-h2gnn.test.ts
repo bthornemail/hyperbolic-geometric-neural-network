@@ -21,14 +21,20 @@ describe('EnhancedH2GNN', () => {
 
   beforeEach(async () => {
     testStoragePath = path.join(__dirname, '../../test-storage', `enhanced-h2gnn-${Date.now()}`);
-    h2gnn = new EnhancedH2GNN({
-      storagePath: testStoragePath,
-      maxMemories: 1000,
-      consolidationThreshold: 50,
-      embeddingDim: 64,
-      numLayers: 3,
-      curvature: -1
-    });
+    h2gnn = new EnhancedH2GNN(
+      {
+        embeddingDim: 64,
+        numLayers: 3,
+        curvature: -1
+      },
+      {
+        storagePath: testStoragePath,
+        maxMemories: 1000,
+        consolidationThreshold: 50,
+        retrievalStrategy: 'recent',
+        compressionEnabled: false
+      }
+    );
     
     await h2gnn.initialize();
   });
@@ -47,14 +53,20 @@ describe('EnhancedH2GNN', () => {
     });
 
     test('should handle initialization with custom config', async () => {
-      const customH2GNN = new EnhancedH2GNN({
-        storagePath: testStoragePath + '-custom',
-        maxMemories: 500,
-        consolidationThreshold: 25,
-        embeddingDim: 128,
-        numLayers: 5,
-        curvature: -0.5
-      });
+      const customH2GNN = new EnhancedH2GNN(
+        {
+          embeddingDim: 128,
+          numLayers: 5,
+          curvature: -0.5
+        },
+        {
+          storagePath: testStoragePath + '-custom',
+          maxMemories: 500,
+          consolidationThreshold: 25,
+          retrievalStrategy: 'recent',
+          compressionEnabled: false
+        }
+      );
 
       await customH2GNN.initialize();
       expect(await customH2GNN.isInitialized()).toBe(true);
@@ -77,7 +89,7 @@ describe('EnhancedH2GNN', () => {
         consolidated: false
       };
 
-      await h2gnn.learnWithMemory(memory);
+      await h2gnn.learnWithMemory(memory.concept, memory, memory.context, memory.performance);
       const memories = await h2gnn.getMemories('test-concept');
 
       expect(memories).toHaveLength(1);
@@ -100,7 +112,7 @@ describe('EnhancedH2GNN', () => {
           consolidated: false
         };
 
-        await h2gnn.learnWithMemory(memory);
+        await h2gnn.learnWithMemory(memory.concept, memory, memory.context, memory.performance);
       }
 
       // Consolidation should have been triggered
@@ -133,8 +145,8 @@ describe('EnhancedH2GNN', () => {
         consolidated: false
       };
 
-      await h2gnn.learnWithMemory(memory1);
-      await h2gnn.learnWithMemory(memory2);
+      await h2gnn.learnWithMemory(memory1.concept, memory1, memory1.context, memory1.performance);
+      await h2gnn.learnWithMemory(memory2.concept, memory2, memory2.context, memory2.performance);
 
       const memories = await h2gnn.getMemories('conflict-concept');
       expect(memories.length).toBeGreaterThan(0);
@@ -146,6 +158,8 @@ describe('EnhancedH2GNN', () => {
       const snapshot: UnderstandingSnapshot = {
         id: 'test-snapshot-1',
         domain: 'testing',
+        knowledgeGraph: {},
+        embeddings: new Map(),
         concepts: ['unit-testing', 'integration-testing'],
         relationships: [],
         confidence: 0.9,
@@ -166,6 +180,8 @@ describe('EnhancedH2GNN', () => {
       const testingSnapshot: UnderstandingSnapshot = {
         id: 'testing-snapshot',
         domain: 'testing',
+        knowledgeGraph: {},
+        embeddings: new Map(),
         concepts: ['unit-testing'],
         relationships: [],
         confidence: 0.9,
@@ -177,6 +193,8 @@ describe('EnhancedH2GNN', () => {
       const developmentSnapshot: UnderstandingSnapshot = {
         id: 'development-snapshot',
         domain: 'development',
+        knowledgeGraph: {},
+        embeddings: new Map(),
         concepts: ['coding'],
         relationships: [],
         confidence: 0.8,
@@ -216,7 +234,7 @@ describe('EnhancedH2GNN', () => {
           consolidated: false
         };
 
-        await h2gnn.learnWithMemory(memory);
+        await h2gnn.learnWithMemory(memory.concept, memory, memory.context, memory.performance);
       }
 
       const progress = await h2gnn.getLearningProgress();
@@ -239,7 +257,7 @@ describe('EnhancedH2GNN', () => {
           consolidated: false
         };
 
-        await h2gnn.learnWithMemory(memory);
+        await h2gnn.learnWithMemory(memory.concept, memory, memory.context, memory.performance);
       }
 
       const progress = await h2gnn.getLearningProgress();
@@ -277,7 +295,7 @@ describe('EnhancedH2GNN', () => {
         consolidated: false
       };
 
-      await h2gnn.learnWithMemory(memory);
+      await h2gnn.learnWithMemory(memory.concept, memory, memory.context, memory.performance);
       
       const updatedStatus = await h2gnn.getSystemStatus();
       expect(updatedStatus.totalMemories).toBeGreaterThanOrEqual(initialStatus.totalMemories);
@@ -302,7 +320,7 @@ describe('EnhancedH2GNN', () => {
           consolidated: false
         };
 
-        await h2gnn.learnWithMemory(memory);
+        await h2gnn.learnWithMemory(memory.concept, memory, memory.context, memory.performance);
       }
 
       // Trigger consolidation
@@ -326,7 +344,7 @@ describe('EnhancedH2GNN', () => {
         consolidated: false
       };
 
-      await expect(h2gnn.learnWithMemory(invalidMemory))
+      await expect(h2gnn.learnWithMemory(invalidMemory, invalidMemory, {}, 0.5))
         .resolves.not.toThrow();
     });
   });
@@ -351,7 +369,7 @@ describe('EnhancedH2GNN', () => {
         consolidated: false
       };
 
-      await expect(h2gnn.learnWithMemory(memory))
+      await expect(h2gnn.learnWithMemory(memory.concept, memory, memory.context, memory.performance))
         .resolves.not.toThrow();
     });
 
@@ -382,7 +400,7 @@ describe('EnhancedH2GNN', () => {
           consolidated: false
         };
 
-        await h2gnn.learnWithMemory(memory);
+        await h2gnn.learnWithMemory(memory.concept, memory, memory.context, memory.performance);
       }
 
       const endTime = Date.now();
@@ -412,7 +430,7 @@ describe('EnhancedH2GNN', () => {
           consolidated: false
         };
 
-        promises.push(h2gnn.learnWithMemory(memory));
+        promises.push(h2gnn.learnWithMemory(memory, memory, {}, 0.5));
       }
 
       const startTime = Date.now();

@@ -5,7 +5,7 @@
  * Converted from src/demo/mcp-collaboration-demo.ts
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 
 describe('MCP Collaboration', () => {
   let mcpCollaboration: any;

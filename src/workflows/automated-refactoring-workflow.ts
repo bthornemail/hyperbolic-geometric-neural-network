@@ -52,7 +52,7 @@ export class AnalyzeRefactoringOpportunitiesNode extends BaseNode {
     
     const result = await this.refactoringTool.proposeAndApplyRefactoring(
       code,
-      language,
+      language as 'typescript' | 'javascript' | 'python' | 'java',
       filePath,
       false // Don't auto-apply yet
     );

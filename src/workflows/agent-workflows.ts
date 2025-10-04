@@ -24,7 +24,7 @@ export class HierarchicalQAWorkflow {
   private h2gnn: HyperbolicGeometricHGN;
   private ragNode: any;
   private agentNode: any;
-  private flow: Flow;
+  private flow!: Flow;
 
   constructor() {
     this.h2gnn = new HyperbolicGeometricHGN({
@@ -249,7 +249,7 @@ export class ConceptLearningWorkflow {
   private wordnetProcessor: WordNetProcessor;
   private h2gnn: HyperbolicGeometricHGN;
   private taskDecomposition: any;
-  private flow: AsyncFlow;
+  private flow!: AsyncFlow;
 
   constructor() {
     this.h2gnn = new HyperbolicGeometricHGN({
@@ -490,7 +490,7 @@ export class SemanticExplorationWorkflow {
   private wordnetProcessor: WordNetProcessor;
   private h2gnn: HyperbolicGeometricHGN;
   private ragNode: any;
-  private flow: Flow;
+  private flow!: Flow;
 
   constructor() {
     this.h2gnn = new HyperbolicGeometricHGN({

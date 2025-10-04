@@ -62,13 +62,12 @@ describe('Pub/Sub Architecture', () => {
     });
 
     it('should manage subscriptions', async () => {
-      const subscription = await broker.subscribe('h2gnn.embeddings', (message) => {
+      const unsubscribe = await broker.subscribe('h2gnn.embeddings', (message) => {
         expect(message).toBeDefined();
       });
       
-      expect(subscription).toBeDefined();
-      expect(subscription.id).toBeDefined();
-      expect(subscription.channel).toBe('h2gnn.embeddings');
+      expect(unsubscribe).toBeDefined();
+      expect(typeof unsubscribe).toBe('function');
     });
 
     it('should handle message broadcasting', async () => {

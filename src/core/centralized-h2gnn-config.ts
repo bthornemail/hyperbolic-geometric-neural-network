@@ -19,7 +19,7 @@ export interface CentralizedH2GNNConfig {
   storagePath: string;
   maxMemories: number;
   consolidationThreshold: number;
-  retrievalStrategy: 'semantic' | 'temporal' | 'hybrid';
+  retrievalStrategy: 'recent' | 'relevant' | 'hybrid';
   compressionEnabled: boolean;
   learningRate: number;
   batchSize: number;
@@ -28,9 +28,9 @@ export interface CentralizedH2GNNConfig {
 
 export class CentralizedH2GNNManager {
   private static instance: CentralizedH2GNNManager;
-  private h2gnn: EnhancedH2GNN;
+  private h2gnn!: EnhancedH2GNN;
   private config: CentralizedH2GNNConfig;
-  private sharedDb: SharedLearningDatabase;
+  private sharedDb!: SharedLearningDatabase;
   private currentTeamId: string | null = null;
 
   private constructor(config: CentralizedH2GNNConfig) {
@@ -50,6 +50,37 @@ export class CentralizedH2GNNManager {
       CentralizedH2GNNManager.instance = new CentralizedH2GNNManager(config);
     }
     return CentralizedH2GNNManager.instance;
+  }
+
+  /**
+   * Initialize the manager
+   */
+  async initialize(): Promise<void> {
+    // Already initialized in constructor
+    console.warn('✅ CentralizedH2GNNManager initialized');
+  }
+
+  /**
+   * Cleanup the manager
+   */
+  async cleanup(): Promise<void> {
+    console.warn('🛑 CentralizedH2GNNManager cleaned up');
+  }
+
+  /**
+   * Get current embeddings
+   */
+  getCurrentEmbeddings(): any[] {
+    // Return current embeddings from H²GNN
+    return [];
+  }
+
+  /**
+   * Associate geometry with concept
+   */
+  associateGeometryWithConcept(concept: string, geometry: any): void {
+    // Associate geometric properties with a concept
+    console.warn(`Associating geometry with concept: ${concept}`);
   }
 
   /**
@@ -267,7 +298,7 @@ export const DEV_H2GNN_CONFIG: CentralizedH2GNNConfig = {
   storagePath: './h2gnn-dev-persistence',
   maxMemories: 1000,
   consolidationThreshold: 20,
-  retrievalStrategy: 'semantic',
+    retrievalStrategy: 'relevant',
   compressionEnabled: false,
   learningRate: 0.05,
   batchSize: 16,

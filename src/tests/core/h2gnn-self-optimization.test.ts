@@ -5,7 +5,7 @@
  * Converted from src/demo/h2gnn-self-optimization-demo.ts
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 
 describe('H²GNN Self-Optimization', () => {
   let h2gnn: any;

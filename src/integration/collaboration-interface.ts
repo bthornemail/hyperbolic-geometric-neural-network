@@ -99,8 +99,8 @@ export class AIHumanCollaborationInterface {
 
       // Connect to the server
       const transport = new StdioClientTransport({
-        reader: this.serverProcess.stdout,
-        writer: this.serverProcess.stdin
+        command: "node",
+        args: ["src/mcp/h2gnn-mcp-server.js"]
       });
 
       await this.client.connect(transport);
@@ -168,19 +168,13 @@ export class AIHumanCollaborationInterface {
     // Query WordNet for the concept
     const wordnetResult = await this.client.request(
       { method: "tools/call" },
-      {
-        name: "query_wordnet",
-        arguments: { concept, includeHierarchy: true }
-      }
+      { concept, includeHierarchy: true }
     );
 
     // Explore semantic space around the concept
     const explorationResult = await this.client.request(
       { method: "tools/call" },
-      {
-        name: "explore_semantic_space",
-        arguments: { startConcept: concept, depth: 2, maxResults: 5 }
-      }
+      { startConcept: concept, depth: 2, maxResults: 5 }
     );
 
     // Get system status to check embeddings

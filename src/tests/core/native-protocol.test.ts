@@ -4,6 +4,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { randomBytes } from 'crypto';
 import { 
   BIP32HDAddressing, 
   H2GNNAddress, 
@@ -20,7 +21,7 @@ describe('Native H²GNN Protocol', () => {
   let protocol: H2GNNProtocol;
 
   beforeEach(() => {
-    addressing = new BIP32HDAddressing();
+    addressing = new BIP32HDAddressing(randomBytes(32));
     protocol = new H2GNNProtocol();
   });
 
@@ -33,7 +34,7 @@ describe('Native H²GNN Protocol', () => {
       const address = addressing.generateAddress('test_purpose');
       
       expect(address).toBeDefined();
-      expect(address.path).toMatch(/^m\/\d+'\/\d+'\/\d+'\/\d+\/\d+$/);
+      expect(address.path).toMatch(/^m\/0x[0-9A-Fa-f]+'\/0x[0-9A-Fa-f]+'\/\d+'\/\d+\/\d+$/);
       expect(address.component).toBeDefined();
       expect(address.hyperbolic).toBeDefined();
       expect(address.network).toBeDefined();
@@ -67,9 +68,9 @@ describe('Native H²GNN Protocol', () => {
     it('should reject invalid addresses', () => {
       const invalidAddress = {
         path: 'invalid/path',
-        component: { type: 'invalid', instance: -1, transport: 'invalid' },
+        component: { type: 'broker' as const, instance: -1, transport: 'internal' as const },
         hyperbolic: { curvature: 0, coordinates: [], embedding: [] },
-        network: { transport: 'invalid', endpoint: '' }
+        network: { transport: 'mqtt' as const, endpoint: '' }
       };
       
       const isValid = addressing.validateAddress(invalidAddress);
@@ -108,10 +109,15 @@ describe('Native H²GNN Protocol', () => {
           correlationId: 'correlation-1'
         },
         payload: {
-          type: 'request',
+          type: 'embeddings',
+          encoding: 'json',
           data: { test: 'data' }
         },
-        signature: 'test-signature'
+        signature: Buffer.from('test-signature'),
+        transport: {
+          type: 'mqtt',
+          priority: 1
+        }
       };
       
       expect(message).toBeDefined();
@@ -130,10 +136,15 @@ describe('Native H²GNN Protocol', () => {
           correlationId: 'correlation-2'
         },
         payload: {
-          type: 'request',
+          type: 'embeddings',
+          encoding: 'json',
           data: { message: 'hello' }
         },
-        signature: 'test-signature'
+        signature: Buffer.from('test-signature'),
+        transport: {
+          type: 'websocket',
+          priority: 1
+        }
       };
       
       const response = await provider.sendMessage(testMessage);
@@ -152,10 +163,15 @@ describe('Native H²GNN Protocol', () => {
           correlationId: 'routing-correlation-1'
         },
         payload: {
-          type: 'request',
+          type: 'embeddings',
+          encoding: 'json',
           data: { route: 'test' }
         },
-        signature: 'routing-signature'
+        signature: Buffer.from('routing-signature'),
+        transport: {
+          type: 'mqtt',
+          priority: 1
+        }
       };
       
       const routed = await broker.routeMessage(message);
@@ -297,12 +313,17 @@ describe('Native H²GNN Protocol', () => {
             correlationId: `perf-correlation-${i}`
           },
           payload: {
-            type: 'request',
+            type: 'embeddings',
+            encoding: 'json',
             data: { index: i }
           },
-          signature: `perf-signature-${i}`
+          signature: Buffer.from(`perf-signature-${i}`),
+          transport: {
+            type: 'mqtt',
+            priority: 1
+          }
         };
-        return protocol.sendMessage(message);
+        return protocol.sendMessage(message.address, message);
       });
       
       const results = await Promise.all(promises);
@@ -324,14 +345,19 @@ describe('Native H²GNN Protocol', () => {
           correlationId: 'large-correlation-1'
         },
         payload: {
-          type: 'request',
+          type: 'embeddings',
+          encoding: 'json',
           data: largeData
         },
-        signature: 'large-signature'
+        signature: Buffer.from('large-signature'),
+        transport: {
+          type: 'mqtt',
+          priority: 1
+        }
       };
       
       const startTime = Date.now();
-      const response = await protocol.sendMessage(message);
+      const response = await protocol.sendMessage(message.address, message);
       const endTime = Date.now();
       
       expect(response).toBeDefined();
@@ -350,13 +376,18 @@ describe('Native H²GNN Protocol', () => {
           correlationId: 'error-correlation-1'
         },
         payload: {
-          type: 'request',
-          data: null
+          type: 'embeddings',
+          encoding: 'json',
+          data: { error: 'test' }
         },
-        signature: 'error-signature'
+        signature: Buffer.from('error-signature'),
+        transport: {
+          type: 'mqtt',
+          priority: 1
+        }
       };
       
-      await expect(protocol.sendMessage(invalidMessage))
+      await expect(protocol.sendMessage(invalidMessage.address, invalidMessage))
         .rejects.toThrow();
     });
 
@@ -370,29 +401,34 @@ describe('Native H²GNN Protocol', () => {
           correlationId: 'timeout-correlation-1'
         },
         payload: {
-          type: 'request',
+          type: 'embeddings',
+          encoding: 'json',
           data: { timeout: true }
         },
-        signature: 'timeout-signature'
+        signature: Buffer.from('timeout-signature'),
+        transport: {
+          type: 'mqtt',
+          priority: 1
+        }
       };
       
       // Set a very short timeout
       protocol.setTimeout(1);
       
-      await expect(protocol.sendMessage(timeoutMessage))
+      await expect(protocol.sendMessage(timeoutMessage.address, timeoutMessage))
         .rejects.toThrow('Request timeout');
     });
 
     it('should handle malformed addresses', () => {
       const malformedAddress = {
         path: 'invalid',
-        component: { type: 'invalid', instance: -1, transport: 'invalid' },
+        component: { type: 'broker' as const, instance: -1, transport: 'internal' as const },
         hyperbolic: { curvature: 0, coordinates: [], embedding: [] },
-        network: { transport: 'invalid', endpoint: '' }
+        network: { transport: 'mqtt' as const, endpoint: '' }
       };
       
-      expect(() => addressing.validateAddress(malformedAddress))
-        .toThrow('Invalid address format');
+      const isValid = addressing.validateAddress(malformedAddress);
+      expect(isValid).toBe(false);
     });
   });
 

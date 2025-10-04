@@ -50,6 +50,16 @@ export class HyperbolicArithmetic {
   }
 
   /**
+   * Scale vector by scalar
+   */
+  static scale(v: Vector, scalar: number): Vector {
+    return {
+      data: v.data.map(x => x * scalar),
+      dim: v.dim
+    };
+  }
+
+  /**
    * Compute dot product of two vectors
    */
   static dot(u: Vector, v: Vector): number {

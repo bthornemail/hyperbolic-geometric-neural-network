@@ -274,6 +274,8 @@ describe('SharedLearningDatabase', () => {
       const snapshot: UnderstandingSnapshot = {
         id: 'test-snapshot-1',
         domain: 'testing',
+        knowledgeGraph: {},
+        embeddings: new Map(),
         concepts: ['unit-testing', 'integration-testing'],
         relationships: [],
         confidence: 0.9,
@@ -309,6 +311,8 @@ describe('SharedLearningDatabase', () => {
       const testingSnapshot: UnderstandingSnapshot = {
         id: 'testing-snapshot',
         domain: 'testing',
+        knowledgeGraph: {},
+        embeddings: new Map(),
         concepts: ['unit-testing'],
         relationships: [],
         confidence: 0.9,
@@ -320,6 +324,8 @@ describe('SharedLearningDatabase', () => {
       const developmentSnapshot: UnderstandingSnapshot = {
         id: 'development-snapshot',
         domain: 'development',
+        knowledgeGraph: {},
+        embeddings: new Map(),
         concepts: ['coding'],
         relationships: [],
         confidence: 0.8,

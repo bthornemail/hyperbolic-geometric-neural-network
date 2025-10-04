@@ -95,11 +95,13 @@ export class H2GNNMCPIntegration {
     host: string,
     port: number
   ): Promise<MCPService> {
+    const componentType = name.toLowerCase() as 'provider' | 'mcp' | 'broker' | 'consumer';
+    const transportType = transport as 'websocket' | 'mqtt' | 'webrtc' | 'udp' | 'tcp' | 'ipc';
     const h2gnnAddress = this.hdAddressing.createAddress(
-      name.toLowerCase(),
+      componentType,
       0,
       'external',
-      transport,
+      transportType,
       host,
       port
     );

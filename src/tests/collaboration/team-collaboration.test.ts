@@ -5,7 +5,7 @@
  * Converted from src/demo/team-collaboration-demo.ts
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 
 describe('Team Collaboration Features', () => {
   let sharedDB: any;
