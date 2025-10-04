@@ -5,7 +5,7 @@ title: "H²GNN Development Guide"
 
 # H²GNN Development Guide: Agentic Collaboration with Tool-First Approach
 
-> **Project Objective:** To build and evolve a self-improving, collaborative AI system, the **Enhanced H²GNN (Hyperbolic Hierarchical Graph Neural Network)**. This document serves as the primary guide for all developers, both human and AI, contributing to the project.
+> **Project Objective:** To build and evolve a self-improving, collaborative AI system, the **Enhanced H²GNN (Hyperbolic Hierarchical Graph Neural Network)** with persistent AI identity integration. This document serves as the primary guide for all developers, both human and AI, contributing to the project.
 
 ## 🚨 **CRITICAL: TOOL-FIRST POLICY - MANDATORY H²GNN USAGE**
 
@@ -69,7 +69,7 @@ consolidate_memories_hd();
 
 ## 1. Core Architecture
 
-Our system is modeled as a learning organism. At its heart is the H²GNN, the "brain," which performs learning and reasoning. This brain interacts with the world through a "nervous system" built on PocketFlow for workflow orchestration and the Model Context Protocol (MCP) for communication.
+Our system is modeled as a learning organism. At its heart is the H²GNN, the "brain," which performs learning and reasoning. This brain interacts with the world through a "nervous system" built on PocketFlow for workflow orchestration and the Model Context Protocol (MCP) for communication, enhanced with persistent AI identity management.
 
 -   **Enhanced H²GNN (The Brain):** The central intelligence, responsible for:
     -   **Learning & Memory:** Continuously learns from code, data, and interactions, storing knowledge in a persistent hyperbolic graph structure (`/persistence`).
@@ -115,6 +115,38 @@ flowchart TD
     B -- Learns & Reasons --> H
     B -- Collaborates via --> I
 ```
+
+## 1.1. Persistent AI Identity System
+
+The H²GNN system now includes a comprehensive persistent AI identity system that maintains context, learning, and memory across sessions.
+
+### **Identity Management**
+- **Health Check**: `http://localhost:3000/health`
+- **System Status**: `http://localhost:3000/status`
+- **Identity Management**: `http://localhost:3000/api/identities`
+- **Memory System**: `http://localhost:3000/api/memories`
+- **Learning System**: `http://localhost:3000/api/learn`
+
+### **Memory Types**
+- **Episodic Memory**: Store specific events, decisions, and interactions
+- **Semantic Memory**: Store concepts, relationships, and knowledge
+- **Procedural Memory**: Store processes, workflows, and procedures
+- **Working Memory**: Store short-term context and attention
+- **Meta Memory**: Store self-awareness and memory management
+
+### **Cursor Rules Integration**
+The system includes three comprehensive Cursor rules:
+1. **`.cursor/rules/ai-persistence-identity.mdc`** - Core persistent identity integration
+2. **`.cursor/rules/mcp-integration.mdc`** - Model Context Protocol integration
+3. **`.cursor/rules/persistent-identity-implementation.mdc`** - Practical implementation guide
+
+### **Benefits**
+- **Consistent AI Behavior**: Maintains personality and preferences across sessions
+- **Context Preservation**: Remembers important decisions and learnings
+- **Continuous Learning**: Improves over time through experience
+- **Efficient Memory**: Uses hyperbolic geometry for optimal organization
+- **Reliable Connection**: Robust error handling and recovery
+- **Cursor Integration**: Seamless integration with development workflow
 
 ## 2. Agentic Development Workflow with H²GNN - TOOL-FIRST APPROACH
 
@@ -212,13 +244,15 @@ end_learning_session_hd();
 
 A task is only considered complete when:
 1. ✅ H²GNN system initialized and status checked
-2. ✅ Analysis performed using built-in tools
-3. ✅ Learning integrated with persistence system
-4. ✅ Knowledge graph properly utilized
-5. ✅ Memory system properly managed
-6. ✅ Geometric analysis completed
-7. ✅ Results generated using appropriate tools
-8. ✅ Memories consolidated and session ended
+2. ✅ Persistent AI identity established and maintained
+3. ✅ Analysis performed using built-in tools
+4. ✅ Learning integrated with persistence system
+5. ✅ Knowledge graph properly utilized
+6. ✅ Memory system properly managed
+7. ✅ Geometric analysis completed
+8. ✅ Results generated using appropriate tools
+9. ✅ Cursor rules integration validated
+10. ✅ Memories consolidated and session ended
 
 ## 3. Current Project Phase: MCP Integration
 
@@ -317,6 +351,7 @@ gemini -p "Create comprehensive documentation using H²GNN knowledge graph"
 
 Before using Gemini CLI, verify:
 - [ ] H²GNN system initialized
+- [ ] Persistent AI identity established
 - [ ] System status checked
 - [ ] Learning progress retrieved
 - [ ] Relevant tools used for analysis
@@ -325,3 +360,23 @@ Before using Gemini CLI, verify:
 - [ ] Knowledge graph analyzed
 - [ ] AST analysis performed
 - [ ] Geometric analysis completed
+- [ ] Cursor rules integration validated
+
+### **Persistent Identity Testing**
+
+The system includes a comprehensive test script for persistent identity validation:
+
+```bash
+# Run persistent identity test
+cd packages && ./test-persistent-identity.sh
+```
+
+This test validates:
+- ✅ System health and status
+- ✅ Identity creation and management
+- ✅ Memory storage (episodic, semantic, procedural)
+- ✅ Learning system integration
+- ✅ Memory retrieval and consolidation
+- ✅ Cursor rules integration
+- ✅ Nginx proxy functionality
+- ✅ Session lifecycle management
