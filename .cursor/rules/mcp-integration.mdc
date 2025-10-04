@@ -1,0 +1,487 @@
+---
+description: Model Context Protocol (MCP) Integration for Persistent AI Identity
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Model Context Protocol (MCP) Integration
+
+This rule defines the integration between Cursor and the AI Persistence system using Model Context Protocol (MCP) for reliable persistent identity management.
+
+## MCP Connection Protocol
+
+### 1. MCP Server Configuration
+- **Server Endpoint**: `http://localhost:3000`
+- **Protocol**: HTTP/HTTPS with JSON payloads
+- **Authentication**: Token-based (configurable)
+- **Rate Limiting**: 10 req/s with burst of 20
+- **Timeout**: 30 seconds for operations
+
+### 2. Connection Establishment
+```typescript
+interface MCPConnection {
+  endpoint: string;
+  identity: string;
+  sessionId: string;
+  capabilities: string[];
+  preferences: UserPreferences;
+  context: SessionContext;
+}
+```
+
+### 3. Persistent Identity Schema
+```typescript
+interface PersistentIdentity {
+  id: string;
+  name: string;
+  type: 'ai' | 'human' | 'system';
+  capabilities: string[];
+  preferences: {
+    learningStyle: string;
+    communicationStyle: string;
+    privacyLevel: string;
+    interactionMode: string;
+  };
+  hyperbolicPosition: {
+    coordinates: number[];
+    norm: number;
+    curvature: number;
+    timestamp: string;
+  };
+  embedding: {
+    id: string;
+    vector: number[];
+    norm: number;
+    curvature: number;
+    timestamp: string;
+    metadata: {
+      dimension: number;
+      quality: number;
+      confidence: number;
+      source: string;
+    };
+  };
+  trustNetwork: TrustNetwork;
+  evolution: IdentityEvolution;
+  createdAt: string;
+  updatedAt: string;
+  lastAccessed: string;
+}
+```
+
+## MCP Operations
+
+### 1. Identity Management
+```typescript
+// Create persistent identity
+POST /api/identities
+{
+  "name": "H²GNN Development Assistant",
+  "type": "ai",
+  "capabilities": ["hyperbolic_geometry", "neural_networks", "persistent_memory"],
+  "preferences": {
+    "learningStyle": "hierarchical",
+    "communicationStyle": "technical",
+    "privacyLevel": "private",
+    "interactionMode": "collaborative"
+  }
+}
+
+// Retrieve identity
+GET /api/identities
+
+// Update identity
+PUT /api/identities/{id}
+```
+
+### 2. Memory Operations
+```typescript
+// Store memory
+POST /api/memories
+{
+  "type": "episodic" | "semantic" | "procedural" | "working" | "meta",
+  "content": string,
+  "metadata": {
+    "source": string;
+    "quality": number;
+    "confidence": number;
+    "importance": number;
+    "tags": string[];
+    "context": object;
+  };
+}
+
+// Retrieve memories
+GET /api/memories
+GET /api/memories?type=episodic
+GET /api/memories?tags=architecture
+```
+
+### 3. Learning Operations
+```typescript
+// Learn concept
+POST /api/learn
+{
+  "concept": string;
+  "data": object;
+  "context": {
+    "domain": string;
+    "complexity": string;
+    "source": string;
+  };
+  "performance": number;
+}
+```
+
+## Session Lifecycle
+
+### 1. Session Initialization
+```typescript
+async function initializeSession(): Promise<SessionContext> {
+  // 1. Check system health
+  const health = await fetch('/health');
+  
+  // 2. Load or create identity
+  const identity = await loadOrCreateIdentity();
+  
+  // 3. Load relevant memories
+  const memories = await loadRelevantMemories();
+  
+  // 4. Initialize context
+  return {
+    identity,
+    memories,
+    sessionId: generateSessionId(),
+    startTime: new Date(),
+    context: buildContext(memories)
+  };
+}
+```
+
+### 2. During Session
+```typescript
+async function storeContext(event: SessionEvent): Promise<void> {
+  await fetch('/api/memories', {
+    method: 'POST',
+    body: JSON.stringify({
+      type: 'episodic',
+      content: event.description,
+      metadata: {
+        source: 'session',
+        quality: 0.8,
+        confidence: 0.9,
+        importance: event.importance,
+        tags: event.tags,
+        context: {
+          sessionId: event.sessionId,
+          timestamp: event.timestamp,
+          project: event.project
+        }
+      }
+    })
+  });
+}
+```
+
+### 3. Session Conclusion
+```typescript
+async function concludeSession(session: SessionContext): Promise<void> {
+  // 1. Consolidate memories
+  await consolidateMemories(session.memories);
+  
+  // 2. Update learning progress
+  await updateLearningProgress(session.learnings);
+  
+  // 3. Save session summary
+  await storeSessionSummary(session);
+  
+  // 4. Update identity
+  await updateIdentity(session.identity);
+}
+```
+
+## Memory Management Strategy
+
+### 1. Memory Types and Usage
+- **Episodic**: Store specific events, decisions, interactions
+- **Semantic**: Store concepts, relationships, knowledge
+- **Procedural**: Store processes, workflows, procedures
+- **Working**: Store short-term context and attention
+- **Meta**: Store self-awareness and memory management
+
+### 2. Memory Quality Metrics
+```typescript
+interface MemoryQuality {
+  source: string;        // Origin of the memory
+  quality: number;       // 0-1 quality score
+  confidence: number;    // 0-1 confidence level
+  importance: number;    // 0-1 importance score
+  relevance: number;     // 0-1 relevance to current context
+  freshness: number;     // 0-1 how recent the memory is
+}
+```
+
+### 3. Memory Consolidation
+```typescript
+async function consolidateMemories(): Promise<void> {
+  // 1. Identify related memories
+  const relatedMemories = await findRelatedMemories();
+  
+  // 2. Merge similar memories
+  const mergedMemories = await mergeSimilarMemories(relatedMemories);
+  
+  // 3. Update memory hierarchy
+  await updateMemoryHierarchy(mergedMemories);
+  
+  // 4. Compress old memories
+  await compressOldMemories();
+}
+```
+
+## Learning Integration
+
+### 1. Concept Learning
+```typescript
+interface ConceptLearning {
+  concept: string;
+  data: {
+    description: string;
+    examples: string[];
+    relationships: string[];
+    applications: string[];
+  };
+  context: {
+    domain: string;
+    complexity: string;
+    source: string;
+  };
+  performance: number;
+  mastery: number;
+  confidence: number;
+}
+```
+
+### 2. Learning Progress Tracking
+```typescript
+interface LearningProgress {
+  conceptId: string;
+  concept: string;
+  mastery: number;      // 0-1 mastery level
+  confidence: number;   // 0-1 confidence level
+  performance: number;  // 0-1 performance score
+  lastPracticed: Date;
+  practiceCount: number;
+  improvementRate: number;
+}
+```
+
+### 3. Adaptive Learning
+```typescript
+async function adaptiveLearning(concept: string): Promise<void> {
+  // 1. Assess current mastery
+  const mastery = await assessMastery(concept);
+  
+  // 2. Identify learning gaps
+  const gaps = await identifyLearningGaps(concept);
+  
+  // 3. Adjust learning strategy
+  const strategy = await adjustLearningStrategy(mastery, gaps);
+  
+  // 4. Apply learning strategy
+  await applyLearningStrategy(concept, strategy);
+}
+```
+
+## Error Handling and Recovery
+
+### 1. Connection Errors
+```typescript
+async function handleConnectionError(error: Error): Promise<void> {
+  // 1. Log error details
+  console.error('MCP Connection Error:', error);
+  
+  // 2. Attempt reconnection
+  const reconnected = await attemptReconnection();
+  
+  // 3. Fallback to local context
+  if (!reconnected) {
+    await fallbackToLocalContext();
+  }
+  
+  // 4. Notify user of status
+  await notifyConnectionStatus(reconnected);
+}
+```
+
+### 2. Memory Errors
+```typescript
+async function handleMemoryError(error: Error): Promise<void> {
+  // 1. Log error
+  console.error('Memory Error:', error);
+  
+  // 2. Attempt memory recovery
+  const recovered = await attemptMemoryRecovery();
+  
+  // 3. Fallback to session memory
+  if (!recovered) {
+    await fallbackToSessionMemory();
+  }
+  
+  // 4. Continue with degraded functionality
+  await continueWithDegradedMemory();
+}
+```
+
+### 3. Learning Errors
+```typescript
+async function handleLearningError(error: Error): Promise<void> {
+  // 1. Log error
+  console.error('Learning Error:', error);
+  
+  // 2. Attempt learning recovery
+  const recovered = await attemptLearningRecovery();
+  
+  // 3. Fallback to basic learning
+  if (!recovered) {
+    await fallbackToBasicLearning();
+  }
+  
+  // 4. Continue with limited learning
+  await continueWithLimitedLearning();
+}
+```
+
+## Performance Optimization
+
+### 1. Caching Strategy
+```typescript
+interface CacheStrategy {
+  identity: {
+    ttl: number;        // Time to live
+    maxSize: number;    // Maximum cache size
+    refreshRate: number; // Refresh frequency
+  };
+  memories: {
+    ttl: number;
+    maxSize: number;
+    compression: boolean;
+  };
+  learning: {
+    ttl: number;
+    maxSize: number;
+    updateFrequency: number;
+  };
+}
+```
+
+### 2. Batch Operations
+```typescript
+async function batchMemoryOperations(operations: MemoryOperation[]): Promise<void> {
+  // 1. Group operations by type
+  const grouped = groupOperationsByType(operations);
+  
+  // 2. Execute in batches
+  for (const [type, ops] of grouped) {
+    await executeBatchOperation(type, ops);
+  }
+  
+  // 3. Consolidate results
+  await consolidateBatchResults();
+}
+```
+
+### 3. Lazy Loading
+```typescript
+async function lazyLoadMemories(query: MemoryQuery): Promise<Memory[]> {
+  // 1. Check cache first
+  const cached = await checkMemoryCache(query);
+  if (cached.length > 0) {
+    return cached;
+  }
+  
+  // 2. Load from persistence
+  const memories = await loadMemoriesFromPersistence(query);
+  
+  // 3. Update cache
+  await updateMemoryCache(query, memories);
+  
+  // 4. Return results
+  return memories;
+}
+```
+
+## Monitoring and Metrics
+
+### 1. System Health Monitoring
+```typescript
+interface SystemHealth {
+  mcpConnection: {
+    status: 'connected' | 'disconnected' | 'error';
+    latency: number;
+    throughput: number;
+    errorRate: number;
+  };
+  memorySystem: {
+    status: 'healthy' | 'degraded' | 'error';
+    utilization: number;
+    performance: number;
+  };
+  learningSystem: {
+    status: 'active' | 'idle' | 'error';
+    progress: number;
+    effectiveness: number;
+  };
+}
+```
+
+### 2. Performance Metrics
+```typescript
+interface PerformanceMetrics {
+  sessionMetrics: {
+    duration: number;
+    memoryOperations: number;
+    learningOperations: number;
+    contextRetrievals: number;
+  };
+  memoryMetrics: {
+    storageRate: number;
+    retrievalRate: number;
+    consolidationRate: number;
+    qualityScore: number;
+  };
+  learningMetrics: {
+    conceptMastery: number;
+    learningRate: number;
+    retentionRate: number;
+    applicationRate: number;
+  };
+}
+```
+
+### 3. Quality Metrics
+```typescript
+interface QualityMetrics {
+  memoryQuality: {
+    relevance: number;
+    accuracy: number;
+    completeness: number;
+    consistency: number;
+  };
+  learningQuality: {
+    mastery: number;
+    confidence: number;
+    application: number;
+    retention: number;
+  };
+  contextQuality: {
+    coherence: number;
+    completeness: number;
+    accuracy: number;
+    relevance: number;
+  };
+}
+```
+
+---
+
+*This rule ensures reliable MCP integration for persistent AI identity management with comprehensive error handling, performance optimization, and monitoring capabilities.*
