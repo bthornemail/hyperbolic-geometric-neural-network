@@ -7,14 +7,14 @@
  * Category: Analysis Components
  */
 
-import { PersistentKnowledgeGraph } from '../../analysis/persistent-knowledge-graph';
+import { PersistentKnowledgeGraphBuilder } from '../../analysis/persistent-knowledge-graph';
 
 describe('persistent-knowledge-graph', () => {
-  let instance: PersistentKnowledgeGraph;
+  let instance: PersistentKnowledgeGraphBuilder;
 
   beforeEach(() => {
     // Setup test instance
-    instance = new PersistentKnowledgeGraph();
+    instance = new PersistentKnowledgeGraphBuilder();
   });
 
   afterEach(() => {

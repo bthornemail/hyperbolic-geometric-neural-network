@@ -7,14 +7,14 @@
  * Category: Core Components
  */
 
-import { ProtocolEncoders } from '../../core/protocol-encoders';
+import { ProtocolEncoder } from '../../core/protocol-encoders';
 
 describe('protocol-encoders', () => {
-  let instance: ProtocolEncoders;
+  let instance: ProtocolEncoder;
 
   beforeEach(() => {
     // Setup test instance
-    instance = new ProtocolEncoders();
+    instance = new ProtocolEncoder();
   });
 
   afterEach(() => {

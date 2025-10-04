@@ -7,14 +7,14 @@
  * Category: Core Components
  */
 
-import { MqttTransport } from '../../core/transports/mqtt-transport';
+import { MQTTTransport } from '../../core/transports/mqtt-transport';
 
 describe('mqtt-transport', () => {
-  let instance: MqttTransport;
+  let instance: MQTTTransport;
 
   beforeEach(() => {
     // Setup test instance
-    instance = new MqttTransport();
+    instance = new MQTTTransport({ broker: 'mqtt://localhost:1883' });
   });
 
   afterEach(() => {

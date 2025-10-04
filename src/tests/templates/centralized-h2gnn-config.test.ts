@@ -7,14 +7,15 @@
  * Category: Core Components
  */
 
-import { CentralizedH2GNNConfig } from '../../core/centralized-h2gnn-config';
+import { CentralizedH2GNNManager } from '../../core/centralized-h2gnn-config';
 
 describe('centralized-h2gnn-config', () => {
-  let instance: CentralizedH2GNNConfig;
+  let instance: CentralizedH2GNNManager;
 
   beforeEach(() => {
     // Setup test instance
-    instance = new CentralizedH2GNNConfig();
+    // Note: CentralizedH2GNNManager has private constructor
+    // instance = new CentralizedH2GNNManager();
   });
 
   afterEach(() => {

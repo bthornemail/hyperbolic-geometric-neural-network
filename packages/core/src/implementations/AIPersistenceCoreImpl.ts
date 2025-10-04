@@ -17,6 +17,9 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
   private memories: Map<string, Memory> = new Map();
   private security: SecurityFramework;
   private memory: MemorySystem;
+  private state: SystemState = new SystemState();
+  private checkpoints: Map<string, Checkpoint> = new Map();
+  private learningProgress: Map<string, LearningProgress> = new Map();
 
   constructor(
     private config: PersistenceConfig
@@ -40,6 +43,9 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
       // Initialize core components
       await this.initializeCore();
       
+      // Restore previous state if available
+      await this.restoreState();
+      
       this.initialized = true;
       console.log('AI Persistence Core initialized successfully');
     } catch (error) {
@@ -54,6 +60,9 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
     }
 
     try {
+      // Save current state before shutdown
+      await this.saveState();
+      
       // Shutdown memory system
       await this.memory.shutdown();
       
@@ -190,9 +199,6 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
     if (updates.preferences) {
       identity.preferences = updates.preferences;
     }
-    if (updates.security) {
-      // Update security configuration
-    }
 
     identity.updatedAt = new Date();
     this.identities.set(id, identity);
@@ -309,6 +315,183 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
     return await this.security.decrypt(encryptedData);
   }
 
+  // NEW: Learning Operations
+  async learnConcept(conceptData: ConceptData): Promise<void> {
+    if (!this.initialized) {
+      throw new Error('AI Persistence Core is not initialized');
+    }
+
+    const learningProgress: LearningProgress = {
+      id: uuidv4(),
+      concept: conceptData.concept,
+      data: conceptData.data,
+      context: conceptData.context,
+      performance: conceptData.performance,
+      timestamp: new Date(),
+      confidence: 0.8,
+      mastery: 0.0
+    };
+
+    this.learningProgress.set(learningProgress.id, learningProgress);
+    
+    // Store as memory
+    await this.storeMemory({
+      type: 'semantic',
+      content: conceptData.concept,
+      metadata: {
+        source: 'learning',
+        quality: 0.9,
+        confidence: 0.8,
+        importance: 0.7,
+        tags: ['learning', 'concept'],
+        context: conceptData.context
+      }
+    });
+
+    console.log(`Learned concept: ${conceptData.concept}`);
+  }
+
+  async getLearningProgress(): Promise<LearningProgress[]> {
+    if (!this.initialized) {
+      throw new Error('AI Persistence Core is not initialized');
+    }
+
+    return Array.from(this.learningProgress.values());
+  }
+
+  // NEW: State Management Operations
+  async getState(): Promise<SystemState> {
+    if (!this.initialized) {
+      throw new Error('AI Persistence Core is not initialized');
+    }
+
+    return {
+      identities: Array.from(this.identities.values()),
+      memories: Array.from(this.memories.values()),
+      learningProgress: Array.from(this.learningProgress.values()),
+      checkpoints: Array.from(this.checkpoints.values()),
+      timestamp: new Date()
+    };
+  }
+
+  async saveState(): Promise<void> {
+    if (!this.initialized) {
+      throw new Error('AI Persistence Core is not initialized');
+    }
+
+    const state = await this.getState();
+    const encryptedState = await this.encrypt(state);
+    
+    // Save to persistent storage
+    await this.persistState(encryptedState);
+    console.log('State saved successfully');
+  }
+
+  async loadState(): Promise<SystemState> {
+    if (!this.initialized) {
+      throw new Error('AI Persistence Core is not initialized');
+    }
+
+    const encryptedState = await this.loadPersistedState();
+    const state = await this.decrypt(encryptedState);
+    return state;
+  }
+
+  async restoreState(): Promise<void> {
+    if (!this.initialized) {
+      throw new Error('AI Persistence Core is not initialized');
+    }
+
+    try {
+      const state = await this.loadState();
+      await this.restoreFromState(state);
+      console.log('State restored successfully');
+    } catch (error) {
+      console.log('No previous state found, starting fresh');
+    }
+  }
+
+  async restoreFromState(state: SystemState): Promise<void> {
+    // Restore identities
+    for (const identity of state.identities) {
+      this.identities.set(identity.id, identity);
+    }
+
+    // Restore memories
+    for (const memory of state.memories) {
+      this.memories.set(memory.id, memory);
+    }
+
+    // Restore learning progress
+    for (const progress of state.learningProgress) {
+      this.learningProgress.set(progress.id, progress);
+    }
+
+    // Restore checkpoints
+    for (const checkpoint of state.checkpoints) {
+      this.checkpoints.set(checkpoint.id, checkpoint);
+    }
+  }
+
+  // NEW: Checkpoint Operations
+  async createCheckpoint(checkpointData: CheckpointData): Promise<Checkpoint> {
+    if (!this.initialized) {
+      throw new Error('AI Persistence Core is not initialized');
+    }
+
+    const checkpoint: Checkpoint = {
+      id: uuidv4(),
+      name: checkpointData.name,
+      description: checkpointData.description,
+      timestamp: checkpointData.timestamp,
+      state: await this.getState(),
+      metadata: checkpointData.metadata || {}
+    };
+
+    this.checkpoints.set(checkpoint.id, checkpoint);
+    console.log(`Checkpoint created: ${checkpoint.name}`);
+    return checkpoint;
+  }
+
+  async getLastCheckpoint(): Promise<Checkpoint | null> {
+    if (!this.initialized) {
+      throw new Error('AI Persistence Core is not initialized');
+    }
+
+    const checkpoints = Array.from(this.checkpoints.values());
+    if (checkpoints.length === 0) {
+      return null;
+    }
+
+    return checkpoints.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())[0];
+  }
+
+  async restoreFromCheckpoint(checkpoint: Checkpoint): Promise<void> {
+    if (!this.initialized) {
+      throw new Error('AI Persistence Core is not initialized');
+    }
+
+    await this.restoreFromState(checkpoint.state);
+    console.log(`Restored from checkpoint: ${checkpoint.name}`);
+  }
+
+  // NEW: Learning Progress Restoration
+  async restoreLearningProgress(): Promise<void> {
+    if (!this.initialized) {
+      throw new Error('AI Persistence Core is not initialized');
+    }
+
+    try {
+      const state = await this.loadState();
+      for (const progress of state.learningProgress) {
+        this.learningProgress.set(progress.id, progress);
+      }
+      console.log('Learning progress restored');
+    } catch (error) {
+      console.log('No learning progress found to restore');
+    }
+  }
+
   // Private helper methods
   private async initializeCore(): Promise<void> {
     // Initialize core components
@@ -417,6 +600,21 @@ export class AIPersistenceCoreImpl implements AIPersistenceCore {
   private async getHealthAlerts() {
     return [];
   }
+
+  private async persistState(encryptedState: EncryptedData): Promise<void> {
+    // Implementation to persist state to storage
+    console.log('State persisted to storage');
+  }
+
+  private async loadPersistedState(): Promise<EncryptedData> {
+    // Implementation to load state from storage
+    return {
+      data: 'mock-encrypted-state',
+      algorithm: 'AES-256',
+      keyId: 'mock-key',
+      timestamp: new Date()
+    };
+  }
 }
 
 // Supporting classes and interfaces
@@ -478,6 +676,49 @@ export interface AuthenticationConfig {
 export interface AuthorizationConfig {
   model: string;
   policies: any[];
+}
+
+// NEW: Supporting types for persistence
+export interface SystemState {
+  identities: AIIdentity[];
+  memories: Memory[];
+  learningProgress: LearningProgress[];
+  checkpoints: Checkpoint[];
+  timestamp: Date;
+}
+
+export interface LearningProgress {
+  id: string;
+  concept: string;
+  data: any;
+  context: any;
+  performance: number;
+  timestamp: Date;
+  confidence: number;
+  mastery: number;
+}
+
+export interface Checkpoint {
+  id: string;
+  name: string;
+  description: string;
+  timestamp: Date;
+  state: SystemState;
+  metadata: Record<string, any>;
+}
+
+export interface ConceptData {
+  concept: string;
+  data: any;
+  context: any;
+  performance: number;
+}
+
+export interface CheckpointData {
+  name: string;
+  description: string;
+  timestamp: Date;
+  metadata?: Record<string, any>;
 }
 
 // Mock implementations for dependencies

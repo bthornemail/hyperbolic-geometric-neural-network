@@ -10,11 +10,11 @@
 import { IPCTransport } from '../../core/transports/ipc-transport';
 
 describe('ipc-transport', () => {
-  let instance: IpcTransport;
+  let instance: IPCTransport;
 
   beforeEach(() => {
     // Setup test instance
-    instance = new IpcTransport();
+    instance = new IPCTransport({ port: 3000, host: 'localhost' });
   });
 
   afterEach(() => {

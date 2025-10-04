@@ -125,6 +125,23 @@ export class IdentityManager {
     return identity;
   }
 
+  // NEW: Identity Restoration
+  async restoreIdentity(): Promise<AIIdentity | null> {
+    try {
+      // Load identity from persistent storage
+      const persistedIdentity = await this.loadPersistedIdentity();
+      if (persistedIdentity) {
+        this.identities.set(persistedIdentity.id, persistedIdentity);
+        console.log(`Identity restored: ${persistedIdentity.id}`);
+        return persistedIdentity;
+      }
+      return null;
+    } catch (error) {
+      console.log('No persisted identity found');
+      return null;
+    }
+  }
+
   // Identity Relationships
   async addRelationship(identityId: string, relationship: Relationship): Promise<void> {
     const identity = this.identities.get(identityId);
@@ -381,6 +398,13 @@ export class IdentityManager {
   private async verifySocial(identity: AIIdentity): Promise<boolean> {
     // Implement social verification
     return true;
+  }
+
+  private async loadPersistedIdentity(): Promise<AIIdentity | null> {
+    // Implementation to load identity from persistent storage
+    // This would typically involve reading from a database or file
+    console.log('Loading persisted identity...');
+    return null; // Mock implementation
   }
 }
 
