@@ -202,7 +202,7 @@ export class Flow extends BaseNode {
    * Run the flow starting from start node
    */
   async run(shared: SharedStore): Promise<Action> {
-    // Merge flow params with shared store
+    // Merge flow params with shared store (track in mergedShared)
     const mergedShared = { ...shared, ...this.params };
     
     let currentNode: BaseNode | undefined = this.startNode;
@@ -218,6 +218,8 @@ export class Flow extends BaseNode {
       currentNode = currentNode.successors.get(action);
     }
 
+    // Propagate any changes back to caller's shared store
+    Object.assign(shared, mergedShared);
     return this.post(shared, null, null);
   }
 
@@ -462,6 +464,7 @@ export class AsyncFlow extends Flow {
       currentNode = currentNode.successors.get(action);
     }
 
+    Object.assign(shared, mergedShared);
     return this.post(shared, null, null);
   }
 }

@@ -41,6 +41,7 @@ export class HierarchicalQAWorkflow {
   }
 
   private buildWorkflow(): void {
+    const wordnetProcessorRef = this.wordnetProcessor;
     // Question Analysis Node
     const analyzeQuestion = new LLMNode({
       systemPrompt: `You are a question analyzer. Analyze the given question and determine:
@@ -55,8 +56,13 @@ Respond in structured format.`,
 
     // Concept Extraction Node
     const extractConcepts = new class extends AgentNode {
+      prep(shared: SharedStore): any {
+        return {
+          question: shared.question || shared.query || shared.prompt || shared.text || ''
+        };
+      }
       async exec(prepRes: any): Promise<any> {
-        const question = prepRes.question;
+        const question = prepRes?.question || '';
         
         // Use WordNet to find relevant concepts
         const concepts = await this.findRelevantConcepts(question);
@@ -67,16 +73,23 @@ Respond in structured format.`,
           reasoning: `Extracted ${concepts.length} relevant concepts from WordNet`
         };
       }
+      post(shared: SharedStore, prepRes: any, execRes: any): Action {
+        // Preserve base behavior of storing results
+        shared.agentAction = execRes.action;
+        shared.agentResult = execRes.result;
+        shared.agentReasoning = execRes.reasoning;
+        return execRes.action || 'default';
+      }
 
       private async findRelevantConcepts(question: string): Promise<any[]> {
-        const words = question.toLowerCase().split(/\s+/);
+        const words = (question || '').toLowerCase().split(/\s+/);
         const concepts: any[] = [];
 
         for (const word of words) {
-          const wordData = this.wordnetProcessor.getWords().get(word);
+          const wordData = wordnetProcessorRef.getWords().get(word);
           if (wordData) {
             for (const synsetId of wordData.synsets) {
-              const synset = this.wordnetProcessor.getSynsets().get(synsetId);
+              const synset = wordnetProcessorRef.getSynsets().get(synsetId);
               if (synset) {
                 concepts.push({
                   word,
@@ -95,6 +108,12 @@ Respond in structured format.`,
 
     // Hierarchical Reasoning Node
     const hierarchicalReasoning = new class extends RAGNode {
+      prep(shared: SharedStore): any {
+        return {
+          question: shared.question || shared.query || shared.prompt || shared.text || '',
+          concepts: shared.agentResult || []
+        };
+      }
       async exec(prepRes: any): Promise<any> {
         const { question, concepts } = prepRes;
         
@@ -110,11 +129,19 @@ Respond in structured format.`,
         return enhancedResponse;
       }
 
+      post(shared: SharedStore, prepRes: any, execRes: any): Action {
+        // Persist full enhanced response for later aggregation
+        shared.hierarchicalInsights = execRes.hierarchicalInsights;
+        shared.reasoning = execRes.reasoning;
+        shared.ragText = execRes.text;
+        return 'default';
+      }
+
       private async buildConceptHierarchies(concepts: any[]): Promise<any[]> {
         const hierarchies: any[] = [];
 
         for (const concept of concepts) {
-          const synset = this.wordnetProcessor.getSynsets().get(concept.synset);
+          const synset = wordnetProcessorRef.getSynsets().get(concept.synset);
           if (synset) {
             const hierarchy = {
               concept: concept.synset,
@@ -130,7 +157,7 @@ Respond in structured format.`,
       }
 
       private async calculateDepth(synsetId: string): Promise<number> {
-        const hierarchy = this.wordnetProcessor.getHierarchy();
+        const hierarchy = wordnetProcessorRef.getHierarchy();
         if (hierarchy) {
           const node = hierarchy.nodes.find(n => n.id === synsetId);
           return node?.depth || 0;
@@ -181,8 +208,9 @@ Structure your response with clear sections and explanations.`,
     return {
       question,
       answer: shared.llmResponse,
+      reasoning: shared.reasoning,
       concepts: shared.agentResult,
-      hierarchicalInsights: shared.ragResponse,
+      hierarchicalInsights: shared.hierarchicalInsights,
       confidence: shared.llmConfidence || 0.8
     };
   }
@@ -223,10 +251,16 @@ export class ConceptLearningWorkflow {
   }
 
   private buildWorkflow(): void {
+    const wordnetProcessorRef = this.wordnetProcessor;
     // Concept Discovery Node
     const discoverConcepts = new class extends AgentNode {
+      prep(shared: SharedStore): any {
+        return {
+          domain: shared.domain || shared.query || shared.task || ''
+        };
+      }
       async exec(prepRes: any): Promise<any> {
-        const domain = prepRes.domain;
+        const domain = prepRes?.domain || '';
         
         // Find all concepts in the domain
         const concepts = await this.findDomainConcepts(domain);
@@ -237,12 +271,18 @@ export class ConceptLearningWorkflow {
           reasoning: `Discovered ${concepts.length} concepts in domain: ${domain}`
         };
       }
+      post(shared: SharedStore, prepRes: any, execRes: any): Action {
+        shared.agentAction = execRes.action;
+        shared.agentResult = execRes.result;
+        shared.agentReasoning = execRes.reasoning;
+        return execRes.action || 'default';
+      }
 
       private async findDomainConcepts(domain: string): Promise<any[]> {
         const concepts: any[] = [];
         
         // Search WordNet for domain-related concepts
-        for (const [id, synset] of this.wordnetProcessor.getSynsets()) {
+        for (const [id, synset] of wordnetProcessorRef.getSynsets()) {
           if (this.isRelevantToDomain(synset, domain)) {
             concepts.push({
               id,
@@ -258,7 +298,7 @@ export class ConceptLearningWorkflow {
       }
 
       private isRelevantToDomain(synset: any, domain: string): boolean {
-        const domainLower = domain.toLowerCase();
+        const domainLower = (domain || '').toLowerCase();
         
         // Check if domain appears in words or definition
         const inWords = synset.words.some((word: string) => 
@@ -273,6 +313,11 @@ export class ConceptLearningWorkflow {
 
     // Hierarchy Analysis Node
     const analyzeHierarchy = new class extends AgentNode {
+      prep(shared: SharedStore): any {
+        return {
+          concepts: shared.agentResult || []
+        };
+      }
       async exec(prepRes: any): Promise<any> {
         const concepts = prepRes.concepts;
         
@@ -288,6 +333,12 @@ export class ConceptLearningWorkflow {
           reasoning: 'Built and analyzed concept hierarchy using hyperbolic geometry'
         };
       }
+      post(shared: SharedStore, prepRes: any, execRes: any): Action {
+        shared.agentAction = execRes.action;
+        shared.agentResult = execRes.result;
+        shared.agentReasoning = execRes.reasoning;
+        return execRes.action || 'default';
+      }
 
       private async buildHierarchy(concepts: any[]): Promise<any> {
         const hierarchy = {
@@ -297,7 +348,7 @@ export class ConceptLearningWorkflow {
         };
 
         for (const concept of concepts) {
-          const synset = this.wordnetProcessor.getSynsets().get(concept.id);
+          const synset = wordnetProcessorRef.getSynsets().get(concept.id);
           if (synset) {
             // Find hierarchical position
             const level = this.calculateLevel(synset);
@@ -329,7 +380,7 @@ export class ConceptLearningWorkflow {
         while (current.hypernyms.length > 0) {
           level++;
           const parentId = current.hypernyms[0];
-          current = this.wordnetProcessor.getSynsets().get(parentId);
+          current = wordnetProcessorRef.getSynsets().get(parentId);
           if (!current || level > 10) break; // Prevent infinite loops
         }
 
@@ -401,7 +452,7 @@ Provide a structured, actionable learning plan.`,
     return {
       domain,
       concepts: shared.agentResult,
-      hierarchy: shared.taskHierarchy,
+      hierarchicalStructure: shared.taskHierarchy,
       learningPlan: shared.llmResponse,
       subtasks: shared.subtasks
     };
@@ -440,8 +491,12 @@ export class SemanticExplorationWorkflow {
   }
 
   private buildWorkflow(): void {
+    const wordnetProcessorRef = this.wordnetProcessor;
     // Concept Embedding Node
     const embedConcept = new class extends AgentNode {
+      prep(shared: SharedStore): any {
+        return { concept: shared.concept || shared.query || '' };
+      }
       async exec(prepRes: any): Promise<any> {
         const concept = prepRes.concept;
         
@@ -457,12 +512,18 @@ export class SemanticExplorationWorkflow {
           reasoning: `Generated hyperbolic embedding for concept: ${concept}`
         };
       }
+      post(shared: SharedStore, prepRes: any, execRes: any): Action {
+        shared.agentAction = execRes.action;
+        shared.agentResult = execRes.result;
+        shared.agentReasoning = execRes.reasoning;
+        return execRes.action || 'default';
+      }
 
       private async findConceptInWordNet(concept: string): Promise<any> {
-        const word = this.wordnetProcessor.getWords().get(concept.toLowerCase());
+        const word = wordnetProcessorRef.getWords().get(concept.toLowerCase());
         if (word) {
           const synsets = word.synsets.map(id => 
-            this.wordnetProcessor.getSynsets().get(id)
+            wordnetProcessorRef.getSynsets().get(id)
           ).filter(Boolean);
           
           return { word, synsets };
@@ -473,6 +534,9 @@ export class SemanticExplorationWorkflow {
 
     // Neighbor Discovery Node
     const discoverNeighbors = new class extends AgentNode {
+      prep(shared: SharedStore): any {
+        return { conceptData: shared.agentResult };
+      }
       async exec(prepRes: any): Promise<any> {
         const { embedding, synsetData } = prepRes.conceptData;
         
@@ -493,6 +557,15 @@ export class SemanticExplorationWorkflow {
           reasoning: `Found ${neighbors.length} semantic neighbors`
         };
       }
+      post(shared: SharedStore, prepRes: any, execRes: any): Action {
+        shared.agentAction = execRes.action;
+        shared.agentResult = execRes.result;
+        shared.agentReasoning = execRes.reasoning;
+        // Persist neighbors separately for convenience
+        // Expect execRes.result to be neighbors list
+        shared.neighbors = execRes.result;
+        return execRes.action || 'default';
+      }
 
       private async findSemanticNeighbors(embedding: Vector, synsetData: any): Promise<any[]> {
         const neighbors: any[] = [];
@@ -501,7 +574,7 @@ export class SemanticExplorationWorkflow {
         if (synsetData.synsets && synsetData.synsets.length > 0) {
           const primarySynset = synsetData.synsets[0];
           try {
-            const semanticNeighbors = this.wordnetProcessor.findSemanticNeighbors(primarySynset.id, 10);
+            const semanticNeighbors = wordnetProcessorRef.findSemanticNeighbors(primarySynset.id, 10);
             
             for (const neighbor of semanticNeighbors) {
               neighbors.push({
@@ -530,6 +603,9 @@ export class SemanticExplorationWorkflow {
 
     // Path Analysis Node
     const analyzePaths = new class extends AgentNode {
+      prep(shared: SharedStore): any {
+        return { neighbors: shared.neighbors || shared.agentResult || [] };
+      }
       async exec(prepRes: any): Promise<any> {
         const neighbors = prepRes.neighbors;
         
@@ -541,6 +617,13 @@ export class SemanticExplorationWorkflow {
           result: pathAnalysis,
           reasoning: 'Analyzed semantic paths in hyperbolic space'
         };
+      }
+      post(shared: SharedStore, prepRes: any, execRes: any): Action {
+        shared.agentAction = execRes.action;
+        shared.agentResult = execRes.result;
+        shared.agentReasoning = execRes.reasoning;
+        shared.pathAnalysis = execRes.result;
+        return execRes.action || 'default';
       }
 
       private async analyzeHyperbolicPaths(neighbors: any[]): Promise<any> {
