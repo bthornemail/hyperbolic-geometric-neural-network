@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "docs/07-intelligence/AI_IDENTITY_MEMORY_SYSTEM.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "AI_IDENTITY_MEMORY_SYSTEM"
             }
           }
         ]
@@ -141,13 +141,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "README.md",
+                "file": "docs/07-intelligence/AI_IDENTITY_MEMORY_SYSTEM.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of README"
+              "title": "Outline of AI_IDENTITY_MEMORY_SYSTEM"
             }
           }
         ],
@@ -168,8 +168,30 @@
       "bases:Create new base": false
     }
   },
-  "active": "0482f86c5617acc3",
+  "active": "4f00e0c2f9f7d877",
   "lastOpenFiles": [
+    "src/demo/wordnet-training-demo.ts",
+    "src/demo/unified-system-demo.ts",
+    "src/demo/team-collaboration-demo.ts",
+    "src/demo/simple-wordnet-test.ts",
+    "src/demo/phase4-production-llm-demo.ts",
+    "src/demo/phase4-production-deployment-demo.ts",
+    "src/demo/phase4-knowledge-transfer-demo.ts",
+    "src/demo/phase4-3d-visualization-demo.ts",
+    "src/demo/native-protocol-demo.ts",
+    "src/demo/native-protocol-demo-offline.ts",
+    "src/demo/native-protocol-demo-core.ts",
+    "docs/07-intelligence/AI_PERSISTENCE_ARCHITECTURE.md",
+    "docs/07-intelligence/AI_PERSISTENCE_PACKAGE_STRUCTURE.md",
+    "docs/07-intelligence/AI_PERSISTENCE_RESEARCH_PROJECT.md",
+    "docs/07-intelligence/AI_PERSISTENCE_RESEARCH_SUMMARY.md",
+    "docs/07-intelligence/IMPLEMENTATION_ROADMAP.md",
+    "docs/03-planning/demo-functionality-analysis.md",
+    "packages/README.md",
+    "docs/01-architecture/core-package-diagram.md",
+    "packages/core/README.md",
+    "docs/07-intelligence/AI_IDENTITY_MEMORY_SYSTEM.md",
+    "README.md",
     "project/docs/Architectural Alignment with H²GNN & MCP.md",
     "project/docs/Architectural Alignment with H²GNN & MCP Typescript Example.md",
     "project/docs/Architectural Autonomy, System Generalization, and Deep Research.md",

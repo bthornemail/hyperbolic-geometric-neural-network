@@ -1,9 +1,9 @@
 {
   "domain": "general",
-  "totalConcepts": 2,
-  "learnedConcepts": 2,
-  "masteryLevel": 0.14500000000000002,
-  "lastUpdated": 1759536154597,
+  "totalConcepts": 3,
+  "learnedConcepts": 3,
+  "masteryLevel": 0.15500000000000003,
+  "lastUpdated": 1759542072009,
   "learningCurve": [
     {
       "timestamp": 1759536154577,
@@ -12,8 +12,14 @@
     {
       "timestamp": 1759536154597,
       "performance": 0.8
+    },
+    {
+      "timestamp": 1759542072009,
+      "performance": 0.1
     }
   ],
-  "weakAreas": [],
+  "weakAreas": [
+    "codebase_analysis"
+  ],
   "strongAreas": []
 }
